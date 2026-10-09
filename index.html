@@ -1,0 +1,1571 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Bỏ Phố Về Quê v87.5.2.1 — Cân Bằng Thưởng Xu</title>
+  <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
+  <link rel="stylesheet" href="css/tailwind-offline.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
+  <link rel="stylesheet" href="css/main.css">
+
+<link rel="stylesheet" href="css/patch-03-v87-laptop-layout-hotfix.css">
+
+<link rel="stylesheet" href="css/patch-04-v8744-career-css.css">
+<link rel="stylesheet" href="css/patch-05-v87441-compact-a.css">
+
+<link rel="stylesheet" href="css/patch-06-v8745-festival-style.css">
+
+<link rel="stylesheet" href="css/patch-07-v8751-town-activities-css.css">
+
+
+<link rel="stylesheet" href="css/patch-08-v8752-festival-css.css">
+
+
+<link rel="stylesheet" href="css/patch-09-v8753-reputation-ui.css">
+
+
+
+<link rel="stylesheet" href="css/patch-10-v87532-staff-ops-css.css">
+<link rel="stylesheet" href="css/patch-11-v87531-staff-life-style.css">
+</head>
+<body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
+  <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
+
+
+    <!-- TÀI KHOẢN / HỒ SƠ NGƯỜI CHƠI (LƯU CỤC BỘ TRÊN TRÌNH DUYỆT) -->
+    <div id="screen-account" class="fixed inset-0 z-[120] bg-gradient-to-br from-slate-950 via-amber-950 to-orange-950 text-white flex flex-col p-4 overflow-y-auto no-scrollbar">
+      <div class="my-auto max-w-sm mx-auto w-full space-y-4 py-6">
+        <div class="text-center">
+          <div class="text-5xl mb-1">👤🌾</div>
+          <h1 class="text-2xl font-black tracking-tight">TÀI KHOẢN NGƯỜI CHƠI</h1>
+          <p class="text-[10px] text-amber-200 mt-1">Mỗi tài khoản có tiến trình riêng trên trình duyệt này.</p>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md rounded-3xl border border-white/15 p-3.5 space-y-2.5">
+          <div class="flex items-center justify-between">
+            <b class="text-xs text-amber-200 uppercase tracking-wide">Tạo tài khoản mới</b>
+            <span class="text-[8px] text-slate-300">Không tự dùng save cũ</span>
+          </div>
+          <label class="block text-[10px] font-bold text-amber-100">Tên nhân vật / tài khoản</label>
+          <input id="account-new-name" maxlength="20" class="w-full px-3 py-2 rounded-xl bg-white text-slate-800 text-sm font-bold focus:outline-none" placeholder="Ví dụ: Bé Thỏ">
+          <label class="block text-[10px] font-bold text-amber-100">Nhân vật chibi đi Làng — chọn ngay bên dưới</label>
+          <div id="account-new-chibi-picker" class="player-chibi-grid" aria-label="Chọn nhân vật đi làng"></div>
+          <div class="account-chibi-hint"><span class="text-base">✨</span><span>Nhân vật bạn điều khiển khi khám phá <b>Làng</b>. Chạm vào Nam hoặc Nữ để chọn; có thể đổi sau trong Chỉnh hồ sơ.</span></div>
+          <label class="block text-[10px] font-bold text-amber-100">Tên quán của bạn</label>
+          <input id="account-new-shop-name" maxlength="32" class="w-full px-3 py-2 rounded-xl bg-white text-slate-800 text-sm font-bold focus:outline-none" placeholder="Ví dụ: Tiệm Mây Nhỏ">
+          <label class="block text-[10px] font-bold text-amber-100">Hình đại diện quán (khác với nhân vật đi Làng)</label>
+          <button type="button" class="avatar-picker-summary" onclick="openShopAvatarGallery('new')">
+            <span id="account-new-avatar-preview" class="avatar-picker-summary-image"></span>
+            <span class="flex-1 min-w-0 text-left"><b class="block text-[11px] text-white">Chọn đại diện quán</b><span id="account-new-avatar-label" class="block text-[9px] text-amber-200/80">Thỏ Bé</span></span>
+            <span class="avatar-picker-summary-action">Đổi hình <span aria-hidden="true">›</span></span>
+          </button>
+          <button onclick="createLocalAccount()" class="w-full py-2.5 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-black tap-scale">
+            ➕ Tạo tài khoản & bắt đầu game mới
+          </button>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between px-1">
+            <b class="text-xs text-white">Tài khoản trên máy này</b>
+            <span id="account-count" class="text-[9px] text-slate-300">0 tài khoản</span>
+          </div>
+          <div id="account-profile-list" class="space-y-2"></div>
+        </div>
+
+        <div id="legacy-save-card" class="hidden rounded-2xl border border-amber-400/35 bg-amber-900/35 p-3"></div>
+
+        <p class="text-[8px] leading-relaxed text-slate-400 text-center">
+          Đây là tài khoản cục bộ của bản HTML. Nếu xóa dữ liệu trình duyệt hoặc đổi máy, tiến trình không tự đồng bộ như tài khoản cloud.
+        </p>
+      </div>
+    </div>
+
+    <!-- V40: Chỉnh tên quán / ảnh đại diện từ màn tài khoản -->
+    <div id="modal-account-shop-edit" class="fixed inset-0 z-[140] hidden bg-black/75 p-3 flex items-center justify-center overflow-y-auto">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl border border-amber-400/40 p-4 space-y-3 shadow-2xl">
+        <div class="flex justify-between items-center"><b class="text-sm text-amber-200">🏪 Hồ sơ quán & nhân vật</b><button onclick="closeAccountShopEdit()" class="p-1 px-2 bg-white/10 rounded-lg">✕</button></div>
+        <label class="block text-[10px] text-slate-300">Tên quán</label>
+        <input id="account-edit-shop-name" maxlength="32" class="w-full p-2 rounded-xl bg-white text-slate-800 font-bold text-sm" placeholder="Tên quán">
+        <label class="block text-[10px] text-slate-300">Hình đại diện quán</label>
+        <button type="button" onclick="openShopAvatarGallery('edit')" class="avatar-picker-summary">
+          <span id="account-edit-avatar-preview" class="avatar-picker-summary-image"></span>
+          <span class="flex-1 min-w-0 text-left"><b class="block text-[11px] text-white">Đổi đại diện quán</b><span id="account-edit-avatar-label" class="block text-[9px] text-amber-200/80">Thỏ Bé</span></span>
+          <span class="avatar-picker-summary-action">Chọn <span aria-hidden="true">›</span></span>
+        </button>
+        <label class="block text-[10px] text-slate-300">Nhân vật đi làng</label>
+        <div id="account-edit-chibi-picker" class="player-chibi-grid"></div>
+        <div class="account-chibi-hint"><span class="text-base">🎀</span><span>Đây là nhân vật chibi đại diện cho tài khoản này khi đi <b>Làng</b> và tham gia sự kiện.</span></div>
+        <button onclick="saveAccountShopEdit()" class="w-full bg-emerald-600 rounded-xl py-2.5 font-black text-xs">💾 Lưu hồ sơ</button>
+      </div>
+    </div>
+
+
+    <!-- V41: Gallery is its own screen; registration/edit screens stay compact. -->
+    <div id="modal-shop-avatar-gallery" class="fixed inset-0 z-[220] hidden bg-[#211d25]/95 backdrop-blur-sm flex items-center justify-center p-2 sm:p-4" role="dialog" aria-modal="true" aria-label="Chọn đại diện quán">
+      <div class="avatar-gallery-shell">
+        <div class="avatar-gallery-toolbar">
+          <div class="min-w-0"><div class="text-[9px] uppercase tracking-wide text-amber-700 font-black">🎨 Góc sáng tạo</div><h2 class="text-lg font-black text-[#603719]">Đại diện quán</h2><p class="text-[9px] text-amber-900/65">Chọn linh vật hoặc khung cảnh yêu thích.</p></div>
+          <button type="button" onclick="closeShopAvatarGallery()" class="avatar-gallery-close" aria-label="Đóng chọn hình">✕</button>
+        </div>
+        <div class="avatar-gallery-filters">
+          <button id="avatar-filter-mascot" onclick="setShopAvatarGalleryCategory('mascot')" type="button">🐾 Linh vật</button>
+          <button id="avatar-filter-scene" onclick="setShopAvatarGalleryCategory('scene')" type="button">🏡 Khung cảnh</button>
+        </div>
+        <div id="shop-avatar-gallery-grid" class="avatar-gallery-grid" aria-label="Danh sách đại diện"></div>
+        <div class="avatar-gallery-footer">
+          <div id="shop-avatar-gallery-preview" class="avatar-gallery-preview"></div>
+          <div class="min-w-0 flex-1"><div class="text-[8px] text-amber-800/60 font-black">ĐANG CHỌN</div><b id="shop-avatar-gallery-name" class="text-xs text-[#603719]">Thỏ Bé</b></div>
+          <button type="button" onclick="confirmShopAvatarGallery()" class="avatar-gallery-confirm">✓ Dùng hình này</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="screen-intro" class="fixed inset-0 z-50 hidden bg-gradient-to-br from-amber-800 via-orange-900 to-amber-950 text-white flex flex-col p-4 overflow-y-auto no-scrollbar">
+      <div class="my-auto max-w-sm mx-auto w-full space-y-4 py-6">
+        <div class="text-center space-y-1">
+          <div class="text-5xl animate-gentle mb-1">🌾🏪🧋</div>
+          <h1 class="text-2xl font-black tracking-tight drop-shadow">VỀ QUÊ KHỞI NGHIỆP</h1>
+          <p class="text-xs text-amber-200 font-semibold">Bản Mô Phỏng Kinh Tế Toàn Diện • 100 Cấp Độ</p>
+        </div>
+
+        <div class="bg-white/10 backdrop-blur-md p-3.5 rounded-3xl border border-white/20 space-y-2.5">
+          <h2 class="text-xs font-black uppercase text-amber-300 tracking-wider">1. Thiết Lập Danh Tính Tiệm</h2>
+          <div class="space-y-2">
+            <div>
+              <label class="text-[10px] text-amber-100 font-bold block mb-1">Tên Bạn (Chủ Quán):</label>
+              <input type="text" id="intro-player-name" value="Bạn" class="w-full px-3 py-1.5 rounded-xl bg-white text-slate-800 font-bold text-xs focus:outline-none shadow-inner" placeholder="Nhập tên của bạn...">
+            </div>
+            <div>
+              <label class="text-[10px] text-amber-100 font-bold block mb-1">Tên Thương Hiệu Quán:</label>
+              <input type="text" id="intro-shop-name" value="Trà Sữa Bé Thỏ" class="w-full px-3 py-1.5 rounded-xl bg-white text-slate-800 font-bold text-xs focus:outline-none shadow-inner" placeholder="Nhập tên quán...">
+            </div>
+          </div>
+        </div>
+
+        <div class="space-y-2">
+          <div class="flex items-center justify-between">
+            <h2 class="text-xs font-black uppercase text-amber-300 tracking-wider">2. Chọn Mô Hình Khởi Nghiệp</h2>
+            <span class="text-[9px] text-amber-200 italic">*Khóa suốt vòng chơi</span>
+          </div>
+          
+          <!-- Nghề 1 -->
+          <div onclick="selectIntroCareer('boba')" id="intro-card-boba" class="p-3 rounded-2xl bg-amber-600 border-2 border-white cursor-pointer tap-scale transition-all flex items-center gap-3 shadow-lg">
+            <span class="text-4xl">🧋</span>
+            <div class="shop-front-body flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <b class="text-xs text-white">Tiệm Trà Sữa Bé Thỏ</b>
+                <span class="text-[9px] bg-amber-300 text-amber-950 font-black px-1.5 py-0.5 rounded-full">Phổ Biến</span>
+              </div>
+              <p class="text-[10px] text-amber-100 mt-0.5">Vốn: 450 Xu • 15 Ly M • 10 Ly L • 12 Trà Đen • 15 Trân Châu</p>
+            </div>
+          </div>
+
+          <!-- Nghề 2 -->
+          <div onclick="selectIntroCareer('noodle')" id="intro-card-noodle" class="p-3 rounded-2xl bg-slate-800/80 border-2 border-slate-600 cursor-pointer tap-scale transition-all flex items-center gap-3">
+            <span class="text-4xl">🍜</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <b class="text-xs text-white">Mì Cay 7 Cấp Độ Nhà Hân</b>
+                <span class="text-[9px] bg-rose-500 text-white font-black px-1.5 py-0.5 rounded-full">Thử Thách</span>
+              </div>
+              <p class="text-[10px] text-slate-300 mt-0.5">Vốn: 450 Xu • 12 Thố M • 8 Thố L • 10 Kim Chi • 8 Bò Mỹ</p>
+            </div>
+          </div>
+
+          <!-- Nghề 3 -->
+          <div onclick="selectIntroCareer('streetfood')" id="intro-card-streetfood" class="p-3 rounded-2xl bg-slate-800/80 border-2 border-slate-600 cursor-pointer tap-scale transition-all flex items-center gap-3">
+            <span class="text-4xl">🍢</span>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-center justify-between">
+                <b class="text-xs text-white">Xe Xiên Bẩn Làng Quê</b>
+                <span class="text-[9px] bg-amber-500 text-slate-950 font-black px-1.5 py-0.5 rounded-full">Đường Phố</span>
+              </div>
+              <p class="text-[10px] text-slate-300 mt-0.5">Vốn: 450 Xu • 15 Đĩa • 10 Mẹt • 15 Cá Viên • 10 Bò Viên</p>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="confirmStartGameFromIntro()" class="w-full py-3 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-white font-black text-sm rounded-2xl shadow-xl tap-scale flex items-center justify-center gap-2 border border-emerald-300">
+          <span>🚀 BẮT ĐẦU NGÀY 1 KHỞI NGHIỆP 🚀</span>
+        </button>
+      </div>
+    </div>
+
+    <header class="compact-header sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white px-2.5 shadow-md">
+      <div class="header-main-row">
+        <div class="flex items-start gap-2 min-w-0 flex-1">
+          <button class="shop-icon-button relative shrink-0 mt-0.5 tap-scale" onclick="openShopIconModal()" title="Đổi biểu tượng quán">
+            <img id="header-shop-avatar-image" src="assets/images/003_header-shop-avatar-image_3a7759990d.webp" class="v30-header-mascot" alt="Linh vật quán">
+            <span id="header-shop-avatar-emoji" class="header-shop-avatar-emoji hidden">🐰</span>
+            <span id="header-career-icon">🧋</span>
+          </button>
+          <div class="min-w-0 flex-1">
+            <div class="flex items-center gap-1 min-w-0">
+              <button class="shop-name-button tap-scale" onclick="openRenameModal('shop')" title="Đổi tên quán">
+                <h1 id="header-shop-name" class="font-black text-[12px] tracking-tight truncate drop-shadow">Trà Sữa Bé Thỏ</h1>
+                <span class="text-[7px] opacity-80">✏️</span>
+              </button>
+              <span id="header-day-tag" class="bg-amber-900/80 text-[7px] px-1.5 py-0.5 rounded-full font-bold shrink-0">Ngày 1</span>
+            </div>
+            <div class="header-left-stats">
+              <span class="compact-chip chip-coin">🪙 <span id="stat-coins">450 Xu</span></span>
+              <button type="button" onclick="openAccountScreen()" title="Đổi tài khoản" class="compact-chip chip-player tap-scale">👤 <span id="header-player-name">Bạn</span></button>
+              <span class="compact-chip chip-rate v72-account-rating" title="Sao đánh giá quán"><span id="header-rating-badge">⭐ 5.0</span><span id="header-rating-count" class="opacity-80">(1)</span></span>
+            </div>
+            <div class="header-exp-wrap" title="Kinh nghiệm">
+              <div id="stat-exp-bar" class="bg-gradient-to-r from-emerald-400 to-lime-300 h-full w-[10%] rounded-full transition-all duration-300"></div>
+            </div>
+          </div>
+        </div>
+        <div class="header-right-stack">
+          <div class="header-right-actions">
+            <button onclick="openSaveModal()" title="Lưu game" class="w-7 h-7 bg-amber-800/80 hover:bg-amber-800 rounded-xl text-[11px] font-bold text-amber-100 tap-scale border border-amber-500/40 flex items-center justify-center">💾</button>
+            <button onclick="openShopHubModal()" title="Trung tâm quán" class="w-7 h-7 header-manage-shop-btn rounded-xl text-[11px] font-bold tap-scale flex items-center justify-center shadow">📋</button>
+            <button id="v87-day-button" type="button" onclick="openEndDayModal()" title="Kết thúc ngày (khác với đóng ca)" aria-label="Qua ngày" class="v87-day-button tap-scale">🌙</button>
+            <button onclick="openBankruptcyModal()" title="Phá sản / đổi nghề" class="w-7 h-7 bg-rose-700 hover:bg-rose-800 rounded-xl text-[11px] font-black text-rose-100 tap-scale border border-rose-500/40 flex items-center justify-center shadow">💥</button>
+          </div>
+          <div class="header-right-stats">
+            <span class="compact-chip chip-level">Lv.<span id="stat-level-num">1</span></span>
+            <button type="button" class="v72-shop-stage-btn tap-scale" onclick="openShopStageQuickModal()" title="Xem điều kiện và nâng bậc quán">
+              <span>🏪</span><span id="header-shop-stage">Bậc 1</span><span class="v72-stage-chevron">↑</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </header>
+
+    <nav class="compact-nav sticky z-30 bg-white/95 backdrop-blur border-b border-amber-200/80 px-2 shadow-sm">
+      <div class="compact-nav-grid grid grid-cols-6 text-center text-xs font-bold text-slate-500">
+        <button id="nav-btn-shop" onclick="switchTab('shop')" class="compact-nav-btn bg-amber-500 text-white shadow-sm tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/004_html-004_34928c2267.webp" alt="Quán">
+          <span class="nav-txt">Quán</span>
+        </button>
+        <button id="nav-btn-farm" onclick="switchTab('farm')" class="compact-nav-btn hover:bg-amber-100 tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/005_html-005_fe5b498c97.webp" alt="Vườn">
+          <span class="nav-txt">Vườn</span>
+        </button>
+        <button id="nav-btn-barn" onclick="switchTab('barn')" class="compact-nav-btn hover:bg-amber-100 tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/006_html-006_e023bc23b1.webp" alt="Chuồng">
+          <span class="nav-txt">Chuồng</span>
+        </button>
+        <button id="nav-btn-village" onclick="switchTab('village')" class="compact-nav-btn hover:bg-amber-100 tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/007_html-007_0ec6845f86.webp" alt="Làng">
+          <span class="nav-txt">Làng</span>
+        </button>
+        <button id="nav-btn-warehouse" onclick="switchTab('warehouse')" class="compact-nav-btn hover:bg-amber-100 tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/008_html-008_364c5fe22f.webp" alt="Kho">
+          <span class="nav-txt">Kho</span>
+        </button>
+        <button id="nav-btn-reviews" onclick="switchTab('reviews')" class="compact-nav-btn hover:bg-amber-100 tap-scale flex flex-col items-center">
+          <img class="nav-art-img" src="assets/images/009_html-009_634cdf54fd.webp" alt="Đánh giá">
+          <span class="nav-txt">Đánh giá</span>
+        </button>
+      </div>
+    </nav>
+
+    <main class="main-stage flex-1 p-3">
+
+      <!-- ============================================== -->
+      <!-- TAB 1: QUÁN CHÍNH (KHÓA THEO NGHỀ ĐÃ CHỌN) -->
+      <!-- ============================================== -->
+      <section id="tab-shop" class="space-y-2.5">
+        <details id="v87532-shop-board" class="v87532-board"><summary>👥 Đội ngũ đang làm việc <span class="v87532-live" data-summary>Chưa thuê nhân viên</span> ▾</summary><div class="v87532-content" data-content></div></details>
+        <!-- KHU VỰC KHÁCH HÀNG TẠI QUẦY -->
+        <div id="customer-booth-card" class="shop-front-panel relative overflow-hidden transition-all duration-300">
+          <div class="shop-front-head flex items-center gap-2.5">
+            <div class="relative shrink-0">
+              <div id="cust-avatar" class="flex items-center justify-center">
+                <img src="assets/images/010_html-010_640fe81ff0.webp" class="v30-sleep-art" alt="Quán đang nghỉ">
+              </div>
+              <span id="cust-strict-badge" class="absolute -bottom-1 -right-1 text-[8px] bg-slate-700 text-white px-1 rounded-md font-bold">Nghỉ Ca</span>
+            </div>
+            <div class="flex-1 min-w-0">
+              <div class="flex items-start justify-between gap-2">
+                <div class="min-w-0">
+                  <h3 id="cust-name" class="font-black text-[13px] text-slate-800 truncate">Quán Đang Nghỉ Ca</h3>
+                  <span id="cust-role" class="text-[9px] text-slate-400 font-medium">Chạm 'Mở Quán' để đón khách</span>
+                </div>
+                <button id="btn-toggle-shop" onclick="toggleOpenShop()" class="bg-emerald-600 text-white font-black tap-scale">🟢 Mở Quán</button>
+              </div>
+              <div class="v30-shop-phase-row">
+                <div class="v30-phase-mini min-w-0">
+                  <span id="shop-status-dot" class="w-2 h-2 rounded-full bg-slate-400 shrink-0"></span>
+                  <span id="shop-phase-text" class="truncate">Ca chuẩn bị</span>
+                  <span id="shop-daily-served-text" class="hidden">Chạm mở quán để đón khách</span>
+                </div>
+                <div class="text-right shrink-0">
+                  <span id="cust-budget" class="text-[10px] font-black text-emerald-600">--</span>
+                  <div id="cust-patience-time" class="text-[8px] text-amber-600 font-bold">--</div>
+                </div>
+              </div>
+              <div class="w-full bg-slate-100 h-1.5 rounded-full mt-1 overflow-hidden border border-slate-200">
+                <div id="cust-patience-bar" class="bg-slate-300 h-full w-[0%] rounded-full transition-all duration-300"></div>
+              </div>
+            </div>
+          </div>
+          <div class="mt-2 p-2 bg-amber-50/80 rounded-xl border border-amber-200 text-xs">
+            <p id="cust-order-quote" class="text-slate-600 italic text-[10px]">"Bấm 'Mở Quán' để bắt đầu đón lượt khách đầu tiên vào mua hàng nhé chủ quán!"</p>
+          </div>
+        </div>
+
+        <!-- V87.4.5: competition remains collapsed so the counter stays compact. -->
+        <details id="v8745-contest" class="v8745-fold">
+          <summary><span>🏆 Hội Thi Bếp Quê</span><span class="v8745-line" id="v8745-summary">Chạm xem thử thách hôm nay ▾</span></summary>
+          <div class="v8745-inner" id="v8745-body">Đang chuẩn bị thể lệ...</div>
+        </details>
+
+        <!-- V68: sticky-level live order slip. Hidden when the full customer card is visible. -->
+        <aside id="v68-order-dock" class="v68-order-dock" aria-label="Đơn khách đang chế biến" aria-live="off">
+          <div class="v68-slip-main">
+            <div class="v68-slip-top">
+              <span class="v68-slip-label">🧾 ĐƠN KHÁCH</span>
+              <strong id="v68-order-name" class="v68-slip-name">Khách</strong>
+              <span id="v68-order-time" class="v68-slip-time">--</span>
+              <button type="button" id="v68-order-expand" onclick="v68ToggleOrderDetails()" aria-expanded="false" aria-label="Xem đầy đủ đơn khách" class="v68-slip-expand">⌄</button>
+            </div>
+            <div id="v68-order-quote" class="v68-slip-quote">Chọn nguyên liệu theo yêu cầu của khách.</div>
+            <div class="v68-slip-progress"><span id="v68-order-progress"></span></div>
+          </div>
+        </aside>
+
+        <div class="workbench-shell v52-shop-workbench bench-frame text-white rounded-3xl p-3 shadow-xl border space-y-2.5">
+          <div class="workbench-topbar">
+            <div class="flex items-center gap-1.5">
+              <span class="text-lg">🏪</span>
+              <b class="text-[11px] text-amber-300 uppercase tracking-wide">Trạm Chế Biến Món</b>
+            </div>
+            <div class="v68-workbench-actions">
+              <button type="button" onclick="v68PeekOrder()" class="v68-see-order tap-scale" title="Giữ đơn khách trên màn hình">🧾 Đơn</button>
+              <button onclick="cleanWorkbenchDish()" class="workbench-chip-btn tap-scale" title="Dọn món đang làm">🧹 Dọn</button>
+            </div>
+          </div>
+          <div class="workbench-focus-strip"><div><b>Ưu tiên thao tác</b><span id="workbench-focus-copy">Chọn ly → cốt trà → topping → điều vị rồi lắc để giao món.</span></div><span class="workbench-stage-pill" id="workbench-stage-pill">Quầy tương tác</span></div>
+
+          <!-- v59 removed large non-interactive scene -->
+                    <!-- MÓN ĐANG LÀM & TÍNH TOÁN 3 GIÁ -->
+          <div class="workbench-preview flex items-center justify-between">
+            <div class="flex items-center gap-2">
+              <div id="dish-preview-icon" class="flex items-center justify-center">
+                <img src="assets/images/011_html-011_70368fb97a.webp" class="v30-dish-art" alt="Ly trà sữa">
+              </div>
+              <div>
+                <b id="dish-preview-name" class="text-xs text-amber-200 block truncate max-w-[130px]">Trà Đen (Size M)</b>
+                <span id="dish-preview-desc" class="text-[9px] text-slate-400 block truncate max-w-[130px]">Chưa thêm topping</span>
+              </div>
+            </div>
+
+            <!-- BỘ ĐIỀU CHỈNH GIÁ BÁN -->
+            <div class="text-right">
+              <div class="text-[8px] text-slate-400">
+                Vốn: <span id="dish-cost-val" class="text-amber-400 font-bold">11 Xu</span>
+              </div>
+              <div class="flex items-center gap-1 mt-0.5">
+                <button onclick="adjustDishPrice(-5)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-xs font-black tap-scale flex items-center justify-center">-</button>
+                <b id="dish-price-val" class="text-xs text-emerald-400 font-black min-w-[38px] text-center">45 Xu</b>
+                <button onclick="adjustDishPrice(5)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-xs font-black tap-scale flex items-center justify-center">+</button>
+              </div>
+              <div class="text-[8px] text-emerald-300/80 font-semibold" id="dish-profit-val">Lãi: +34 Xu</div>
+            </div>
+          </div>
+          <div class="workbench-preset-wrap v54-compact">
+            <div class="workbench-fast-top">
+              <div class="workbench-fast-copy">
+                <b>⚡ Làm nhanh tại quầy</b>
+                <span id="workbench-fast-hint">Mở bằng cấp quán cao hơn hoặc khi đã có trang trí đẹp.</span>
+              </div>
+              <div class="v58-fast-actions">
+                <button id="v58-preset-toggle" type="button" onclick="v58TogglePresets()" aria-expanded="false" aria-controls="workbench-preset-grid" class="v58-preset-toggle tap-scale" title="Hiện món làm nhanh">⚡ <span id="v58-preset-chevron">▾</span></button>
+                <button id="shop-fast-toggle" onclick="toggleShopFastAssistant()" class="workbench-assistant-toggle locked tap-scale">🤖 Trợ lý</button>
+              </div>
+            </div>
+            <div id="workbench-lowstock-bar" class="workbench-lowstock-bar compact"></div>
+            <div id="workbench-preset-grid" class="workbench-preset-grid v54-compact" hidden></div>
+          </div>
+
+          <!-- 1. NGHỀ TRÀ SỮA -->
+          
+<div id="workbench-career-boba" class="space-y-2">
+  <div class="v60-boba-station">
+    <div class="v60-counter-shell">
+      <div class="v60-workbench-grid">
+        <div class="v60-size-rack">
+          <button onclick="setBobaCupSize('M')" id="btn-cup-m" class="v60-size-card tap-scale">
+            <span class="v60-size-label">M</span>
+            <img src="assets/images/012_html-012_9bf9f99910.webp" class="v60-cup-art" alt="Ly M">
+            <span id="stock-cup-m" class="v60-size-stock">📦 15</span>
+          </button>
+          <button onclick="setBobaCupSize('L')" id="btn-cup-l" class="v60-size-card tap-scale v60-size-muted">
+            <span class="v60-size-label">L</span>
+            <img src="assets/images/013_html-013_d8141e70e2.webp" class="v60-cup-art" alt="Ly L">
+            <span id="stock-cup-l" class="v60-size-stock">📦 10</span>
+          </button>
+          <button onclick="setBobaCupSize('XL')" id="btn-cup-xl" class="v60-size-card tap-scale v60-size-muted">
+            <span class="v60-size-label">XL</span>
+            <img src="assets/images/013_html-013_d8141e70e2.webp" class="v60-cup-art" alt="Ly XL">
+            <span id="stock-cup-xl" class="v60-size-stock">🔒 Lv.18</span>
+          </button>
+        </div>
+
+        <div class="v60-main-panel">
+          <div class="v60-shelf-wrap">
+            <div class="v60-shelf-head">
+              <span>Cốt trà cute</span>
+              <span id="boba-base-count" class="v60-count-chip">0/0 mở</span>
+            </div>
+            <div class="v60-shelf-frame">
+              <div id="boba-tea-dispenser-strip" class="v60-dispenser-strip"></div>
+            </div>
+          </div>
+
+          <div class="v60-topping-wrap">
+            <div class="v60-shelf-head">
+              <span>Topping dễ thương</span>
+              <span id="boba-top-count" class="v60-count-chip">0/0 mở</span>
+            </div>
+            <div id="boba-toppings-grid" class="v60-top-grid"></div>
+          </div>
+
+          <div class="v60-bottom-row">
+            <div class="v60-control-box">
+              <div class="v60-control-title">🍬 Đường</div>
+              <div class="v60-pill-grid">
+                <button onclick="setBobaSugar(30)" id="btn-sugar-30" class="v60-pill tap-scale">30%</button>
+                <button onclick="setBobaSugar(70)" id="btn-sugar-70" class="v60-pill tap-scale v60-pill-active">70%</button>
+                <button onclick="setBobaSugar(100)" id="btn-sugar-100" class="v60-pill tap-scale">100%</button>
+              </div>
+            </div>
+            <div class="v60-control-box">
+              <div class="v60-control-title">🧊 Đá</div>
+              <div class="v60-pill-grid">
+                <button onclick="setBobaIce(0)" id="btn-ice-0" class="v60-pill tap-scale">0%</button>
+                <button onclick="setBobaIce(50)" id="btn-ice-50" class="v60-pill tap-scale v60-pill-active">50%</button>
+                <button onclick="setBobaIce(100)" id="btn-ice-100" class="v60-pill tap-scale">100%</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="v60-finish-bar">
+            <div class="v60-finish-copy">
+              <span class="text-lg">🥤</span>
+              <div>
+                <b class="block text-[11px] text-amber-100">Lắc Shaker</b>
+                <span id="shaker-status-text" class="text-[8px] text-slate-200">Trạng thái: Chưa lắc</span>
+              </div>
+            </div>
+            <button id="btn-shake-cup" onclick="startShakeProcess()" class="v60-shake-btn tap-scale">Lắc (2s)</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div id="workbench-career-noodle" class="hidden space-y-2">
+  <div class="v61-station v61-noodle-theme">
+    <div class="v61-headline"><span>🍲 Trạm mì cay</span><span id="noodle-base-count" class="v61-count-chip">0/0 mở</span></div>
+    <div class="v61-flex-layout">
+      <div class="v61-size-rack">
+        <button onclick="setNoodleBowlSize('M')" id="btn-bowl-m" class="v60-size-card tap-scale"><span class="v60-size-label">M</span><span class="v61-size-emoji">🍲</span><span id="stock-bowl-m" class="v60-size-stock">📦 12</span></button>
+        <button onclick="setNoodleBowlSize('L')" id="btn-bowl-l" class="v60-size-card tap-scale v60-size-muted"><span class="v60-size-label">L</span><span class="v61-size-emoji">🍜</span><span id="stock-bowl-l" class="v60-size-stock">📦 8</span></button>
+        <button onclick="setNoodleBowlSize('XL')" id="btn-bowl-xl" class="v60-size-card tap-scale v60-size-muted"><span class="v60-size-label">XL</span><span class="v61-size-emoji">🥘</span><span id="stock-bowl-xl" class="v60-size-stock">🔒 Lv.18</span></button>
+      </div>
+      <div class="v61-main-panel">
+        <div class="v61-panel-box">
+          <div class="v61-section-row"><span>🍲 Nước lèo</span><span class="v61-mini-note">chọn cốt</span></div>
+          <div id="noodle-broth-grid" class="v61-broth-grid"></div>
+        </div>
+        <div class="v61-panel-box">
+          <div class="v61-section-row"><span>🌶️ Cấp cay</span><span id="noodle-spicy-level-text" class="v61-mini-note strong">Cấp 3 (Cay Vừa)</span></div>
+          <div id="noodle-spicy-buttons" class="v61-spicy-row"></div>
+        </div>
+        <div class="v61-panel-box">
+          <div class="v61-section-row"><span>🥚 Topping</span><span id="noodle-top-count" class="v61-count-chip">0/0 mở</span></div>
+          <div id="noodle-toppings-grid" class="v61-top-grid"></div>
+        </div>
+        <div class="v61-cook-bar">
+          <div class="v61-cook-copy"><span class="text-xl">🔥</span><div><b class="block text-[11px] text-amber-100">Bếp thố sôi</b><span id="noodle-cook-status" class="text-[8px] text-orange-100/90">Trạng thái: Chưa nấu</span></div></div>
+          <button id="btn-cook-noodle" onclick="startCookNoodleProcess()" class="v61-cook-btn tap-scale">Nấu (2s)</button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="workbench-career-streetfood" class="hidden space-y-2">
+  <div class="v61-station v61-skewer-theme">
+    <div class="v61-headline"><span>🍢 Trạm xiên que</span><span id="street-skewer-count" class="v61-count-chip">0/0 mở</span></div>
+    <div class="v61-flex-layout">
+      <div class="v61-size-rack">
+        <button onclick="setSkewerTray('plate')" id="btn-tray-plate" class="v60-size-card tap-scale"><span class="v60-size-label">Đĩa</span><span class="v61-size-emoji">🍽️</span><span id="stock-tray-plate" class="v60-size-stock">📦 15</span></button>
+        <button onclick="setSkewerTray('basket')" id="btn-tray-basket" class="v60-size-card tap-scale v60-size-muted"><span class="v60-size-label">Mẹt</span><span class="v61-size-emoji">🧺</span><span id="stock-tray-basket" class="v60-size-stock">📦 10</span></button>
+        <button onclick="setSkewerTray('box')" id="btn-tray-box" class="v60-size-card tap-scale v60-size-muted"><span class="v60-size-label">Hộp</span><span class="v61-size-emoji">📦</span><span id="stock-tray-box" class="v60-size-stock">🔒 Lv.12</span></button>
+      </div>
+      <div class="v61-main-panel">
+        <div class="v61-panel-box">
+          <div class="v61-section-row"><span>🍢 Khay xiên</span><span class="v61-mini-note">thêm / bớt</span></div>
+          <div id="skewer-items-grid" class="v61-skewer-grid"></div>
+        </div>
+        <div class="v61-fry-station">
+          <div class="v61-section-row"><span>🍳 Chảo dầu</span><span id="fry-status-txt" class="v61-mini-note strong">Chưa thả xiên</span></div>
+          <div class="v61-heat-row">
+            <button onclick="setFryHeat(140)" id="btn-heat-140" class="v61-heat-btn tap-scale">140°</button>
+            <button onclick="setFryHeat(170)" id="btn-heat-170" class="v61-heat-btn tap-scale active">170°</button>
+            <button onclick="setFryHeat(200)" id="btn-heat-200" class="v61-heat-btn tap-scale">200°</button>
+          </div>
+          <div class="v61-progress-track"><div id="fry-progress-bar" class="v61-progress-fill"></div></div>
+          <div class="v61-fry-actions"><button id="btn-start-fry" onclick="startFryProcess()" class="v61-cook-btn tap-scale">🔥 Chiên</button><button id="btn-pull-fry" onclick="pullFryProcess()" disabled class="v61-cook-btn secondary tap-scale">🥢 Vớt</button></div>
+        </div>
+        <div class="v61-panel-box">
+          <div class="v61-section-row"><span>🥣 Khay sốt</span><span id="street-sauce-count" class="v61-count-chip">0/0 mở</span></div>
+          <div id="skewer-sauce-grid" class="v61-sauce-grid"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+          <!-- NÚT GIAO MÓN -->
+          <button onclick="serveDishToCustomer()" class="w-full py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 hover:from-emerald-400 hover:to-teal-500 text-white font-black text-xs rounded-2xl shadow-lg tap-scale flex items-center justify-center gap-1.5">
+            <span>✨</span>
+            <span>GIAO MÓN CHO KHÁCH</span>
+            <span>✨</span>
+          </button>
+        </div>
+      </section>
+
+      <!-- ============================================== -->
+      <!-- TAB: ĐÁNH GIÁ QUÁN -->
+      <!-- ============================================== -->
+      <section id="tab-reviews" class="hidden space-y-2.5">
+        <div class="bg-gradient-to-br from-amber-500 via-orange-500 to-rose-500 text-white rounded-3xl p-3 shadow-lg border border-amber-300/60 overflow-hidden relative">
+          <div class="absolute -right-5 -top-7 text-7xl opacity-15">⭐</div>
+          <div class="relative flex items-center justify-between gap-3">
+            <div>
+              <div class="text-[9px] font-black uppercase tracking-[0.16em] text-amber-100">Danh tiếng cửa hàng</div>
+              <div class="flex items-end gap-1 mt-0.5">
+                <span id="reviews-rating-big" class="text-3xl leading-none font-black">5.0</span>
+                <span class="text-sm font-black text-amber-100">/ 5</span>
+              </div>
+              <div id="shop-rating-summary" class="text-[9px] text-amber-50 mt-1">5.0/5 • 1 đánh giá</div>
+            </div>
+            <div class="text-right shrink-0">
+              <div class="text-3xl">💬</div>
+              <div class="text-[8px] text-amber-100 font-bold">Bạn có thể phản hồi khách</div>
+            </div>
+          </div>
+        </div>
+
+        <details id="v8745-mastery" class="v8745-fold" ontoggle="if(this.open) v8745Render()">
+          <summary><span>📖 Tay Nghề & Huy Hiệu Ẩm Thực</span><span class="v8745-line" id="v8745-mastery-line">Xem độ thành thạo ▾</span></summary>
+          <div class="v8745-inner" id="v8745-mastery-body">Đang cập nhật...</div>
+        </details>
+
+        <div class="tab-soft-card rounded-3xl p-3 shadow-sm">
+          <div class="flex items-center justify-between mb-2">
+            <div>
+              <b class="text-xs text-slate-800 block">Phân bố sao</b>
+              <span class="text-[8px] text-slate-400">Dựa trên các đánh giá đã lưu</span>
+            </div>
+            <span id="reviews-count-big" class="text-[9px] bg-amber-100 text-amber-800 font-black px-2 py-1 rounded-full">0 review</span>
+          </div>
+          <div id="reviews-distribution" class="space-y-1"></div>
+        </div>
+
+        <div class="tab-soft-card rounded-3xl p-3 shadow-sm">
+          <div class="flex items-center justify-between gap-2 mb-2">
+            <div>
+              <b class="text-xs text-slate-800 block">Nhận xét của khách</b>
+              <span class="text-[8px] text-slate-400">Mới nhất ở trên • lưu tối đa 30 đánh giá</span>
+            </div>
+            <span class="text-lg">📝</span>
+          </div>
+          <div id="shop-reviews-list" class="space-y-2 pb-1">
+            <div class="text-[9px] text-slate-400 italic py-2 text-center">Chưa có đánh giá mới trong run này.</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="tab-farm" class="hidden space-y-2.5">
+        <div class="zone-scene zone-farm">
+          <div class="zone-scene-content">
+            <div class="zone-title-row">
+              <div class="zone-big-icon">🌱</div>
+              <div>
+                <div class="zone-name">Vườn</div>
+                <div class="zone-meta">
+                  <span class="zone-meta-icon">🌾</span>
+                  <span class="zone-meta-icon">💧</span>
+                  <span class="zone-meta-icon">🧺</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-[28px] drop-shadow-sm">🌳</div>
+          </div>
+        </div>
+
+        <div id="farm-automation-panel" class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-2.5 shadow-sm"></div>
+        <div id="farm-event-panel" class="rounded-2xl border border-lime-200 bg-lime-50/80 p-2.5 shadow-sm"></div>
+        <div class="grid grid-cols-2 gap-2" id="farm-plots-grid"></div>
+
+        <div class="tab-soft-card p-2.5 rounded-2xl shadow-sm space-y-1.5">
+          <b class="text-xs text-slate-800 block">Túi Hạt Giống:</b>
+          <div class="grid grid-cols-2 gap-1.5" id="farm-seed-store-grid"></div>
+        </div>
+      </section>
+
+      <section id="tab-barn" class="hidden space-y-2.5">
+        <div class="zone-scene zone-barn">
+          <div class="zone-scene-content">
+            <div class="zone-title-row">
+              <div class="zone-big-icon">🐄</div>
+              <div>
+                <div class="zone-name">Chuồng</div>
+                <div class="zone-meta">
+                  <span class="zone-meta-icon">🌾</span>
+                  <span class="zone-meta-icon">🫶</span>
+                  <span class="zone-meta-icon">🥚</span>
+                </div>
+              </div>
+            </div>
+            <div class="text-[28px] drop-shadow-sm">🪵</div>
+          </div>
+        </div>
+
+        <div id="barn-automation-panel" class="rounded-2xl border border-amber-200 bg-amber-50/70 p-2.5 shadow-sm"></div>
+        <div id="barn-event-panel" class="rounded-2xl border border-orange-200 bg-orange-50/80 p-2.5 shadow-sm"></div>
+        <div class="space-y-2" id="barn-animals-list"></div>
+      </section>
+
+
+      <section id="tab-village" class="hidden space-y-2.5">
+        <div class="village-card">
+          <div class="village-top">
+            <div class="flex items-center justify-between gap-2">
+              <div>
+                <div class="text-[8px] font-black uppercase tracking-[.16em] text-emerald-950/60">Đi dạo quanh quê</div>
+                <div class="font-black text-sm text-emerald-950">🗺️ Làng & Phố Huyện</div>
+              </div>
+              <div class="flex items-center gap-1.5 v86-top-tools">
+                <span class="village-stat-chip">🤝 <span id="village-karma-text">10</span></span>
+                <span class="village-stat-chip">🚶 <span id="village-trip-count">0</span></span>
+                <button type="button" class="village-help-btn v77-help-btn v83-help-btn v86-top-help tap-scale" onclick="toggleVillageGuide(true)" aria-label="Hướng dẫn chơi Làng" title="Hướng dẫn">?</button>
+              </div>
+            </div>
+            <div class="mt-2 flex items-center gap-2 text-[8px] font-black text-emerald-950/75">
+              <span id="village-weather-top" class="village-soft-chip">☀️ Nắng đẹp</span>
+              <span class="village-soft-chip">📍 <span id="village-zone-top-name">Phố Nhỏ</span></span>
+            </div>
+            <div id="v873-attendance-hint" class="v873-attendance-hint" aria-live="polite">👥 Lịch cư dân đang cập nhật…</div>
+          </div>
+
+          <div id="village-zone-row" class="village-zone-row"></div>
+
+          <div id="village-road" class="village-road map-upgraded">
+            <span class="village-prop text-4xl" style="left:5%;bottom:45px">🏠</span>
+            <span class="village-prop text-3xl" style="left:27%;bottom:47px">🌳</span>
+            <span id="village-zone-prop" class="village-prop text-4xl" style="right:7%;bottom:43px">🧺</span>
+            <span class="village-prop text-xl" style="right:28%;bottom:50px">🐕</span>
+            <span id="village-ambient-left" class="village-ambient" style="left:24%;bottom:48px">🐓</span>
+            <span id="village-ambient-right" class="village-ambient" style="right:24%;bottom:48px">🌼</span>
+            <div id="village-chibi" class="village-chibi-doll">
+              <span id="village-chibi-name" class="chibi-name-tag">Bạn</span>
+              <div class="v44-village-player"><img id="village-chibi-image" class="village-chibi-image" alt="Nhân vật chibi"></div>
+              <span id="village-chibi-outfit" class="chibi-outfit"></span><span id="village-chibi-hat" class="chibi-hat"></span><span id="village-chibi-charm" class="chibi-charm"></span><span id="village-chibi-shoes" class="chibi-shoes"></span>
+            </div>
+            <div id="village-npc-layer" class="village-npc-layer"></div>
+            <!-- v87.3.4.4: fixed map-point overlay removed; the scene is reserved for player and NPCs. -->
+          </div>
+          <div class="village-map-tip"><span class="spark">✨</span><span>Khám phá bằng Đi lon ton và gặp gỡ cư dân trên bản đồ.</span></div>
+          <div class="village-npc-note"><span class="spark">🚶</span><span>NPC hoàn thành việc xong sẽ rời đi — nhấn vào mới hiện tên và hội thoại.</span></div>
+
+          <div class="village-action-hub v77-control-deck v83-control-deck">
+            <div class="village-walk-bar v77-walk-bar v83-walk-bar">
+              <div class="village-energy-card v77-energy-card" role="group" aria-label="Năng lượng khám phá Làng">
+                <div class="village-energy-head v77-energy-head">
+                  <span class="v77-energy-title"><span class="v77-energy-icon">⚡</span> Năng lượng</span>
+                  <span class="v77-energy-count"><strong id="village-energy-text">100</strong><small>/100</small></span>
+                </div>
+                <div class="village-energy-track v77-energy-track"><div id="village-energy-bar" class="village-energy-fill" style="width:100%"></div></div>
+                <div class="village-energy-foot v77-energy-foot">
+                  <span>◷ <span id="village-energy-regen">+1/45s</span></span>
+                  <span id="village-energy-meta">🤝 10 • 🚶 0</span>
+                </div>
+              </div>
+              <button id="btn-village-walk" onclick="startVillageWalk()" class="village-walk-btn v77-walk-btn tap-scale" aria-label="Đi lon ton khám phá, tiêu hao năng lượng">
+                <img id="v77-walk-mascot" class="v77-walk-mascot" alt="" aria-hidden="true">
+                <span class="v77-walk-copy">
+                  <span class="walk-main">Đi lon ton <span class="v77-walk-arrow">›</span></span>
+                  <span class="walk-sub">⚡ <span id="village-walk-cost">10</span> · Khám phá</span>
+                </span>
+              </button>
+            </div>
+          </div>
+          <details id="v8751-town-card" hidden aria-label="Việc vui mỗi khu">
+            <summary><span class="v8751-symbol" id="v8751-town-icon">🎪</span>
+              <span class="v8751-summary-copy"><span id="v8751-town-title">Việc vui trong ngày</span><span class="v8751-sub" id="v8751-town-sub">Hoạt động ngắn, quà thật</span></span>
+              <span class="v8751-status" id="v8751-town-status">🎫 0/5</span><span class="v8751-arrow">⌄</span>
+            </summary><div id="v8751-town-body"></div>
+          </details>
+
+          <details id="v8752-festival-card" aria-label="Sự kiện liên khu và lễ hội" >
+            <summary><span aria-hidden="true" style="font-size:17px">🎊</span>
+              <span class="v8752-festival-summary-main"><span id="v8752-festival-title">Lễ Hội Thị Trấn</span><span id="v8752-festival-sub" class="v8752-festival-sub">Ba chuỗi hành trình nhiều ngày</span></span>
+              <span id="v8752-festival-pill" class="v8752-pill">📍 0/3</span><span aria-hidden="true">⌄</span>
+            </summary><div id="v8752-festival-body"></div>
+          </details>
+          <details id="v8753-rep-card" aria-label="Danh vọng tại thị trấn">
+            <summary><span style="font-size:16px">🏅</span><span class="v8753-summary-text">Danh Vọng Thị Trấn <span class="v8753-sub" id="v8753-sub">Uy tín riêng tại 11 khu • Mở hợp đồng cung ứng</span></span><span class="v8753-count" id="v8753-count">0/11</span><span aria-hidden="true">⌄</span></summary>
+            <div id="v8753-body">Đang đọc danh vọng...</div>
+          </details>
+          <div id="v84-story-progress" class="v84-story-progress" aria-label="Tiến độ cốt truyện của cư dân"></div>
+          <div id="village-gear-summary" class="village-gear-summary px-2"></div>
+          <div id="village-guide-panel" class="village-guide-panel hidden">
+            <div class="village-guide-head">
+              <b>❔ Cách chơi tab Làng</b>
+              <button type="button" onclick="toggleVillageGuide(false)" class="village-guide-close">Đóng</button>
+            </div>
+            <ul>
+              <li>• Cảnh Làng không còn ghim điểm cố định; bạn có thể ngắm cảnh và gặp NPC ngay trên map.</li>
+              <li>• Bấm <b>Đi lon ton</b> để tiêu hao năng lượng và gặp NPC, biến cố hoặc quà thưởng.</li>
+              <li>• NPC hoàn thành việc xong sẽ rời đi — nhấn vào mới hiện tên và hội thoại.</li>
+              <li>• Theo dõi thời tiết ở phần trên cùng; dưới khu làng không lặp lại dự báo nữa.</li>
+            </ul>
+          </div>
+
+          <div id="village-encounter-backdrop" class="village-encounter-backdrop hidden"></div>
+          <div id="village-encounter-panel" class="village-encounter hidden">
+            <div class="village-encounter-head">
+              <div id="village-encounter-icon" class="w-12 h-12 rounded-[18px] bg-white border border-amber-200 flex items-center justify-center text-[26px] shrink-0 shadow-sm">❔</div>
+              <div class="village-encounter-title-wrap">
+                <b id="village-encounter-title" class="text-[13px] text-slate-800 block font-black">Có chuyện xảy ra</b>
+                <p id="village-encounter-desc" class="text-[9px] text-amber-900/70 mt-1 leading-relaxed"></p>
+              </div>
+            </div>
+            <div class="village-encounter-body">
+              <div id="village-choice-list" class="village-encounter-choices"></div>
+              <div class="village-encounter-footer">
+                <span class="pill">🌾 Sự kiện ngẫu nhiên</span>
+                <span id="village-encounter-energy" class="pill">⚡ Đi làng tiêu hao thể lực</span>
+              </div>
+            </div>
+          </div>
+          <div id="village-point-backdrop" class="village-encounter-backdrop hidden" onclick="closeVillagePointModal()"></div>
+          <div id="village-point-panel" class="village-encounter village-point-panel hidden">
+            <div class="village-encounter-head">
+              <div id="village-point-icon" class="w-12 h-12 rounded-[18px] bg-white border border-sky-200 flex items-center justify-center text-[26px] shrink-0 shadow-sm">📍</div>
+              <div class="village-encounter-title-wrap">
+                <b id="village-point-title" class="text-[13px] text-slate-800 block font-black">Điểm tương tác</b>
+                <p id="village-point-desc" class="text-[9px] text-sky-900/70 mt-1 leading-relaxed"></p>
+              </div>
+            </div>
+            <div class="village-encounter-body">
+              <div id="village-point-choice-list" class="village-encounter-choices"></div>
+              <div class="village-encounter-footer">
+                <span class="pill">🗺️ Điểm trên bản đồ</span>
+                <span id="village-point-zone" class="pill">Làng</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="tab-soft-card rounded-2xl p-2.5 shadow-sm">
+          <div class="flex items-center justify-between">
+            <b class="text-[10px] text-slate-800">📜 Chuyện vừa gặp</b>
+            <span class="text-[8px] text-slate-400">tối đa 12 chuyện gần nhất</span>
+          </div>
+          <div id="village-history-list" class="mt-1"></div>
+        </div>
+      </section>
+
+      <section id="tab-warehouse" class="hidden space-y-2.5">
+        <div class="compact-banner bg-slate-800 text-white shadow flex items-center justify-between">
+          <div>
+            <h2 class="font-black text-xs">Kho Vật Tư & Nông Sản</h2>
+            <p id="warehouse-valuation-text" class="text-[9px] text-slate-300">Tổng trữ lượng: 0 món • Ước tính: 0 Xu</p>
+          </div>
+          <span class="text-3xl">📦</span>
+        </div>
+
+        <div class="flex gap-1 overflow-x-auto no-scrollbar py-0.5">
+          <button onclick="filterWarehouseCategory('all')" class="px-2 py-1 rounded-lg bg-amber-500 text-white font-bold text-[9px] whitespace-nowrap">Tất Cả</button>
+          <button onclick="filterWarehouseCategory('craft')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Chế Biến</button>
+          <button onclick="filterWarehouseCategory('farm')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Nông Sản</button>
+          <button onclick="filterWarehouseCategory('dairy')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Sữa & Trứng</button>
+          <button onclick="filterWarehouseCategory('seed')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Hạt Giống</button>
+          <button onclick="filterWarehouseCategory('misc')" class="v8731-warehouse-tab px-2 py-1 rounded-lg bg-rose-100 text-rose-800 font-black text-[9px] whitespace-nowrap">🎀 Đồ Linh Tinh</button>
+          <button onclick="filterWarehouseCategory('souvenir')" class="px-2 py-1 rounded-lg bg-gradient-to-r from-violet-100 to-amber-100 text-violet-800 font-black text-[9px] whitespace-nowrap">🏆 Lưu Niệm</button>
+        </div>
+
+        <div class="grid grid-cols-3 gap-1.5" id="warehouse-items-grid"></div>
+      </section>
+    </main>
+
+    <div class="fixed bottom-3 right-3 z-50">
+      <button onclick="openSmartPhoneModal()" class="w-14 h-14 bg-gradient-to-tr from-amber-600 via-orange-500 to-amber-700 text-white rounded-full shadow-2xl flex items-center justify-center p-3 border-2 border-white tap-scale relative">
+        <span class="text-2xl">📱</span>
+        <span id="phone-notif-badge" class="absolute -top-1 -right-1 w-5 h-5 bg-rose-600 text-white rounded-full text-[10px] font-black flex items-center justify-center border-2 border-white hidden animate-bounce">!</span>
+      </button>
+    </div>
+
+    <div id="modal-smartphone" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-md hidden flex items-center justify-center p-3">
+      <div class="phone-shell relative w-[92vw] max-w-[365px] h-[88vh] max-h-[760px] bg-gradient-to-b from-slate-800 via-slate-950 to-black text-white rounded-[42px] px-3 pt-8 pb-4 flex flex-col gap-2 border-[6px] border-black overflow-hidden">
+        <div class="phone-island absolute top-2 left-1/2 -translate-x-1/2 w-24 h-6 rounded-full bg-black border border-slate-800 flex items-center justify-center gap-1.5 z-10">
+          <span class="w-1.5 h-1.5 rounded-full bg-slate-700"></span>
+          <span class="w-8 h-1.5 rounded-full bg-slate-900"></span>
+        </div>
+
+        <div class="flex items-center justify-between px-1 text-[9px] font-black text-slate-300 shrink-0">
+          <span id="phone-clock">19:30</span>
+          <div class="flex items-center gap-1"><span>▮▮▮</span><span>5G</span><span>🔋</span></div>
+        </div>
+
+        <div class="flex items-center justify-between px-1 shrink-0">
+          <div class="min-w-0">
+            <div class="text-[8px] text-slate-400 font-bold uppercase tracking-[0.18em]">Thị Trấn OS</div>
+            <b id="phone-current-app-title" class="text-xs text-white block truncate">Đơn Giao Hàng</b>
+          </div>
+          <div class="flex items-center gap-1">
+            <span class="phone-wallet-pill">🪙 <span id="phone-coins-display">0</span></span>
+            <button onclick="switchPhoneApp('effects')" title="Tổng chỉ số cộng/trừ và nguồn hiệu ứng" aria-label="Xem tổng hiệu ứng" class="v87411-shortcut tap-scale">📊</button>
+            <button onclick="openNotificationsModal()" title="Thông báo" class="relative w-7 h-7 bg-white/10 hover:bg-white/15 border border-white/10 rounded-full text-[12px] font-black text-slate-200 flex items-center justify-center tap-scale">
+              🔔<span id="phone-notification-count" class="hidden absolute -top-1.5 -right-1.5 min-w-4 h-4 px-1 rounded-full bg-rose-500 text-white text-[7px] font-black flex items-center justify-center border border-slate-950">0</span>
+            </button>
+            <button onclick="closeSmartPhoneModal()" title="Khóa điện thoại" class="w-7 h-7 bg-white/10 hover:bg-white/15 border border-white/10 rounded-full text-[11px] font-black text-slate-300 flex items-center justify-center tap-scale">⏻</button>
+          </div>
+        </div>
+
+        <!-- MÀN HÌNH HOME: icon app theo kiểu smartphone -->
+        <div class="grid grid-cols-4 gap-x-1.5 gap-y-1 text-center text-[7px] font-bold shrink-0 bg-white/[0.035] border border-white/[0.06] rounded-3xl px-2 py-2">
+          <button onclick="switchPhoneApp('delivery')" id="papp-btn-delivery" class="py-1 rounded-2xl bg-white/10 text-white ring-1 ring-white/10 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-sky-400 to-blue-600 flex items-center justify-center text-xl mb-1">🛵</span>
+            <span>Ship</span>
+          </button>
+          <button onclick="switchPhoneApp('soppi')" id="papp-btn-soppi" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-orange-400 to-rose-500 flex items-center justify-center text-xl mb-1">🛒</span>
+            <span>Soppi</span>
+          </button>
+          <button onclick="switchPhoneApp('social')" id="papp-btn-social" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-violet-400 to-purple-700 flex items-center justify-center text-xl mb-1">👥</span>
+            <span>Cư Dân</span>
+          </button>
+          <button onclick="switchPhoneApp('progress')" id="papp-btn-progress" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-emerald-400 to-teal-700 flex items-center justify-center text-xl mb-1">🏗️</span>
+            <span>Phát Triển</span>
+          </button>
+          <button onclick="switchPhoneApp('utility')" id="papp-btn-utility" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-cyan-400 to-blue-700 flex items-center justify-center text-xl mb-1">🧰</span>
+            <span>Tiện Ích</span>
+          </button>
+          <button onclick="switchPhoneApp('games')" id="papp-btn-games" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-fuchsia-400 to-pink-700 flex items-center justify-center text-xl mb-1">🎮</span>
+            <span>Game</span>
+          </button>
+          <button onclick="switchPhoneApp('bank')" id="papp-btn-bank" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-amber-400 to-yellow-700 flex items-center justify-center text-xl mb-1">🏦</span>
+            <span>Ví/Vay</span>
+          </button>
+          <button onclick="switchPhoneApp('auction')" id="papp-btn-auction" class="py-1 rounded-2xl bg-transparent text-slate-300 tap-scale flex flex-col items-center">
+            <span class="phone-app-icon w-10 h-10 rounded-[13px] bg-gradient-to-br from-violet-500 to-amber-700 flex items-center justify-center text-xl mb-1">🔨</span>
+            <span>Đấu Giá</span>
+          </button>
+        </div>
+
+        <div class="flex-1 min-h-0 mt-2 overflow-y-auto no-scrollbar space-y-2 bg-black/20 border border-white/[0.07] rounded-[28px] p-2.5" id="phone-app-container">
+          
+          <!-- V87.4.1.1: Trung tâm tổng hợp hiệu ứng, không lưu trạng thái vào save. -->
+          <div id="phone-app-effects" class="hidden v87411-panel">
+            <div class="v87411-top"><b>📊 Sổ Hiệu Ứng</b><button type="button" onclick="renderEffectDashboard()">↻ Cập nhật</button></div>
+            <p class="v87411-intro">Tổng chỉ số đang có • nguồn cộng/trừ • giới hạn hiệu lực. Bấm từng chỉ số để xem chi tiết.</p>
+            <div id="v87411-summary"></div>
+            <div id="v87411-groups"></div>
+          </div>
+
+          <!-- APP V37: SÀN ĐẤU GIÁ LƯU NIỆM (NPC/offline) -->
+          <div id="phone-app-auction" class="hidden space-y-2">
+            <div class="auction-header">
+              <div class="flex items-center justify-between gap-2">
+                <div><b class="text-[12px] text-amber-100 block">🔨 Sàn Sưu Tầm Đầu Làng</b><span class="text-[8px] text-violet-200">Phiên đấu giá với thương nhân NPC</span></div>
+                <span class="phone-wallet-pill shrink-0">🪙 <span id="auction-coins">0</span></span>
+              </div>
+              <div class="auction-note mt-1">🔔 Kết quả chốt khi qua ngày. Xu đã đặt giá được giữ lại, nếu thua sẽ hoàn trả. Chỉ bán bản lưu niệm dư.</div>
+            </div>
+            <div class="auction-tabs">
+              <button onclick="setAuctionTab('buy')" id="auction-tab-buy" class="auction-tab active">🛍️ Săn đồ</button>
+              <button onclick="setAuctionTab('sell')" id="auction-tab-sell" class="auction-tab">💰 Bán đồ dư</button>
+              <button onclick="setAuctionTab('history')" id="auction-tab-history" class="auction-tab">📜 Giao dịch</button>
+            </div>
+            <div id="auction-buy-section" class="space-y-2">
+              <div class="auction-note">📆 Hàng mới mỗi ngày • đặt giá hoặc mua ngay để bổ sung bộ sưu tập.</div>
+              <div id="auction-buy-grid" class="auction-grid"></div>
+            </div>
+            <div id="auction-sell-section" class="space-y-2 hidden">
+              <div id="auction-my-listings" class="space-y-1.5"></div>
+              <div class="auction-note">Giữ tối thiểu 1 bản mỗi loại. Niêm yết 1 ngày; thu phí đăng 3%, phí bán thành công 5%. Không trúng giá sẽ hoàn vật phẩm.</div>
+              <div id="auction-sell-grid" class="auction-grid"></div>
+            </div>
+            <div id="auction-history-section" class="space-y-1.5 hidden"><div id="auction-history-list" class="space-y-1.5"></div></div>
+          </div>
+
+          <!-- APP 1: SHIPPER ONLINE -->
+          <div id="phone-app-delivery" class="space-y-2">
+            <div class="bg-slate-800 p-2 rounded-2xl border border-slate-700 flex items-center justify-between">
+              <div>
+                <b class="text-xs text-amber-300 block">Đơn Hàng Giao Tận Nơi</b>
+                <span id="delivery-status-txt" class="text-[9px] text-slate-400">Chờ mở quán để nhận tín hiệu đơn...</span>
+              </div>
+              <span class="text-2xl">📦</span>
+            </div>
+            <div class="space-y-1.5" id="delivery-orders-list"></div>
+          </div>
+
+          <!-- APP 2: SOPPI V87.4.3 COMPACT -->
+          <div id="phone-app-soppi" class="hidden v8743-shop">
+            <div class="v8743-head"><div><b>🛍️ Soppi • Săn Hàng Quê</b><small id="v8743-market-chip">📰 Giá đổi theo tin hôm nay</small></div><span>🚚</span></div>
+            <div class="v8743-tabs" role="tablist" aria-label="Danh mục Soppi">
+              <button type="button" id="v8743-tab-buy" onclick="v8743SelectTab('buy')">🧺<small>Mua sắm</small></button>
+              <button type="button" id="v8743-tab-sale" onclick="v8743SelectTab('sale')">⚡<small>Săn sale</small></button>
+              <button type="button" id="v8743-tab-recipe" onclick="v8743SelectTab('recipe')">📖<small>Công thức</small></button>
+              <button type="button" id="v8743-tab-box" onclick="v8743SelectTab('box')">🎁<small>Túi mù</small></button>
+            </div>
+            <div id="soppi-active-deliveries" class="v8743-deliveries"></div>
+            <div id="v8743-panel-buy" class="v8743-panel">
+              <div class="v8743-filter"><input type="search" id="v8743-search" placeholder="🔎 Tìm nguyên liệu..." oninput="v8743SearchChange(this.value)" autocomplete="off"><button type="button" onclick="v8743ToggleCompact()" id="v8743-compact-toggle">▦ 4 cột</button><button type="button" onclick="v8743ToggleLocked()" id="v8743-locked-toggle">🔓 Mở</button></div>
+              <div class="v8743-mini-filters" id="v8743-groups">
+                <button onclick="v8743SelectGroup('all')">Tất cả</button><button onclick="v8743SelectGroup('broth')">Cốt / sốt</button><button onclick="v8743SelectGroup('top')">Topping</button><button onclick="v8743SelectGroup('other')">Khác</button>
+              </div>
+              <div class="v8743-subline"><b id="v8743-buy-count">0 món</b><small>Online tiết kiệm khoảng 5% • Giao sau</small></div>
+              <div id="soppi-items-grid" class="v8743-goods"></div>
+              <div class="v8743-pager" id="v8743-buy-pager"></div>
+              <div class="v8743-cart" id="v8743-cart"><span>🛒 Chưa chọn hàng</span><button type="button" onclick="v8743Checkout()">Đặt hàng</button></div>
+              <details class="v8743-accordion" id="v8743-direct-market"><summary>🏪 Mua ngay tại Chợ / Bán nông sản <span>⌄</span></summary>
+                <div class="v8743-market-news"><b id="market-news-headline">📰 Tin thị trường</b><small id="market-news-impact">Đang cập nhật…</small><i id="market-news-tag">Hôm nay</i></div>
+                <div class="v8743-deal"><span>📦 <b>Kèo Thơm Anh Khải</b><small id="market-deal-desc">Đang cập nhật</small></span><button id="btn-claim-deal" onclick="buyDailyFlashDeal()">Xem kèo</button></div>
+                <div class="v8743-market-controls"><button onclick="setMarketTabFilter('all')" id="mfilter-all">Tất cả</button><button onclick="setMarketTabFilter('craft')" id="mfilter-craft">Chế biến</button><button onclick="setMarketTabFilter('farm')" id="mfilter-farm">Nông sản</button><button onclick="setMarketTabFilter('sell')" id="mfilter-sell">Bán lại</button></div>
+                <div class="v8743-goods" id="market-items-grid"></div><div class="v8743-pager" id="v8743-market-pager"></div>
+              </details>
+            </div>
+            <div id="v8743-panel-sale" class="v8743-panel hidden">
+              <div class="v8743-timer"><b>⚡ Flash Sale • Giới hạn suất</b><span id="soppi-flash-countdown">00:60</span></div>
+              <div id="soppi-sale-grid" class="v8743-goods"></div>
+              <div class="v8743-help">Deal đổi mỗi 60 giây. Giá chịu ảnh hưởng tin thị trường và ưu đãi online.</div>
+              <div class="v8743-deal"><span>📦 <b>Kèo Thơm Anh Khải</b><small>Giá kèo từ tin thị trường hôm nay</small></span><button onclick="v8743SelectTab('buy');v8743OpenDirectMarket()">Mở Chợ</button></div>
+            </div>
+            <div id="v8743-panel-recipe" class="v8743-panel hidden">
+              <div class="v8743-recipe-head"><div><b>📖 Sổ Công Thức</b><small id="v8743-recipe-count">Đang tải...</small></div><button onclick="v8743BuyRecipeBox()">🎲 Săn mảnh • 75 Xu</button></div>
+              <div class="v8743-help" id="v8743-recipe-box-hint">Tìm 2 mảnh để mở công thức khám phá. Món bí truyền phải học từ NPC.</div>
+              <div class="v8743-recipes" id="v8743-recipe-grid"></div><div class="v8743-pager" id="v8743-recipe-pager"></div>
+            </div>
+            <div id="v8743-panel-box" class="v8743-panel hidden">
+              <div class="v8743-help">🎁 Đồ Xinh, quà NPC và túi mù vẫn giữ đủ xác suất như bản trước.</div>
+              <div id="v8731-toy-market" class="v8731-market">
+                <button type="button" onclick="v8731ToggleMarket()" class="v8731-market-toggle tap-scale" aria-expanded="false" id="v8731-market-toggle"><span>🧸 <b>Chợ Đồ Xinh & Quà Vặt</b><small>Quà tặng • túi mù • đồ chơi</small></span><span id="v8731-shop-chevron">⌄</span></button>
+                <div id="v8731-market-body" class="hidden p-2 space-y-2"><div id="v8731-market-grid" class="grid grid-cols-3 gap-1"></div></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- V87.3.2: Danh Bạ Cư Dân thống nhất với NPC Làng; Khách Quán là danh sách riêng -->
+          <div id="phone-app-social" class="hidden v8732-app">
+            <div class="v8732-heading">
+              <span class="v8732-heading-icon">📖</span>
+              <div class="min-w-0 flex-1"><b>Sổ Tay Cư Dân</b><small>Người làng • ký ức • hành trình quen biết</small></div>
+              <span id="v8732-progress-count" class="v8732-count">0/0</span>
+            </div>
+            <div class="v8732-main-tabs">
+              <button id="v8732-tab-village" type="button" onclick="filterSocialGroup('village')">🏡 Cư Dân Làng</button>
+              <button id="v8732-tab-customer" type="button" onclick="filterSocialGroup('customer')">🧋 Khách Quán</button>
+            </div>
+            <div class="v8732-filters">
+              <input id="v8732-search" type="search" placeholder="🔎 Tìm tên, nghề nghiệp..." oninput="v8732ChangeSearch(this.value)" aria-label="Tìm cư dân" autocomplete="off">
+              <div class="v8732-filter-row">
+                <select id="v8732-zone-filter" onchange="v8732ChangeFilter('zone',this.value)" aria-label="Lọc khu vực"><option value="all">📍 Mọi khu</option></select>
+                <select id="v8732-job-filter" onchange="v8732ChangeFilter('job',this.value)" aria-label="Lọc nghề nghiệp"><option value="all">💼 Mọi nghề</option></select>
+                <select id="v8732-status-filter" onchange="v8732ChangeFilter('status',this.value)" aria-label="Lọc quan hệ">
+                  <option value="all">Tất cả quan hệ</option><option value="met">✅ Đã gặp</option><option value="unmet">❔ Chưa gặp</option><option value="close">💚 Thân thiết</option><option value="good">😊 Ấn tượng tốt</option><option value="bad">💢 Ấn tượng xấu</option>
+                </select>
+                <select id="v8732-story-filter" onchange="v8732ChangeFilter('story',this.value)" aria-label="Lọc cốt truyện"><option value="all">📖 Mọi truyện</option><option value="active">Đang làm</option><option value="done">Hoàn thành</option><option value="pending">Chờ giải quyết</option></select>
+              </div>
+            </div>
+            <div id="v8732-profile" class="hidden"></div>
+            <div id="v8732-list-summary" class="v8732-list-summary"></div>
+            <div id="social-npc-list" class="v8732-contact-list"></div>
+          </div>
+
+          <!-- APP 4: TRUNG TÂM PHÁT TRIỂN QUÁN -->
+          <div id="phone-app-progress" class="hidden space-y-2">
+            <div class="bg-gradient-to-r from-emerald-950 via-teal-950 to-cyan-950 p-2.5 rounded-2xl border border-emerald-500/40 shadow">
+              <div class="flex items-center justify-between gap-2">
+                <div class="flex items-center gap-2 min-w-0">
+                  <div class="w-9 h-9 rounded-xl bg-emerald-600 flex items-center justify-center text-xl shadow-lg border border-emerald-400">🏗️</div>
+                  <div class="min-w-0">
+                    <b class="text-xs text-emerald-100 block">Trung Tâm Phát Triển Quán</b>
+                    <span id="growth-stage-label" class="text-[8px] text-emerald-300 block truncate">Quầy Khởi Nghiệp</span>
+                  </div>
+                </div>
+                <span id="growth-sp-badge" class="text-[9px] bg-amber-500/20 text-amber-200 border border-amber-400/30 px-2 py-1 rounded-xl font-black shrink-0">⚡ 0 SP</span>
+              </div>
+              <div id="growth-bonus-summary" class="mt-2 text-[8px] text-cyan-100 bg-black/20 rounded-xl px-2 py-1.5">Đang tính hiệu ứng quán...</div>
+              <button type="button" onclick="switchPhoneApp('effects')" class="v87411-jump">📊 Xem tổng tất cả hiệu ứng +/− và nguồn cộng dồn →</button>
+            </div>
+
+            <div class="grid grid-cols-4 gap-1 text-[8px] font-bold">
+              <button id="growth-tab-skills" onclick="switchGrowthSection('skills')" class="py-1.5 rounded-xl bg-emerald-600 text-white tap-scale">⚡ Kỹ Năng</button>
+              <button id="growth-tab-decor" onclick="switchGrowthSection('decor')" class="py-1.5 rounded-xl bg-slate-800 text-slate-300 tap-scale">🪴 Trang Trí</button>
+              <button id="growth-tab-staff" onclick="switchGrowthSection('staff')" class="py-1.5 rounded-xl bg-slate-800 text-slate-300 tap-scale">👥 Nhân Viên</button>
+              <button id="growth-tab-story" onclick="switchGrowthSection('story')" class="py-1.5 rounded-xl bg-slate-800 text-slate-300 tap-scale">🏪 Mở Rộng</button>
+            </div>
+
+            <div id="growth-panel-skills" class="space-y-1.5"></div>
+            <div id="growth-panel-decor" class="hidden space-y-1.5"></div>
+            <div id="growth-panel-staff" class="hidden space-y-1.5"></div>
+            <div id="growth-panel-story" class="hidden space-y-1.5"></div>
+          </div>
+
+          <!-- APP: TIỆN ÍCH & PHỤ KIỆN -->
+          <div id="phone-app-utility" class="hidden space-y-2">
+            <div class="utility-hero">
+              <div class="flex items-center justify-between gap-2"><div><b class="text-xs text-cyan-200 block">🧰 Tiện Ích & Phụ Kiện</b><span class="text-[8px] text-slate-400">Mua buff và phối đồ cho chibi.</span></div><span class="phone-wallet-pill">🪙 <span id="utility-coins-display">0</span></span></div>
+              <div id="utility-gear-bonus-summary" class="text-[8px] text-emerald-300 mt-2 leading-relaxed">Chưa có buff.</div>
+              <button type="button" onclick="switchPhoneApp('effects')" class="v87411-jump">📊 Tổng chỉ số đang hoạt động →</button>
+            </div>
+            <div><div class="utility-section-title mb-1.5">Đang trang bị</div><div id="utility-equipped-grid" class="grid grid-cols-4 gap-1.5"></div></div>
+            <div class="utility-filter-row">
+              <button onclick="setUtilityShopFilter('gear')" data-utility-filter="gear" class="utility-filter-btn active">👕 Trang bị</button><button onclick="setUtilityShopFilter('village')" data-utility-filter="village" class="utility-filter-btn">🗺️ Làng</button><button onclick="setUtilityShopFilter('shop')" data-utility-filter="shop" class="utility-filter-btn">🏪 Quán</button><button onclick="setUtilityShopFilter('farm')" data-utility-filter="farm" class="utility-filter-btn">🌱 Vườn</button><button onclick="setUtilityShopFilter('barn')" data-utility-filter="barn" class="utility-filter-btn">🐄 Chuồng</button>
+            </div>
+            <div id="utility-gear-section"><div class="flex items-center justify-between mb-1.5"><div class="utility-section-title">Phụ kiện nhân vật</div><span id="utility-owned-count" class="utility-owned-pill">0 món</span></div><div id="utility-gear-shop-grid" class="utility-grid"></div></div>
+
+            <div id="utility-energy-section" class="energy-pack-panel hidden">
+              <div class="energy-pack-head">
+                <div>
+                  <div class="utility-section-title">⚡ Nạp thể lực Làng</div>
+                  <div class="text-[7px] text-slate-400 mt-0.5">Dùng ngay • không vượt quá 100⚡</div>
+                </div>
+                <span class="energy-now-pill">⚡ <span id="utility-energy-now">100</span>/100</span>
+              </div>
+              <div id="utility-energy-pack-grid" class="energy-pack-grid"></div>
+            </div>
+
+            <div id="utility-buff-section" class="hidden"><div class="utility-section-title mb-1.5">Đồ trợ lực</div><div id="utility-buff-shop-grid" class="utility-grid"></div></div>
+          </div>
+
+          <div id="phone-app-games" class="hidden space-y-2">
+            <div class="rounded-2xl bg-gradient-to-r from-fuchsia-950/80 to-indigo-950/80 border border-fuchsia-500/30 p-2 flex items-center justify-between">
+              <div><b class="text-[10px] text-fuchsia-200 block">🎮 Góc Giải Trí Làng Quê</b><span class="text-[8px] text-slate-400">Chơi để săn điểm, Xu và đồ lưu niệm hiếm.</span></div>
+              <span id="game-collection-summary" class="text-[8px] font-black text-amber-300">🏆 0/0</span>
+            </div>
+            <div class="grid grid-cols-2 gap-1.5 text-xs">
+              <button onclick="openBlindBagModal()" class="p-2.5 bg-gradient-to-br from-amber-900/60 to-slate-800 hover:from-amber-800 rounded-2xl border border-amber-500/40 text-left tap-scale">
+                <div class="text-3xl mb-1">🎁</div><b class="text-amber-200 block text-xs">Khui Hộp Mù</b><span id="blindbag-card-stock" class="text-[8px] text-amber-300">45 Xu • hoặc dùng Túi Mù nhặt được</span>
+              </button>
+              <button onclick="openLotteryModal()" class="p-2.5 bg-gradient-to-br from-rose-900/60 to-slate-800 hover:from-rose-800 rounded-2xl border border-rose-500/40 text-left tap-scale">
+                <div class="text-3xl mb-1">🎟️</div><b class="text-rose-200 block text-xs">Vé Số Cào</b><span id="lottery-card-stock" class="text-[8px] text-rose-300">25 Xu • hoặc dùng vé nhặt được</span>
+              </button>
+              <button onclick="openMemoryGame()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-2xl border border-slate-700 text-left tap-scale">
+                <div class="text-3xl mb-1">🃏</div><b class="text-slate-200 block text-xs">Ghép Thẻ</b><span class="text-[8px] text-slate-400">1 lượt miễn phí/ngày</span>
+              </button>
+              <button onclick="openWheelGame()" class="p-2.5 bg-slate-800 hover:bg-slate-700 rounded-2xl border border-slate-700 text-left tap-scale">
+                <div class="text-3xl mb-1">🎡</div><b class="text-slate-200 block text-xs">Vòng Quay</b><span class="text-[8px] text-slate-400">Canh thời điểm • có jackpot</span>
+              </button>
+              <button onclick="openWhackGame()" class="p-2.5 bg-gradient-to-br from-emerald-950/80 to-slate-800 hover:from-emerald-900 rounded-2xl border border-emerald-500/30 text-left tap-scale">
+                <div class="text-3xl mb-1">🐭</div><b class="text-emerald-200 block text-xs">Săn Chuột Kho</b><span class="text-[8px] text-emerald-300">20 Xu • phản xạ + combo</span>
+              </button>
+              <button onclick="openStackGame()" class="p-2.5 bg-gradient-to-br from-sky-950/80 to-slate-800 hover:from-sky-900 rounded-2xl border border-sky-500/30 text-left tap-scale">
+                <div class="text-3xl mb-1">🥤</div><b class="text-sky-200 block text-xs">Xếp Tháp Ly</b><span class="text-[8px] text-sky-300">25 Xu • căn chuẩn từng tầng</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- APP 6: TÀI CHÍNH & VAY VỐN -->
+          <div id="phone-app-bank" class="hidden space-y-2">
+            <div class="bg-slate-800 p-2 rounded-2xl border border-slate-700 flex items-center justify-between">
+              <div>
+                <b class="text-xs block">Sổ Nợ Hiện Tại:</b>
+                <span id="bank-debt-text" class="text-rose-400 font-black text-xs">0 Xu</span>
+              </div>
+              <button onclick="payDebtAmount(100)" class="px-2 py-1 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[9px] rounded-lg tap-scale">
+                Trả 100 Xu
+              </button>
+            </div>
+
+            <div class="bg-gradient-to-br from-amber-950/80 to-slate-900 p-2 rounded-2xl border border-amber-600/50 space-y-1.5">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center gap-1.5">
+                  <span class="text-lg">📜</span>
+                  <b class="text-[11px] text-amber-300">Thế Chấp Ô Đất</b>
+                </div>
+                <span id="mortgage-plots-count" class="text-[8px] text-amber-300 font-bold">Đang cắm: 0 ô</span>
+              </div>
+              <div class="grid grid-cols-2 gap-1 text-[9px]">
+                <button onclick="mortgagePlotDeed()" class="p-1.5 bg-slate-800 hover:bg-slate-700 border border-amber-500/30 rounded-xl text-left tap-scale">
+                  <b class="text-amber-200 block">Cầm Sổ Đất</b>
+                  <span class="text-[8px] text-slate-400">Nhận 1.500 Xu</span>
+                </button>
+                <button onclick="redeemPlotDeed()" class="p-1.5 bg-slate-800 hover:bg-slate-700 border border-emerald-500/30 rounded-xl text-left tap-scale">
+                  <b class="text-emerald-300 block">Chuộc Lại</b>
+                  <span class="text-[8px] text-slate-400">Trả 1.800 Xu</span>
+                </button>
+              </div>
+            </div>
+
+            <div class="space-y-1">
+              <b class="text-[10px] block text-slate-400">Gói Vay Tín Dụng:</b>
+              <div class="space-y-1 text-xs" id="bank-loans-list"></div>
+            </div>
+          </div>
+        </div>
+        <div class="phone-home-indicator w-24 h-1 rounded-full bg-white/70 mx-auto shrink-0"></div>
+      </div>
+    </div>
+
+    <div id="modal-quick-restock" class="fixed inset-0 z-50 bg-black/75 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-slate-900 text-white rounded-3xl p-4 border border-amber-500 shadow-2xl space-y-3">
+        <div class="flex items-center justify-between border-b border-slate-800 pb-2">
+          <div class="flex items-center gap-1.5">
+            <span class="text-2xl" id="qrestock-icon">📦</span>
+            <div>
+              <b class="text-xs text-amber-300" id="qrestock-title">Nhập Nhanh Tại Quầy</b>
+              <span class="text-[9px] text-slate-400 block" id="qrestock-stock-info">Tồn kho hiện tại: 0</span>
+            </div>
+          </div>
+          <button onclick="closeQuickRestockModal()" class="w-6 h-6 rounded-full bg-slate-800 text-slate-400 font-bold text-xs flex items-center justify-center">✕</button>
+        </div>
+
+        <div class="bg-slate-800/80 p-2.5 rounded-2xl border border-slate-700 space-y-2">
+          <div class="flex items-center justify-between text-xs">
+            <span class="text-slate-300">Đơn giá sỉ cấp tốc:</span>
+            <b class="text-amber-300" id="qrestock-unit-price">10 Xu / món</b>
+          </div>
+          <div class="flex items-center justify-between">
+            <span class="text-slate-300 text-xs">Số lượng nhập:</span>
+            <div class="flex items-center gap-2">
+              <button onclick="adjustQuickRestockQty(-5)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-black tap-scale flex items-center justify-center">-</button>
+              <b class="text-sm text-emerald-400 min-w-[24px] text-center" id="qrestock-qty">5</b>
+              <button onclick="adjustQuickRestockQty(5)" class="w-6 h-6 bg-slate-700 hover:bg-slate-600 rounded-lg text-xs font-black tap-scale flex items-center justify-center">+</button>
+            </div>
+          </div>
+          <div class="border-t border-slate-700 pt-1.5 flex items-center justify-between">
+            <span class="text-xs font-bold text-slate-300">Tổng thanh toán:</span>
+            <b class="text-sm font-black text-emerald-400" id="qrestock-total-cost">50 Xu</b>
+          </div>
+        </div>
+
+        <div class="flex gap-2">
+          <button onclick="closeQuickRestockModal()" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl tap-scale">Hủy</button>
+          <button onclick="confirmQuickRestockPurchase()" class="flex-1 py-2 bg-emerald-600 hover:bg-emerald-500 text-white font-black text-xs rounded-xl tap-scale shadow-lg">Mua Ngay 🪙</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MINI GAME: GHÉP THẺ THỰC SỰ -->
+    <div id="modal-memory-game" class="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-indigo-500 shadow-2xl space-y-3">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-black text-sm text-indigo-300">🃏 Ghép Thẻ Nông Sản</h3>
+            <p class="text-[9px] text-slate-400">Lật 2 thẻ • ghép đủ 6 cặp trước khi hết giờ</p>
+          </div>
+          <button onclick="closeMemoryGame()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold">✕</button>
+        </div>
+        <div class="grid grid-cols-3 gap-2 text-[10px] font-bold">
+          <div class="bg-slate-800 rounded-xl p-1.5 text-center">⏱ <span id="memory-time">45</span>s</div>
+          <div class="bg-slate-800 rounded-xl p-1.5 text-center">🎯 <span id="memory-moves">0</span> lượt</div>
+          <div class="bg-slate-800 rounded-xl p-1.5 text-center">🔥 x<span id="memory-combo">0</span></div>
+        </div>
+        <div id="memory-grid" class="grid grid-cols-4 gap-2"></div>
+        <div id="memory-msg" class="text-[10px] text-center text-indigo-200 min-h-[16px]">Nhấn Bắt Đầu để trộn thẻ.</div>
+        <button id="memory-start-btn" onclick="startMemoryGame()" class="w-full py-2 bg-indigo-600 hover:bg-indigo-500 rounded-xl text-xs font-black tap-scale">Bắt Đầu Ghép 🃏</button>
+      </div>
+    </div>
+
+    <!-- MINI GAME: VÒNG QUAY CÓ CĂN THỜI ĐIỂM -->
+    <div id="modal-wheel-game" class="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-cyan-500 shadow-2xl space-y-3 text-center">
+        <div class="flex items-center justify-between text-left">
+          <div>
+            <h3 class="font-black text-sm text-cyan-300">🎡 Vòng Quay Canh Thời Điểm</h3>
+            <p class="text-[9px] text-slate-400">Vòng quay chạy thật • nhấn DỪNG để chốt ô kim chỉ</p>
+          </div>
+          <button onclick="closeWheelGame()" class="w-7 h-7 rounded-full bg-slate-800 text-slate-400 font-bold">✕</button>
+        </div>
+        <div class="relative w-52 h-52 mx-auto">
+          <div class="absolute left-1/2 -translate-x-1/2 -top-3 z-10 text-3xl">🔻</div>
+          <div id="wheel-disc" class="w-52 h-52 rounded-full border-4 border-cyan-300 shadow-xl flex items-center justify-center transition-transform" style="background: conic-gradient(#0ea5e9 0deg 45deg,#f59e0b 45deg 90deg,#10b981 90deg 135deg,#8b5cf6 135deg 180deg,#e11d48 180deg 225deg,#22c55e 225deg 270deg,#f97316 270deg 315deg,#6366f1 315deg 360deg); transform: rotate(0deg);">
+            <div class="w-14 h-14 bg-slate-900 rounded-full border-4 border-white flex items-center justify-center text-2xl">🎯</div>
+          </div>
+        </div>
+        <div id="wheel-result" class="text-[11px] font-bold text-cyan-200 min-h-[18px]">Các ô: 20 • 35 • 50 • 80 Xu • mật ong • hạt dâu • jackpot • hụt</div>
+        <button id="wheel-action-btn" onclick="startWheelTimingGame()" class="w-full py-2 bg-cyan-600 hover:bg-cyan-500 rounded-xl text-xs font-black tap-scale">QUAY 🎡</button>
+      </div>
+    </div>
+
+    <div id="modal-scratch-lottery" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-rose-500 shadow-2xl space-y-3">
+        <div class="flex items-start justify-between gap-2">
+          <div class="flex items-center gap-2">
+            <span class="text-4xl">🎟️</span>
+            <div><h3 class="font-black text-sm text-rose-300">Vé Số Cào Làng Quê</h3><p class="text-[9px] text-slate-400">25 Xu/vé • Cào 6 ô • trùng 3 mệnh giá để nhận đúng số Xu đó</p></div>
+          </div>
+          <button onclick="openLotteryInfo()" class="w-7 h-7 rounded-full bg-rose-500/20 border border-rose-400/40 text-rose-200 font-black text-xs">?</button>
+        </div>
+        <div id="lottery-ticket-status" class="text-[9px] text-center text-slate-400 bg-slate-800 rounded-xl p-1.5">Chưa có vé. Mua một vé để bắt đầu.</div>
+        <div class="p-2.5 bg-rose-950/60 rounded-2xl border border-rose-500/40 grid grid-cols-3 gap-2">
+          <div onclick="scratchLotterySlot(0)" id="lslot-0" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+          <div onclick="scratchLotterySlot(1)" id="lslot-1" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+          <div onclick="scratchLotterySlot(2)" id="lslot-2" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+          <div onclick="scratchLotterySlot(3)" id="lslot-3" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+          <div onclick="scratchLotterySlot(4)" id="lslot-4" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+          <div onclick="scratchLotterySlot(5)" id="lslot-5" class="h-14 bg-slate-700 hover:bg-slate-600 rounded-xl flex items-center justify-center text-lg font-black text-slate-400 cursor-pointer tap-scale border border-slate-500">❓</div>
+        </div>
+        <p id="lottery-msg" class="text-[10px] text-amber-300 font-bold text-center min-h-[16px]">Mệnh giá có thể xuất hiện: 5 • 10 • 20 • 30 • 50 • 100 • 200 • 500 • 1.000 Xu</p>
+        <div class="bg-slate-800/90 rounded-2xl p-2 border border-slate-700 space-y-1">
+          <div class="flex items-center justify-between text-[9px] font-bold text-slate-400 border-b border-slate-700 pb-0.5"><span>Lịch sử 20 vé gần nhất:</span><span id="lottery-audit-stats">0 lượt</span></div>
+          <div id="lottery-history-list" class="max-h-20 overflow-y-auto no-scrollbar space-y-0.5 text-[8px] text-slate-300"><span class="text-slate-500 italic block text-center">Chưa có lượt cào nào</span></div>
+        </div>
+        <div class="flex gap-2">
+          <button onclick="closeLotteryModal()" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-300">Đóng</button>
+          <button id="lottery-buy-btn" onclick="buyNewLotteryTicket()" class="flex-1 py-2 bg-rose-600 hover:bg-rose-500 rounded-xl text-xs font-black text-white tap-scale shadow-lg">Mua Vé (25 Xu)</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-lottery-info" class="fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-slate-950 text-white rounded-3xl p-4 border border-rose-400/50 shadow-2xl space-y-2">
+        <div class="flex items-center justify-between"><b class="text-sm text-rose-300">❓ Cơ chế Vé Số Cào</b><button onclick="closeLotteryInfo()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <p class="text-[9px] text-slate-300 leading-relaxed">Mỗi vé được in sẵn 6 ô. Nếu có <b>ít nhất 3 ô cùng một mệnh giá</b>, bạn nhận đúng mệnh giá đó. Vé không trúng vẫn có thể hiện những cặp số gần giống để tạo cảm giác cào thật hơn.</p>
+        <div id="lottery-odds-list" class="space-y-1 text-[9px]"></div>
+        <p class="text-[8px] text-slate-500">🍀 Kỹ năng May Mắn làm giảm nhẹ tỷ lệ trắng tay và đẩy xác suất sang các giải có thưởng. Giải 500/1.000 Xu còn có cơ hội mở khóa lưu niệm vé hiếm.</p>
+      </div>
+    </div>
+
+    <div id="modal-blindbag" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-amber-500 shadow-2xl text-center space-y-3">
+        <div class="flex items-start justify-between gap-2 text-left">
+          <div class="flex items-center gap-2"><span class="text-4xl">🎁</span><div><h3 class="font-black text-sm text-amber-300">Khui Hộp Mù Làng Quê</h3><p class="text-[9px] text-slate-400">45 Xu/lần • có thể lời hoặc lỗ • săn lưu niệm hiếm</p></div></div>
+          <button onclick="openBlindBagInfo()" class="w-7 h-7 rounded-full bg-amber-500/20 border border-amber-400/40 text-amber-200 font-black text-xs">?</button>
+        </div>
+        <div id="blindbag-stock-status" class="rounded-xl bg-amber-950/40 border border-amber-500/30 px-2 py-1.5 text-[9px] text-amber-200 font-bold">🎁 Túi Mù đang có: 0 • Không có sẽ dùng 45 Xu</div>
+        <div class="grid grid-cols-2 gap-2" id="blindbag-selection-grid">
+          <div onclick="selectBlindBag(1)" id="bbag-box-1" class="p-3 bg-slate-800 hover:bg-amber-900/60 border-2 border-slate-700 hover:border-amber-400 rounded-2xl cursor-pointer tap-scale transition-all"><span class="text-4xl block">🎁</span><span class="text-[9px] font-black text-amber-200 mt-1 block">Hộp #1</span><span class="text-[7px] text-slate-500">Không biết bên trong...</span></div>
+          <div onclick="selectBlindBag(2)" id="bbag-box-2" class="p-3 bg-slate-800 hover:bg-amber-900/60 border-2 border-slate-700 hover:border-amber-400 rounded-2xl cursor-pointer tap-scale transition-all"><span class="text-4xl block">🎁</span><span class="text-[9px] font-black text-amber-200 mt-1 block">Hộp #2</span><span class="text-[7px] text-slate-500">Có khi là hàng hiếm?</span></div>
+          <div onclick="selectBlindBag(3)" id="bbag-box-3" class="p-3 bg-slate-800 hover:bg-amber-900/60 border-2 border-slate-700 hover:border-amber-400 rounded-2xl cursor-pointer tap-scale transition-all"><span class="text-4xl block">🎁</span><span class="text-[9px] font-black text-amber-200 mt-1 block">Hộp #3</span><span class="text-[7px] text-slate-500">Có thể trúng hộp xui...</span></div>
+          <div onclick="selectBlindBag(4)" id="bbag-box-4" class="p-3 bg-slate-800 hover:bg-amber-900/60 border-2 border-slate-700 hover:border-amber-400 rounded-2xl cursor-pointer tap-scale transition-all"><span class="text-4xl block">🎁</span><span class="text-[9px] font-black text-amber-200 mt-1 block">Hộp #4</span><span class="text-[7px] text-slate-500">Biết đâu vàng?</span></div>
+        </div>
+        <div id="blindbag-result-box" class="hidden p-2.5 bg-slate-800 rounded-2xl border border-slate-700 space-y-1">
+          <span id="bbag-result-icon" class="text-4xl block">✨</span><b id="bbag-result-title" class="text-xs text-amber-300 block">Chúc Mừng!</b><p id="bbag-result-desc" class="text-[10px] text-slate-300">Bạn đã nhận được vật phẩm!</p><div id="bbag-result-rarity" class="text-[8px] font-black"></div>
+        </div>
+        <div class="flex gap-2"><button onclick="closeBlindBagModal()" class="flex-1 py-2 bg-slate-800 hover:bg-slate-700 rounded-xl text-xs font-bold text-slate-300">Đóng</button><button id="btn-rip-blindbag" onclick="ripSelectedBlindBag()" disabled class="flex-1 py-2 bg-amber-600 hover:bg-amber-500 rounded-xl text-xs font-black text-white tap-scale">Khui Hộp (45 Xu) ✨</button></div>
+      </div>
+    </div>
+
+    <div id="modal-blindbag-info" class="fixed inset-0 z-[70] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-950 text-white rounded-3xl p-4 border border-amber-400/50 shadow-2xl space-y-2">
+        <div class="flex items-center justify-between"><b class="text-sm text-amber-300">❓ Cơ chế Hộp Mù</b><button onclick="closeBlindBagInfo()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <p class="text-[9px] text-slate-300">Mỗi lượt tạo sẵn <b>4 hộp bí mật</b>. Mỗi hộp có thể là <b>Xui / Thường / Hên / Đại Cát</b>. Bạn vẫn nhận được một thứ gì đó, nhưng hộp xui có giá trị thấp hơn 45 Xu nên <b>vẫn có nguy cơ lỗ</b>. Sau khi mở, game sẽ lật luôn cấp vận may của 3 hộp còn lại để bạn biết mình đã bỏ lỡ gì.</p>
+        <div id="blindbag-risk-list" class="space-y-1 text-[9px]"></div>
+        <div class="text-[8px] text-slate-500 font-bold pt-1">BONUS lưu niệm (roll riêng):</div>
+        <div id="blindbag-odds-list" class="space-y-1 text-[9px]"></div>
+        <div class="grid grid-cols-2 gap-1 text-[8px] font-black">
+          <div class="rounded-lg border border-emerald-500/50 bg-emerald-950/40 p-1.5 text-emerald-300">🟢 Xanh • Phổ biến</div><div class="rounded-lg border border-blue-500/50 bg-blue-950/40 p-1.5 text-blue-300">🔵 Xanh dương • Hiếm</div>
+          <div class="rounded-lg border border-violet-500/50 bg-violet-950/40 p-1.5 text-violet-300">🟣 Tím • Sử thi</div><div class="rounded-lg border border-rose-500/50 bg-rose-950/40 p-1.5 text-rose-300">🔴 Đỏ • Huyền thoại</div>
+          <div class="col-span-2 rounded-lg border border-amber-400/50 bg-amber-950/40 p-1.5 text-amber-300">🟡 Vàng • Di sản • hiếm nhất, chỉ để sưu tầm/khoe thành tích</div>
+        </div>
+        <p class="text-[8px] text-slate-500">Đồ lưu niệm không bị tiêu hao. Trùng món vẫn được giữ x2, x3... trong Kho → Lưu Niệm. 🍀 May Mắn giảm nhẹ tỷ lệ Xui và tăng cơ hội Hên/Đại Cát.</p>
+      </div>
+    </div>
+
+    <!-- THÔNG BÁO ĐIỆN THOẠI -->
+    <div id="modal-notifications" class="fixed inset-0 z-[65] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm max-h-[76vh] overflow-hidden bg-slate-950 text-white rounded-3xl border border-sky-500/40 shadow-2xl flex flex-col">
+        <div class="p-3 flex items-center justify-between border-b border-slate-800"><div><b class="text-sm text-sky-300">🔔 Trung Tâm Thông Báo</b><p class="text-[8px] text-slate-500">Biến cố, khách đặc biệt và quà hiếm • không spam đơn giao hàng</p></div><button onclick="closeNotificationsModal()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <div id="notifications-list" class="p-2.5 overflow-y-auto no-scrollbar space-y-1.5"></div>
+      </div>
+    </div>
+
+    <!-- BIẾN CỐ NGẪU NHIÊN CÓ LỰA CHỌN -->
+    <div id="modal-random-event" class="fixed inset-0 z-[66] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white rounded-3xl p-4 shadow-2xl border-2 border-violet-300 space-y-2.5">
+        <div class="text-center"><span id="random-event-icon" class="text-4xl block">⚡</span><b id="random-event-title" class="text-sm text-slate-800 font-black">Biến cố bất ngờ!</b><p id="random-event-desc" class="text-[10px] text-slate-600 mt-1 leading-relaxed"></p></div>
+        <div class="grid grid-cols-1 gap-1.5"><button id="random-event-choice-a" class="p-2 rounded-xl bg-emerald-600 text-white text-[10px] font-black tap-scale"></button><button id="random-event-choice-b" class="p-2 rounded-xl bg-slate-800 text-white text-[10px] font-black tap-scale"></button></div>
+      </div>
+    </div>
+
+    <!-- MINI GAME MỚI: SĂN CHUỘT KHO -->
+    <div id="modal-whack-game" class="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-emerald-500 shadow-2xl space-y-3">
+        <div class="flex items-center justify-between"><div><h3 class="font-black text-sm text-emerald-300">🐭 Săn Chuột Kho</h3><p class="text-[9px] text-slate-400">20 Xu/lượt • chạm chuột, né mèo • chuột vàng được nhiều điểm</p></div><button onclick="closeWhackGame()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <div class="grid grid-cols-3 gap-1 text-[9px] font-black"><div class="p-1.5 bg-slate-800 rounded-xl text-center">⏱ <span id="whack-time">20</span>s</div><div class="p-1.5 bg-slate-800 rounded-xl text-center">🎯 <span id="whack-score">0</span></div><div class="p-1.5 bg-slate-800 rounded-xl text-center">🔥 x<span id="whack-combo">0</span></div></div>
+        <div id="whack-grid" class="grid grid-cols-3 gap-2"></div>
+        <p id="whack-msg" class="text-[9px] text-center text-emerald-200 min-h-[16px]">Mốc 25 điểm bắt đầu có lời. 45+ điểm có cơ hội rơi lưu niệm.</p>
+        <button id="whack-start-btn" onclick="startWhackGame()" class="w-full py-2 bg-emerald-600 hover:bg-emerald-500 rounded-xl text-xs font-black tap-scale">Chơi (20 Xu) 🐭</button>
+      </div>
+    </div>
+
+    <!-- MINI GAME MỚI: XẾP THÁP LY -->
+    <div id="modal-stack-game" class="fixed inset-0 z-[90] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border border-sky-500 shadow-2xl space-y-3">
+        <div class="flex items-center justify-between"><div><h3 class="font-black text-sm text-sky-300">🥤 Xếp Tháp Ly</h3><p class="text-[9px] text-slate-400">25 Xu/lượt • căn thanh chạy vào vùng mục tiêu • càng cao càng nhanh</p></div><button onclick="closeStackGame()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <div class="flex items-center justify-between text-[9px] font-black"><span>🏗️ Tầng <span id="stack-level">0</span>/8</span><span>✨ Perfect: <span id="stack-perfect">0</span></span><span>🏆 Best: <span id="stack-best">0</span></span></div>
+        <div class="relative h-12 rounded-2xl bg-slate-800 border border-slate-700 overflow-hidden">
+          <div id="stack-target" class="absolute top-0 bottom-0 bg-emerald-500/30 border-x-2 border-emerald-400" style="left:40%;width:20%"></div>
+          <div id="stack-runner" class="absolute top-2 bottom-2 w-8 rounded-lg bg-sky-400 shadow-lg" style="left:0%"></div>
+        </div>
+        <div id="stack-tower" class="h-36 rounded-2xl bg-gradient-to-b from-slate-800 to-slate-950 border border-slate-700 flex flex-col-reverse items-center justify-start p-2 gap-0.5 overflow-hidden"></div>
+        <p id="stack-msg" class="text-[9px] text-center text-sky-200 min-h-[16px]">Bấm bắt đầu rồi THẢ khi thanh xanh nằm giữa vùng mục tiêu.</p>
+        <button id="stack-action-btn" onclick="startStackGame()" class="w-full py-2 bg-sky-600 hover:bg-sky-500 rounded-xl text-xs font-black tap-scale">Chơi (25 Xu) 🥤</button>
+      </div>
+    </div>
+
+    <!-- V87: report is ONLY for closing a shift, never advancing the calendar -->
+    <div id="modal-daily-report" class="v87-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="report-title-day">
+      <div class="v87-dialog">
+        <div class="v87-dialog-head"><span class="v87-dialog-icon">🧾</span><div><div class="v87-overline">TỔNG KẾT CA KINH DOANH</div><h3 id="report-title-day" class="v87-dialog-title">Tổng kết ca ngày 1</h3></div></div>
+        <p class="v87-explanation">Đóng ca chỉ dừng bán hàng. Bạn vẫn được khám phá Làng, chăm Vườn và Chuồng trước khi đi ngủ.</p>
+        <div class="v87-report">
+          <div><span>Khách tại quầy</span><strong id="report-counter-served">0</strong></div>
+          <div><span>Đơn giao hàng</span><strong id="report-delivery-served">0</strong></div>
+          <div><span>Đánh giá bình quân</span><strong id="report-rating-avg">⭐ 5.0</strong></div>
+          <div><span>Doanh thu đã nhận</span><strong id="report-rev-total" class="v87-plus">+0 Xu</strong></div>
+          <div><span>Chi phí dự tính cuối ngày</span><strong id="report-op-costs">-0 Xu</strong></div>
+          <div><span>Lãi vay dự tính</span><strong id="report-interest-cost">-0 Xu</strong></div>
+          <div class="v87-report-net"><span>Lãi/lỗ dự tính</span><strong id="report-net-profit">0 Xu</strong></div>
+        </div>
+        <div class="v87-note">💡 Chi phí và lãi vay <b>chỉ trừ khi bấm 🌙 Qua ngày</b>. Không trừ lúc đóng ca.<div id="v87-cancel-orders-warning" class="hidden"></div></div>
+        <div class="v87-actions">
+          <button type="button" class="v87-secondary" onclick="closeDailyReportModal()">Tiếp tục bán</button>
+          <button type="button" class="v87-primary" onclick="confirmCloseShopShift()">🔒 Đóng ca</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- V87: independent and explicit day transition -->
+    <div id="modal-v87-end-day" class="v87-overlay hidden" role="dialog" aria-modal="true" aria-labelledby="v87-end-title">
+      <div class="v87-dialog">
+        <div class="v87-dialog-head"><span class="v87-dialog-icon">🌙</span><div><div class="v87-overline">NHẬT KÝ CUỐI NGÀY</div><h3 id="v87-end-title" class="v87-dialog-title">Khép lại ngày 1?</h3></div></div>
+        <p class="v87-explanation" id="v87-end-desc">Bạn có thể tiếp tục sinh hoạt hoặc chuyển sang ngày mới.</p>
+        <div class="v87-summary-grid">
+          <div><span>Doanh thu quán</span><strong id="v87-end-revenue">0 Xu</strong></div>
+          <div><span>Đã phục vụ</span><strong id="v87-end-served">0 khách</strong></div>
+          <div><span>Lượt khám phá</span><strong id="v87-end-trips">0 lượt</strong></div>
+          <div><span>Trạng thái ca</span><strong id="v87-end-shift">Chưa mở quán</strong></div>
+        </div>
+        <div class="v87-report v87-costs">
+          <div><span>Phí duy trì + nhân viên</span><strong id="v87-end-cost">-0 Xu</strong></div>
+          <div><span>Lãi vay hôm nay</span><strong id="v87-end-interest">-0 Xu</strong></div>
+          <div class="v87-report-net"><span>Số Xu sau khi khấu trừ</span><strong id="v87-end-remaining">0 Xu</strong></div>
+        </div>
+        <p class="v87-warning" id="v87-end-warning">🌙 Sang ngày mới sẽ hồi đầy 100/100 năng lượng Làng; NPC và ưu đãi có thể thay đổi.</p>
+        <div class="v87-actions">
+          <button class="v87-secondary" type="button" onclick="closeEndDayModal()">Ở lại hôm nay</button>
+          <button class="v87-primary" type="button" onclick="confirmAdvanceToNextDay()" id="v87-confirm-end-day">🌅 Sang ngày mới</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-customer-feedback" class="fixed inset-0 z-50 bg-black/60 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div id="feedback-card-box" class="w-full max-w-xs bg-white rounded-3xl p-3.5 shadow-2xl border-2 border-emerald-400 text-center space-y-2">
+        <div id="fb-avatar" class="w-12 h-12 bg-amber-100 rounded-2xl mx-auto flex items-center justify-center text-3xl border border-amber-300">👩</div>
+        <div>
+          <div id="fb-stars" class="text-amber-400 text-sm font-black">⭐⭐⭐⭐⭐</div>
+          <h4 id="fb-name" class="font-extrabold text-xs text-slate-800">Linh Sinh Viên</h4>
+        </div>
+        <p id="fb-quote" class="text-[10px] text-slate-600 italic bg-amber-50 p-2 rounded-xl border border-amber-200">
+          "Hương vị thơm ngon, giá cả hợp lý!"
+        </p>
+        <div class="grid grid-cols-2 gap-1.5 text-xs">
+          <div class="bg-emerald-50 p-1.5 rounded-xl border border-emerald-200">
+            <span class="text-[8px] text-emerald-700 block font-bold">Thực Thu:</span>
+            <b id="fb-earned" class="text-emerald-700 text-xs font-black">+45 Xu</b>
+          </div>
+          <div class="bg-amber-50 p-1.5 rounded-xl border border-amber-200">
+            <span class="text-[8px] text-amber-700 block font-bold">Tiền Tip:</span>
+            <b id="fb-tip" class="text-amber-700 text-xs font-black">+5 Xu</b>
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5">
+          <button id="fb-btn-reply" onclick="replyFromFeedback()" class="py-2 bg-slate-700 hover:bg-slate-800 text-white font-bold text-[10px] rounded-xl shadow tap-scale">
+            💬 Phản Hồi
+          </button>
+          <button id="fb-btn-confirm" onclick="closeCustomerFeedbackModal()" class="py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[10px] rounded-xl shadow tap-scale">
+            Tiếp Tục ✨
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- MODAL CHỦ QUÁN TRẢ LỜI ĐÁNH GIÁ -->
+    <div id="modal-review-reply" class="fixed inset-0 z-[60] bg-black/65 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white rounded-3xl p-3.5 shadow-2xl border-2 border-amber-300 space-y-2.5">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="font-black text-xs text-slate-800">💬 Phản Hồi Đánh Giá</h3>
+            <p id="review-reply-customer" class="text-[9px] text-slate-500">Trả lời khách hàng</p>
+          </div>
+          <button onclick="closeReviewReplyModal()" class="w-7 h-7 rounded-lg bg-slate-100 text-slate-500 font-black">✕</button>
+        </div>
+        <div id="review-reply-original" class="text-[9px] italic text-slate-600 bg-amber-50 border border-amber-200 rounded-xl p-2"></div>
+        <textarea id="review-reply-input" maxlength="180" rows="3" class="w-full resize-none rounded-xl border border-slate-300 p-2 text-[10px] text-slate-800 focus:outline-none focus:border-amber-500" placeholder="Ví dụ: Cảm ơn bạn đã góp ý, quán sẽ chú ý hơn ạ! 💛"></textarea>
+        <div class="flex gap-1.5">
+          <button onclick="closeReviewReplyModal()" class="flex-1 py-2 bg-slate-100 text-slate-600 font-bold text-[10px] rounded-xl">Để Sau</button>
+          <button onclick="submitReviewReply()" class="flex-1 py-2 bg-amber-500 hover:bg-amber-600 text-white font-black text-[10px] rounded-xl shadow tap-scale">Gửi Phản Hồi</button>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-pack-minigame" class="fixed inset-0 z-[90] bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white rounded-3xl p-3.5 shadow-2xl border border-amber-300 space-y-2.5">
+        <div class="text-center">
+          <span class="text-2xl mb-0.5 block">📦</span>
+          <h3 class="font-black text-xs text-slate-800">Đóng Hộp Giao Hàng</h3>
+          <span id="pack-timer-val" class="text-[9px] text-rose-600 font-bold">⏱️ 6.0s Còn lại</span>
+        </div>
+        <div class="p-1.5 bg-amber-50 border border-amber-200 rounded-xl text-center">
+          <span class="text-[8px] text-amber-800 font-bold block">Bước Hiện Tại:</span>
+          <b id="pack-target-step-txt" class="text-[10px] text-amber-900">1. Đóng Nắp / Lót Màng</b>
+        </div>
+        <div class="space-y-1.5">
+          <button id="btn-pack-1" onclick="handlePackStepClick(1)" class="w-full py-2 px-2.5 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl shadow tap-scale text-left flex items-center justify-between">
+            <span id="pack-step-1-label">🥤 1. Nắp Ly Chống Tràn</span>
+            <span id="pack-check-1">⏳</span>
+          </button>
+          <button id="btn-pack-2" onclick="handlePackStepClick(2)" disabled class="w-full py-2 px-2.5 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl text-left flex items-center justify-between">
+            <span id="pack-step-2-label">🧋 2. Ống Hút To & Muỗng</span>
+            <span id="pack-check-2">🔒</span>
+          </button>
+          <button id="btn-pack-3" onclick="handlePackStepClick(3)" disabled class="w-full py-2 px-2.5 bg-slate-200 text-slate-700 font-bold text-xs rounded-xl text-left flex items-center justify-between">
+            <span id="pack-step-3-label">🛍️ 3. Túi Chữ T & Dán Bill</span>
+            <span id="pack-check-3">🔒</span>
+          </button>
+        </div>
+        <button onclick="cancelPackMinigame()" class="w-full py-1 bg-slate-100 hover:bg-slate-200 text-slate-600 font-bold text-[9px] rounded-lg">
+          Hủy Bỏ Đơn
+        </button>
+      </div>
+    </div>
+
+    <div id="modal-bankruptcy" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-slate-900 text-white rounded-3xl p-4 border-2 border-rose-500 shadow-2xl space-y-3">
+        <div class="text-center">
+          <span class="text-4xl block mb-1">💥</span>
+          <h3 class="font-black text-base text-rose-400">Tuyên Bố Phá Sản & Khởi Nghiệp Lại</h3>
+          <p class="text-[10px] text-slate-400 mt-0.5">Đặt lại Ngày 1 với 450 Xu và chọn lại mô hình kinh doanh:</p>
+        </div>
+
+        <div class="space-y-2">
+          <div onclick="confirmBankruptcyAndRestart('boba')" class="p-2.5 rounded-2xl bg-slate-800 hover:bg-amber-950/60 border border-amber-500/40 cursor-pointer tap-scale flex items-center gap-3">
+            <span class="text-4xl">🧋</span>
+            <div>
+              <b class="text-xs text-amber-300 block">Trà Sữa Bé Thỏ</b>
+              <span class="text-[9px] text-slate-400">Vốn 450 Xu • 15 Ly • 12 Trà Đen • 15 Trân Châu</span>
+            </div>
+          </div>
+
+          <div onclick="confirmBankruptcyAndRestart('noodle')" class="p-2.5 rounded-2xl bg-slate-800 hover:bg-rose-950/60 border border-rose-500/40 cursor-pointer tap-scale flex items-center gap-3">
+            <span class="text-4xl">🍜</span>
+            <div>
+              <b class="text-xs text-rose-300 block">Mì Cay 7 Cấp Độ Nhà Hân</b>
+              <span class="text-[9px] text-slate-400">Vốn 450 Xu • 12 Thố • 10 Kim Chi • 8 Bò Mỹ</span>
+            </div>
+          </div>
+
+          <div onclick="confirmBankruptcyAndRestart('streetfood')" class="p-2.5 rounded-2xl bg-slate-800 hover:bg-orange-950/60 border border-orange-500/40 cursor-pointer tap-scale flex items-center gap-3">
+            <span class="text-4xl">🍢</span>
+            <div>
+              <b class="text-xs text-amber-400 block">Xe Xiên Bẩn Làng Quê</b>
+              <span class="text-[9px] text-slate-400">Vốn 450 Xu • 15 Đĩa • 15 Cá Viên • 10 Bò Viên</span>
+            </div>
+          </div>
+        </div>
+
+        <button onclick="closeBankruptcyModal()" class="w-full py-2 bg-slate-800 hover:bg-slate-700 text-slate-300 font-bold text-xs rounded-xl">
+          Quay Lại Quán Hiện Tại
+        </button>
+      </div>
+    </div>
+
+    <div id="modal-save" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white rounded-3xl p-3.5 shadow-2xl border border-amber-300 space-y-2.5">
+        <h3 class="font-black text-xs text-slate-800">Quản Lý Tiến Trình Game</h3>
+        <p class="text-[9px] text-slate-500">Lưu lại để không lo mất dữ liệu khi đổi thiết bị!</p>
+        <div class="space-y-1.5">
+          <button onclick="saveGameToStorage(true); closeSaveModal();" class="w-full py-2 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-xs rounded-xl tap-scale">
+            💾 Lưu Trực Tiếp Ngay
+          </button>
+          <button onclick="exportSaveCode()" class="w-full py-2 bg-amber-500 hover:bg-amber-600 text-white font-bold text-xs rounded-xl tap-scale">
+            📋 Sao Chép Mã Sao Lưu
+          </button>
+        </div>
+        <button onclick="closeSaveModal()" class="w-full py-1.5 bg-slate-100 font-bold text-xs rounded-xl text-slate-600">Đóng</button>
+      </div>
+    </div>
+
+    <div id="modal-shop-hub" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-sm bg-white rounded-3xl p-3.5 shadow-2xl border border-amber-300 space-y-2.5 max-h-[88vh] overflow-y-auto">
+        <div class="flex items-start justify-between gap-2">
+          <div>
+            <h3 class="font-black text-sm text-slate-800">📋 Trung Tâm Quản Lý Quán</h3>
+            <p class="text-[9px] text-slate-500 mt-0.5">Theo dõi tiến độ, công thức, tồn kho và nhịp bán trong tab Quán.</p>
+          </div>
+          <button onclick="closeShopHubModal()" class="w-7 h-7 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-black tap-scale">✕</button>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div class="shop-hub-stat-card"><b id="shop-front-stage">Bậc 1/6</b><span>Tiến độ phát triển quán</span></div>
+          <div class="shop-hub-stat-card"><b id="shop-front-recipes">0 / 0 công thức</b><span>Món đang có thể bán</span></div>
+          <div class="shop-hub-stat-card"><b id="shop-front-stock">0 nguyên liệu sắp hết</b><span>Ưu tiên nhập thêm ngay</span></div>
+          <div class="shop-hub-stat-card"><b id="shop-front-pop">0/100 nổi tiếng</b><span>Ảnh hưởng đến nhịp khách</span></div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="shop-hub-section-title">Preset đang bán tốt</div>
+          <div id="shop-hub-recipe-list" class="space-y-1.5"></div>
+        </div>
+        <div class="space-y-1.5">
+          <div class="shop-hub-section-title">Nguyên liệu sắp hết</div>
+          <div id="shop-hub-lowstock-list" class="grid grid-cols-2 gap-1.5"></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="modal-rename" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+      <div class="w-full max-w-xs bg-white rounded-3xl p-3.5 shadow-2xl border border-amber-300 space-y-2.5">
+        <h3 id="rename-title-txt" class="font-black text-xs text-slate-800">Đặt Tên Mới</h3>
+        <input type="text" id="rename-input-val" class="w-full px-2.5 py-1.5 border-2 border-amber-300 rounded-xl text-xs font-bold focus:outline-none focus:border-amber-500" placeholder="Nhập tên mới...">
+        <div class="grid grid-cols-2 gap-1.5">
+          <button onclick="closeRenameModal()" class="py-1.5 bg-slate-100 hover:bg-slate-200 font-bold text-xs rounded-xl text-slate-600">Hủy</button>
+          <button onclick="saveRenameAction()" class="py-1.5 bg-amber-500 hover:bg-amber-600 font-bold text-xs rounded-xl text-white">Lưu Tên</button>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- TOAST THÔNG BÁO -->
+    <div id="toast-box" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 pointer-events-none transition-all duration-300 opacity-0 transform -translate-y-4">
+      <div class="px-3.5 py-1.5 bg-slate-900/90 text-white font-bold text-xs rounded-2xl shadow-xl border border-slate-700 flex items-center gap-1.5">
+        <span id="toast-icon">✨</span>
+        <span id="toast-text">Thông báo...</span>
+      </div>
+    </div>
+
+  </div>
+
+  <script src="js/game.js"></script>
+
+  <div id="modal-shop-stage-quick" class="v72-stage-overlay hidden" role="dialog" aria-modal="true" aria-label="Nâng bậc quán" onclick="if(event.target===this) closeShopStageQuickModal()">
+    <div class="v72-stage-dialog">
+      <div class="v72-stage-dialog-top">
+        <div><div class="v72-stage-overline">TIẾN TRÌNH PHÁT TRIỂN</div><h2>🏪 Nâng bậc quán</h2></div>
+        <button type="button" onclick="closeShopStageQuickModal()" class="v72-stage-close" aria-label="Đóng">✕</button>
+      </div>
+      <div id="v72-stage-quick-content"></div>
+      <button type="button" id="v72-stage-quick-upgrade" onclick="confirmShopStageQuickUpgrade()" class="v72-stage-submit" disabled>Kiểm tra điều kiện</button>
+      <p class="v72-stage-footnote">Dùng chung tiến trình với Phát triển trên điện thoại. Nâng bậc tốn Xu và tăng chi phí vận hành mỗi ngày.</p>
+    </div>
+  </div>
+
+<div id="v84-luck-overlay" class="v84-luck-overlay hidden" role="dialog" aria-modal="true" aria-label="Kết quả may rủi">
+    <div id="v84-luck-dialog" class="v84-luck-dialog"></div>
+  </div>
+
+<div id="v87531-report-modal" class="v87531-overlay hidden" role="dialog" aria-modal="true" aria-label="Báo cáo nhân sự sáng nay">
+  <div class="v87531-dialog"><div id="v87531-report-body"></div></div>
+</div>
+</body>
+</html>

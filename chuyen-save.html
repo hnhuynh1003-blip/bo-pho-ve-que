@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="vi">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Chuyển save — Bỏ Phố Về Quê</title>
+<style>
+:root{font-family:system-ui,-apple-system,Segoe UI,Arial,sans-serif;color-scheme:light}
+*{box-sizing:border-box}body{margin:0;padding:22px;background:#fff8ed;color:#3e3227}
+main{max-width:700px;margin:auto;background:white;border-radius:22px;padding:25px;box-shadow:0 10px 30px #764b2220}
+h1{font-size:1.55rem}p,li{line-height:1.55}label{font-weight:650;display:block;margin:20px 0 7px}
+textarea,input{border:1px solid #d6c4a8;border-radius:10px;padding:12px;width:100%;font:inherit;background:#fffdf8}
+textarea{min-height:155px;resize:vertical;overflow-wrap:anywhere}button,a.action{border:0;border-radius:11px;padding:12px 16px;font:inherit;font-weight:700;cursor:pointer}
+button{background:#2e6f50;color:white}button[disabled]{opacity:.45;cursor:not-allowed}a.action{display:inline-block;color:#2e6f50;border:1px solid #2e6f50;text-decoration:none;margin-left:8px;background:white}
+#preview{margin-top:16px;padding:12px;background:#ecf7ef;border-radius:10px;white-space:pre-wrap;display:none}
+#status{min-height:24px;font-weight:600;margin-top:14px}small,.hint{color:#796a5a}strong{color:#623d22}
+.warn{border-left:3px solid #b66c19;padding:9px 12px;background:#fff5df}code{word-break:break-word}
+</style>
+</head>
+<body>
+<main>
+<h1>💾 Chuyển dữ liệu game sang GitHub Pages</h1>
+<p>Công cụ này chạy ngay trong trình duyệt và <strong>không gửi mã save lên máy chủ</strong>. Nó dùng mã save được tạo bởi nút <strong>Xuất mã save</strong> trong bản Bỏ Phố Về Quê v87.</p>
+<ol>
+<li>Mở bản game cũ, vào phần lưu game và <strong>sao chép mã save</strong>.</li>
+<li>Mở trang này tại địa chỉ GitHub Pages mới; dán mã vào ô bên dưới.</li>
+<li>Bấm Kiểm tra, xác nhận thông tin và chọn <strong>Tạo hồ sơ từ save</strong>.</li>
+<li>Trở về trang game, chọn hồ sơ vừa nhập và xác nhận cấp, Xu, vật phẩm, nhiệm vụ.</li>
+</ol>
+<p class="warn">Không xóa save ở bản cũ. Trang này <strong>chỉ tạo hồ sơ mới</strong>, không ghi đè một hồ sơ hiện có. Chức năng nhập chỉ nên dùng với mã save đáng tin cậy do chính bạn xuất.</p>
+<label for="saveCode">Mã save Base64</label>
+<textarea id="saveCode" autocomplete="off" spellcheck="false" placeholder="Dán mã đã sao chép từ bản gốc..." aria-label="Mã save"></textarea>
+<div><button id="inspectBtn" type="button">Kiểm tra mã save</button></div>
+<div id="preview" role="status"></div>
+<label for="newName">Tên hồ sơ mới (để phân biệt)</label>
+<input id="newName" maxlength="20" placeholder="Nhập tên tài khoản mới" disabled>
+<div style="margin-top:14px">
+<button id="importBtn" type="button" disabled>Tạo hồ sơ từ save</button>
+<a class="action" href="index.html">Về game</a>
+</div>
+<p id="status" aria-live="polite"></p>
+<small>Ghi chú: dữ liệu được lưu theo đúng tên miền/trình duyệt đang mở. Việc nhập ở <code>localhost</code> không làm dữ liệu xuất hiện trên <code>github.io</code>.</small>
+</main>
+<script>
+(() => {
+'use strict';
+const REGISTRY = 've_que_khoi_nghiep_accounts_v1';
+const ACTIVE = 've_que_khoi_nghiep_active_profile_v1';
+const $ = (id) => document.getElementById(id);
+let candidate = null;
+function message(msg, isError=false){$('status').textContent=msg;$('status').style.color=isError?'#a52824':'#2d6644';}
+function reset(){candidate=null;$('preview').style.display='none';$('importBtn').disabled=true;$('newName').disabled=true;message('');}
+$('saveCode').addEventListener('input',reset);
+function decode(code){
+  const s=code.replace(/\s+/g,'');
+  if (!s || s.length>6_000_000 || !/^[A-Za-z0-9+/]*={0,2}$/.test(s))throw Error('Mã save rỗng, quá dài hoặc không đúng định dạng Base64.');
+  const bin=atob(s);
+  const bytes=Uint8Array.from(bin,c=>c.charCodeAt(0));
+  const obj=JSON.parse(new TextDecoder('utf-8',{fatal:true}).decode(bytes));
+  if (!obj || typeof obj!=='object' || Array.isArray(obj))throw Error('Dữ liệu lưu không phải một đối tượng game.');
+  const validId=['boba','noodle','streetfood'];
+  if (!validId.includes(obj.currentCareer))throw Error('Nghề trong save không thuộc ba nghề của bản v87.5.3.2.');
+  if (!Number.isInteger(obj.level)||obj.level<1 || !Number.isInteger(obj.day)||obj.day<1 || typeof obj.coins!=='number'||!Number.isFinite(obj.coins)||obj.coins<0)throw Error('Save thiếu cấp, ngày hoặc Xu hợp lệ.');
+  if (!obj.inventory || typeof obj.inventory!=='object' || Array.isArray(obj.inventory))throw Error('Save thiếu kho vật phẩm hợp lệ.');
+  if (Object.prototype.hasOwnProperty.call(obj,'__proto__'))throw Error('Save chứa thuộc tính không được hỗ trợ.');
+  return obj;
+}
+function readAccounts(){
+ const raw=localStorage.getItem(REGISTRY);const list=raw?JSON.parse(raw):[];
+ if(!Array.isArray(list))throw Error('Danh mục hồ sơ trên trang này không hợp lệ.');
+ return list;
+}
+$('inspectBtn').addEventListener('click',()=>{
+ try{
+  candidate=decode($('saveCode').value);
+  $('preview').style.display='block';
+  $('preview').textContent='Hồ sơ hợp lệ theo kiểm tra cấu trúc cơ bản.\nNgười chơi: '+String(candidate.playerName||'Không có tên').slice(0,60)+'\nTên quán: '+String(candidate.shopName||'Chưa đặt tên').slice(0,60)+'\nNghề: '+candidate.currentCareer+'\nCấp: '+candidate.level+' | Ngày: '+candidate.day+' | Xu: '+candidate.coins+'\nHãy kiểm tra các giá trị này với game gốc.';
+  $('newName').disabled=false;
+  $('newName').value=String(candidate.playerName||'Ho so nhap').slice(0,20);
+  $('importBtn').disabled=false;
+  message('Kiểm tra cấu trúc cơ bản thành công. Chưa xác minh hoạt động gameplay.');
+ }catch(e){reset();message('Không thể đọc mã save: '+e.message,true)}
+});
+$('importBtn').addEventListener('click',()=>{
+ if(!candidate)return;
+ const name=$('newName').value.trim().slice(0,20);
+ if(!name)return message('Hãy nhập tên hồ sơ mới.',true);
+ try{
+  const existing=readAccounts();
+  if(existing.some(a=>String(a?.name||'').toLowerCase()===name.toLowerCase()))return message('Tên hồ sơ đã tồn tại. Hãy đặt tên khác.',true);
+  if(!confirm('Tạo hồ sơ mới "'+name+'" từ mã save đã chọn? Hồ sơ hiện có sẽ không bị ghi đè.'))return;
+  const id='p_import_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);
+  const saveKey='ve_que_khoi_nghiep_profile_'+id+'_save_v13';
+  const now=Date.now();
+  const shopName=String(candidate.shopName||'Quán Nhà Mình').slice(0,32);
+  const shopAvatar=String(candidate.shopAvatar||'bunny').slice(0,50);
+  const playerChibi=candidate.playerChibi==='female'?'female':'male';
+  const record={id,name,shopName,shopAvatar,playerChibi,createdAt:now,lastPlayedAt:now,
+      summary:{playerName:String(candidate.playerName||name).slice(0,20),shopName,shopAvatar,playerChibi,day:candidate.day,level:candidate.level,career:candidate.currentCareer,hasStarted:!!candidate.hasStarted}};
+  // Atomic-ish transaction: restore registry and active profile if a write fails.
+  const previousRegistry=localStorage.getItem(REGISTRY);
+  const previousActive=localStorage.getItem(ACTIVE);
+  try{
+    localStorage.setItem(saveKey,JSON.stringify(candidate));
+    localStorage.setItem(REGISTRY,JSON.stringify([...existing,record]));
+    localStorage.setItem(ACTIVE,id);
+  }catch(error){
+    try{
+      localStorage.removeItem(saveKey);
+      if(previousRegistry===null)localStorage.removeItem(REGISTRY);else localStorage.setItem(REGISTRY,previousRegistry);
+      if(previousActive===null)localStorage.removeItem(ACTIVE);else localStorage.setItem(ACTIVE,previousActive);
+    }catch(_rollbackError){/* Preserve original error; tell user not to delete any prior data. */}
+    throw error;
+  }
+  $('importBtn').disabled=true;
+  message('Đã tạo hồ sơ "'+name+'". Bấm “Về game”, chọn hồ sơ này, sau đó kiểm tra toàn bộ dữ liệu.');
+ }catch(e){message('Không thể tạo hồ sơ: '+e.message,true)}
+});
+})();
+</script>
+</body>
+</html>

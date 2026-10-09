@@ -1,0 +1,2244 @@
+{
+  "summary": {
+    "original_file": "ve_que_khoi_nghiep_fix_gameplay_v87_5_3_2_staffops(1).html",
+    "original_sha256": "14079bdd6ee0495cefa10f60f6657c2800bd6d7904ef61883fcce97433074f22",
+    "original_bytes": 32131693,
+    "optimized_index_bytes": 123080,
+    "images_references": 304,
+    "images_unique": 276,
+    "image_references_by_location": {
+      "css": 2,
+      "html": 12,
+      "js": 290
+    },
+    "image_bytes_total": 21685162,
+    "css_files": [
+      "tailwind-offline.css",
+      "main.css",
+      "patch-03-v87-laptop-layout-hotfix.css",
+      "patch-04-v8744-career-css.css",
+      "patch-05-v87441-compact-a.css",
+      "patch-06-v8745-festival-style.css",
+      "patch-07-v8751-town-activities-css.css",
+      "patch-08-v8752-festival-css.css",
+      "patch-09-v8753-reputation-ui.css",
+      "patch-10-v87532-staff-ops-css.css",
+      "patch-11-v87531-staff-life-style.css"
+    ],
+    "js_files": [
+      "game.js"
+    ],
+    "extracted_unchanged_files": true,
+    "note": "All image bytes are decoded verbatim; CSS/JS code is copied unchanged except data:image URLs."
+  },
+  "images": [
+    {
+      "file": "assets/images/001_css-001_8a11ac9fab.webp",
+      "format": "webp",
+      "bytes": 353000,
+      "sha256": "8a11ac9fab26d243623573026b477228f68541ca9fa413c5abf6ee23f83c8561",
+      "first_context": "css",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/002_css-002_270f814735.webp",
+      "format": "webp",
+      "bytes": 307684,
+      "sha256": "270f8147355462af683f804561360269cd0b0382efcae2c1758c50c88b506ec4",
+      "first_context": "css",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/003_header-shop-avatar-image_3a7759990d.webp",
+      "format": "webp",
+      "bytes": 7130,
+      "sha256": "3a7759990d69826ec88ace3c7dc26c1578db3f5c652be7b57e4e2d82f6c57e84",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/004_html-004_34928c2267.webp",
+      "format": "webp",
+      "bytes": 2928,
+      "sha256": "34928c2267d7e57bfe6c84439700b6415d90afefce91d09e8bb609f9969c5b7b",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/005_html-005_fe5b498c97.webp",
+      "format": "webp",
+      "bytes": 2008,
+      "sha256": "fe5b498c977af1d7e0482470e0ac6b1458cd27c3f67699d81f760bba802dab81",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/006_html-006_e023bc23b1.webp",
+      "format": "webp",
+      "bytes": 2626,
+      "sha256": "e023bc23b1cf643e6d5ec8f0e436bce7b46a1c831662b05346108205eda18155",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/007_html-007_0ec6845f86.webp",
+      "format": "webp",
+      "bytes": 3020,
+      "sha256": "0ec6845f86d15b75555b6fece1464b2756a8c4e024d6fad22e5baa71520e510f",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/008_html-008_364c5fe22f.webp",
+      "format": "webp",
+      "bytes": 1996,
+      "sha256": "364c5fe22ff33bc0e419f5abc1fbc70f4509ba11baaa84317c79797d1316ddd2",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/009_html-009_634cdf54fd.webp",
+      "format": "webp",
+      "bytes": 1760,
+      "sha256": "634cdf54fdb049fe025966d2153b5b01e08f361b2faeff942ad65b1fa50ac67b",
+      "first_context": "html",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/010_html-010_640fe81ff0.webp",
+      "format": "webp",
+      "bytes": 7876,
+      "sha256": "640fe81ff0f9319beddcb5282c43be4908adc471aa17c9730796b7c6bb097044",
+      "first_context": "html",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/011_html-011_70368fb97a.webp",
+      "format": "webp",
+      "bytes": 5714,
+      "sha256": "70368fb97ad298c7026e4d9122809cf370fb8450f9bf82f32f68d81f15bb27f8",
+      "first_context": "html",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/012_html-012_9bf9f99910.webp",
+      "format": "webp",
+      "bytes": 1536,
+      "sha256": "9bf9f999105ea61bef2d623793d37798d38af318a1618784d93b76089ea4f8b5",
+      "first_context": "html",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/013_html-013_d8141e70e2.webp",
+      "format": "webp",
+      "bytes": 1488,
+      "sha256": "d8141e70e241cb624dd4b523769779682cefcf6a386d6bf139c3d792ed7a54e4",
+      "first_context": "html",
+      "occurrences": 3
+    },
+    {
+      "file": "assets/images/014_broth-kimchi_3479262574.webp",
+      "format": "webp",
+      "bytes": 20204,
+      "sha256": "3479262574842980bd458ec60a44315973102665f95ac229bfd9f97751ac79f2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/015_broth-tomyum_20c2f9b69e.webp",
+      "format": "webp",
+      "bytes": 22222,
+      "sha256": "20c2f9b69e45de753e4020e7c119774f845c0585bf0b158a1e6d08b60b97cb8b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/016_broth-beef_b8c3ffb2fc.webp",
+      "format": "webp",
+      "bytes": 20216,
+      "sha256": "b8c3ffb2fc577b1a3dfd9d11bae19856216cdcf5982f29f807586d6c5739da39",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/017_broth-mushroom_21abdd5b3a.webp",
+      "format": "webp",
+      "bytes": 19796,
+      "sha256": "21abdd5b3af17df477ccde3fda337fab0e26439472ed64d36e0f3f79ea8ce4c1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/018_broth-mala_ddf6e7b91b.webp",
+      "format": "webp",
+      "bytes": 20952,
+      "sha256": "ddf6e7b91bb3a730a5eeaca0797393f9934e6c7b5fd0d777b65ba82fbf07e489",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/019_broth-collagen_08ac71d3e8.webp",
+      "format": "webp",
+      "bytes": 16850,
+      "sha256": "08ac71d3e8cff77683ded9796a82d0bf4b7551c80f2cbd58b6ed76dcdf6e4108",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/020_broth-tonkotsu_fa00b40a20.webp",
+      "format": "webp",
+      "bytes": 18522,
+      "sha256": "fa00b40a20f9620071720d0006dd8a7c27287b0ebdb06d3ba2514466a068ebe1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/021_broth-herbal_f4689d18c1.webp",
+      "format": "webp",
+      "bytes": 18332,
+      "sha256": "f4689d18c14bd78c32dc65671e0ac9551a96f8e85ef574affa7b498cb60f17e7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/022_ntop-beef_81e8e95ab4.webp",
+      "format": "webp",
+      "bytes": 21294,
+      "sha256": "81e8e95ab431730ffdfc71e5f6630e510590a706bffefbe73dac03dea2372071",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/023_ntop-shrimp_1c8b5020c3.webp",
+      "format": "webp",
+      "bytes": 28140,
+      "sha256": "1c8b5020c315fdca4b89c1621ae7efe96e526ef062ad03710fd797bb1a777936",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/024_ntop-squid_7199b07cc7.webp",
+      "format": "webp",
+      "bytes": 21408,
+      "sha256": "7199b07cc7cc6cacf5bb214f6bb9faba2f049b63b8d94376b6435a8c39c6038e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/025_ntop-fishcake_24bbcc8954.webp",
+      "format": "webp",
+      "bytes": 19554,
+      "sha256": "24bbcc8954680a544f7a4b8e3885591b5fc640d55fcbca9e8b85a6a84b35f88d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/026_ntop-sausage_e0e1817937.webp",
+      "format": "webp",
+      "bytes": 18854,
+      "sha256": "e0e1817937637b9d7af50e060fc1f30635abb1c6a1f6b724405d672af948ebb2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/027_ntop-enoki_e30c22c06a.webp",
+      "format": "webp",
+      "bytes": 28870,
+      "sha256": "e30c22c06ad462065f73524886ade2d40f4c3c0a6b0a5230c2b6f0b28ba4a23b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/028_ntop-egg_5a07307531.webp",
+      "format": "webp",
+      "bytes": 20684,
+      "sha256": "5a0730753129f2a867af665b53c4dada3194ccde762c9e3ff8dc886be814023f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/029_ntop-cheese_775a5df548.webp",
+      "format": "webp",
+      "bytes": 15906,
+      "sha256": "775a5df5488fed268a140c072d5cc69e7e3f1a7919bccf0740759f287e359d77",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/030_ntop-tofu_ba1114812b.webp",
+      "format": "webp",
+      "bytes": 16214,
+      "sha256": "ba1114812be2b24e0f1f2f1ffffef8171f8f30ca0c677b592d5e8a6570f8a254",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/031_ntop-bokchoy_685788dfff.webp",
+      "format": "webp",
+      "bytes": 23286,
+      "sha256": "685788dfff151b7c592f85e9c4fd7e9f4000d6d04c43e3712b890a830b41bf4a",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/032_ntop-crabstick_d64a0a8583.webp",
+      "format": "webp",
+      "bytes": 25028,
+      "sha256": "d64a0a858311ba8d482e3cfd12e1574a2a258e7dccf2c0cea4efc87a87c993a6",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/033_ntop-meatball_c8afbfb9ab.webp",
+      "format": "webp",
+      "bytes": 19634,
+      "sha256": "c8afbfb9ab1dcc3a2bd4afe5a7739f31b5f36305303ea0f66c44b941158b9589",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/034_ntop-corn_6aea9ec063.webp",
+      "format": "webp",
+      "bytes": 23686,
+      "sha256": "6aea9ec06397ec23b907cd16b11033f35ba01f6b90f5588ace2bba0555387b52",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/035_skewer-fish_4136082abf.webp",
+      "format": "webp",
+      "bytes": 19550,
+      "sha256": "4136082abf14b02ebf9a9ae3e48dad7d5eecef63deb15725d9c891fb0685006c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/036_skewer-beef_45ff36497f.webp",
+      "format": "webp",
+      "bytes": 20226,
+      "sha256": "45ff36497fbfae37e6dcfadb9e0279f6e8b3dffa84cd2fbf237308ae8afdf55d",
+      "first_context": "js",
+      "occurrences": 3
+    },
+    {
+      "file": "assets/images/037_skewer-shrimp_c434676d05.webp",
+      "format": "webp",
+      "bytes": 27096,
+      "sha256": "c434676d05b1c7515bd14744dd03cf4799febfe5cf2c5f6383723a0cadf2dbb2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/038_skewer-holo_3d93a52f37.webp",
+      "format": "webp",
+      "bytes": 17564,
+      "sha256": "3d93a52f376b3da88621ca337cd6071993c0fa34989c9a240774c5b04da918e0",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/039_skewer-tofu_ab9ddb6c12.webp",
+      "format": "webp",
+      "bytes": 20336,
+      "sha256": "ab9ddb6c1237b53ff70025fb38337c2a2fa3d46e260b7fe44a7837c4fc0981df",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/040_skewer-beef-enoki_2c40f0764f.webp",
+      "format": "webp",
+      "bytes": 27620,
+      "sha256": "2c40f0764f236718cf412f9a73e28dca26e6ba55618a81079c07b175a2271d1b",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/041_skewer-okra_75c3f7b2ad.webp",
+      "format": "webp",
+      "bytes": 22236,
+      "sha256": "75c3f7b2adf479c9e1c213b7bf9ec47730f1ee1802000fe4dbbe9e1ab88a7315",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/042_skewer-cheese-sausage_6c06204456.webp",
+      "format": "webp",
+      "bytes": 21042,
+      "sha256": "6c062044561e4b53e30a8b7193e9fefedbd984683043eb3c24a4baf0cd428f16",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/043_skewer-mushroom_c68901fb40.webp",
+      "format": "webp",
+      "bytes": 22258,
+      "sha256": "c68901fb40bdaacc3c13feac47e8ea751454ed42c425cd46c483d9d8a30aefae",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/044_sauce-sweet-chili_738b66b9fd.webp",
+      "format": "webp",
+      "bytes": 19342,
+      "sha256": "738b66b9fdef4eb85aa7c48ab36f2f9f6cf1306d5949a89944f332a8f270c73f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/045_sauce-tamarind_f5fa2f7f94.webp",
+      "format": "webp",
+      "bytes": 20416,
+      "sha256": "f5fa2f7f94091cfe1419a79199379e4689632e021379619887e62488c9e3f0c5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/046_sauce-butter-garlic_471362bfeb.webp",
+      "format": "webp",
+      "bytes": 19342,
+      "sha256": "471362bfebab9943c29f516a46d912a6552962d80f3b7329944a48f7a70d319b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/047_sauce-satay_4188bed57e.webp",
+      "format": "webp",
+      "bytes": 24872,
+      "sha256": "4188bed57e4c440329c4f8e8cab0a77181738a90ce9b47faa221fd14dae90202",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/048_sauce-mayo_713cc503d1.webp",
+      "format": "webp",
+      "bytes": 16186,
+      "sha256": "713cc503d10473a8fa6d188eeb2ac21fa580896d78a49f0147760edbaf3fc1c5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/049_sauce-honey-mustard_65ce6543a7.webp",
+      "format": "webp",
+      "bytes": 20418,
+      "sha256": "65ce6543a7d62e991513f85bd2f0d3f54211a3950b8d17ffc1151bcacc3d0086",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/050_sauce-bbq_5949b7483d.webp",
+      "format": "webp",
+      "bytes": 20444,
+      "sha256": "5949b7483d909bfcf3e6281bd1269e11a4b01ba9752e096292b8d1a14e6b053b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/051_tea-black_930b05810b.webp",
+      "format": "webp",
+      "bytes": 1720,
+      "sha256": "930b05810bd5b1f615468506f72495cbff25e2fdd7b42bf9f46e0b78d757edb4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/052_tea-green_dea58918d2.webp",
+      "format": "webp",
+      "bytes": 622,
+      "sha256": "dea58918d2a7f4cfced836fbdcb77229471ef7d37982d84232b485e38a553d50",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/053_topping-boba_42302e5a50.webp",
+      "format": "webp",
+      "bytes": 2470,
+      "sha256": "42302e5a502d43f7c7f625020c62857145626a9a33cde102565f40742a7613bd",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/054_topping-pudding_9d5c9189c2.webp",
+      "format": "webp",
+      "bytes": 1330,
+      "sha256": "9d5c9189c222851a0d0df9218175b57ca17635af11e139bfd4de513dcc520538",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/055_topping-jelly_0ccb3e514b.webp",
+      "format": "webp",
+      "bytes": 1236,
+      "sha256": "0ccb3e514b7c2d5bf2a1a8485057bf93758c6c61b7ea92b0e67890478bd413b7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/056_topping-cheese-foam_365e6bf007.webp",
+      "format": "webp",
+      "bytes": 1310,
+      "sha256": "365e6bf00702bf004a47bd5aded28c487fd551a9660ca7685a3c5d7151423e9f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/057_tea-black_8c43c9fdf1.webp",
+      "format": "webp",
+      "bytes": 9368,
+      "sha256": "8c43c9fdf149c8a99cf3ebd9fb633acbda0fbf4b45af57b2f2652c4a13aa540d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/058_tea-green_c593521943.webp",
+      "format": "webp",
+      "bytes": 9398,
+      "sha256": "c593521943492854eaf4b6de029a0cc8e65df8625ac19cd7511cda3ffa086336",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/059_tea-oolong_76378ca6ec.webp",
+      "format": "webp",
+      "bytes": 8812,
+      "sha256": "76378ca6ec30fd24c4f09232320750fd2f841ae1695bc6bf788990353f90d867",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/060_tea-jasmine_6eb0f1a20e.webp",
+      "format": "webp",
+      "bytes": 9214,
+      "sha256": "6eb0f1a20e3895213e4d67af6a706ee9a0767e765bc56dbc9df2a3ab6905f71b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/061_milk-fresh_80b152583c.webp",
+      "format": "webp",
+      "bytes": 5656,
+      "sha256": "80b152583cad08509ed1b04e63a7fb10a7cebb2e7a7af757c3ab2d708c0bdfbe",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/062_tea-honey_c540b7e03e.webp",
+      "format": "webp",
+      "bytes": 8690,
+      "sha256": "c540b7e03e68b10c213632ba07c7a0d71c44b7dc37767c64dea48958dc827599",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/063_tea-strawberry_e9002fe325.webp",
+      "format": "webp",
+      "bytes": 8470,
+      "sha256": "e9002fe325b82cee88356f3007dce9c6b0dc4d795bbe2617ef3e7d4b1c31b539",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/064_tea-taro_f92cdc8eba.webp",
+      "format": "webp",
+      "bytes": 6536,
+      "sha256": "f92cdc8eba0b1bc2a06f8fcb1c430883b379600bc3c3d46f067e946ec0895d99",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/065_topping-boba_50721c0e58.webp",
+      "format": "webp",
+      "bytes": 8264,
+      "sha256": "50721c0e58c8082595ae89b0d95261b12174ca8417fe03b23ea3414fa9f76298",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/066_topping-white-boba_665b19cd9f.webp",
+      "format": "webp",
+      "bytes": 5654,
+      "sha256": "665b19cd9f8ee277df9ee7844a31be7c00456ad28e13244ae264bca64763dea4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/067_topping-pudding_33e17cfd13.webp",
+      "format": "webp",
+      "bytes": 5688,
+      "sha256": "33e17cfd13ebd4f4ece57a074fbed4ffaec156a4a3a204ba2fbc6b7b67d09639",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/068_topping-jelly_61dbd58c82.webp",
+      "format": "webp",
+      "bytes": 6358,
+      "sha256": "61dbd58c82065c71ed217866fb2c8e29a2be6cde201940188e7b9a31fc4bfc17",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/069_topping-cheese-foam_0190b7ff02.webp",
+      "format": "webp",
+      "bytes": 4216,
+      "sha256": "0190b7ff023ba693e600f7c03793cd750239e695e25061061d2c8378a7928c43",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/070_topping-lychee_b30470ed21.webp",
+      "format": "webp",
+      "bytes": 4400,
+      "sha256": "b30470ed21067a58b78b0d8e0892f1db6bb2d98f30a9e77cbeed822746cee10a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/071_topping-cookie_9b347a4826.webp",
+      "format": "webp",
+      "bytes": 6022,
+      "sha256": "9b347a482692b01155dd9f214d212a0cf7de4439f9f24608b167a12555bcc18f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/072_topping-aloe_a17bf92f08.webp",
+      "format": "webp",
+      "bytes": 7370,
+      "sha256": "a17bf92f08ec93a84692769c6e98cc62d28bdf5a4f4856e11e415844b9d66e54",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/073_topping-grass-jelly_d917e5f37f.webp",
+      "format": "webp",
+      "bytes": 8268,
+      "sha256": "d917e5f37fc5dabd64d531583d78123b1c0588e2bae573467aadd4e2c1a733d8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/074_topping-redbean_416456d0bc.webp",
+      "format": "webp",
+      "bytes": 7000,
+      "sha256": "416456d0bcec2db4b4686696408daae3f5366f3f6c17b2027b1adc035326d79a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/075_topping-crystal_e2ce5320db.webp",
+      "format": "webp",
+      "bytes": 6648,
+      "sha256": "e2ce5320db6426c2494a05e7890b50ebf0bbaaccf32b1a3eef166fa28491a14a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/076_topping-mochi_5c7b9aa32e.webp",
+      "format": "webp",
+      "bytes": 6732,
+      "sha256": "5c7b9aa32e97a6479e0972bf7b4bba097c2dc0e363847e63f4703c1b7c24ac1e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/077_broth-kimchi_da7ff66fad.webp",
+      "format": "webp",
+      "bytes": 8348,
+      "sha256": "da7ff66fad34e0d27c4f471dec55044e55c01fd89a15580730d00850e4745522",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/078_broth-tomyum_d794c082aa.webp",
+      "format": "webp",
+      "bytes": 8388,
+      "sha256": "d794c082aac0b81183a6af35503729a658b59a01754013c317be8ef1af95d19e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/079_broth-mala_6343d690fe.webp",
+      "format": "webp",
+      "bytes": 7954,
+      "sha256": "6343d690fee0f61e63341ea22269623fe37f70737740f6fe14f8c0dbec7246f4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/080_broth-tonkotsu_a3f2025ac5.webp",
+      "format": "webp",
+      "bytes": 7476,
+      "sha256": "a3f2025ac55c309b2f91e3020297c4c275b4e19db09f3cc7d8967187e184a9e6",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/081_broth-mushroom_0e85dc991e.webp",
+      "format": "webp",
+      "bytes": 7312,
+      "sha256": "0e85dc991e1f73eccbe18b9a3db013511b28615f5543bc333e672c7884613cc0",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/082_broth-herbal_e6b3e671a5.webp",
+      "format": "webp",
+      "bytes": 7662,
+      "sha256": "e6b3e671a59858012b0e891bbca20c3837b422e3470ba7e5b2488a4912006afd",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/083_ntop-beef_ee466f1d52.webp",
+      "format": "webp",
+      "bytes": 8050,
+      "sha256": "ee466f1d520cf4376f54d0259fea7376dda46c4a29828306fafb41f6758ba49f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/084_ntop-shrimp_04ea544abc.webp",
+      "format": "webp",
+      "bytes": 7406,
+      "sha256": "04ea544abcb7b1c25625e593f8801de29aa607bb7832143363a9950e6df6c90d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/085_ntop-squid_b00e827c0f.webp",
+      "format": "webp",
+      "bytes": 7612,
+      "sha256": "b00e827c0f265b1899c9fbcb61c476a15c92831ef0a6522c9799798d68492255",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/086_ntop-fishcake_c07abb6f09.webp",
+      "format": "webp",
+      "bytes": 5982,
+      "sha256": "c07abb6f090476997503894e648f519de5368837f669462ac6e154333cc589a8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/087_ntop-sausage_97652ae415.webp",
+      "format": "webp",
+      "bytes": 7050,
+      "sha256": "97652ae415b91c82ea48703548b880f7860ecfe4beea19c65c7f65c6b4aa4cc0",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/088_ntop-tofu_9d7fe53a3b.webp",
+      "format": "webp",
+      "bytes": 6658,
+      "sha256": "9d7fe53a3b49a888b449ffc513c836c105f97891f86592d3d1d7175ee93f6941",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/089_ntop-egg_b9782f996e.webp",
+      "format": "webp",
+      "bytes": 6410,
+      "sha256": "b9782f996ec83b5f6ec08de4af582e2963df27e6cbe73478a552a63a23741482",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/090_ntop-cheese_1c6a659378.webp",
+      "format": "webp",
+      "bytes": 6132,
+      "sha256": "1c6a659378b84971127cb5062f09f55d032ead296ac4cecf20c10c9e3a81e4e2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/091_ntop-enoki_9b9773ee97.webp",
+      "format": "webp",
+      "bytes": 8038,
+      "sha256": "9b9773ee9761b2ef502696f9b14f1eae0cc49f9f6c98d00f37fd132e33d94530",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/092_ntop-bokchoy_b3cebb98d4.webp",
+      "format": "webp",
+      "bytes": 7658,
+      "sha256": "b3cebb98d4540600832e572ae2cd795d3511cfac394991e915c011bf552934ba",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/093_ntop-crabstick_ea1b8e072e.webp",
+      "format": "webp",
+      "bytes": 7668,
+      "sha256": "ea1b8e072e30c2c9751e4a6566a6fdcd831e4ee01107c3b763b6742cd91cc855",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/094_ntop-corn_5e4b2d1d36.webp",
+      "format": "webp",
+      "bytes": 7470,
+      "sha256": "5e4b2d1d3689525115dc55e480177d5077cfaa8af576eedd2e9ed97ad3a3309f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/095_ntop-meatball_644a9c4d56.webp",
+      "format": "webp",
+      "bytes": 7338,
+      "sha256": "644a9c4d562c10d8dd912375c3d988d2c962054b8274d8bdcda0f3f3122730f8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/096_ntop-dumpling_298d969d62.webp",
+      "format": "webp",
+      "bytes": 6554,
+      "sha256": "298d969d62b34f3c26cbce2253620cee558c15178d509702ef888a8f2594a3b9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/097_skewer-fish_2b89ecf0f2.webp",
+      "format": "webp",
+      "bytes": 5902,
+      "sha256": "2b89ecf0f24e8512d1ec19fb38fb6275cbf6228b28ca7a0dd358eb0cd9a6787a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/098_skewer-beef_613e29801f.webp",
+      "format": "webp",
+      "bytes": 7002,
+      "sha256": "613e29801fe03d4f8e572e889d22d88850dc5d609e5b7a38ad55e3a88a626012",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/099_skewer-shrimp_8ffdd3175b.webp",
+      "format": "webp",
+      "bytes": 8664,
+      "sha256": "8ffdd3175b06a29912826532ca598b0e49e3db62a928271c81a6f870a76c7d4d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/100_skewer-sausage_0d6c41b67e.webp",
+      "format": "webp",
+      "bytes": 6630,
+      "sha256": "0d6c41b67e332d58bc3bb5b80300b22502d8376ec27d672c3a47bad2e11e1f34",
+      "first_context": "js",
+      "occurrences": 3
+    },
+    {
+      "file": "assets/images/101_skewer-tofu_6ecd1b4452.webp",
+      "format": "webp",
+      "bytes": 7622,
+      "sha256": "6ecd1b445248868853a20ac1369d8a104bd193ce5cd96ecf225066b7ee629830",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/102_skewer-quail_64f82907cf.webp",
+      "format": "webp",
+      "bytes": 6054,
+      "sha256": "64f82907cf231bc30df32051018abe1e88eafe2cd7587ee245a5e1ac2203e73a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/103_skewer-mushroom_ce7b6f05d7.webp",
+      "format": "webp",
+      "bytes": 7406,
+      "sha256": "ce7b6f05d7fb452fc4cc8870d76068cf5924e4b5486d8f0876eb2c7a3f6854b8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/104_skewer-crabstick_2ae98200df.webp",
+      "format": "webp",
+      "bytes": 7548,
+      "sha256": "2ae98200dfc78b88816e07d71b20a086297f04630969fc926a40f4d218c62da5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/105_skewer-okra_8f1ce09e6b.webp",
+      "format": "webp",
+      "bytes": 8002,
+      "sha256": "8f1ce09e6b47be083a322b7635688f8d43d996f5619dfdd982466cf77258cac7",
+      "first_context": "js",
+      "occurrences": 3
+    },
+    {
+      "file": "assets/images/106_skewer-chicken_202d7ee5f4.webp",
+      "format": "webp",
+      "bytes": 8150,
+      "sha256": "202d7ee5f4458972c929e73c2971ccc5f18a1eddb9b17dc8a97600b769dd2026",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/107_skewer-squid_5ee8b9479b.webp",
+      "format": "webp",
+      "bytes": 7712,
+      "sha256": "5ee8b9479bd849415b2e5bce2c496152839ed4b90b27b12f8d3de0aff8144143",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/108_sauce-sweet-chili_e934851eee.webp",
+      "format": "webp",
+      "bytes": 6870,
+      "sha256": "e934851eee5a8b658f7da8f732999568de1d860868be449b68bf55131f6371fd",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/109_sauce-tamarind_3b10d51b5c.webp",
+      "format": "webp",
+      "bytes": 7282,
+      "sha256": "3b10d51b5ced9495f6af7da7c5d8679454ea0c65f29598c9a98d33bd5f1f2c0c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/110_sauce-butter-garlic_9fc33b8511.webp",
+      "format": "webp",
+      "bytes": 7710,
+      "sha256": "9fc33b8511a7c02869af5ea6c227c45f9acaa805b26c81b71a8e964b4be31d02",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/111_sauce-cheese_9a6715e125.webp",
+      "format": "webp",
+      "bytes": 6148,
+      "sha256": "9a6715e125ea04c20422b8cde24d2148c2f00cbafb447d85c8e35bd74edd3756",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/112_sauce-satay_d73eca6f1e.webp",
+      "format": "webp",
+      "bytes": 7828,
+      "sha256": "d73eca6f1e1bdb0b787611d36ea71adae9a8d1c2b67e5150cb9e7928dba54628",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/113_sauce-mayo_a8a9edf237.webp",
+      "format": "webp",
+      "bytes": 4542,
+      "sha256": "a8a9edf237431c3c990be8b9537661d4fa087adb5b2435118e1819f332544a13",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/114_sauce-honey-mustard_586bc95cc5.webp",
+      "format": "webp",
+      "bytes": 4456,
+      "sha256": "586bc95cc5e8244ac0d5099a51b999e79e7acc3fa21910841f520838d724c773",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/115_sauce-bbq_bbede88550.webp",
+      "format": "webp",
+      "bytes": 4692,
+      "sha256": "bbede8855003c5650bf0b20984fb5aeea87394a2bb13a1f7cb2a58dcddb1d6af",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/116_bebo_a23ed6191e.webp",
+      "format": "webp",
+      "bytes": 108964,
+      "sha256": "a23ed6191ebebd8a635e2cf7cfcd2999f223d88636dbdedbce9488cc1d6d8c5e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/117_mika_6fcbe1c0ec.webp",
+      "format": "webp",
+      "bytes": 58048,
+      "sha256": "6fcbe1c0ec3020e600f04c968ef10a92f2e2e46bb471d472ed3909e6563dfc7d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/118_batu_f08005b5ea.webp",
+      "format": "webp",
+      "bytes": 84300,
+      "sha256": "f08005b5ea8010a4ca5f9b7b6bdd1f2609bee82956845986c770e71742293d5e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/119_chunam_b7520623c6.webp",
+      "format": "webp",
+      "bytes": 95898,
+      "sha256": "b7520623c6b2096d892145db7ab5bf7e5c8a196d234ba90f94c6f7e721ceef38",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/120_colua_898b7112a3.webp",
+      "format": "webp",
+      "bytes": 56098,
+      "sha256": "898b7112a3e0f1b7da288f21426f342abccc826d35af33bec9d0ea44411a9fae",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/121_baccau_587b6f1a56.webp",
+      "format": "webp",
+      "bytes": 50896,
+      "sha256": "587b6f1a5687c1f6e1e85591305337a4d2d08e2587dfa4eea56975233a90bc2f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/122_anhpho_781115f15e.webp",
+      "format": "webp",
+      "bytes": 58008,
+      "sha256": "781115f15e3b24f94ae91c9f61c5190bcca09834d0adf9c139fb590983a83374",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/123_cohanh_2112ccc03d.webp",
+      "format": "webp",
+      "bytes": 86512,
+      "sha256": "2112ccc03d94bb18e136c13d3b04de18fcc8d3f01beb8bd0bd976e5074adc423",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/124_banlan_86bcbc38d4.webp",
+      "format": "webp",
+      "bytes": 117784,
+      "sha256": "86bcbc38d4b6e48bbe23493a3d81304ff1cbca71fe689e4f0ece00d47af91397",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/125_bactam_75d212983c.webp",
+      "format": "webp",
+      "bytes": 205710,
+      "sha256": "75d212983c4cd6a7302485fc20e5ba3eaf19be135a1fce74ea49a42a3e325c9f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/126_cout_e5658547c7.webp",
+      "format": "webp",
+      "bytes": 217886,
+      "sha256": "e5658547c7c17e7811c39d02bb4cdbd273e9060b392a52da5afac265650336af",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/127_bacbinh_8f5fc4780f.webp",
+      "format": "webp",
+      "bytes": 158868,
+      "sha256": "8f5fc4780ffd8c63bdcbc470c6521668d91196c4def5868ca1e520a0a142c9a3",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/128_thaydung_efaeeebe94.webp",
+      "format": "webp",
+      "bytes": 173712,
+      "sha256": "efaeeebe94f9821b6c045760bbba10b514d57aec02e4f635a97d03f57c7888d9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/129_thayminh_e299a888a8.webp",
+      "format": "webp",
+      "bytes": 160798,
+      "sha256": "e299a888a869d0329a139d19b2ddb52e12351ba56e91dc6fa6e81c130132c3e7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/130_banmai_250149ff71.webp",
+      "format": "webp",
+      "bytes": 150324,
+      "sha256": "250149ff71e95a1cbf1d358b0a8a4fa852a7583c7932c3c42f95912a9eca0f47",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/131_mika_e7383538c2.webp",
+      "format": "webp",
+      "bytes": 184234,
+      "sha256": "e7383538c260c8b5ebd72f3e01f453240305156b36d74871b00588815629c3ef",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/132_colua_6c8f41517c.webp",
+      "format": "webp",
+      "bytes": 185370,
+      "sha256": "6c8f41517cb99f0d20aea6d66bdda6a976f3b49656f00b60d587677b163ede06",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/133_baccau_e30ba5e5e0.webp",
+      "format": "webp",
+      "bytes": 190982,
+      "sha256": "e30ba5e5e02a0d34e55cbc8b6fc084d8a8064e55986f3bdb6ff5d98528309662",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/134_anhpho_353f6abb0d.webp",
+      "format": "webp",
+      "bytes": 136346,
+      "sha256": "353f6abb0d8fe6d6d218746a02327181b3cf8a11a99dd5e7b2e4824e26788b67",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/135_chinhai_e0fbd995b6.webp",
+      "format": "webp",
+      "bytes": 117978,
+      "sha256": "e0fbd995b67c547e2ec2d97b9356318929ecd0f36047e289053548fe8997ff00",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/136_cosau_36d21dd658.webp",
+      "format": "webp",
+      "bytes": 130094,
+      "sha256": "36d21dd6583fe7c871dfa6e28ab51f2e45b8e9a7b497ae020eb0cac4b7449662",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/137_anhkhai_2ec95c7d20.webp",
+      "format": "webp",
+      "bytes": 109278,
+      "sha256": "2ec95c7d2074bb9855a510331fd377104225d23c4a779ef66b400cc14f0bd14a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/138_chuloc_0a86d4ff44.webp",
+      "format": "webp",
+      "bytes": 121808,
+      "sha256": "0a86d4ff44dbaf2a0680ad544761e873946edff851006631bca8c3b94bff769a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/139_bacphuc_845e78bc66.webp",
+      "format": "webp",
+      "bytes": 141270,
+      "sha256": "845e78bc6657bbff55e9a9b7cc380ff68eecfc7554aad521fcef477c3c1b53cc",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/140_chiha_fd60aea18a.webp",
+      "format": "webp",
+      "bytes": 118552,
+      "sha256": "fd60aea18a0223fe8b8ac0c2b1e51d1d20a3a0d42c4863dd5cc4a02cf36e987b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/141_anhkhoa_72178951f0.webp",
+      "format": "webp",
+      "bytes": 128846,
+      "sha256": "72178951f08d69d7bebfc93ca72b5a84e4bd29518d134e3f577181060ad2e9bc",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/142_chidiem_2c66befc3a.webp",
+      "format": "webp",
+      "bytes": 91906,
+      "sha256": "2c66befc3a3cf2a3fcdc6732d4adbbc7953007f79b53a43cac10c80b8eeb4268",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/143_cotuyet_b424ef5961.webp",
+      "format": "webp",
+      "bytes": 77384,
+      "sha256": "b424ef59612c533bdc5da3b47b649e5f33bb6315d06d84bfcc7a7f4358463376",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/144_anhtin_a999dce407.webp",
+      "format": "webp",
+      "bytes": 90806,
+      "sha256": "a999dce407a95ff0a893469b4ff72665e5aeb494bde61ab0b8aeaf53d351a783",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/145_bacsian_6a357b275d.webp",
+      "format": "webp",
+      "bytes": 75242,
+      "sha256": "6a357b275d4a13bca8f4ac5262fc97fa35d56803990f9444d70a8f6ccd50d08a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/146_ytalinh_799b24d787.webp",
+      "format": "webp",
+      "bytes": 78340,
+      "sha256": "799b24d787a577158f6143af130880d486e3e67955d205abf68f8eca18ba38b7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/147_ongkhang_5846670f5a.webp",
+      "format": "webp",
+      "bytes": 110660,
+      "sha256": "5846670f5ac14cdba20d055a7e6c6c2388d16e9841e78e108c663fe1257ee1c8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/148_baman_7d695ca63f.webp",
+      "format": "webp",
+      "bytes": 28020,
+      "sha256": "7d695ca63ff96ffea082bd0da58985032d59aae820f8fbcdaaa4077810bef93d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/149_anhvinh_59001679ce.webp",
+      "format": "webp",
+      "bytes": 27656,
+      "sha256": "59001679ce98450095409f9e963a029723cf2106e39d0c53ff8094879e9b706a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/150_cogiang_5a0d2b0f2b.webp",
+      "format": "webp",
+      "bytes": 15610,
+      "sha256": "5a0d2b0f2b82ca193fd5c7bb539475714f7c620b23e454fdf4cafd09612561a1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/151_chinhien_cb923e6cd3.webp",
+      "format": "webp",
+      "bytes": 40240,
+      "sha256": "cb923e6cd3fb79e7bcbdb5d01eb579acae46effa56fba7720462a5528bbe325d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/152_anhduy_04554cf498.webp",
+      "format": "webp",
+      "bytes": 30984,
+      "sha256": "04554cf498d236a6289af09a2d5942ab1f33cb3dc6ba6d520f5474c0e33cb326",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/153_bacthach_68851c0364.webp",
+      "format": "webp",
+      "bytes": 24928,
+      "sha256": "68851c036401d72cc6183ae794a70b19fe2512ef6f0a86764b3ddc00460d4514",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/154_chily_0dbcc85156.webp",
+      "format": "webp",
+      "bytes": 34162,
+      "sha256": "0dbcc8515620cad89c213463914367efff7608db90f09ffe2d7b9259494f9367",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/155_anhsoc_e5c2a282d8.webp",
+      "format": "webp",
+      "bytes": 34690,
+      "sha256": "e5c2a282d8123d5f5c79dc7a554a412ae507d6f2f5cd616f3c39d7c9e115fb44",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/156_coyen_d7dab0b0ab.webp",
+      "format": "webp",
+      "bytes": 35006,
+      "sha256": "d7dab0b0ab412bccf4217717f6eb5322a770034552480100ed78564ab6d78518",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/157_anhquan_e12632944f.webp",
+      "format": "webp",
+      "bytes": 32052,
+      "sha256": "e12632944f620fbb3bd5610b18460e4c59f8a6dff011e7e0e82db2a2fc91fe9c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/158_chingoc_ba8de6ec17.webp",
+      "format": "webp",
+      "bytes": 24122,
+      "sha256": "ba8de6ec17e7becaff940425d733389e960909f92a51f763e77b9964e9ffdce7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/159_thaytri_58b7b9fed3.webp",
+      "format": "webp",
+      "bytes": 37396,
+      "sha256": "58b7b9fed3bfe7f25a0bdad8bf4299a35ede8dc81f7eab82883691cad1d8c5f4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/160_village-map-art_d608ea4d15.webp",
+      "format": "webp",
+      "bytes": 320948,
+      "sha256": "d608ea4d159d34ad77dc597a2b8f6cd7b49413cd811f51b3c911add8a5d2ce4b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/161_lane_a460193012.webp",
+      "format": "webp",
+      "bytes": 186558,
+      "sha256": "a460193012a8d9d9e01ad446483d9fc1235ab7f381ec88d8122fba5cffe35d98",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/162_market_f19dbba8a2.webp",
+      "format": "webp",
+      "bytes": 222714,
+      "sha256": "f19dbba8a2ea5a8e999314453e2502dd8bb0afffd3526bdd910e197a2f9d9ba2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/163_school_7b557a370c.webp",
+      "format": "webp",
+      "bytes": 236764,
+      "sha256": "7b557a370cae2ae584909c4e38b05b84ac069dee7674b602120ff7e6894747ab",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/164_ricefield_8ead750201.webp",
+      "format": "webp",
+      "bytes": 259872,
+      "sha256": "8ead750201fd7c218889b8358110092d9667307e08b874184ed0dfa26ce9ec29",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/165_riverside_a3cec0c03c.webp",
+      "format": "webp",
+      "bytes": 222634,
+      "sha256": "a3cec0c03c9f6af12c771850f0e5c4905f8e07afdf706e5a7cdf3a0c3c802080",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/166_busstop_52fa748552.webp",
+      "format": "webp",
+      "bytes": 198912,
+      "sha256": "52fa7485524b402aa58949381f3463ce990bb30c703a4a826d788246eaaa2469",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/167_clinic_6a73516e06.webp",
+      "format": "webp",
+      "bytes": 214998,
+      "sha256": "6a73516e06605230d7c56e3380519518cd6aded0906cc29192859b660d2c42d0",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/168_temple_8034968ce4.webp",
+      "format": "webp",
+      "bytes": 214414,
+      "sha256": "8034968ce490880e52af1b5c8c56379fc3849d01659dd2c354a7d76a8830b7eb",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/169_hill_cf71b959cf.webp",
+      "format": "webp",
+      "bytes": 272262,
+      "sha256": "cf71b959cfeee1757bfa5fc8688a95b2aae15db62b429ac95e205f9ec21457a3",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/170_nightmarket_af737a4f0a.webp",
+      "format": "webp",
+      "bytes": 224384,
+      "sha256": "af737a4f0a2a6a1962a3fbdefcec4cfef4463856eeb526dcc6c0d62db762ace3",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/171_district_c9caae315d.webp",
+      "format": "webp",
+      "bytes": 296196,
+      "sha256": "c9caae315d35591eb3b5c38f364aaba4b2612820094d1a1580ca0f0f40b5bc10",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/172_bactam_60d77c7fce.webp",
+      "format": "webp",
+      "bytes": 158038,
+      "sha256": "60d77c7fcee0b98e0613c2f040fe5166fc699b905732e0220a9000ef0e329394",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/173_cout_4a923d4112.webp",
+      "format": "webp",
+      "bytes": 171682,
+      "sha256": "4a923d41127318af4c242a6f90e50d973251e15f50aeb3be647c3e3d85db38d5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/174_bacbinh_c049327de6.webp",
+      "format": "webp",
+      "bytes": 86628,
+      "sha256": "c049327de6df26af93f101bbf8afd19cd818c593770412b5d19450b2ca2030f4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/175_thaydung_9becc9c7e9.webp",
+      "format": "webp",
+      "bytes": 107170,
+      "sha256": "9becc9c7e953d2b45da97d22706767665aca315734fd6d4f0729409314c7613e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/176_thayminh_e75bd96c1d.webp",
+      "format": "webp",
+      "bytes": 103934,
+      "sha256": "e75bd96c1d4ab64375ed1acf2fd83d641555609c7733bc1fb32b62d21cefeb25",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/177_banmai_b6c4bd6220.webp",
+      "format": "webp",
+      "bytes": 138042,
+      "sha256": "b6c4bd6220a49bfe26c21f10db4cc86b1602321d13edbc1a279ad3c87ed3ad47",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/178_mika_65bf2ec97b.webp",
+      "format": "webp",
+      "bytes": 175630,
+      "sha256": "65bf2ec97bb90d64804a9b3e70443891f106df93e10758b8771e1ca848bae7f9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/179_colua_a0a649721f.webp",
+      "format": "webp",
+      "bytes": 136830,
+      "sha256": "a0a649721fc46eddfd1f95f9165ca02f57294a25375eac0f2710e2cbb9222160",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/180_baccau_4583f050dd.webp",
+      "format": "webp",
+      "bytes": 141272,
+      "sha256": "4583f050ddf20c8e42a8ad5e17769ad8e4b7b087ec05579d61aab8d47bb2014f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/181_anhpho_79a1f13c1f.webp",
+      "format": "webp",
+      "bytes": 103198,
+      "sha256": "79a1f13c1fcdfbb8dfe4d7db6fb6578c1222278dcf2d913f4ae90abc76bcd493",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/182_bebo_3c6533c79e.webp",
+      "format": "webp",
+      "bytes": 48104,
+      "sha256": "3c6533c79e91ba221671638e9879efb9edaab9002f6d0f8d4f1ad3a26b2d6984",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/183_batu_6f5ad99fcc.webp",
+      "format": "webp",
+      "bytes": 52324,
+      "sha256": "6f5ad99fcc2e0e67c592aaa577835ca9a59a6ace397c927952facf03a94c4730",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/184_chunam_212ec0a33b.webp",
+      "format": "webp",
+      "bytes": 51390,
+      "sha256": "212ec0a33b17545291cb00a38e8696b5d0a2f6ee85d0b9b3006f1397cbff9ee4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/185_cohanh_84351db407.webp",
+      "format": "webp",
+      "bytes": 52084,
+      "sha256": "84351db40720c6600a049f60fd0e4019ce97c632964d4d5565441f753630c8a6",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/186_banlan_3808750eac.webp",
+      "format": "webp",
+      "bytes": 63978,
+      "sha256": "3808750eac45ee770ba388a3fa39ef81452d1cd7519f15a02979f5cc581a491d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/187_male_546ebb6f07.webp",
+      "format": "webp",
+      "bytes": 45722,
+      "sha256": "546ebb6f07be301b713a94dbb002516681b086adbaf3ce01a0a755bb67be438c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/188_female_a2ff2a3122.webp",
+      "format": "webp",
+      "bytes": 61918,
+      "sha256": "a2ff2a3122397e209ddbea1af47b4956e646c64b4b6bf5fce3a0ebd990dfa8cb",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/189_chinhai_c2f92c0c78.webp",
+      "format": "webp",
+      "bytes": 422324,
+      "sha256": "c2f92c0c78fdc4a7f4bdcd710d57c0475f2f3524f58f2a6724cb735b4fc4abd4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/190_cosau_75a7fcc460.webp",
+      "format": "webp",
+      "bytes": 443614,
+      "sha256": "75a7fcc460f525c2df6171b76fb148eeb5abcc1c9eb87953a4c53fd27bb31a47",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/191_anhkhai_5e7aaf41e2.webp",
+      "format": "webp",
+      "bytes": 401544,
+      "sha256": "5e7aaf41e2f01e2253b4a52288f466d5067986fa62c479a7b215be177cbac718",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/192_chuloc_116074dfa9.webp",
+      "format": "webp",
+      "bytes": 394994,
+      "sha256": "116074dfa965e2d0c28714485daa46677db92418acade643af04a3a01809d3b7",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/193_bacphuc_390b1cd295.webp",
+      "format": "webp",
+      "bytes": 347896,
+      "sha256": "390b1cd295b9789d9ef0c5f7dfbd02774fdeec8fe33681791fb3a76d516e85a9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/194_chiha_473059ebee.webp",
+      "format": "webp",
+      "bytes": 411166,
+      "sha256": "473059ebee66293276bfa91f1061b5b942a02ae4e04771d059cd69e5ad480774",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/195_anhkhoa_9b2395372f.webp",
+      "format": "webp",
+      "bytes": 384742,
+      "sha256": "9b2395372f22cbec8c3ffb73566b6b6aa5151d438fb1b35ab3052ffdcf1d106a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/196_chidiem_7cf6866c71.webp",
+      "format": "webp",
+      "bytes": 328738,
+      "sha256": "7cf6866c710795ce5ea33f68e4598a8bebdb6ff8b098349d384a830837412702",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/197_cotuyet_72dfa720b9.webp",
+      "format": "webp",
+      "bytes": 277106,
+      "sha256": "72dfa720b9aa98c1b20a7d6afb5b7d3b29355509448ce9fc3c219f0f23702c6a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/198_anhtin_9909253d8e.webp",
+      "format": "webp",
+      "bytes": 316122,
+      "sha256": "9909253d8e720f728ab1a1fdd920ff4365491ae69eae2659a52a81971cf14fc9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/199_bacsian_8269b72238.webp",
+      "format": "webp",
+      "bytes": 131984,
+      "sha256": "8269b7223880525bb95038093cf17cd0e319d93364d368b66bd05f2b2725f155",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/200_ytalinh_17a3b42516.webp",
+      "format": "webp",
+      "bytes": 138016,
+      "sha256": "17a3b425165ae8db1642ddfa768692ae54dff3d9fc6572d250f5cc4b0648788a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/201_ongkhang_bdb8c51dc5.webp",
+      "format": "webp",
+      "bytes": 204446,
+      "sha256": "bdb8c51dc551bce1f70c0fb14b1bf946edf58340d8e5216c2e819ccd80a24d6f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/202_baman_6d558043ec.webp",
+      "format": "webp",
+      "bytes": 36440,
+      "sha256": "6d558043ec9b0f43c3d266ca75da9e6dd2b36a5cbbde2657a89ebafea5547afd",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/203_anhvinh_c6923ba710.webp",
+      "format": "webp",
+      "bytes": 42226,
+      "sha256": "c6923ba710be9336ce30c4b9892f6c1446d0ef318873a7a48eb51452737962b8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/204_cogiang_6b78551582.webp",
+      "format": "webp",
+      "bytes": 39022,
+      "sha256": "6b785515827bb47df1a14591b73718bcc1e76ea5226f9331760fb844157f5b3d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/205_chinhien_eb256264af.webp",
+      "format": "webp",
+      "bytes": 45614,
+      "sha256": "eb256264af3a4e79cbdd843513d47592d58a0aa7e8569bf2370f96eb53f6cf53",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/206_anhduy_aafeb33261.webp",
+      "format": "webp",
+      "bytes": 42028,
+      "sha256": "aafeb33261ac5573d58618e5d1a1cc0cc658834f96f00cbe72f0751f20102d33",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/207_bacthach_1f1c94b394.webp",
+      "format": "webp",
+      "bytes": 45064,
+      "sha256": "1f1c94b394a00335016d575c22ae8b06da8e641095f275edaa654282c0a7b3a8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/208_chily_63dceeb596.webp",
+      "format": "webp",
+      "bytes": 49122,
+      "sha256": "63dceeb5962dd6c7a630e5dfbe25ab7c3aafecfcdc9a3937ae0c01201d13acd1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/209_anhsoc_1ffdb5d64a.webp",
+      "format": "webp",
+      "bytes": 49020,
+      "sha256": "1ffdb5d64aa1e631a279e8a6f979fe94cea6a1ca47974cfb5be4805ea6b9e7d5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/210_coyen_ac79c092eb.webp",
+      "format": "webp",
+      "bytes": 49910,
+      "sha256": "ac79c092eb6f4f6d00022caf4cd1ce200c5be5df62995115c9af8e3fa1e50f32",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/211_anhquan_464a130c96.webp",
+      "format": "webp",
+      "bytes": 37008,
+      "sha256": "464a130c968b946bf8a146b18a746d84a3d2a1d79906b89b7d122fdd8dffb4a2",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/212_chingoc_898b84e2d8.webp",
+      "format": "webp",
+      "bytes": 35662,
+      "sha256": "898b84e2d8545840c7f5c3986ed732995268f1740e5178b1a1b922fea39bcb3d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/213_thaytri_f0551dab89.webp",
+      "format": "webp",
+      "bytes": 43898,
+      "sha256": "f0551dab895dd0a8966a973c039c4de653239807e46f2def29b4f75b5bf2e204",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/214_js-238_d281448e96.webp",
+      "format": "webp",
+      "bytes": 3628,
+      "sha256": "d281448e9639beb0d494e406c7ab105e40af52117c15173ca65606f3eb558814",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/215_js-239_5ebe922f3f.webp",
+      "format": "webp",
+      "bytes": 3904,
+      "sha256": "5ebe922f3fa90a0c03502d5277bc8a4be96003992dcafc16a5e1a0ac09163b9d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/216_js-240_09f54037f6.webp",
+      "format": "webp",
+      "bytes": 3366,
+      "sha256": "09f54037f67f254f4388c17de15b95fcaaf470f74647e0e4e1fcdc2774b7855e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/217_js-241_7181964ae3.webp",
+      "format": "webp",
+      "bytes": 3572,
+      "sha256": "7181964ae3e144fba62d606576bd93c7187a3fc37e7a8934a555b3f7d3712294",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/218_js-242_be026456ce.webp",
+      "format": "webp",
+      "bytes": 3888,
+      "sha256": "be026456ce9fcf6f1451981088b3c593b1bc8f1721ef59113d60a95097c394f0",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/219_js-243_3837f0ee5a.webp",
+      "format": "webp",
+      "bytes": 3048,
+      "sha256": "3837f0ee5a65f17d6ab9802535528d19a5a899020a7926e3958eb52aa19f8fa9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/220_js-244_667f802033.webp",
+      "format": "webp",
+      "bytes": 3620,
+      "sha256": "667f80203300c6c00ab02d2475e252655db474db37366de903efda53d29bc3e1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/221_js-245_15e906f40c.webp",
+      "format": "webp",
+      "bytes": 3556,
+      "sha256": "15e906f40c9011116a0d5d7f3d590999fbafc68309a42fa6ba1f1cfaa3913a10",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/222_js-246_0c83313939.webp",
+      "format": "webp",
+      "bytes": 3074,
+      "sha256": "0c83313939d12cd8e4ed820a07122df5f93914eb0f92cffbe3a8901c2af96d0e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/223_js-247_796cfcb71b.webp",
+      "format": "webp",
+      "bytes": 3222,
+      "sha256": "796cfcb71b053ec893198baf01c7131c7bc7377787525893b5ba1104c782e63f",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/224_js-248_dccd1cf0ec.webp",
+      "format": "webp",
+      "bytes": 3386,
+      "sha256": "dccd1cf0ecb6a46ff84bcd631d238fc6dac829ab44925af00308e12cfe8ea680",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/225_js-249_119859ef60.webp",
+      "format": "webp",
+      "bytes": 3822,
+      "sha256": "119859ef60984b718d07aa7219dd04fd11ea832b15c39b22e1aa1d40bb193eb9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/226_js-250_143d722995.webp",
+      "format": "webp",
+      "bytes": 2586,
+      "sha256": "143d722995a71a991c6074741079b839da1f571418ac72f5ab64682081b13b15",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/227_js-251_e07921b493.webp",
+      "format": "webp",
+      "bytes": 3222,
+      "sha256": "e07921b493549b19d6f8a5693cba560367981f0d3b8f07a53f2377ba0c6f086b",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/228_js-252_fbe0e55b4c.webp",
+      "format": "webp",
+      "bytes": 3368,
+      "sha256": "fbe0e55b4c0317b86682a842013c726ff80574a7861a84cc48b7557cdf483a6c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/229_js-253_9bf25bd745.webp",
+      "format": "webp",
+      "bytes": 3564,
+      "sha256": "9bf25bd745e45715dd88fd3d476fe5a5feda2a5fac88add497965774f73eaf27",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/230_js-254_17491e61a9.webp",
+      "format": "webp",
+      "bytes": 3316,
+      "sha256": "17491e61a9ad3af7984c5706f65d7803fe91c00d7c2777346bb2d8706b68fc92",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/231_js-255_1a4b7f5495.webp",
+      "format": "webp",
+      "bytes": 3546,
+      "sha256": "1a4b7f54957544411b3ac8ddb56cec23382f265b9167443fece35286500beac1",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/232_js-256_8f7326b701.webp",
+      "format": "webp",
+      "bytes": 3664,
+      "sha256": "8f7326b70132bef62cec6e44135f7e8308a14e0313ae202d96215e261da4a954",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/233_js-257_095e81a5f8.webp",
+      "format": "webp",
+      "bytes": 3122,
+      "sha256": "095e81a5f8cf4831ee780e085af715bf7ac12e3fb592487dec3e5f635401ee13",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/234_js-258_c4ce53affe.webp",
+      "format": "webp",
+      "bytes": 2602,
+      "sha256": "c4ce53affecd6ec71db8dfaf4ba6ac9c0297d8f342dfec018df5b99bb8754295",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/235_js-259_36a6688e5d.webp",
+      "format": "webp",
+      "bytes": 2766,
+      "sha256": "36a6688e5d6fb84551efa9c90702120dedec8efe9182b2d334e626b91e9f1a3d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/236_js-260_b3700347b7.webp",
+      "format": "webp",
+      "bytes": 2616,
+      "sha256": "b3700347b768da43e416964027e041916e93c4b036c51961fe76cb480da5098c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/237_js-261_fd411fe182.webp",
+      "format": "webp",
+      "bytes": 3282,
+      "sha256": "fd411fe182d30fd45ad4cbaea6e6c7ab9e4cb01a0d09193acc258bb2b76de568",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/238_js-262_5a7bec0121.webp",
+      "format": "webp",
+      "bytes": 3290,
+      "sha256": "5a7bec01212532c22a4d6796a82f88df65ddd06dda0a8cc6530b91913f885a9a",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/239_js-263_88f9d89568.webp",
+      "format": "webp",
+      "bytes": 6416,
+      "sha256": "88f9d89568942ca7e389733156c1c23e27e80cae8a47d37f5c9b1138bf7a7903",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/240_js-264_d5200dcb25.webp",
+      "format": "webp",
+      "bytes": 5760,
+      "sha256": "d5200dcb2513356f59a60f475cbd83c6d82ffe5454e2b949b840859210f1ad42",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/241_js-265_1ea0250ec7.webp",
+      "format": "webp",
+      "bytes": 4492,
+      "sha256": "1ea0250ec7a57d3d63505275d0e226be9657b9b2292d2380a9f5c3ec49c568b8",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/242_js-266_6a28ebfca2.webp",
+      "format": "webp",
+      "bytes": 4948,
+      "sha256": "6a28ebfca20ef305c1205539b80eca2e6e6dc151225bbed8c7a65c277b559c46",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/243_js-267_6a9d1bd58b.webp",
+      "format": "webp",
+      "bytes": 5984,
+      "sha256": "6a9d1bd58b5a1cc5c78bad5d38240c10d278995469562e46b2c3cbaa942d6658",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/244_js-268_e86b05a08e.webp",
+      "format": "webp",
+      "bytes": 5378,
+      "sha256": "e86b05a08e5f894bf599c692d235a0d3bfa035915dd5ecf618aa349d0fa434b4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/245_js-269_de085bc5c9.webp",
+      "format": "webp",
+      "bytes": 5988,
+      "sha256": "de085bc5c93cb111300a3aa2156b268e588c3c66f8ac475e0a9e073a69ec8f9c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/246_js-270_05efb8e90f.webp",
+      "format": "webp",
+      "bytes": 6204,
+      "sha256": "05efb8e90f2d483bb87b5aa5065b68b2237f507efe8f199b06b0286d803d9fe5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/247_js-271_a9d43b15e9.webp",
+      "format": "webp",
+      "bytes": 5208,
+      "sha256": "a9d43b15e9b5b4797747e144244a6a8f73b37832af574ca8696315066aa284ba",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/248_js-272_e7030047dc.webp",
+      "format": "webp",
+      "bytes": 6148,
+      "sha256": "e7030047dcbfb27741a64dc31851ecc13344e5b9c51b4f7678720308259ca244",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/249_js-273_675aa2a1eb.webp",
+      "format": "webp",
+      "bytes": 4250,
+      "sha256": "675aa2a1ebc7a67f718dab576c1292fcabc3e046abc6c4e8587daa3c5bb0e6d9",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/250_js-274_5656ff2251.webp",
+      "format": "webp",
+      "bytes": 6484,
+      "sha256": "5656ff2251412535811fb40f510ff1352032bd5c877e495a1dbe51206699f3f6",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/251_js-275_f33aaa70b3.webp",
+      "format": "webp",
+      "bytes": 10458,
+      "sha256": "f33aaa70b3acfed4f512e5aa780a45bcdd81673eef685d84ff6a0bd547dcf45e",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/252_js-276_85bb774228.webp",
+      "format": "webp",
+      "bytes": 10522,
+      "sha256": "85bb774228927b4d96591d1d23cfd71936463f8d3da73bbdd7159d59f498fec4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/253_js-277_aa011e36ff.webp",
+      "format": "webp",
+      "bytes": 13824,
+      "sha256": "aa011e36ffe22dfef95462d68b598ab5d82f0422e281b8febcb2b9ac35c1a8f4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/254_js-278_d5ab06ad7f.webp",
+      "format": "webp",
+      "bytes": 11388,
+      "sha256": "d5ab06ad7f50230da5382e0f1c83f23389467cd947000a959df86e2ee3664c62",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/255_js-279_5e20114c13.webp",
+      "format": "webp",
+      "bytes": 11082,
+      "sha256": "5e20114c131cad50b05b9e5459e3e5d1bba6fd34dfa312bb8827563f7365c959",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/256_js-280_7c5b721031.webp",
+      "format": "webp",
+      "bytes": 14286,
+      "sha256": "7c5b721031d5f50770e3a7bc4f09f574b79ad887696383d0488255951a6e6c0d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/257_js-281_cfcd3e593f.webp",
+      "format": "webp",
+      "bytes": 8896,
+      "sha256": "cfcd3e593fa08afac1ff1ba24c0b4593059adb366e1c69b1739d17ee22603f58",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/258_js-282_5afbd91220.webp",
+      "format": "webp",
+      "bytes": 12070,
+      "sha256": "5afbd91220b87415365471c81eee4b379156aa7aee8f7d593c32243510cbe6a6",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/259_js-283_3b3f2f21bc.webp",
+      "format": "webp",
+      "bytes": 86384,
+      "sha256": "3b3f2f21bceb73741d6bfb973fd585639a37cce76783cfcb074f79b8814d092c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/260_js-284_e859d7af0a.webp",
+      "format": "webp",
+      "bytes": 115652,
+      "sha256": "e859d7af0a8c06b80ed0286236c3cc229b148a5092aa2b7541e6528ac08c99e3",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/261_v73-bunny_2b526258ad.png",
+      "format": "png",
+      "bytes": 1461828,
+      "sha256": "2b526258adc05726e222938ef85afecd6d0cb50ef9869c2e72c30d5526db0eac",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/262_v73-corgi_4686836233.png",
+      "format": "png",
+      "bytes": 1765698,
+      "sha256": "4686836233a78bd9d62c48c26e5e60911bfc29a74a1f25e603846949088eeda5",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/263_v73-chibi-male_5a2c384007.png",
+      "format": "png",
+      "bytes": 650380,
+      "sha256": "5a2c3840076b3190a0b46d91e74e682100de2ffa5b5290aace3794070cdb3b30",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/264_v73-chibi-female_5d4f2c44b4.png",
+      "format": "png",
+      "bytes": 817052,
+      "sha256": "5d4f2c44b457d54243111afc7f26c5167ee4a49337f7869791c4f2fc1e1c7c3c",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/265_broth-kimchi_5acb941d6d.png",
+      "format": "png",
+      "bytes": 95501,
+      "sha256": "5acb941d6d62fdd2b4cb109da5d8743f54ac36fcfcc2e880ffcc9f3ec793a4cd",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/266_broth-tomyum_44da18ced7.png",
+      "format": "png",
+      "bytes": 95572,
+      "sha256": "44da18ced7e2080920e89b2715c2d3dd73c87ac52ce86ebbe861b9862585d694",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/267_broth-beef_64c04a0cf2.png",
+      "format": "png",
+      "bytes": 94812,
+      "sha256": "64c04a0cf2bb8afa192ef4531fedf82703c838ad257467b8cd4b2a15c3fcb342",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/268_broth-mushroom_5f2191ddb2.png",
+      "format": "png",
+      "bytes": 91725,
+      "sha256": "5f2191ddb20e5aa62f0023304b514fb732b99d007338aa1c0a4250d7f655e38d",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/269_broth-collagen_2662f669b1.png",
+      "format": "png",
+      "bytes": 90031,
+      "sha256": "2662f669b1268e34809f63b9193e8d8546dc5d81388f0bbf68ba2056a21faa83",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/270_ntop-beef_a34151f506.png",
+      "format": "png",
+      "bytes": 99944,
+      "sha256": "a34151f5060060278623bbe086f078a2a631f85c3debc9f837cc469657b9d785",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/271_ntop-shrimp_9034b82fb8.png",
+      "format": "png",
+      "bytes": 90380,
+      "sha256": "9034b82fb8e86524fa96e6ae2cf89708e4137d07fa754822888e867237642c7d",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/272_ntop-squid_d2f82e1c5e.png",
+      "format": "png",
+      "bytes": 94230,
+      "sha256": "d2f82e1c5e6fae1e17060be7f84d7118137d82f862fcced843d5e716732581ba",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/273_ntop-sausage_cd12cdad25.png",
+      "format": "png",
+      "bytes": 79830,
+      "sha256": "cd12cdad257a003e3ab52dee35af99f3030c90c69aeaecf5aeedc375d6f9464f",
+      "first_context": "js",
+      "occurrences": 2
+    },
+    {
+      "file": "assets/images/274_ntop-egg_0fe2cc0867.png",
+      "format": "png",
+      "bytes": 73109,
+      "sha256": "0fe2cc0867ae5c5f0822f505a3cfd8db5254601ee6107193e77113e6d19359e4",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/275_ntop-enoki_2a90d93bd7.png",
+      "format": "png",
+      "bytes": 118584,
+      "sha256": "2a90d93bd717c4a3561448c0682b77fe8ea12c916b379f656faf00e5b5e6eb78",
+      "first_context": "js",
+      "occurrences": 1
+    },
+    {
+      "file": "assets/images/276_ntop-cheese_afd667d7ef.png",
+      "format": "png",
+      "bytes": 91356,
+      "sha256": "afd667d7efa4fef486c653e2e3eeed30aa57a520872dd288671d8fd41962e4c4",
+      "first_context": "js",
+      "occurrences": 1
+    }
+  ]
+}
