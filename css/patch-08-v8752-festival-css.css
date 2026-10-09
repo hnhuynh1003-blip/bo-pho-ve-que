@@ -1,0 +1,24 @@
+
+/* v87.5.2: festival panel stays closed by default so the map remains visible */
+#v8752-festival-card{box-sizing:border-box;margin:4px 0;max-width:100%;min-width:0;border:1px solid #ecc49b;border-radius:14px;background:linear-gradient(135deg,#fffdfa,#fff2e5);color:#684529;overflow:hidden}
+#v8752-festival-card summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;padding:7px 9px;font-size:10px;font-weight:900}
+#v8752-festival-card summary::-webkit-details-marker{display:none}
+#v8752-festival-card .v8752-festival-summary-main{flex:1;min-width:0}
+#v8752-festival-card .v8752-festival-sub{display:block;font-size:8px;line-height:1.3;color:#9c6f45;font-weight:700;margin-top:2px}
+#v8752-festival-card .v8752-pill{flex:none;font-size:8px;font-weight:900;padding:4px 6px;background:#fff7ea;border:1px solid #f0d2a3;border-radius:999px;white-space:nowrap}
+#v8752-festival-body{border-top:1px solid #eed7bd;padding:7px 8px 9px;font-size:9px;line-height:1.4}
+.v8752-tabs{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px}
+.v8752-tabs button{min-width:0;border:1px solid #ebd5b2;background:#fff9ec;border-radius:9px;padding:6px 2px;font-size:8px;font-weight:900;color:#6d4a26;line-height:1.4;cursor:pointer}
+.v8752-tabs button.active{background:#d96837;border-color:#c55a2c;color:#fff}
+.v8752-copy{margin:7px 0 5px;padding:7px;border-radius:9px;background:#fff9f1;color:#704c2c;line-height:1.55}
+.v8752-progress{display:flex;gap:4px;align-items:center;margin:5px 0}
+.v8752-progress span{height:5px;flex:1;background:#edd6b3;border-radius:100px}
+.v8752-progress span.done{background:#19a36f}
+.v8752-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin-top:7px}
+.v8752-options button,.v8752-go{min-width:0;border-radius:9px;padding:8px 4px;font-size:8px;line-height:1.35;font-weight:900;cursor:pointer;background:#fff;border:1px solid #deb985;color:#6a431d;overflow-wrap:anywhere}
+.v8752-options button:disabled,.v8752-go:disabled{opacity:.53;cursor:not-allowed}
+.v8752-go{display:inline-block;background:#fff2dc;margin-top:5px;padding:7px 9px}
+.v8752-shop{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:7px;border:1px solid #dbcc9b;background:#fffeec;border-radius:9px;margin-top:6px}
+.v8752-shop .v8752-shop-btn{border:1px solid #bf8a50;background:#ffe1a7;border-radius:8px;padding:7px 8px;font-size:8px;font-weight:900;white-space:nowrap}
+.v8752-shop .v8752-shop-btn:disabled{opacity:.5}
+.v8752-muted{font-size:8px;color:#99754f;margin-top:5px;line-height:1.5}

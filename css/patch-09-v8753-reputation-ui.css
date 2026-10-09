@@ -1,0 +1,25 @@
+
+/* V87.5.3 • danh vọng gọn trên cả mobile / desktop; KHÔNG sửa header */
+#v8753-rep-card{box-sizing:border-box;max-width:100%;min-width:0;margin:4px 0;border:1px solid #d8c5a0;border-radius:13px;overflow:hidden;background:linear-gradient(120deg,#fffdfa,#f0fcf3);color:#5d452f}
+#v8753-rep-card>summary{cursor:pointer;list-style:none;display:flex;align-items:center;gap:7px;padding:8px 9px;min-height:36px;font-size:10px;font-weight:900}
+#v8753-rep-card>summary::-webkit-details-marker{display:none}
+#v8753-rep-card .v8753-summary-text{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+#v8753-rep-card .v8753-sub{font-size:8px;color:#7c715c;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#v8753-rep-card .v8753-count{white-space:nowrap;font-size:8px;padding:4px 6px;border-radius:999px;background:#f9efcf;border:1px solid #e9d2a0}
+#v8753-body{border-top:1px solid #e8ddc8;padding:8px;font-size:9px;line-height:1.45}
+.v8753-head{display:flex;align-items:center;justify-content:space-between;gap:5px}
+.v8753-head b{font-size:10px}.v8753-head span{font-size:9px;font-weight:900;color:#0b865e}
+.v8753-meter{height:6px;overflow:hidden;background:#e7dfcf;border-radius:100px;margin:5px 0}
+.v8753-meter i{display:block;height:100%;border-radius:100px;background:linear-gradient(90deg,#f4b644,#0a9f75)}
+.v8753-footnote{font-size:8px;color:#806c50;margin:5px 0}
+.v8753-quest{background:#fff;border:1px solid #ead9b9;border-radius:10px;padding:7px;display:flex;justify-content:space-between;align-items:center;gap:7px}
+.v8753-quest div{min-width:0;flex:1;font-size:9px;line-height:1.5}
+.v8753-quest button,.v8753-all-btn{border:0;border-radius:8px;background:#0b9870;color:white;font-size:9px;font-weight:900;padding:7px 9px;flex:none;cursor:pointer}
+.v8753-quest button:disabled{opacity:.5;cursor:not-allowed;background:#8a9b92}
+.v8753-all-btn{background:#f0e3cf;color:#684728;padding:5px 8px}
+.v8753-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:4px;margin-top:6px}
+.v8753-zone{padding:5px 3px;text-align:center;min-width:0;border:1px solid #e7dbbf;border-radius:8px;background:#fff;color:#5c452d;font-size:8px;line-height:1.25}
+.v8753-zone b{display:block;font-size:8px;overflow:hidden;white-space:nowrap;text-overflow:ellipsis}
+.v8753-zone.current{border-color:#2eb98b;background:#f0fff7}
+.v8753-zone small{font-size:7px;color:#168d65}
+@media(min-width:400px){.v8753-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}

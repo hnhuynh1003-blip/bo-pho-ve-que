@@ -1,0 +1,89 @@
+
+/* === V87 laptop layout hotfix === */
+html, body {
+  max-width: 100%;
+  overflow-x: hidden;
+}
+body {
+  width: 100%;
+}
+.app-shell {
+  width: 100% !important;
+  max-width: 448px !important;
+  margin-left: auto !important;
+  margin-right: auto !important;
+  box-sizing: border-box !important;
+  overflow-x: hidden !important;
+}
+.compact-header,
+.compact-nav,
+.main-stage,
+.main-stage > section,
+.main-stage > section > * {
+  box-sizing: border-box;
+  max-width: 100%;
+}
+.main-stage > :is(#tab-shop,#tab-farm,#tab-barn,#tab-village,#tab-warehouse,#tab-reviews) {
+  width: 100% !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+#tab-shop > *,
+#tab-farm > *,
+#tab-barn > *,
+#tab-village > *,
+#tab-warehouse > *,
+#tab-reviews > * {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+}
+#customer-booth-card,
+.workbench-shell.v52-shop-workbench,
+#tab-village .village-card,
+#tab-village .village-road.map-upgraded,
+#tab-village .v86-lane-card,
+#tab-village .v86-energy-row,
+#tab-village .v86-quest-row,
+#tab-village .v86-story-wrap,
+#tab-village .v86-scene-actions,
+#tab-village .v86-bottom-actions,
+#tab-village .v86-npc-log,
+#tab-village .v86-village-footer,
+#tab-warehouse .grid,
+#warehouse-items-grid {
+  width: 100% !important;
+  max-width: 100% !important;
+  min-width: 0 !important;
+  margin-left: 0 !important;
+  margin-right: 0 !important;
+}
+.compact-nav-grid,
+#tab-village .v86-top-tools,
+#tab-village .v84-choice-wrap,
+#tab-village .v84-story-chips,
+#tab-village .v86-story-actions,
+#tab-shop .size-toggle-grid,
+#tab-shop .ingredient-grid-4,
+#tab-shop .ingredient-grid-5,
+#tab-shop .small-pct,
+#tab-warehouse .grid {
+  min-width: 0 !important;
+}
+@media (min-width: 768px) {
+  body {
+    padding: 0 !important;
+    align-items: flex-start !important;
+  }
+  .app-shell {
+    min-height: 100vh !important;
+    border-radius: 0 !important;
+    box-shadow: 0 18px 50px rgba(46, 31, 14, .14) !important;
+  }
+  .main-stage {
+    padding-left: 8px !important;
+    padding-right: 8px !important;
+  }
+}

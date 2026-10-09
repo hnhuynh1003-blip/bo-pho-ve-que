@@ -1,0 +1,13 @@
+
+.v87531-overlay{position:fixed;inset:0;z-index:165;background:rgba(16,22,35,.73);display:flex;align-items:center;justify-content:center;padding:12px;backdrop-filter:blur(3px)}
+.v87531-overlay.hidden{display:none!important}
+.v87531-dialog{width:min(394px,100%);max-height:88dvh;overflow:auto;background:#fff9ed;border:2px solid #edc88a;border-radius:22px;padding:13px;color:#533c27;box-shadow:0 18px 80px #281b1b75}
+.v87531-head{display:flex;gap:9px;align-items:center;margin-bottom:9px}.v87531-avatar{width:45px;height:45px;display:grid;place-items:center;border-radius:14px;background:#ffe6bb;font-size:25px;flex-shrink:0}
+.v87531-head b{font-size:13px;color:#583316}.v87531-sub{font-size:9px;color:#956b45}.v87531-story{background:#fff;border:1px solid #edd7ac;border-radius:13px;padding:10px;font-size:11px;line-height:1.6}
+.v87531-choices{display:grid;gap:7px;margin-top:10px}.v87531-choices button{border:0;border-radius:12px;background:#0e966c;color:white;font-size:11px;font-weight:900;text-align:left;padding:10px;cursor:pointer;min-height:41px}.v87531-choices button.alt{background:#f2dfc0;color:#6e4b2d}
+.v87531-foot{font-size:9px;color:#926941;line-height:1.5;margin-top:10px;display:flex;justify-content:space-between;gap:7px;align-items:center}.v87531-foot button{background:none;color:#7f6547;text-decoration:underline;font-size:10px;padding:4px}
+.v87531-summary{padding:9px 10px;border-radius:11px;background:#163b46;color:#e3f8f6;font-size:10px;line-height:1.6}
+.v87531-mini{margin-top:5px;padding:7px 8px;background:#0f2736;border:1px solid #315063;border-radius:10px;color:#d5e5ef;font-size:9px;line-height:1.45}
+.v87531-status{display:flex;flex-wrap:wrap;gap:5px;margin-top:4px}.v87531-status span{font-size:8px;background:#214558;color:#d3f4ff;padding:3px 6px;border-radius:8px}
+.v87531-actions{display:flex;gap:5px;flex-wrap:wrap;margin-top:5px}.v87531-actions button{border:0;border-radius:9px;background:#197b77;padding:6px 9px;font-size:9px;font-weight:800;color:white}.v87531-actions button.secondary{background:#404e63}
+.v87531-diary{font-size:8px;color:#a8c5dc;line-height:1.5;margin-top:4px}

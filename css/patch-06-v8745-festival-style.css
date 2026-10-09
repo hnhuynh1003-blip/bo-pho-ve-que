@@ -1,0 +1,11 @@
+
+/* v87.4.5: collapsible game-mode, zero effect on header layout */
+.v8745-fold{margin:0!important;border:1px solid #eccd92;border-radius:13px;background:linear-gradient(110deg,#fffbeb,#f6fdf7);color:#6b4623;overflow:hidden;width:100%;max-width:100%;box-sizing:border-box}
+.v8745-fold>summary{list-style:none;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:6px;padding:7px 9px;min-height:31px;font-size:9px;font-weight:900}
+.v8745-fold>summary::-webkit-details-marker{display:none}.v8745-fold .v8745-line{font-size:8px;font-weight:700;color:#7d6a55;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:50%;text-align:right}
+.v8745-inner{padding:0 9px 9px;font-size:9px;line-height:1.45}.v8745-meta{display:flex;justify-content:space-between;gap:5px;align-items:center;margin-bottom:5px}.v8745-note{font-size:8px;color:#826848}
+.v8745-actions{display:flex;gap:5px;align-items:center;justify-content:space-between;margin-top:7px}.v8745-action{border:0;border-radius:9px;background:#0c9c70;color:white;padding:7px 10px;font-size:9px;font-weight:900;cursor:pointer}.v8745-action:disabled{opacity:.6;background:#7d8a80;cursor:not-allowed}
+.v8745-track{height:7px;border-radius:15px;background:#e7dac5;overflow:hidden;margin-top:6px}.v8745-progress{display:block;background:linear-gradient(90deg,#ffac36,#0ac387);height:100%;transition:width .2s}
+.v8745-ranks{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px}.v8745-rank{border:1px solid #e6d5b2;background:#fff;border-radius:7px;font-size:8px;font-weight:800;padding:3px 5px;color:#865c30}
+.v8745-rank.done{border-color:#9ed8b5;color:#0b8865;background:#effff4}.v8745-rank.disabled{opacity:.5}
+.v8745-recipe-table{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;margin-top:7px}.v8745-recipe-cell{border:1px solid #eee0bd;padding:6px;border-radius:8px;background:#fff;font-size:8px;min-width:0}.v8745-recipe-cell b{display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.v8745-recipe-cell small{display:block;color:#877258;font-size:8px;margin-top:2px}
