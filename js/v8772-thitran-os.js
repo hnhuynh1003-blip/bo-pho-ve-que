@@ -15,11 +15,12 @@
  if(typeof originalSwitch!=='function'||typeof originalOpen!=='function')return;
  const apps=new Map();
  const wallpapers=[
-  {id:'village',name:'Làng quê bình minh',url:'assets/images/171_district_c9caae315d.webp',position:'center center'},
-  {id:'rice',name:'Cánh đồng lúa',url:'assets/images/164_ricefield_8ead750201.webp',position:'center center'},
-  {id:'hill',name:'Đồi Sim chiều tà',url:'assets/images/169_hill_cf71b959cf.webp',position:'center center'},
-  {id:'night',name:'Phố Đèn về đêm',url:'assets/images/170_nightmarket_af737a4f0a.webp',position:'center center'},
-  {id:'river',name:'Bến sông bình yên',url:'assets/images/165_riverside_a3cec0c03c.webp',position:'center center'}
+  {id:'village',name:'Làng chiều',url:'assets/images/phone/wallpapers/village.webp',position:'center center'},
+  {id:'night',name:'Đêm dịu',url:'assets/images/phone/wallpapers/night.webp',position:'center center'},
+  {id:'rice',name:'Nông trại',url:'assets/images/phone/wallpapers/rice.webp',position:'center center'},
+  {id:'market',name:'Phố chợ',url:'assets/images/phone/wallpapers/market.webp',position:'center center'},
+  {id:'festival',name:'Lễ hội',url:'assets/images/phone/wallpapers/festival.webp',position:'center center'},
+  {id:'gradient',name:'Gradient',url:'assets/images/phone/wallpapers/gradient.webp',position:'center center'}
  ];
  const milestones=Array.isArray(window.VillageOSReleases) ? window.VillageOSReleases.map(x=>[x.version,x.summary]) : [
   ['Khởi đầu','Mô phỏng bán đồ ăn, nhận đơn và quản lý quầy hàng.'],
@@ -33,9 +34,15 @@
  ];
  const globalKey='bpvq:v8772:device-settings';
  const profileKey=()=>`bpvq:v8772:profile:${(typeof activeProfileId!=='undefined'&&activeProfileId)||'guest'}`;
- const defaults={sound:true,volume:80,reducedMotion:false,wallpaper:'village',mikaMode:'explore',largeText:false};
+ const defaults={sound:true,volume:80,reducedMotion:false,wallpaper:'village',layoutMode:'swipe',backgroundEffects:true,mikaMode:'explore',largeText:false};
  function read(key){try{const v=JSON.parse(localStorage.getItem(key)||'null');return v&&typeof v==='object'&&!Array.isArray(v)?v:{}}catch(e){return {}}}
- function getSettings(){return {...defaults,...read(globalKey),...read(profileKey())};}
+ function getSettings(){
+  const st={...defaults,...read(globalKey),...read(profileKey())};
+  // Legacy wallpaper IDs are mapped without destroying historical save data.
+  if(st.wallpaper==='hill')st.wallpaper='village';
+  if(st.wallpaper==='river')st.wallpaper='rice';
+  return st;
+ }
  function setSetting(name,value){
   const scope=['sound','volume','reducedMotion','largeText'].includes(name)?globalKey:profileKey();
   const obj=read(scope);obj[name]=value;
@@ -46,6 +53,8 @@
   const st=getSettings();
   modal.classList.toggle('v8772-reduce-motion',!!st.reducedMotion);
   modal.classList.toggle('v8772-large-text',!!st.largeText);
+  modal.classList.toggle('v8777-layout-list',st.layoutMode==='list');
+  modal.classList.toggle('v8777-effects-off',st.backgroundEffects===false);
   const wallpaper=wallpapers.find(w=>w.id===st.wallpaper)||wallpapers[0];
   const home=byId('phone-app-home');if(home){home.style.setProperty('--v8772-wallpaper',`url("${wallpaper.url}")`);home.style.setProperty('--v8772-wallpaper-position',wallpaper.position);}
  }
@@ -127,12 +136,15 @@
  function btn(id,emoji,titleText,desc){return `<button class="v8772-setting-category" onclick="VillageOS.settings('${id}')"><span>${emoji}</span><span><b>${titleText}</b><small>${desc}</small></span><span>›</span></button>`;}
  function renderSettings(){
   const s=getSettings();const view=inSettings;
-  if(view==='root')settingsPanel.innerHTML=`<div class="v8772-settings-title">⚙️ Cài đặt <small>Tùy chỉnh chiếc điện thoại của bạn</small></div>${btn('appearance','🎨','Giao diện','5 hình nền · cỡ chữ')}${btn('audio','🔊','Âm thanh','Bật/tắt hiệu ứng · âm lượng')}${btn('performance','✨','Hiệu năng','Giảm chuyển động')}${btn('mika','🌸','Mika','Hướng dẫn người mới')}${btn('data','💾','Dữ liệu','Save và sao lưu')}${btn('about','📖','Về Game','Tác giả · phiên bản · lịch sử cập nhật')}`;
+  if(view==='root')settingsPanel.innerHTML=`<div class="v8772-settings-title">⚙️ Cài đặt <small>Tùy chỉnh chiếc điện thoại của bạn</small></div>${btn('appearance','🎨','Giao diện','6 hình nền · vuốt ngang · hiệu ứng')}${btn('audio','🔊','Âm thanh','Bật/tắt hiệu ứng · âm lượng')}${btn('performance','✨','Hiệu năng','Giảm chuyển động')}${btn('mika','🌸','Mika','Hướng dẫn người mới')}${btn('data','💾','Dữ liệu','Save và sao lưu')}${btn('about','📖','Về Game','Tác giả · phiên bản · lịch sử cập nhật')}`;
   else {
    let content='';
    if(view==='appearance'){
     content=`<h3>🌄 Bộ sưu tập hình nền</h3><div class="v8772-wallpapers">${wallpapers.map(w=>`<button class="v8772-wallpaper-option ${s.wallpaper===w.id?'selected':''}" onclick="VillageOS.setSetting('wallpaper','${w.id}')" aria-label="Chọn ${w.name}"><img loading="lazy" src="${w.url}" alt=""><span>${w.name}</span><em>${s.wallpaper===w.id?'✓':''}</em></button>`).join('')}</div>`;
+    content+=`<h3>📱 Bố cục Home</h3><div class="v8777-layout-choices" role="group" aria-label="Bố cục điện thoại"><button type="button" class="${s.layoutMode!=='list'?'selected':''}" onclick="VillageOS.setSetting('layoutMode','swipe')">↔ Vuốt ngang</button><button type="button" class="${s.layoutMode==='list'?'selected':''}" onclick="VillageOS.setSetting('layoutMode','list')">↕ Cuộn dọc</button></div>`;
+    content+=row('✨','Hiệu ứng nền nhẹ','Tắt khi muốn tiết kiệm tài nguyên',`<input type="checkbox" aria-label="Hiệu ứng nền" ${s.backgroundEffects!==false?'checked':''} onchange="VillageOS.setSetting('backgroundEffects',this.checked)">`);
     content+=row('🔤','Chữ lớn','Tăng cỡ chữ trong ứng dụng',`<input type="checkbox" aria-label="Chữ lớn" ${s.largeText?'checked':''} onchange="VillageOS.setSetting('largeText',this.checked)">`);
+    content+=`<button type="button" class="v8777-reset-button" onclick="VillageOS.resetPhoneAppearance()">↺ Đặt lại giao diện điện thoại</button>`;
    }
    if(view==='audio'){
     content=row('🔊','Hiệu ứng âm thanh','Chạm để bật hoặc tắt âm trong game',`<input type="checkbox" aria-label="Bật âm thanh" ${s.sound?'checked':''} onchange="VillageOS.setSetting('sound',this.checked)">`);
@@ -149,6 +161,11 @@
  function settings(id){inSettings=id;renderSettings();}
  Object.assign(window.VillageOS,{
   settings,
+  resetPhoneAppearance(){
+   // Keep sound, Mika, save data, accessibility and game preferences unchanged.
+   for(const [k,v] of Object.entries({wallpaper:'village',layoutMode:'swipe',backgroundEffects:true,theme:'warm'}))setSetting(k,v);
+   renderSettings();
+  },
   mikaMode(mode){window.v877MikaSetMode?.(mode);setSetting('mikaMode',mode);},
   resumeMika(){window.closeSmartPhoneModal();window.v8771ResumeGuide?.();},
   saveNow(){try{saveGameToStorage(false);showToast('Đã lưu game.','💾')}catch(e){showToast('Không thể lưu.','⚠️')}},
