@@ -33,6 +33,7 @@
   <link rel="stylesheet" href="css/v8772-thitran-os.css?v=87.7.2" />
   <link rel="stylesheet" href="css/v8773-anime-signature.css?v=87.7.3" />
   <link rel="stylesheet" href="css/v8774-header-notification.css?v=87.7.4" />
+  <link rel="stylesheet" href="css/v8775-os-reborn.css?v=87.7.5" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -220,7 +221,7 @@
         <span class="v8774-chip v8774-coin" title="Tiền hiện có">🪙 <span id="stat-coins">450 Xu</span></span>
         <span class="v8774-chip v8774-rating" title="Sao đánh giá quán"><span id="header-rating-badge">⭐ 5.0</span><span id="header-rating-count">(1)</span></span>
         <span class="v8774-chip v8774-level">Lv.<span id="stat-level-num">1</span></span>
-        <button type="button" class="v8774-chip v8774-stage tap-scale" onclick="openShopStageQuickModal()" title="Xem điều kiện nâng bậc (vẫn tốn Xu)">🏪 <span id="header-shop-stage">Bậc 1</span></button>
+        <button type="button" class="v8774-chip v8774-stage tap-scale" onclick="openSmartPhoneModal();VillageOS.open('construction')" title="Vào Xây Quán xem tiến độ và thuê thợ">🏪 <span id="header-shop-stage">Bậc 1</span></button>
         <div class="header-exp-wrap v8774-exp" title="Kinh nghiệm"><div id="stat-exp-bar" class="bg-gradient-to-r from-emerald-400 to-lime-300 h-full w-[10%] rounded-full transition-all duration-300"></div></div>
       </div>
       <section id="v8774-bell-panel" class="v8774-popover hidden" aria-label="Thông báo gần đây" role="dialog" aria-modal="false"></section>
@@ -229,12 +230,10 @@
         <div class="v8774-menu-grid">
           <button id="v87-day-button" type="button" onclick="BPVQHeader.close();openEndDayModal()" title="Kết thúc ngày (khác đóng ca)">🌙 <span>Qua ngày</span></button>
           <button type="button" onclick="BPVQHeader.close();openShopHubModal()">📋 <span>Quản lý quán</span></button>
-          <button type="button" onclick="BPVQHeader.close();openShopStageQuickModal()">🏗️ <span>Tăng bậc</span></button>
           <button type="button" onclick="BPVQHeader.close();openAccountScreen()">👤 <span id="header-player-name">Tài khoản</span></button>
           <button type="button" onclick="BPVQHeader.close();openSmartPhoneModal();VillageOS.open('settings')">⚙️ <span>Cài đặt / Lưu</span></button>
-          <button type="button" class="v8774-danger" onclick="BPVQHeader.close();openBankruptcyModal()">💥 <span>Đổi nghề / Phá sản</span></button>
         </div>
-        <p class="v8774-menu-note">Tăng bậc vẫn cần đủ điều kiện và Xu. Đổi nghề sẽ được chuyển vào app Nhân Vật ở bản tiếp theo.</p>
+        <p class="v8774-menu-note">Muốn nâng bậc: chạm huy hiệu Bậc để vào Xây Quán. Đổi nghề: Điện thoại → Nhân Vật → Hành trình.</p>
       </section>
     </header>
 
@@ -1588,5 +1587,6 @@
   <script src="js/v8772-thitran-os.js?v=87.7.3"></script>
   <script src="js/v8773-anime-signature.js?v=87.7.3"></script>
   <script src="js/v8774-header-notification.js?v=87.7.4"></script>
+  <script src="js/v8775-os-reborn.js?v=87.7.5"></script>
 </body>
 </html>

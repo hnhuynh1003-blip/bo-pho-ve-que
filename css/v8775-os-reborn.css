@@ -1,0 +1,89 @@
+/* Bỏ Phố Về Quê 87.7.5 — OS Reborn. App UI is inside the phone only. */
+#modal-smartphone.v8775-reborn .v8772-home{gap:9px!important;padding:12px 12px 12px!important;}
+#modal-smartphone.v8775-reborn .v8773-hero{min-height:135px!important;padding:9px 8px 0!important;}
+#modal-smartphone.v8775-reborn .v8773-hero-mika{height:122px!important;max-width:48%!important;}
+#modal-smartphone.v8775-reborn .v8773-hero-time{font-size:32px!important;margin:3px 0!important;}
+#modal-smartphone.v8775-reborn .v8773-hero-greeting{font-size:10px!important;}
+#modal-smartphone.v8775-reborn .v8772-home:before{filter:saturate(1.03)!important;}
+#modal-smartphone.v8775-reborn .v8775-notices{position:relative;z-index:3;background:linear-gradient(145deg,rgba(255,252,240,.91),rgba(251,230,193,.9));border:1px solid rgba(255,248,216,.9);border-radius:18px;color:#68472d;box-shadow:0 7px 20px #101c285b,0 1px 0 #fff9 inset;backdrop-filter:blur(13px);-webkit-backdrop-filter:blur(13px);padding:9px;display:grid;gap:6px;}
+#modal-smartphone.v8775-reborn .v8775-notices.hidden{display:none!important;}
+#modal-smartphone.v8775-reborn .v8775-notice-header{display:flex;align-items:center;gap:6px;justify-content:space-between;}
+#modal-smartphone.v8775-reborn .v8775-notice-header>button:first-child{min-height:37px;flex:1;min-width:0;text-align:left;display:flex;align-items:center;gap:5px;justify-content:space-between;padding:3px 6px;font-size:11px;font-weight:900;color:#77502c;}
+#modal-smartphone.v8775-reborn .v8775-notice-header em{font-style:normal;font-weight:900;font-size:9px;color:#a34f2b;background:#ffe1be;border-radius:999px;padding:2px 5px;margin-left:3px;}
+#modal-smartphone.v8775-reborn .v8775-notice-header small{font-size:9px;color:#a47e50;white-space:nowrap;}
+#modal-smartphone.v8775-reborn .v8775-see-all{min-height:37px;border:1px solid #dec79d;border-radius:10px;background:#fff9ed;color:#8d6031;font-size:10px;font-weight:850;padding:4px 8px;flex-shrink:0;}
+#modal-smartphone.v8775-reborn .v8775-notice-feed{display:grid;gap:5px;}
+#modal-smartphone.v8775-reborn .v8775-notice{display:flex;width:100%;align-items:center;gap:7px;border:1px solid #e8d3ad;border-radius:12px;background:#fff9ed;padding:7px 8px;color:#593d29;text-align:left;min-height:49px;}
+#modal-smartphone.v8775-reborn .v8775-notice>span:first-child{font-size:19px;flex:none;}
+#modal-smartphone.v8775-reborn .v8775-notice>span:nth-child(2){display:grid;gap:2px;min-width:0;flex:1;}
+#modal-smartphone.v8775-reborn .v8775-notice b{display:block;max-width:100%;font-size:10.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#modal-smartphone.v8775-reborn .v8775-notice small{display:block;max-width:100%;font-size:9px;color:#866d52;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+#modal-smartphone.v8775-reborn .v8775-notice i{flex:none;width:7px;height:7px;border-radius:100%;background:#da8245;}
+#modal-smartphone.v8775-reborn .v8775-notice.read{opacity:.77;background:#f6ead5;}
+#modal-smartphone.v8775-reborn .v8775-notice-empty{font-size:10px;color:#96704e;text-align:center;padding:3px 0 5px;}
+#modal-smartphone.v8775-reborn #v8772-app-launcher{row-gap:6px!important;column-gap:4px!important;}
+#modal-smartphone.v8775-reborn #v8772-app-launcher .v8772-app{min-height:68px!important;gap:4px!important;}
+#modal-smartphone.v8775-reborn #v8772-app-launcher .phone-app-icon{width:48px!important;height:48px!important;font-size:26px!important;}
+#modal-smartphone.v8775-reborn #v8772-app-launcher .phone-app-icon.v8773-art-icon{font-size:0!important;}
+#modal-smartphone.v8775-reborn #v8772-app-launcher .v8772-app>span:last-child{font-size:10px!important;line-height:1.2!important;}
+#modal-smartphone.v8775-reborn .v8773-dock{margin-top:4px!important;padding:7px 5px!important;}
+#modal-smartphone.v8775-reborn .v8773-dock .v8772-app{min-height:64px!important;}
+#modal-smartphone.v8775-reborn .v8773-dock .phone-app-icon{width:51px!important;height:51px!important;}
+#modal-smartphone.v8775-reborn #papp-btn-character .phone-app-icon{background:linear-gradient(135deg,#f8c194,#bd6a69)!important;}
+#modal-smartphone.v8775-reborn #papp-btn-construction .phone-app-icon{background:linear-gradient(135deg,#f0c987,#bb8248)!important;}
+#modal-smartphone.v8775-reborn #papp-btn-staff .phone-app-icon{background:linear-gradient(135deg,#a9d7c4,#4e998c)!important;}
+#modal-smartphone.v8775-reborn #papp-btn-journal .phone-app-icon{background:linear-gradient(135deg,#d5b7ed,#805bba)!important;}
+#modal-smartphone.v8775-reborn .v8775-app-panel{background:#fff3dc;min-height:100%;border:1px solid #e5c69d;border-radius:18px;padding:12px 9px 18px;color:#523921;display:grid;align-content:start;gap:9px;}
+#modal-smartphone.v8775-reborn .v8775-app-panel.hidden{display:none!important;}
+#modal-smartphone.v8775-reborn .v8775-app-heading{display:flex;gap:9px;align-items:center;padding:11px 12px;border-radius:15px;background:linear-gradient(120deg,#8b633e,#685042);color:#fff3d7;box-shadow:0 3px 10px #6c4e3329;}
+#modal-smartphone.v8775-reborn .v8775-app-heading>span{background:#fff4da30;border:1px solid #fff7d45c;border-radius:12px;width:41px;height:41px;display:grid;place-items:center;flex:none;font-size:23px;}
+#modal-smartphone.v8775-reborn .v8775-app-heading b{font-size:14px;display:block;font-weight:900;}
+#modal-smartphone.v8775-reborn .v8775-app-heading small{font-size:9px;color:#f2e1c8;display:block;margin-top:3px;line-height:1.3;}
+#modal-smartphone.v8775-reborn .v8775-tabs{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none;}
+#modal-smartphone.v8775-reborn .v8775-tabs button{min-height:41px;flex:1;white-space:nowrap;font-size:10px;font-weight:900;background:#f9e2bc;border:1px solid #dcc39f;border-radius:11px;color:#825d36;padding:6px 7px;}
+#modal-smartphone.v8775-reborn .v8775-tabs button[data-on="true"]{background:linear-gradient(135deg,#84613e,#ab7941);color:#fff8e6;border-color:#a67746;}
+#modal-smartphone.v8775-reborn .v8775-info{border:1px solid #e4c69f;background:#fff9eb;border-radius:13px;padding:10px 11px;font-size:10.5px;line-height:1.65;color:#79583a;}
+#modal-smartphone.v8775-reborn .v8775-info b{color:#513b26;}
+#modal-smartphone.v8775-reborn .v8775-help,#modal-smartphone.v8775-reborn .v8775-disclaimer{color:#8d755a;font-size:9.5px;line-height:1.6;display:block;padding:4px 1px;}
+#modal-smartphone.v8775-reborn .v8775-chibi-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card{display:flex;flex-direction:column;align-items:center;gap:5px;padding:11px 8px 9px;border-radius:15px;background:#fffaf1;border:2px solid #e0c59c;min-width:0;min-height:178px;color:#714c2e;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card.selected{border-color:#469877;box-shadow:0 0 0 3px #76caaa52;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card.locked{opacity:.65;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card img{height:108px;width:100%;object-fit:contain;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card b{font-size:11px;}
+#modal-smartphone.v8775-reborn .v8775-chibi-card small{font-size:9px;color:#8e7048;}
+#modal-smartphone.v8775-reborn .v8775-primary,#modal-smartphone.v8775-reborn .v8775-action-danger{width:100%;border-radius:12px;color:#fff;min-height:45px;font-size:11px;font-weight:900;box-shadow:0 3px 8px #463b2c23;}
+#modal-smartphone.v8775-reborn .v8775-primary{background:#3d9681;}
+#modal-smartphone.v8775-reborn .v8775-action-danger{background:#a8544f;}
+#modal-smartphone.v8775-reborn .v8775-growth-panel{width:100%;min-width:0;}
+#modal-smartphone.v8775-reborn .v8775-growth-panel:not(.hidden){display:block;}
+#modal-smartphone.v8775-reborn #v8775-construction-content,#modal-smartphone.v8775-reborn #v8775-character-content,#modal-smartphone.v8775-reborn #v8775-staff-content{display:grid;gap:8px;min-width:0;}
+#modal-smartphone.v8775-reborn .v8775-journal-tabs button{font-size:9px;padding:6px 4px;}
+#modal-smartphone.v8775-reborn .v8775-task{background:#fffcf5;border:1px solid #e8d6b8;border-radius:13px;display:flex;gap:10px;align-items:flex-start;padding:11px 9px;}
+#modal-smartphone.v8775-reborn .v8775-task-icon{font-size:24px;width:35px;text-align:center;flex:none;}
+#modal-smartphone.v8775-reborn .v8775-task>div:last-child{min-width:0;flex:1;}
+#modal-smartphone.v8775-reborn .v8775-task b{font-size:11px;color:#5b3e25;}
+#modal-smartphone.v8775-reborn .v8775-task p{font-size:10px;color:#847057;line-height:1.5;margin:5px 0;}
+#modal-smartphone.v8775-reborn .v8775-task button{font-size:10px;color:#4f8867;font-weight:900;padding:6px 0;min-height:33px;}
+#modal-smartphone.v8775-reborn .v8775-notification-options{display:grid;gap:9px;color:#523921;}
+#modal-smartphone.v8775-reborn .v8775-notification-options label{display:flex;align-items:center;gap:8px;padding:11px 10px;border:1px solid #dfc19a;background:#fff9ef;border-radius:12px;min-height:56px;}
+#modal-smartphone.v8775-reborn .v8775-notification-options label span{flex:1;min-width:0;}
+#modal-smartphone.v8775-reborn .v8775-notification-options b{display:block;font-size:11px;}
+#modal-smartphone.v8775-reborn .v8775-notification-options small{display:block;color:#9e8362;font-size:9px;margin-top:3px;}
+#modal-smartphone.v8775-reborn .v8775-notification-options input{width:22px;height:22px;accent-color:#5d9977;flex:none;}
+@media(max-width:350px){#modal-smartphone.v8775-reborn .v8773-hero{min-height:122px!important;}#modal-smartphone.v8775-reborn .v8773-hero-mika{height:115px!important;}#modal-smartphone.v8775-reborn #v8772-app-launcher .phone-app-icon{width:44px!important;height:44px!important;}#modal-smartphone.v8775-reborn .v8775-app-heading b{font-size:12px;}}
+@media(prefers-reduced-motion:reduce){#modal-smartphone.v8775-reborn *{animation:none!important;transition:none!important;}}
+
+/* Existing-app clarity and tappable controls; no gameplay DOM reparenting. */
+#modal-smartphone.v8775-reborn .v8775-app-helper{padding:9px 10px;background:#fff4d7;border:1px solid #eed4a9;border-radius:13px;color:#6a4a2d;font-size:10px;line-height:1.55;margin-bottom:8px;}
+#modal-smartphone.v8775-reborn .v8775-bank-warning{background:#fff2e2;border-color:#dfaa86;color:#994e37;}
+#modal-smartphone.v8775-reborn #phone-app-delivery .delivery-orders-list button,
+#modal-smartphone.v8775-reborn #phone-app-soppi button,
+#modal-smartphone.v8775-reborn #phone-app-auction button,
+#modal-smartphone.v8775-reborn #phone-app-bank button,
+#modal-smartphone.v8775-reborn #phone-app-social button{touch-action:manipulation;}
+#modal-smartphone.v8775-reborn #delivery-orders-list button{min-height:43px!important;}
+#modal-smartphone.v8775-reborn #bank-loans-list button{min-height:40px!important;padding:6px 9px!important;}
+#modal-smartphone.v8775-reborn #phone-app-soppi .v8743-tabs button{min-height:44px!important;}
+#modal-smartphone.v8775-reborn #phone-app-auction .auction-tab{min-height:41px!important;}
+#modal-smartphone.v8775-reborn #phone-app-social :is(input[type=search],select){min-height:40px!important;}

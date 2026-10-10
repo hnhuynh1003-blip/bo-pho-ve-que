@@ -871,6 +871,7 @@
       skills: { sales: 0, service: 0, luck: 0 },
       careerTalents: {}, careerServed: {},
       shopStage: 0,
+      shopConstruction: null,
       staff: [],
 
       // Unified Central Inventory
@@ -5374,6 +5375,7 @@ function v8752BuyFestival(id){
         box.innerHTML=`<div class="v72-stage-now"><div class="v72-stage-small">ĐÃ ĐẠT BẬC TỐI ĐA</div><div class="v72-stage-label">${current.icon} ${current.name}</div></div>`;
         btn.disabled=true;btn.textContent='🏆 Đã đạt bậc cao nhất';return;
       }
+      const building=gameState.shopConstruction;
       const levelOk=gameState.level>=next.reqLevel;
       const ratingOk=gameState.reputation>=next.reqRating;
       const coinOk=gameState.coins>=next.cost;
@@ -5382,13 +5384,14 @@ function v8752BuyFestival(id){
       box.innerHTML=`<div class="v72-stage-now"><div class="v72-stage-small">Bậc ${stage+1}/${SHOP_STAGE_CONFIG.length} • hiện tại</div><div class="v72-stage-label">${current.icon} ${current.name}</div></div>
       <div class="v72-stage-next"><div class="v72-stage-small">Bậc ${stage+2}/${SHOP_STAGE_CONFIG.length} • tiếp theo</div><div class="v72-stage-label">${next.icon} ${next.name}</div>
       <div class="v72-stage-reqs">${req('🎮 Level',levelOk,gameState.level,next.reqLevel)}${req('⭐ Sao',ratingOk,gameState.reputation.toFixed(1),next.reqRating.toFixed(1))}${req('🪙 Xu',coinOk,fmt(gameState.coins),fmt(next.cost))}</div>
-      <p style="font-size:9px;color:#896443;line-height:1.45;margin-top:9px;">${next.story} • Nhận +1 SP và mở thêm nội dung khi lên bậc.</p></div>`;
-      const can=levelOk&&ratingOk&&coinOk;
+      <p style="font-size:9px;color:#896443;line-height:1.45;margin-top:9px;">${next.story} • Khi hoàn thành công trình sẽ nhận +1 SP và mở thêm nội dung.</p></div>`;
+      const can=levelOk&&ratingOk&&coinOk&&!building;
       btn.disabled=!can;
-      btn.textContent=can?`⬆️ Nâng lên bậc ${stage+2} • ${fmt(next.cost)} Xu`:'🔒 Chưa đủ điều kiện nâng bậc';
+      btn.textContent=building?`🏗️ Đang thi công • hoàn thành ngày ${building.finishDay}`:can?`🛠️ Thuê thợ lên Bậc ${stage+2} • ${fmt(next.cost)} Xu`:'🔒 Chưa đủ điều kiện thuê thợ';
     }
     function confirmShopStageQuickUpgrade(){
       const stageBefore=gameState.shopStage;
+      if(gameState.shopConstruction)return renderShopStageQuickModal();
       const next=SHOP_STAGE_CONFIG[stageBefore+1];
       if(!next) return renderShopStageQuickModal();
       if(gameState.level<next.reqLevel||gameState.reputation<next.reqRating||gameState.coins<next.cost){renderShopStageQuickModal();return;}
@@ -9143,6 +9146,7 @@ function v8752BuyFestival(id){
         currentCustomer=null;
         activeOnlineOrders=[];
         gameState.day += 1;
+        v8775FinishConstructionIfReady();
         v87531Morning();
         v87532Morning();
         v872DayChanged();
@@ -9887,7 +9891,8 @@ function v8752BuyFestival(id){
         }
       }
 
-      activeOnlineOrders.forEach((ord, idx) => {
+      for (let idx = activeOnlineOrders.length - 1; idx >= 0; idx--) {
+        const ord=activeOnlineOrders[idx];
         if (ord.status === 'pending') {
           ord.timeLeft -= 1;
           if (ord.timeLeft <= 0) {
@@ -9897,7 +9902,7 @@ function v8752BuyFestival(id){
             renderDeliveryApp();
           }
         }
-      });
+      }
     }
 
     function renderDeliveryApp() {
@@ -10989,7 +10994,7 @@ function v8752BuyFestival(id){
       const okLv = gameState.level >= next.reqLevel;
       const okRating = gameState.reputation >= next.reqRating;
       const okCoins = gameState.coins >= next.cost;
-      const canUpgrade = okLv && okRating && okCoins;
+      const canUpgrade = okLv && okRating && okCoins && !gameState.shopConstruction;
       box.innerHTML += `
         <div class="p-2.5 rounded-2xl bg-gradient-to-r from-indigo-950 to-emerald-950 border border-emerald-500/40 space-y-1.5">
           <b class="text-[10px] text-emerald-200">Cột mốc tiếp theo: ${next.icon} ${next.name}</b>
@@ -10998,27 +11003,60 @@ function v8752BuyFestival(id){
             <span class="rounded-lg px-1 py-1 ${okRating ? 'bg-emerald-900 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${okRating ? '✓' : '○'} ⭐ ${next.reqRating.toFixed(1)}</span>
             <span class="rounded-lg px-1 py-1 ${okCoins ? 'bg-emerald-900 text-emerald-300' : 'bg-slate-800 text-slate-400'}">${okCoins ? '✓' : '○'} ${next.cost.toLocaleString()} Xu</span>
           </div>
-          <button ${canUpgrade ? '' : 'disabled'} onclick="upgradeShopStage()" class="w-full py-1.5 rounded-xl text-[9px] font-black ${canUpgrade ? 'bg-emerald-600 hover:bg-emerald-500 text-white tap-scale' : 'bg-slate-800 text-slate-500'}">NÂNG CẤP QUÁN → ${next.name.toUpperCase()}</button>
-          <p class="text-[7px] text-slate-400 text-center">Nâng cấp tặng +1 SP nhưng cũng tăng chi phí vận hành mỗi ngày.</p>
+          <button ${canUpgrade ? '' : 'disabled'} onclick="upgradeShopStage()" class="w-full py-1.5 rounded-xl text-[9px] font-black ${canUpgrade ? 'bg-emerald-600 hover:bg-emerald-500 text-white tap-scale' : 'bg-slate-800 text-slate-500'}">${gameState.shopConstruction ? `🏗️ Đang thi công · hoàn thành ngày ${gameState.shopConstruction.finishDay}` : `🛠️ THUÊ THỢ → ${next.name.toUpperCase()} (${v8775ConstructionDuration(current+1)} ngày)`}</button>
+          <p class="text-[7px] text-slate-400 text-center">Chi phí là giá trọn gói thuê thợ, không phụ thu; nhận +1 SP khi khánh thành, sau đó phí vận hành tăng.</p>
         </div>`;
     }
 
-    function upgradeShopStage() {
-      ensureGrowthState();
-      const next = SHOP_STAGE_CONFIG[gameState.shopStage + 1];
-      if (!next) return showToast('Quán đã đạt bậc cao nhất!', '🏆');
-      if (gameState.level < next.reqLevel) return showToast(`Cần đạt Lv.${next.reqLevel}!`, '⚠️');
-      if (gameState.reputation < next.reqRating) return showToast(`Cần đánh giá quán ít nhất ${next.reqRating.toFixed(1)} sao!`, '⭐');
-      if (gameState.coins < next.cost) return showToast(`Cần ${next.cost.toLocaleString()} Xu để nâng cấp quán!`, '❌');
-      gameState.coins -= next.cost;
-      gameState.shopStage += 1;
-      gameState.sp += 1;
-      grantStoryUnlockPack(gameState.shopStage);
-      playSound('level');
-      showToast(`MỞ CỘT MỐC: ${next.icon} ${next.name}! (+1 SP)`, '🏪');
+    // v87.7.5: paid contractor project. One active project; same original stage price.
+    // Completion only on explicit next game-day; never grants a stage when save is loaded.
+    function v8775ConstructionDuration(targetStage){
+      return targetStage<=2 ? 1 : (targetStage<=5 ? 2 : 3);
+    }
+    function v8775FinishConstructionIfReady(){
+      const build=gameState.shopConstruction;
+      if(!build||typeof build!=='object')return false;
+      const target=Math.floor(Number(build.targetStage)||0);
+      if(target!==Number(gameState.shopStage)+1){
+        // Corrupt or already-completed project: clear without reward or refund exploit.
+        gameState.shopConstruction=null;return false;
+      }
+      if(Number(gameState.day)<Number(build.finishDay))return false;
+      gameState.shopConstruction=null;
+      gameState.shopStage=target;
+      gameState.sp=(Number(gameState.sp)||0)+1;
+      grantStoryUnlockPack(target);
+      const cfg=SHOP_STAGE_CONFIG[target];
+      pushGameNotification('🎊 Khánh thành quán!',`Đội thợ đã hoàn tất ${cfg?.name||'công trình'}! Quán lên Bậc ${target+1}, nhận +1 SP.`, '🏗️','event');
+      if(typeof showToast==='function')showToast(`Đã khánh thành ${cfg?.name||'quán mới'}! +1 SP`,'🎉');
+      refreshShopStageQuickBadge();
       updateHeaderStats();
       renderGrowthApp();
-      saveGameToStorage();
+      return true;
+    }
+    function upgradeShopStage() {
+      ensureGrowthState();
+      if(gameState.shopConstruction){
+        const pending=gameState.shopConstruction;
+        return showToast(`Đội thợ đang thi công. Dự kiến ngày ${pending.finishDay}!`,'🏗️');
+      }
+      const target=Number(gameState.shopStage)+1;
+      const next=SHOP_STAGE_CONFIG[target];
+      if(!next) return showToast('Quán đã đạt bậc cao nhất!', '🏆');
+      if(gameState.level<next.reqLevel) return showToast(`Cần đạt Lv.${next.reqLevel}!`, '⚠️');
+      if(gameState.reputation<next.reqRating) return showToast(`Cần đánh giá ít nhất ${next.reqRating.toFixed(1)} sao!`, '⭐');
+      if(gameState.coins<next.cost) return showToast(`Cần ${next.cost.toLocaleString()} Xu để thuê thợ!`, '❌');
+      const days=v8775ConstructionDuration(target);
+      const accepted=window.confirm(`Thuê đội thợ nâng lên ${next.name}?\nPhí trọn gói: ${next.cost.toLocaleString('vi-VN')} Xu.\nThi công: ${days} ngày trong game, hoàn thành vào ngày ${Number(gameState.day)+days}.\nKhông thể hủy/hoàn tiền sau khi ký hợp đồng.\nBậc quán và +1 SP chỉ nhận khi hoàn thành.\n\nXác nhận thuê thợ?`);
+      if(!accepted)return;
+      // Re-check immediately after user confirmation to prevent duplicate purchase.
+      if(gameState.shopConstruction||gameState.coins<next.cost||Number(gameState.shopStage)+1!==target)return;
+      gameState.coins-=next.cost;
+      gameState.shopConstruction={targetStage:target,startedDay:Number(gameState.day),finishDay:Number(gameState.day)+days,cost:next.cost};
+      pushGameNotification('🏗️ Đã thuê đội thi công',`Dự án ${next.name} bắt đầu; hẹn khánh thành ngày ${gameState.shopConstruction.finishDay}.`, '🛠️','event');
+      playSound('click');
+      showToast(`Đã thuê thợ xây ${next.name}. Hẹn ngày ${gameState.shopConstruction.finishDay}!`,'🏗️');
+      updateHeaderStats();renderGrowthApp();renderShopStageQuickModal();saveGameToStorage();
     }
 
     // ==================== HỘP MÙ: CÓ LỜI/LỖ + BONUS LƯU NIỆM ====================
@@ -11724,7 +11762,7 @@ function v8752BuyFestival(id){
             <div class="p-1.5 bg-slate-800 rounded-xl border border-slate-700 flex items-center justify-between text-xs">
               <div>
                 <b class="text-amber-200 text-xs block">${loan.name}</b>
-                <span class="text-[8px] text-slate-400">Lãi ${loan.rate} • Yêu cầu: Lv.${loan.minLv}</span>
+                <span class="text-[8px] text-slate-400">Phí đầu kỳ 15% • lãi vận hành hiện hành 5%/ngày • Lv.${loan.minLv}</span>
               </div>
               ${canTake ? `
                 <button onclick="takeBankLoan(${loan.amount})" class="px-2 py-0.5 bg-emerald-600 hover:bg-emerald-700 text-white font-bold text-[8px] rounded-lg tap-scale">
@@ -11839,6 +11877,7 @@ function v8752BuyFestival(id){
       gameState.skillTalents = {};
       gameState.decorations = [];
       gameState.shopStage = 0;
+      gameState.shopConstruction = null;
       gameState.staff = [];
       gameState.staffHR = null;
       gameState.soppiFlashSale = null;
@@ -12842,7 +12881,8 @@ function v8752BuyFestival(id){
 
       // 4. Vận chuyển Soppi
       if (gameState.soppiOrders && gameState.soppiOrders.length > 0) {
-        gameState.soppiOrders.forEach((ord, i) => {
+        for (let i = gameState.soppiOrders.length - 1; i >= 0; i--) {
+          const ord=gameState.soppiOrders[i];
           ord.timeLeft -= 1;
           if (ord.timeLeft <= 0) {
             gameState.inventory[ord.itemKey] = (gameState.inventory[ord.itemKey] || 0) + ord.qty;
@@ -12856,7 +12896,7 @@ function v8752BuyFestival(id){
               renderSoppiActiveOrders();
             }
           }
-        });
+        }
         if (!document.getElementById('phone-app-soppi').classList.contains('hidden')) {
           renderSoppiActiveOrders();
           renderSoppiFlashSale();
