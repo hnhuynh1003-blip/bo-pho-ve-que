@@ -1,0 +1,73 @@
+/* v87.7.2 — Thị Trấn OS: no changes to original 8 app panels or save schema */
+#modal-smartphone .phone-shell{gap:5px!important}
+#modal-smartphone .phone-shell>.v8772-app-launcher{display:none!important}
+#modal-smartphone #phone-app-container{padding:0!important;background:#0c172a99!important;position:relative;overflow:auto;isolation:isolate}
+#modal-smartphone .v8772-home{position:relative;isolation:isolate;min-height:100%;padding:20px 12px 15px;display:flex;flex-direction:column;gap:20px;overflow:hidden;border-radius:21px;color:#fff}
+#modal-smartphone .v8772-home:before{content:"";position:absolute;inset:0;background-image:linear-gradient(175deg,rgba(4,25,42,.47),rgba(17,38,54,.26) 42%,rgba(6,14,31,.78)),var(--v8772-wallpaper);background-size:cover;background-position:var(--v8772-wallpaper-position,center);z-index:-1;filter:saturate(.9)}
+#modal-smartphone .v8772-home-intro{padding:4px 6px 0;display:grid;gap:5px;text-shadow:0 2px 6px #142137cc}
+#modal-smartphone .v8772-home-intro>span{font-size:10px;font-weight:900;letter-spacing:.15em;color:#fff1c7}
+#modal-smartphone .v8772-home-intro>b{font-size:18px;line-height:1.2;color:#fff9e6}
+#modal-smartphone .v8772-home-intro>small{font-size:10px;color:#f6eee0}
+#modal-smartphone .v8772-app-launcher{display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px 5px;width:100%;padding:12px 7px;border-radius:25px;background:rgba(12,29,50,.34);border:1px solid #ffffff66;box-shadow:0 10px 25px #07162938;backdrop-filter:blur(8px);-webkit-backdrop-filter:blur(8px)}
+#modal-smartphone #v8772-app-launcher .v8772-app{min-width:0;width:100%;border:0!important;background:transparent!important;box-shadow:none!important;outline-offset:-2px;display:flex;flex-direction:column;align-items:center;gap:6px;padding:5px 0!important;border-radius:16px;color:#fff!important;font-size:10px!important;font-weight:850!important;min-height:65px;justify-content:flex-start}
+#modal-smartphone #v8772-app-launcher .v8772-app:focus-visible{outline:2px solid #f9d580}
+#modal-smartphone #v8772-app-launcher .phone-app-icon{width:43px;height:43px;flex:none;font-size:24px;border:1px solid #d3f5ff82;border-radius:15px;box-shadow:0 3px 7px #071b3299;background:linear-gradient(145deg,#25acc4aa,#175a88dc)!important}
+#modal-smartphone #v8772-app-launcher .v8772-app>span:last-child{font-size:10px;color:#fff;text-shadow:0 1px 4px #000b}
+#modal-smartphone #v8772-app-launcher .v8772-app:active .phone-app-icon{transform:scale(.95)}
+#modal-smartphone .v8772-home-hint{text-align:center;color:#ffefc6;font-size:10px;font-weight:750;margin-top:auto;text-shadow:0 2px 6px #000c}
+#modal-smartphone .v8772-phone-nav{display:flex;align-items:center;justify-content:center;gap:9px;flex-shrink:0;padding:0 0 1px}
+#modal-smartphone .v8772-phone-nav button{min-height:35px;padding:5px 15px;color:#f7dfb7;border:1px solid #ffffff35;background:rgba(26,51,72,.78);border-radius:999px;font-size:11px;font-weight:850;display:flex;align-items:center;gap:6px}
+#modal-smartphone .v8772-phone-nav button:focus-visible,#modal-smartphone .v8772-close:focus-visible{outline:2px solid #f9d580;outline-offset:2px}
+#modal-smartphone .v8772-phone-nav.v8772-is-home .v8772-back-button{display:none}
+#modal-smartphone .v8772-phone-nav.v8772-is-home .v8772-home-button{background:#6e8c8088}
+#modal-smartphone .v8772-close{min-width:39px!important;min-height:39px!important;flex:none;border-radius:50%!important;border:1px solid #e6ca8b99!important;background:linear-gradient(150deg,#20384c,#4b476b)!important;color:#fff5de!important;box-shadow:0 2px 9px #0007;font-size:22px!important;font-weight:550!important;line-height:1!important}
+#modal-smartphone .v8772-settings{padding:13px 10px;min-height:100%;color:#f7f0e6}
+#modal-smartphone .v8772-settings-title{color:#ffe4a0;font-size:15px;font-weight:900;margin-bottom:12px}
+#modal-smartphone .v8772-settings-title small{display:block;color:#acbdd3;font-size:9px;font-weight:500;margin-top:3px}
+#modal-smartphone .v8772-setting-category{width:100%;display:grid;grid-template-columns:37px minmax(0,1fr) 18px;align-items:center;gap:8px;min-height:51px;padding:7px 8px;text-align:left;margin:5px 0;border-radius:14px;background:#1f3047;border:1px solid #42627b;color:#f8f3e9}
+#modal-smartphone .v8772-setting-category>span:first-child{font-size:21px;text-align:center}
+#modal-smartphone .v8772-setting-category b,#modal-smartphone .v8772-setting-copy b{font-size:11px;display:block}
+#modal-smartphone .v8772-setting-category small,#modal-smartphone .v8772-setting-copy small{font-size:9px;color:#b7c6d2;display:block;margin-top:3px}
+#modal-smartphone .v8772-setting-category>span:last-child{font-size:22px;color:#efcf97}
+#modal-smartphone .v8772-subheader{display:flex;align-items:center;gap:10px;font-size:14px;color:#f9dc9b;margin-bottom:12px}
+#modal-smartphone .v8772-subheader button{width:40px;height:40px;border-radius:50%;background:#ffffff15;color:#fff;font-size:26px}
+#modal-smartphone .v8772-subcontent{display:grid;gap:12px}
+#modal-smartphone .v8772-subcontent h3{font-size:13px;font-weight:900;color:#fde5a3}
+#modal-smartphone .v8772-subcontent h4{font-size:11px;font-weight:900;color:#fee2a3;margin-top:6px}
+#modal-smartphone .v8772-note{font-size:10px;line-height:1.6;color:#d4dfec}
+#modal-smartphone .v8772-setting-row{background:#1f3047;border:1px solid #47627c;border-radius:14px;padding:11px 9px;display:flex;align-items:center;gap:9px;min-height:56px}
+#modal-smartphone .v8772-setting-icon{font-size:22px}
+#modal-smartphone .v8772-setting-copy{flex:1;min-width:0}
+#modal-smartphone .v8772-setting-row input[type=checkbox]{width:24px;height:24px;accent-color:#67d7a3;flex-shrink:0}
+#modal-smartphone .v8772-slider-row{display:grid;gap:8px;background:#1f3047;border-radius:14px;padding:13px}
+#modal-smartphone .v8772-slider-row label{font-size:11px;display:flex;justify-content:space-between}
+#modal-smartphone .v8772-slider-row input{width:100%;accent-color:#61cba2}
+#modal-smartphone .v8772-wallpapers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px}
+#modal-smartphone .v8772-wallpaper-option{position:relative;border:2px solid #47627c;background:#24344d;border-radius:13px;overflow:hidden;min-width:0;padding:0;text-align:left;color:#fff}
+#modal-smartphone .v8772-wallpaper-option.selected{border-color:#ffd174}
+#modal-smartphone .v8772-wallpaper-option img{width:100%;height:100px;object-fit:cover}
+#modal-smartphone .v8772-wallpaper-option span{display:block;padding:7px;font-size:9.5px;line-height:1.35}
+#modal-smartphone .v8772-wallpaper-option em{position:absolute;right:4px;top:4px;font-style:normal;color:#123c2e;background:#a9edc3;border-radius:50%;font-size:13px;font-weight:bold;padding:1px 5px}
+#modal-smartphone .v8772-mika-modes{display:grid;gap:6px}
+#modal-smartphone .v8772-mika-modes button,#modal-smartphone .v8772-action{border:1px solid #50758a;background:#243e57;color:#f3f7f7;padding:12px 10px;border-radius:13px;font-size:11px;text-align:left;font-weight:850;min-height:42px}
+#modal-smartphone .v8772-mika-modes button.selected{border-color:#edc96d;background:#405a57}
+#modal-smartphone .v8772-history{display:grid;gap:7px}
+#modal-smartphone .v8772-history>div{display:flex;gap:8px;background:#20354d;padding:9px;border-radius:10px;font-size:10px;line-height:1.6}
+#modal-smartphone .v8772-history b{color:#f9d58e;min-width:64px}
+#modal-smartphone .v8772-history span{flex:1;color:#dbe4ea}
+#modal-smartphone.v8772-reduce-motion *,#modal-smartphone.v8772-reduce-motion *:before,#modal-smartphone.v8772-reduce-motion *:after{animation:none!important;transition:none!important}
+#modal-smartphone.v8772-large-text .v8772-settings small,#modal-smartphone.v8772-large-text .v8772-settings .v8772-note,#modal-smartphone.v8772-large-text .v8772-app>span:last-child{font-size:12px!important}
+/* Compact shift controls: enlarge actual tap target, not visual footprint */
+#tab-shop #btn-toggle-shop{min-height:44px!important;min-width:107px!important;max-width:128px!important;padding:8px 10px!important;border-radius:999px!important;font-size:11px!important;touch-action:manipulation;display:inline-flex!important;justify-content:center;align-items:center}
+#v87-day-button{min-width:42px!important;min-height:42px!important;touch-action:manipulation;display:inline-grid!important;place-items:center}
+#modal-daily-report .v87-actions button,#modal-v87-end-day .v87-actions button{min-height:47px!important;font-size:11px!important;touch-action:manipulation}
+@media(max-width:400px){#tab-shop #btn-toggle-shop{min-width:102px!important;max-width:115px!important;font-size:10px!important;padding-inline:7px!important}#modal-smartphone .phone-shell{width:96vw!important;max-width:390px!important;height:min(94dvh,790px)!important;padding-inline:10px!important}}
+@media(prefers-reduced-motion:reduce){#modal-smartphone .v8772-home *,#modal-smartphone .v8772-settings *{transition:none!important;animation:none!important}}
+/* Mika guide mobile: two equal actions, one precise non-blocking targeting ring */
+#v8771-coach .v8771-coach-actions{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px!important;align-items:stretch}
+#v8771-coach .v8771-coach-actions>button{grid-column:auto!important;flex:none!important;width:100%!important;min-width:0!important;min-height:40px!important;border-radius:13px!important;padding:7px 4px!important;font-size:10px!important}
+#v8771-coach .v8771-coach-actions>.v8772-manual-done{grid-column:1/-1!important;background:#fff7ea!important;color:#836241!important;border:1px solid #e8d3a6!important;min-height:30px!important}
+.v8772-target-ring{position:fixed;pointer-events:none;border:3px solid #ffc43b;border-radius:14px;z-index:210;box-shadow:0 0 0 5px #ffc64d45,0 0 16px #ffed8b;animation:v8772-ring-pulse 1.1s ease-in-out 4}
+.v8772-target-ring span{position:absolute;bottom:calc(100% + 6px);left:50%;transform:translateX(-50%);white-space:nowrap;background:#fff6d7;border:1px solid #d6a247;border-radius:999px;color:#7d4d17;font-size:10px;font-weight:900;padding:5px 10px;box-shadow:0 2px 9px #0003}
+@keyframes v8772-ring-pulse{50%{border-color:#15a37b;box-shadow:0 0 0 10px #ffc64d22}}
+@media(prefers-reduced-motion:reduce){.v8772-target-ring{animation:none}}
