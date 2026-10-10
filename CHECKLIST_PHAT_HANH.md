@@ -1,4 +1,13 @@
-# Kiểm thử v87.6.0 — chuẩn bị phát hành thử
+# Kiểm thử v87.6.1 — bản vá ảnh 3 quán
+
+## Bản vá v87.6.1
+
+- [x] 8 nhóm ảnh trùng sai món được ánh xạ riêng.
+- [x] 2 nguồn ảnh WebP hỏng đang hiện hành đã được bỏ khỏi luồng render nguyên liệu.
+- [x] 2 ảnh trà bị nhiễu đã có ảnh SVG thay thế.
+- [x] SVG bổ sung và WebP vệ sinh mảnh rời kiểm thử định dạng đạt.
+- [x] Mã game gốc, save/schema và CSS gốc không thay đổi.
+- [ ] Kiểm thử toàn bộ 3 quán trên laptop, Chrome Android và Safari iOS.
 
 ## Đã thực hiện tại đây
 

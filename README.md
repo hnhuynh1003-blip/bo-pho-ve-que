@@ -1,7 +1,11 @@
-# Bỏ Phố Về Quê — v87.6.0 (tách tài nguyên / GitHub Pages)
+# Bỏ Phố Về Quê — v87.6.1 (vá ảnh 3 quán / GitHub Pages)
 
 **Bản nền:** `ve_que_khoi_nghiep_fix_gameplay_v87_5_3_2_staffops(1).html`.
 Đây là bản **tái đóng gói kỹ thuật**, không phải bản phát triển gameplay mới. Mọi hình ảnh được tách nguyên byte; CSS và JavaScript giữ thứ tự cũ. Bản gốc cần được lưu riêng ở nơi an toàn.
+
+## Bản vá v87.6.1
+
+Đã thêm `js/v8761-art-fixes.js` và 26 tài nguyên mới, cập nhật 47 ID ảnh nguyên liệu, giữ nguyên mã kinh tế và save từ v87.6.0. Xem `BAO_CAO_BAN_VA_v87.6.1.md` và `HUONG_DAN_CAP_NHAT_GITHUB.md` để biết phạm vi, giới hạn và cách cập nhật.
 
 ## Chạy thử
 
