@@ -34,6 +34,10 @@
   {id:'sale',title:'Săn sale và công thức',body:'Vào Điện thoại → Soppi để xem Săn Sale và mục Công Thức. Không cần mua hàng để hoàn thành bài học.',target:'#papp-btn-soppi',check:()=>!byId('phone-app-soppi')?.classList.contains('hidden')}
  ];
  let storyVisible=false;let storyReplay=false;let replayIndex=0;let lastHighlights=[];
+ // Hướng dẫn mini mặc định trên điện thoại: người chơi chủ động mở nội dung.
+ let coachExpanded=typeof window.matchMedia==='function' ? window.matchMedia('(min-width: 701px)').matches : true;
+ const setGuideVisibility=(active)=>document.body.classList.toggle('v8771-guide-live',!!active);
+
  function markPlaying(){document.body.classList.toggle('v8771-playing',started()&&byId('screen-account')?.classList.contains('hidden')&&byId('screen-intro')?.classList.contains('hidden'));}
  function syncAccount(){const nameBlock=byId('account-new-shop-name')?.closest('label')||null;const inp=byId('account-new-shop-name');if(inp){inp.previousElementSibling?.classList.add('v8771-account-hidden');inp.classList.add('v8771-account-hidden');}const chooser=$('#screen-account .avatar-picker-summary');if(chooser){chooser.previousElementSibling?.classList.add('v8771-account-hidden');chooser.classList.add('v8771-account-hidden');}const btn=$('#screen-account button[onclick="createLocalAccount()"]');if(btn)btn.textContent='🧳 Tạo nhân vật & bắt đầu hành trình';const h=$('#screen-account h1');if(h)h.textContent='TẠO NHÂN VẬT & HỒ SƠ';if(nameBlock)nameBlock.classList.add('v8771-account-hidden');}
  function syncIntro(){
@@ -66,17 +70,33 @@
  window.v8771StoryNext=()=>{if(storyReplay){replayIndex++;if(replayIndex>=chapters.length)finishReplay();else drawStory();return;}const s=onboard();s.introStep=(Number(s.introStep)||0)+1;if(s.introStep>=chapters.length)finishStory();else {save();drawStory()}};
  window.v8771SkipStory=()=>storyReplay?finishReplay():finishStory();
  const popup=document.createElement('section');popup.id='v8771-welcome';popup.className='v8771-welcome hidden';popup.setAttribute('role','dialog');popup.setAttribute('aria-modal','true');popup.setAttribute('aria-label','Mika hỏi hướng dẫn');popup.innerHTML=`<div class="v8771-welcome-card"><img src="${MIKA}" alt="Mika"><b>🌸 Mika • Người bạn đồng hành</b><p>“Quán mới đã sẵn sàng! Bạn có muốn mình chỉ từng bước mở quán, giao món rồi khám phá điện thoại, Kho, Vườn, Chuồng và Làng không?”</p><button type="button" onclick="v8771ChooseHelp('new')">🌱 Có, chỉ mình với!</button><button type="button" onclick="v8771ChooseHelp('explore')">🧭 Mình muốn tự khám phá</button><button type="button" onclick="v8771ChooseHelp('off')">✨ Mình đã biết chơi rồi</button></div>`;document.body.appendChild(popup);
- const coach=document.createElement('section');coach.id='v8771-coach';coach.className='v8771-coach hidden';coach.setAttribute('aria-live','polite');document.body.appendChild(coach);
+ const coach=document.createElement('section');coach.id='v8771-coach';coach.className='v8771-coach hidden';coach.setAttribute('aria-label','Mika hướng dẫn');document.body.appendChild(coach);
  function unmark(){lastHighlights.forEach(el=>el.classList.remove('v8771-spotlight'));lastHighlights=[]}
  function targetFor(step){return step.target?$(step.target):null}
- function renderCoach(){const g=guidance();unmark();if(!started()||!g.active||g.done){coach.classList.add('hidden');return;}const step=steps[Math.min(g.step,steps.length-1)];if(!step){g.active=false;g.done=true;save();coach.classList.add('hidden');return;}coach.classList.remove('hidden');coach.innerHTML=`<div class="v8771-coach-head"><img src="${MIKA}" alt=""><div><b>Mika hướng dẫn (${g.step+1}/${steps.length})</b><small>${safe(step.title)}</small></div><button onclick="v8771PauseGuide()" title="Tạm dừng">✕</button></div><p>${safe(step.body)}</p><div class="v8771-coach-actions"><button onclick="v8771PointGuide()">📍 Chỉ vị trí</button>${step.manual?'<button onclick="v8771NextGuide()">✅ Đã xem</button>':''}<button onclick="v8771NextGuide()">Bỏ qua ›</button></div>`}
- function moveNext(){const g=guidance();g.step=Math.min(steps.length,g.step+1);if(g.step>=steps.length){g.done=true;g.active=false;coach.classList.add('hidden');try{showToast('Mika: Bạn đã biết những thao tác chính rồi! 🌸','✅')}catch(e){}}else if(steps[g.step].id==='serve'){g.serveBefore=(gameState.dailyStats?.counterServed||0)+(gameState.dailyStats?.deliveryServed||0);}unmark();save();renderCoach()}
+ function renderCoach(){
+  const g=guidance();unmark();
+  if(!started()||!g.active||g.done){coach.classList.add('hidden');setGuideVisibility(false);return;}
+  const step=steps[Math.min(g.step,steps.length-1)];
+  if(!step){g.active=false;g.done=true;save();coach.classList.add('hidden');setGuideVisibility(false);return;}
+  setGuideVisibility(true);
+  coach.classList.remove('hidden');
+  coach.classList.toggle('v8771-expanded',coachExpanded);
+  const count=`${g.step+1}/${steps.length}`;
+  coach.innerHTML=`<button type="button" class="v8771-coach-mini" onclick="v8771ToggleCoach()" aria-expanded="${coachExpanded?'true':'false'}" aria-label="Mika hướng dẫn bước ${count}: ${safe(step.title)}. Chạm để xem chi tiết"><img src="${MIKA}" alt=""><span><b>Mika ${count}</b><small>${safe(step.title)}</small></span><span class="v8771-mini-chevron" aria-hidden="true">⌃</span></button><div class="v8771-coach-full"><div class="v8771-coach-head"><img src="${MIKA}" alt=""><div><b>Mika hướng dẫn (${count})</b><small>${safe(step.title)}</small></div><button type="button" onclick="v8771ToggleCoach()" title="Thu gọn" aria-label="Thu gọn hướng dẫn">⌄</button><button type="button" onclick="v8771PauseGuide()" title="Tạm dừng hướng dẫn" aria-label="Tạm dừng hướng dẫn">✕</button></div><p>${safe(step.body)}</p><div class="v8771-coach-actions"><button type="button" onclick="v8771PointGuide()">📍 Chỉ vị trí</button>${step.manual?'<button type="button" onclick="v8771NextGuide()">✅ Đã xem</button>':''}<button type="button" onclick="v8771NextGuide()">Bỏ qua ›</button></div></div>`;
+ }
+ window.v8771ToggleCoach=()=>{
+  coachExpanded=!coachExpanded;
+  coach.classList.toggle('v8771-expanded',coachExpanded);
+  const mini=coach.querySelector('.v8771-coach-mini');
+  if(mini)mini.setAttribute('aria-expanded',coachExpanded?'true':'false');
+ };
+ function moveNext(){const g=guidance();g.step=Math.min(steps.length,g.step+1);if(g.step>=steps.length){g.done=true;g.active=false;coach.classList.add('hidden');setGuideVisibility(false);try{showToast('Mika: Bạn đã biết những thao tác chính rồi! 🌸','✅')}catch(e){}}else if(steps[g.step].id==='serve'){g.serveBefore=(gameState.dailyStats?.counterServed||0)+(gameState.dailyStats?.deliveryServed||0);}unmark();save();renderCoach()}
  window.v8771NextGuide=()=>moveNext();
- window.v8771PauseGuide=()=>{guidance().active=false;unmark();coach.classList.add('hidden');save();};
- window.v8771ResumeGuide=()=>{const g=guidance();g.active=true;g.done=false;save();renderCoach();};
- window.v8771PointGuide=()=>{const g=guidance(),step=steps[g.step];if(!step)return; if(step.nav && byId(`tab-${step.nav}`)?.classList.contains('hidden')){switchTab(step.nav)}const target=targetFor(step);if(target){target.classList.add('v8771-spotlight');lastHighlights.push(target);target.scrollIntoView({block:'center',behavior:'smooth'});}else{try{showToast('Mika: Mở tính năng theo hướng dẫn nhé!','🌸')}catch(e){}}};
- window.v8771ChooseHelp=(mode)=>{const state=onboard();state.asked=true;state.introCompleted=true;popup.classList.add('hidden');if(typeof v877MikaSetMode==='function')v877MikaSetMode(mode);const g=guidance();g.active=mode==='new';if(mode==='new'){g.step=0;g.done=false;g.serveBefore=0;}else g.active=false;save();renderCoach()};
- function showWelcome(){if(!started())return;const state=onboard();if(state.asked)return;state.asked=false;popup.classList.remove('hidden');coach.classList.add('hidden');markPlaying()}
+ window.v8771PauseGuide=()=>{guidance().active=false;unmark();coach.classList.add('hidden');setGuideVisibility(false);save();};
+ window.v8771ResumeGuide=()=>{const g=guidance();g.active=true;g.done=false;coachExpanded=window.innerWidth>700;save();renderCoach();};
+ window.v8771PointGuide=()=>{const g=guidance(),step=steps[g.step];if(!step)return; coachExpanded=false;coach.classList.remove('v8771-expanded'); const mini=coach.querySelector('.v8771-coach-mini');if(mini)mini.setAttribute('aria-expanded','false');if(step.nav && byId(`tab-${step.nav}`)?.classList.contains('hidden')){switchTab(step.nav)}const target=targetFor(step);if(target){target.classList.add('v8771-spotlight');lastHighlights.push(target);target.scrollIntoView({block:'center',behavior:'smooth'});}else{try{showToast('Mika: Mở tính năng theo hướng dẫn nhé!','🌸')}catch(e){}}};
+ window.v8771ChooseHelp=(mode)=>{const state=onboard();state.asked=true;state.introCompleted=true;popup.classList.add('hidden');if(typeof v877MikaSetMode==='function')v877MikaSetMode(mode);const g=guidance();g.active=mode==='new';coachExpanded=window.innerWidth>700;if(mode==='new'){g.step=0;g.done=false;g.serveBefore=0;}else g.active=false;save();renderCoach()};
+ function showWelcome(){if(!started())return;const state=onboard();if(state.asked)return;state.asked=false;popup.classList.remove('hidden');coach.classList.add('hidden');setGuideVisibility(false);markPlaying()}
  function synchronize(){markPlaying();if(!started())return;const g=guidance();if(g.active && onboard().asked)renderCoach();}
  // Hook chỉ tại các ranh giới tạo lượt; không thay đổi xử lý tài chính, kho, nghề.
  const nativeFresh=window.startFreshRunForActiveProfile;
@@ -90,7 +110,7 @@
  const nativeSelectCareer=window.selectIntroCareer;
  if(typeof nativeSelectCareer==='function')window.selectIntroCareer=function(key){const res=nativeSelectCareer.call(this,key);const c=careers[key];const hint=byId('v8771-career-mika')?.querySelector('p');if(c&&hint)hint.textContent=`“${c.icon} ${c.name}: ${c.hint} Nghề sẽ khóa trong lượt chơi này, bạn cứ chọn theo sở thích nhé!”`;return res;};
  const nativeAccount=window.openAccountScreen;
- if(typeof nativeAccount==='function')window.openAccountScreen=function(...args){const res=nativeAccount.apply(this,args);popup.classList.add('hidden');overlay.classList.add('hidden');coach.classList.add('hidden');unmark();storyVisible=false;markPlaying();return res;};
+ if(typeof nativeAccount==='function')window.openAccountScreen=function(...args){const res=nativeAccount.apply(this,args);popup.classList.add('hidden');overlay.classList.add('hidden');coach.classList.add('hidden');setGuideVisibility(false);unmark();storyVisible=false;markPlaying();return res;};
  const nativeLoaded=window.enterLoadedGame;
  if(typeof nativeLoaded==='function')window.enterLoadedGame=function(...args){const res=nativeLoaded.apply(this,args);popup.classList.add('hidden');overlay.classList.add('hidden');storyVisible=false;synchronize();const s=onboard();if(s.introCompleted===true&&s.asked===false)window.setTimeout(showWelcome,220);return res;};
  // Khôi phục hướng dẫn khi người chơi mở Mika (không trùng chức năng tự động hóa ở Quán).
