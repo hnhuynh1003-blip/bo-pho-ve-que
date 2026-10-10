@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v87.6.1 — Vá hình nguyên liệu</title>
+  <title>Bỏ Phố Về Quê v87.7 — Kho Hoàn Chỉnh & Mika 2.0</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -28,6 +28,7 @@
 
 <link rel="stylesheet" href="css/patch-10-v87532-staff-ops-css.css">
 <link rel="stylesheet" href="css/patch-11-v87531-staff-life-style.css">
+  <link rel="stylesheet" href="css/v877-warehouse-mika.css?v=87.7" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -786,14 +787,12 @@
           <span class="text-3xl">📦</span>
         </div>
 
-        <div class="flex gap-1 overflow-x-auto no-scrollbar py-0.5">
-          <button onclick="filterWarehouseCategory('all')" class="px-2 py-1 rounded-lg bg-amber-500 text-white font-bold text-[9px] whitespace-nowrap">Tất Cả</button>
-          <button onclick="filterWarehouseCategory('craft')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Chế Biến</button>
-          <button onclick="filterWarehouseCategory('farm')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Nông Sản</button>
-          <button onclick="filterWarehouseCategory('dairy')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Sữa & Trứng</button>
-          <button onclick="filterWarehouseCategory('seed')" class="px-2 py-1 rounded-lg bg-slate-100 text-slate-700 font-bold text-[9px] whitespace-nowrap">Hạt Giống</button>
-          <button onclick="filterWarehouseCategory('misc')" class="v8731-warehouse-tab px-2 py-1 rounded-lg bg-rose-100 text-rose-800 font-black text-[9px] whitespace-nowrap">🎀 Đồ Linh Tinh</button>
-          <button onclick="filterWarehouseCategory('souvenir')" class="px-2 py-1 rounded-lg bg-gradient-to-r from-violet-100 to-amber-100 text-violet-800 font-black text-[9px] whitespace-nowrap">🏆 Lưu Niệm</button>
+        <div id="v877-warehouse-filters" aria-label="Lọc Kho">
+          <button type="button" data-v877-filter="all" onclick="filterWarehouseCategory('all')" class="active">Tất Cả</button>
+          <button type="button" data-v877-filter="craft" onclick="filterWarehouseCategory('craft')">Chế Biến</button>
+          <button type="button" data-v877-filter="farm" onclick="filterWarehouseCategory('farm')">🌾 Nông Sản</button>
+          <button type="button" data-v877-filter="special" onclick="filterWarehouseCategory('special')">🎁 Vật Phẩm</button>
+          <button type="button" data-v877-filter="souvenir" onclick="filterWarehouseCategory('souvenir')">🏆 Lưu Niệm</button>
         </div>
 
         <div class="grid grid-cols-3 gap-1.5" id="warehouse-items-grid"></div>
@@ -1581,5 +1580,6 @@
     }
   })();
   </script>
+  <script src="js/v877-warehouse-mika.js?v=87.7"></script>
 </body>
 </html>
