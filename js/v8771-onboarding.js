@@ -20,15 +20,15 @@
   {k:'mika',tag:'CHƯƠNG 0 · NGƯỜI BẠN MỚI',title:'Mika Chào Đón Bạn',icon:'🌸',text:'“A, bạn vừa trở về từ thành phố phải không? Mình là Mika! Ở đây tuy nhỏ nhưng nhiều thứ thú vị lắm. Nghe nói bạn định mở một quán ăn?”',quote:'“Để mình giới thiệu những nghề có thể bắt đầu ở quê nhé!”',button:'🏪 Mika ơi, giới thiệu quán đi!'}
  ];
  const steps=[
-  {id:'prep',title:'Nhìn qua quầy chế biến',body:'Mỗi nghề dùng khay hoặc ly/thố khác nhau. Bạn hãy xem khu chế biến phía dưới để biết nguyên liệu ban đầu; chỉ bấm Đã xem khi bạn đã sẵn sàng.',target:'#workbench-focus-copy',nav:'shop',manual:true},
-  {id:'open',title:'Mở quán đón khách',body:'Nhấn nút Mở Quán để nhận đơn đầu tiên. Mika sẽ tự nhận biết khi bạn mở thành công.',target:'#btn-toggle-shop',nav:'shop',check:()=>gameState.phase==='open'},
-  {id:'serve',title:'Làm và giao món đầu tiên',body:'Đọc yêu cầu khách, chọn nguyên liệu, chế biến và bấm GIAO MÓN CHO KHÁCH. Mika chỉ đánh dấu hoàn thành sau khi game ghi nhận một đơn.',target:'#customer-booth-card',nav:'shop',check:(g)=>Number(gameState.dailyStats?.counterServed||0)+Number(gameState.dailyStats?.deliveryServed||0)>Number(g.serveBefore||0)},
-  {id:'phone',title:'Khám phá điện thoại',body:'Bấm biểu tượng điện thoại để xem đơn giao, Soppi, minigame và các ứng dụng khác.',target:'[onclick="openSmartPhoneModal()"]',check:()=>!byId('modal-smartphone')?.classList.contains('hidden')},
+  {id:'prep',title:'Nhìn qua quầy chế biến',body:'Mỗi nghề dùng khay hoặc ly/thố khác nhau. Bạn hãy xem khu chế biến phía dưới để biết nguyên liệu ban đầu; chỉ bấm Đã xem khi bạn đã sẵn sàng.',target:'.workbench-shell',nav:'shop',manual:true},
+  {id:'open',title:'Mở quán đón khách',body:'Quán nhỏ của chúng mình sắp đón khách rồi! Bạn sẵn sàng chưa? Mở quán thôi nào~',target:'#btn-toggle-shop',nav:'shop',check:()=>gameState.phase==='open'},
+  {id:'serve',title:'Làm và giao món đầu tiên',body:'Đọc yêu cầu khách, chọn nguyên liệu, chế biến và bấm GIAO MÓN CHO KHÁCH. Mika chỉ đánh dấu hoàn thành sau khi game ghi nhận một đơn.',target:'button[onclick*="serveDishToCustomer"]',nav:'shop',check:(g)=>Number(gameState.dailyStats?.counterServed||0)+Number(gameState.dailyStats?.deliveryServed||0)>Number(g.serveBefore||0)},
+  {id:'phone',title:'Khám phá điện thoại',body:'Bấm biểu tượng điện thoại để xem đơn giao, Soppi, minigame và các ứng dụng khác.',target:'#v8772-phone-opener',check:()=>!byId('modal-smartphone')?.classList.contains('hidden')},
   {id:'stock',title:'Kiểm tra Kho',body:'Mở Kho để xem nguyên liệu, hạt giống, Túi Mù, Vé Số và tiến độ Mảnh Công Thức.',target:'#nav-btn-warehouse',nav:'warehouse',check:()=>!byId('tab-warehouse')?.classList.contains('hidden')},
   {id:'farm',title:'Vườn và trồng trọt',body:'Vào Vườn để xem ô đất, hạt giống và cách thu hoạch.',target:'#nav-btn-farm',nav:'farm',check:()=>!byId('tab-farm')?.classList.contains('hidden')},
   {id:'barn',title:'Chuồng và vật nuôi',body:'Vào Chuồng để xem các con vật cùng nguyên liệu chăn nuôi.',target:'#nav-btn-barn',nav:'barn',check:()=>!byId('tab-barn')?.classList.contains('hidden')},
   {id:'village',title:'Khám phá Làng cùng Bé Bơ',body:'Vào Làng để gặp cư dân, khám phá các khu vực và làm nhiệm vụ NPC. Bé Bơ sẽ giúp bạn quen với nơi này.',target:'#nav-btn-village',nav:'village',check:()=>!byId('tab-village')?.classList.contains('hidden')},
-  {id:'npc',title:'Gặp NPC và làm nhiệm vụ',body:'Hãy xem các cư dân và nhiệm vụ trong Làng. Chạm nhân vật để trò chuyện hoặc nhận việc. Có thể quay lại làm sau khi đã mở khóa.',target:'#tab-village',nav:'village',manual:true},
+  {id:'npc',title:'Gặp NPC và làm nhiệm vụ',body:'Hãy xem các cư dân và nhiệm vụ trong Làng. Chạm nhân vật để trò chuyện hoặc nhận việc. Có thể quay lại làm sau khi đã mở khóa.',target:'#tab-village .village-world, #tab-village [data-npc], #tab-village button[onclick*="village"]',nav:'village',manual:true},
   {id:'upgrade',title:'Nâng bậc quán',body:'Bấm Bậc quán phía trên để xem điều kiện nâng cấp. Bạn không cần mua ngay, chỉ cần mở và xem.',target:'.v72-shop-stage-btn',check:()=>!byId('modal-shop-stage-quick')?.classList.contains('hidden')},
   {id:'skill',title:'Nâng cấp kỹ năng nhân vật',body:'Mở Điện thoại → Phát triển → Kỹ năng. Điểm kỹ năng sẽ giúp bạn cải thiện hoạt động kinh doanh.',target:'#papp-btn-progress',check:()=>!byId('phone-app-progress')?.classList.contains('hidden')},
   {id:'sale',title:'Săn sale và công thức',body:'Vào Điện thoại → Soppi để xem Săn Sale và mục Công Thức. Không cần mua hàng để hoàn thành bài học.',target:'#papp-btn-soppi',check:()=>!byId('phone-app-soppi')?.classList.contains('hidden')}
@@ -71,7 +71,12 @@
  window.v8771SkipStory=()=>storyReplay?finishReplay():finishStory();
  const popup=document.createElement('section');popup.id='v8771-welcome';popup.className='v8771-welcome hidden';popup.setAttribute('role','dialog');popup.setAttribute('aria-modal','true');popup.setAttribute('aria-label','Mika hỏi hướng dẫn');popup.innerHTML=`<div class="v8771-welcome-card"><img src="${MIKA}" alt="Mika"><b>🌸 Mika • Người bạn đồng hành</b><p>“Quán mới đã sẵn sàng! Bạn có muốn mình chỉ từng bước mở quán, giao món rồi khám phá điện thoại, Kho, Vườn, Chuồng và Làng không?”</p><button type="button" onclick="v8771ChooseHelp('new')">🌱 Có, chỉ mình với!</button><button type="button" onclick="v8771ChooseHelp('explore')">🧭 Mình muốn tự khám phá</button><button type="button" onclick="v8771ChooseHelp('off')">✨ Mình đã biết chơi rồi</button></div>`;document.body.appendChild(popup);
  const coach=document.createElement('section');coach.id='v8771-coach';coach.className='v8771-coach hidden';coach.setAttribute('aria-label','Mika hướng dẫn');document.body.appendChild(coach);
- function unmark(){lastHighlights.forEach(el=>el.classList.remove('v8771-spotlight'));lastHighlights=[]}
+ let ring=null;let ringTarget=null;let ringTimer=0;
+ function closeRing(){if(ring){ring.remove();ring=null;}ringTarget=null;clearTimeout(ringTimer);ringTimer=0;}
+ function syncRing(){if(!ring||!ringTarget)return;const r=ringTarget.getBoundingClientRect();if(r.width<2||r.height<2||r.bottom<0||r.top>window.innerHeight){ring.style.display='none';return;}ring.style.display='block';ring.style.left=`${Math.max(2,r.left-5)}px`;ring.style.top=`${Math.max(2,r.top-5)}px`;ring.style.width=`${Math.max(36,r.width+10)}px`;ring.style.height=`${Math.max(36,r.height+10)}px`;}
+ function showRing(target){closeRing();ringTarget=target;ring=document.createElement('div');ring.className='v8772-target-ring';ring.setAttribute('aria-hidden','true');ring.innerHTML='<span>☟ Bấm ở đây</span>';document.body.appendChild(ring);syncRing();ringTimer=setTimeout(closeRing,9000);}
+ window.addEventListener('scroll',syncRing,true);window.addEventListener('resize',syncRing);
+ function unmark(){closeRing();lastHighlights.forEach(el=>el.classList.remove('v8771-spotlight'));lastHighlights=[]}
  function targetFor(step){return step.target?$(step.target):null}
  function renderCoach(){
   const g=guidance();unmark();
@@ -82,7 +87,7 @@
   coach.classList.remove('hidden');
   coach.classList.toggle('v8771-expanded',coachExpanded);
   const count=`${g.step+1}/${steps.length}`;
-  coach.innerHTML=`<button type="button" class="v8771-coach-mini" onclick="v8771ToggleCoach()" aria-expanded="${coachExpanded?'true':'false'}" aria-label="Mika hướng dẫn bước ${count}: ${safe(step.title)}. Chạm để xem chi tiết"><img src="${MIKA}" alt=""><span><b>Mika ${count}</b><small>${safe(step.title)}</small></span><span class="v8771-mini-chevron" aria-hidden="true">⌃</span></button><div class="v8771-coach-full"><div class="v8771-coach-head"><img src="${MIKA}" alt=""><div><b>Mika hướng dẫn (${count})</b><small>${safe(step.title)}</small></div><button type="button" onclick="v8771ToggleCoach()" title="Thu gọn" aria-label="Thu gọn hướng dẫn">⌄</button><button type="button" onclick="v8771PauseGuide()" title="Tạm dừng hướng dẫn" aria-label="Tạm dừng hướng dẫn">✕</button></div><p>${safe(step.body)}</p><div class="v8771-coach-actions"><button type="button" onclick="v8771PointGuide()">📍 Chỉ vị trí</button>${step.manual?'<button type="button" onclick="v8771NextGuide()">✅ Đã xem</button>':''}<button type="button" onclick="v8771NextGuide()">Bỏ qua ›</button></div></div>`;
+  coach.innerHTML=`<button type="button" class="v8771-coach-mini" onclick="v8771ToggleCoach()" aria-expanded="${coachExpanded?'true':'false'}" aria-label="Mika hướng dẫn bước ${count}: ${safe(step.title)}. Chạm để xem chi tiết"><img src="${MIKA}" alt=""><span><b>Mika ${count}</b><small>${safe(step.title)}</small></span><span class="v8771-mini-chevron" aria-hidden="true">⌃</span></button><div class="v8771-coach-full"><div class="v8771-coach-head"><img src="${MIKA}" alt=""><div><b>Mika hướng dẫn (${count})</b><small>${safe(step.title)}</small></div><button type="button" onclick="v8771ToggleCoach()" title="Thu gọn" aria-label="Thu gọn hướng dẫn">⌄</button><button type="button" onclick="v8771PauseGuide()" title="Tạm dừng hướng dẫn" aria-label="Tạm dừng hướng dẫn">✕</button></div><p>${safe(step.body)}</p><div class="v8771-coach-actions"><button type="button" onclick="v8771PointGuide()">📍 Chỉ mình với</button><button type="button" onclick="v8771NextGuide()">Bỏ qua ›</button>${step.manual?'<button class="v8772-manual-done" type="button" onclick="v8771NextGuide()">✅ Mình đã xem xong</button>':''}</div></div>`;
  }
  window.v8771ToggleCoach=()=>{
   coachExpanded=!coachExpanded;
@@ -94,7 +99,22 @@
  window.v8771NextGuide=()=>moveNext();
  window.v8771PauseGuide=()=>{guidance().active=false;unmark();coach.classList.add('hidden');setGuideVisibility(false);save();};
  window.v8771ResumeGuide=()=>{const g=guidance();g.active=true;g.done=false;coachExpanded=window.innerWidth>700;save();renderCoach();};
- window.v8771PointGuide=()=>{const g=guidance(),step=steps[g.step];if(!step)return; coachExpanded=false;coach.classList.remove('v8771-expanded'); const mini=coach.querySelector('.v8771-coach-mini');if(mini)mini.setAttribute('aria-expanded','false');if(step.nav && byId(`tab-${step.nav}`)?.classList.contains('hidden')){switchTab(step.nav)}const target=targetFor(step);if(target){target.classList.add('v8771-spotlight');lastHighlights.push(target);target.scrollIntoView({block:'center',behavior:'smooth'});}else{try{showToast('Mika: Mở tính năng theo hướng dẫn nhé!','🌸')}catch(e){}}};
+ window.v8771PointGuide=()=>{
+  const g=guidance(),step=steps[g.step];if(!step)return;
+  coachExpanded=false;coach.classList.remove('v8771-expanded');
+  coach.querySelector('.v8771-coach-mini')?.setAttribute('aria-expanded','false');
+  if(step.nav&&byId(`tab-${step.nav}`)?.classList.contains('hidden'))switchTab(step.nav);
+  if(['skill','sale'].includes(step.id)){
+   if(byId('modal-smartphone')?.classList.contains('hidden'))openSmartPhoneModal();
+   window.switchPhoneApp?.(step.id==='skill'?'progress':'soppi');
+  }
+  const target=targetFor(step);
+  if(!target||target.classList.contains('hidden')||!target.getClientRects().length){
+   try{showToast('Mika: Phần này chưa hiện ra. Hãy mở đúng khu vực trước nhé!','🌸')}catch(e){}return;
+  }
+  target.scrollIntoView({block:'center',inline:'nearest',behavior:'smooth'});
+  window.setTimeout(()=>showRing(target),220);
+ };
  window.v8771ChooseHelp=(mode)=>{const state=onboard();state.asked=true;state.introCompleted=true;popup.classList.add('hidden');if(typeof v877MikaSetMode==='function')v877MikaSetMode(mode);const g=guidance();g.active=mode==='new';coachExpanded=window.innerWidth>700;if(mode==='new'){g.step=0;g.done=false;g.serveBefore=0;}else g.active=false;save();renderCoach()};
  function showWelcome(){if(!started())return;const state=onboard();if(state.asked)return;state.asked=false;popup.classList.remove('hidden');coach.classList.add('hidden');setGuideVisibility(false);markPlaying()}
  function synchronize(){markPlaying();if(!started())return;const g=guidance();if(g.active && onboard().asked)renderCoach();}
