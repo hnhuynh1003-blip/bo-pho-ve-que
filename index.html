@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v87.7 — Kho Hoàn Chỉnh & Mika 2.0</title>
+  <title>Bỏ Phố Về Quê v87.7.1 — Hành Trình Về Quê & Mika</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="css/patch-10-v87532-staff-ops-css.css">
 <link rel="stylesheet" href="css/patch-11-v87531-staff-life-style.css">
   <link rel="stylesheet" href="css/v877-warehouse-mika.css?v=87.7" />
+  <link rel="stylesheet" href="css/v8771-onboarding.css?v=87.7.1" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -788,11 +789,11 @@
         </div>
 
         <div id="v877-warehouse-filters" aria-label="Lọc Kho">
-          <button type="button" data-v877-filter="all" onclick="filterWarehouseCategory('all')" class="active">Tất Cả</button>
-          <button type="button" data-v877-filter="craft" onclick="filterWarehouseCategory('craft')">Chế Biến</button>
-          <button type="button" data-v877-filter="farm" onclick="filterWarehouseCategory('farm')">🌾 Nông Sản</button>
-          <button type="button" data-v877-filter="special" onclick="filterWarehouseCategory('special')">🎁 Vật Phẩm</button>
-          <button type="button" data-v877-filter="souvenir" onclick="filterWarehouseCategory('souvenir')">🏆 Lưu Niệm</button>
+          <button type="button" data-v877-filter="all" onclick="filterWarehouseCategory('all')" class="active">📦 Tất cả</button>
+          <button type="button" data-v877-filter="craft" onclick="filterWarehouseCategory('craft')">🍳 Chế biến</button>
+          <button type="button" data-v877-filter="farm" onclick="filterWarehouseCategory('farm')">🌾 Nông sản</button>
+          <button type="button" data-v877-filter="special" onclick="filterWarehouseCategory('special')">🎁 Vật phẩm</button>
+          <button type="button" data-v877-filter="souvenir" onclick="filterWarehouseCategory('souvenir')">🏆 Lưu niệm</button>
         </div>
 
         <div class="grid grid-cols-3 gap-1.5" id="warehouse-items-grid"></div>
@@ -1581,5 +1582,6 @@
   })();
   </script>
   <script src="js/v877-warehouse-mika.js?v=87.7"></script>
+  <script src="js/v8771-onboarding.js?v=87.7.1"></script>
 </body>
 </html>
