@@ -54,7 +54,7 @@
     const banner=document.createElement('div');banner.id='v8771-career-mika';banner.className='v8771-mika-note';banner.innerHTML=`<img src="${MIKA}" alt="Mika"><div><b>Mika • Chọn con đường của bạn</b><p>“Bạn thích pha trà, nấu mì cay hay bán xiên que? Chọn nghề rồi đặt tên quán nhé. Nghề sẽ khóa trong lượt chơi này đó!”</p></div>`;
     after?.parentElement?.insertBefore(banner,after);
   }
-  const shopName=byId('intro-shop-name');if(shopName&&!shopName.value.trim())shopName.value='Quán Nhà Mình';
+  const shopName=byId('intro-shop-name');if(shopName)shopName.placeholder='Ví dụ: Tiệm Mây Nhỏ';
   updateIntroAvatar();
  }
  function updateIntroAvatar(){const avatar=byId('v8771-avatar-image');if(!avatar)return;try{const src=getShopAvatarSource(getCurrentShopAvatar());avatar.innerHTML=src?`<img alt="Đại diện quán" src="${safe(src)}">`:'🏪'}catch(e){avatar.textContent='🏪'}}
@@ -80,9 +80,9 @@
  function synchronize(){markPlaying();if(!started())return;const g=guidance();if(g.active && onboard().asked)renderCoach();}
  // Hook chỉ tại các ranh giới tạo lượt; không thay đổi xử lý tài chính, kho, nghề.
  const nativeFresh=window.startFreshRunForActiveProfile;
- if(typeof nativeFresh==='function')window.startFreshRunForActiveProfile=function(...args){const result=nativeFresh.apply(this,args);const s=onboard();s.introStep=0;s.introCompleted=false;s.asked=false;syncIntro();save();drawStory();return result;};
+ if(typeof nativeFresh==='function')window.startFreshRunForActiveProfile=function(...args){const result=nativeFresh.apply(this,args);const shopField=byId('intro-shop-name');if(shopField)shopField.value='';const s=onboard();s.introStep=0;s.introCompleted=false;s.asked=false;syncIntro();save();drawStory();return result;};
  const nativeContinue=window.continueLocalAccount;
- if(typeof nativeContinue==='function')window.continueLocalAccount=function(...args){const result=nativeContinue.apply(this,args);syncIntro();markPlaying();const s=onboard();if(!gameState.hasStarted&&s.introCompleted===false){drawStory()}else if(started()&&s.asked){synchronize()}return result;};
+ if(typeof nativeContinue==='function')window.continueLocalAccount=function(...args){const result=nativeContinue.apply(this,args);if(!gameState.hasStarted){const shopField=byId('intro-shop-name');if(shopField)shopField.value='';}syncIntro();markPlaying();const s=onboard();if(!gameState.hasStarted&&s.introCompleted===false){drawStory()}else if(started()&&s.asked){synchronize()}return result;};
  const nativeConfirm=window.confirmStartGameFromIntro;
  if(typeof nativeConfirm==='function')window.confirmStartGameFromIntro=function(...args){const name=byId('intro-shop-name')?.value.trim();if(!name){try{showToast('Bạn hãy đặt tên quán trước nhé!','🏪')}catch(e){}return;}const result=nativeConfirm.apply(this,args);if(started()){const s=onboard();s.introCompleted=true;s.introStep=chapters.length;markPlaying();save();window.setTimeout(showWelcome,180)}return result;};
  const nativeAvatar=window.confirmShopAvatarGallery;
@@ -100,6 +100,6 @@
  function checkGuide(){const g=guidance();if(!started()||!g.active||g.done)return;const step=steps[g.step];if(step&&step.check&&step.check(g))moveNext();}
  document.addEventListener('click',()=>{window.setTimeout(checkGuide,120)},true);
  window.setInterval(()=>{if(started()&&guidance().active)checkGuide();},1400);
- syncAccount();syncIntro();markPlaying();
+ syncAccount();const initialShopField=byId('intro-shop-name');if(initialShopField)initialShopField.value='';syncIntro();markPlaying();
  window.__v8771Test={chapters,steps,onboard,guidance,checkGuide,careers};
 })();
