@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v87.7.3 — Thị Trấn OS</title>
+  <title>Bỏ Phố Về Quê v87.7.4 — Header Cute Premium</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -32,6 +32,7 @@
   <link rel="stylesheet" href="css/v8771-onboarding.css?v=87.7.2" />
   <link rel="stylesheet" href="css/v8772-thitran-os.css?v=87.7.2" />
   <link rel="stylesheet" href="css/v8773-anime-signature.css?v=87.7.3" />
+  <link rel="stylesheet" href="css/v8774-header-notification.css?v=87.7.4" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -196,47 +197,45 @@
       </div>
     </div>
 
-    <header class="compact-header sticky top-0 z-40 bg-gradient-to-r from-amber-600 via-orange-600 to-amber-700 text-white px-2.5 shadow-md">
-      <div class="header-main-row">
-        <div class="flex items-start gap-2 min-w-0 flex-1">
-          <button class="shop-icon-button relative shrink-0 mt-0.5 tap-scale" onclick="openShopIconModal()" title="Đổi biểu tượng quán">
-            <img id="header-shop-avatar-image" src="assets/images/003_header-shop-avatar-image_3a7759990d.webp" class="v30-header-mascot" alt="Linh vật quán">
-            <span id="header-shop-avatar-emoji" class="header-shop-avatar-emoji hidden">🐰</span>
-            <span id="header-career-icon">🧋</span>
+    <!-- v87.7.4: fixed, two-line, mobile-first premium header. Keep legacy data IDs. -->
+    <header class="compact-header v8774-header sticky top-0 z-40" aria-label="Thông tin cửa hàng">
+      <div class="v8774-topline">
+        <button class="shop-icon-button v8774-avatar tap-scale" onclick="openShopIconModal()" title="Đổi biểu tượng quán" aria-label="Đổi biểu tượng quán">
+          <img id="header-shop-avatar-image" src="assets/images/003_header-shop-avatar-image_3a7759990d.webp" class="v30-header-mascot" alt="Linh vật quán">
+          <span id="header-shop-avatar-emoji" class="header-shop-avatar-emoji hidden">🐰</span>
+          <span id="header-career-icon">🧋</span>
+        </button>
+        <div class="v8774-identity">
+          <button class="shop-name-button tap-scale" onclick="openRenameModal('shop')" title="Đổi tên quán">
+            <h1 id="header-shop-name" class="truncate">Trà Sữa Bé Thỏ</h1><span class="v8774-pencil">✎</span>
           </button>
-          <div class="min-w-0 flex-1">
-            <div class="flex items-center gap-1 min-w-0">
-              <button class="shop-name-button tap-scale" onclick="openRenameModal('shop')" title="Đổi tên quán">
-                <h1 id="header-shop-name" class="font-black text-[12px] tracking-tight truncate drop-shadow">Trà Sữa Bé Thỏ</h1>
-                <span class="text-[7px] opacity-80">✏️</span>
-              </button>
-              <span id="header-day-tag" class="bg-amber-900/80 text-[7px] px-1.5 py-0.5 rounded-full font-bold shrink-0">Ngày 1</span>
-            </div>
-            <div class="header-left-stats">
-              <span class="compact-chip chip-coin">🪙 <span id="stat-coins">450 Xu</span></span>
-              <button type="button" onclick="openAccountScreen()" title="Đổi tài khoản" class="compact-chip chip-player tap-scale">👤 <span id="header-player-name">Bạn</span></button>
-              <span class="compact-chip chip-rate v72-account-rating" title="Sao đánh giá quán"><span id="header-rating-badge">⭐ 5.0</span><span id="header-rating-count" class="opacity-80">(1)</span></span>
-            </div>
-            <div class="header-exp-wrap" title="Kinh nghiệm">
-              <div id="stat-exp-bar" class="bg-gradient-to-r from-emerald-400 to-lime-300 h-full w-[10%] rounded-full transition-all duration-300"></div>
-            </div>
-          </div>
+          <span id="header-day-tag" class="v8774-day">Ngày 1</span>
         </div>
-        <div class="header-right-stack">
-          <div class="header-right-actions">
-            <button onclick="openSaveModal()" title="Lưu game" class="w-7 h-7 bg-amber-800/80 hover:bg-amber-800 rounded-xl text-[11px] font-bold text-amber-100 tap-scale border border-amber-500/40 flex items-center justify-center">💾</button>
-            <button onclick="openShopHubModal()" title="Trung tâm quán" class="w-7 h-7 header-manage-shop-btn rounded-xl text-[11px] font-bold tap-scale flex items-center justify-center shadow">📋</button>
-            <button id="v87-day-button" type="button" onclick="openEndDayModal()" title="Kết thúc ngày (khác với đóng ca)" aria-label="Qua ngày" class="v87-day-button tap-scale">🌙</button>
-            <button onclick="openBankruptcyModal()" title="Phá sản / đổi nghề" class="w-7 h-7 bg-rose-700 hover:bg-rose-800 rounded-xl text-[11px] font-black text-rose-100 tap-scale border border-rose-500/40 flex items-center justify-center shadow">💥</button>
-          </div>
-          <div class="header-right-stats">
-            <span class="compact-chip chip-level">Lv.<span id="stat-level-num">1</span></span>
-            <button type="button" class="v72-shop-stage-btn tap-scale" onclick="openShopStageQuickModal()" title="Xem điều kiện và nâng bậc quán">
-              <span>🏪</span><span id="header-shop-stage">Bậc 1</span><span class="v72-stage-chevron">↑</span>
-            </button>
-          </div>
+        <div class="v8774-actions">
+          <button type="button" class="v8774-icon-button v8774-control" id="v8774-bell-btn" onclick="BPVQHeader.toggle('bell')" aria-label="Xem thông báo" aria-expanded="false" title="Thông báo nhanh">🔔<span id="header-notif-badge" class="v8774-unread hidden">0</span></button>
+          <button type="button" class="v8774-icon-button v8774-control" id="v8774-menu-btn" onclick="BPVQHeader.toggle('menu')" aria-label="Mở chức năng khác" aria-expanded="false" title="Các chức năng khác">⋯</button>
         </div>
       </div>
+      <div class="v8774-statline">
+        <span class="v8774-chip v8774-coin" title="Tiền hiện có">🪙 <span id="stat-coins">450 Xu</span></span>
+        <span class="v8774-chip v8774-rating" title="Sao đánh giá quán"><span id="header-rating-badge">⭐ 5.0</span><span id="header-rating-count">(1)</span></span>
+        <span class="v8774-chip v8774-level">Lv.<span id="stat-level-num">1</span></span>
+        <button type="button" class="v8774-chip v8774-stage tap-scale" onclick="openShopStageQuickModal()" title="Xem điều kiện nâng bậc (vẫn tốn Xu)">🏪 <span id="header-shop-stage">Bậc 1</span></button>
+        <div class="header-exp-wrap v8774-exp" title="Kinh nghiệm"><div id="stat-exp-bar" class="bg-gradient-to-r from-emerald-400 to-lime-300 h-full w-[10%] rounded-full transition-all duration-300"></div></div>
+      </div>
+      <section id="v8774-bell-panel" class="v8774-popover hidden" aria-label="Thông báo gần đây" role="dialog" aria-modal="false"></section>
+      <section id="v8774-menu-panel" class="v8774-popover v8774-menu hidden" aria-label="Chức năng quán" role="dialog" aria-modal="false">
+        <div class="v8774-menu-heading">Điều khiển quán</div>
+        <div class="v8774-menu-grid">
+          <button id="v87-day-button" type="button" onclick="BPVQHeader.close();openEndDayModal()" title="Kết thúc ngày (khác đóng ca)">🌙 <span>Qua ngày</span></button>
+          <button type="button" onclick="BPVQHeader.close();openShopHubModal()">📋 <span>Quản lý quán</span></button>
+          <button type="button" onclick="BPVQHeader.close();openShopStageQuickModal()">🏗️ <span>Tăng bậc</span></button>
+          <button type="button" onclick="BPVQHeader.close();openAccountScreen()">👤 <span id="header-player-name">Tài khoản</span></button>
+          <button type="button" onclick="BPVQHeader.close();openSmartPhoneModal();VillageOS.open('settings')">⚙️ <span>Cài đặt / Lưu</span></button>
+          <button type="button" class="v8774-danger" onclick="BPVQHeader.close();openBankruptcyModal()">💥 <span>Đổi nghề / Phá sản</span></button>
+        </div>
+        <p class="v8774-menu-note">Tăng bậc vẫn cần đủ điều kiện và Xu. Đổi nghề sẽ được chuyển vào app Nhân Vật ở bản tiếp theo.</p>
+      </section>
     </header>
 
     <nav class="compact-nav sticky z-30 bg-white/95 backdrop-blur border-b border-amber-200/80 px-2 shadow-sm">
@@ -1276,9 +1275,9 @@
     </div>
 
     <!-- THÔNG BÁO ĐIỆN THOẠI -->
-    <div id="modal-notifications" class="fixed inset-0 z-[65] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
+    <div id="modal-notifications" class="v8774-notifications-modal fixed inset-0 z-[65] bg-black/80 backdrop-blur-sm hidden flex items-center justify-center p-4">
       <div class="w-full max-w-sm max-h-[76vh] overflow-hidden bg-slate-950 text-white rounded-3xl border border-sky-500/40 shadow-2xl flex flex-col">
-        <div class="p-3 flex items-center justify-between border-b border-slate-800"><div><b class="text-sm text-sky-300">🔔 Trung Tâm Thông Báo</b><p class="text-[8px] text-slate-500">Biến cố, khách đặc biệt và quà hiếm • không spam đơn giao hàng</p></div><button onclick="closeNotificationsModal()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
+        <div class="p-3 flex items-center justify-between border-b border-slate-800"><div><b class="text-sm text-sky-300">🔔 Trung Tâm Thông Báo</b><p class="text-[8px] text-slate-500">Thời tiết · Sự kiện · Khởi nghiệp · Lịch sử</p></div><button onclick="closeNotificationsModal()" class="w-7 h-7 rounded-full bg-slate-800">✕</button></div>
         <div id="notifications-list" class="p-2.5 overflow-y-auto no-scrollbar space-y-1.5"></div>
       </div>
     </div>
@@ -1588,5 +1587,6 @@
   <script src="js/v8772-releases.js?v=87.7.2"></script>
   <script src="js/v8772-thitran-os.js?v=87.7.3"></script>
   <script src="js/v8773-anime-signature.js?v=87.7.3"></script>
+  <script src="js/v8774-header-notification.js?v=87.7.4"></script>
 </body>
 </html>

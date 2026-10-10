@@ -29,7 +29,7 @@
   {id:'barn',title:'Chuồng và vật nuôi',body:'Vào Chuồng để xem các con vật cùng nguyên liệu chăn nuôi.',target:'#nav-btn-barn',nav:'barn',check:()=>!byId('tab-barn')?.classList.contains('hidden')},
   {id:'village',title:'Khám phá Làng cùng Bé Bơ',body:'Vào Làng để gặp cư dân, khám phá các khu vực và làm nhiệm vụ NPC. Bé Bơ sẽ giúp bạn quen với nơi này.',target:'#nav-btn-village',nav:'village',check:()=>!byId('tab-village')?.classList.contains('hidden')},
   {id:'npc',title:'Gặp NPC và làm nhiệm vụ',body:'Hãy xem các cư dân và nhiệm vụ trong Làng. Chạm nhân vật để trò chuyện hoặc nhận việc. Có thể quay lại làm sau khi đã mở khóa.',target:'#tab-village .village-world, #tab-village [data-npc], #tab-village button[onclick*="village"]',nav:'village',manual:true},
-  {id:'upgrade',title:'Nâng bậc quán',body:'Bấm Bậc quán phía trên để xem điều kiện nâng cấp. Bạn không cần mua ngay, chỉ cần mở và xem.',target:'.v72-shop-stage-btn',check:()=>!byId('modal-shop-stage-quick')?.classList.contains('hidden')},
+  {id:'upgrade',title:'Nâng bậc quán',body:'Bấm Bậc quán phía trên để xem điều kiện nâng cấp. Bạn không cần mua ngay, chỉ cần mở và xem.',target:'.v8774-stage',check:()=>!byId('modal-shop-stage-quick')?.classList.contains('hidden')},
   {id:'skill',title:'Nâng cấp kỹ năng nhân vật',body:'Mở Điện thoại → Phát triển → Kỹ năng. Điểm kỹ năng sẽ giúp bạn cải thiện hoạt động kinh doanh.',target:'#papp-btn-progress',check:()=>!byId('phone-app-progress')?.classList.contains('hidden')},
   {id:'sale',title:'Săn sale và công thức',body:'Vào Điện thoại → Soppi để xem Săn Sale và mục Công Thức. Không cần mua hàng để hoàn thành bài học.',target:'#papp-btn-soppi',check:()=>!byId('phone-app-soppi')?.classList.contains('hidden')}
  ];

@@ -1330,7 +1330,8 @@ clearTimeout(window._toastTimeout);
       const unread = gameState.notifications.filter(n => !n.read).length;
       const main = document.getElementById('phone-notif-badge');
       const phone = document.getElementById('phone-notification-count');
-      [main, phone].forEach(el => {
+      const header = document.getElementById('header-notif-badge');
+      [main, phone, header].forEach(el => {
         if (!el) return;
         if (unread > 0) {
           el.classList.remove('hidden');
@@ -1345,7 +1346,7 @@ clearTimeout(window._toastTimeout);
       ensureV6State();
       const modal = document.getElementById('modal-notifications');
       if (modal) modal.classList.remove('hidden');
-      gameState.notifications.forEach(n => n.read = true);
+      // v87.7.4: opening the inbox does not mark every message as read.
       renderNotificationsList();
       renderNotificationBadge();
       saveGameToStorage();
@@ -1358,21 +1359,61 @@ clearTimeout(window._toastTimeout);
       playSound('click');
     }
 
+    // v87.7.4: one notification source shared by phone, Header and save.
+    function getBPVQNotificationGroup(n) {
+      const kind = String(n && n.type || '').toLowerCase();
+      if (kind === 'weather') return 'weather';
+      if (['event','incident','festival','market','world','special','npc'].includes(kind)) return 'events';
+      return 'other';
+    }
+
+    function bpvqSetNotificationFilter(category) {
+      window.BPVQNotificationFilter = ['all','weather','events','other'].includes(category) ? category : 'all';
+      renderNotificationsList();
+    }
+
+    function bpvqReadGameNotification(id) {
+      ensureV6State();
+      const n = gameState.notifications.find(item => String(item.id) === String(id));
+      if (!n) return;
+      if (!n.read) {
+        n.read = true;
+        saveGameToStorage();
+      }
+      renderNotificationsList();
+      renderNotificationBadge();
+      if (window.BPVQHeader) window.BPVQHeader.refresh();
+    }
+
+    function bpvqReadAllNotifications() {
+      ensureV6State();
+      const hadUnread = gameState.notifications.some(n => !n.read);
+      if (!hadUnread) return;
+      gameState.notifications.forEach(n => { n.read = true; });
+      renderNotificationBadge();
+      renderNotificationsList();
+      saveGameToStorage();
+      if (window.BPVQHeader) window.BPVQHeader.refresh();
+    }
+
     function renderNotificationsList() {
       const list = document.getElementById('notifications-list');
       if (!list) return;
       ensureV6State();
-      if (gameState.notifications.length === 0) {
-        list.innerHTML = `<div class="text-center py-8 text-slate-500 text-xs">🔕 Chưa có thông báo nào.</div>`;
-        return;
-      }
-      list.innerHTML = gameState.notifications.map(n => {
-        const dot = n.read ? '' : '<span class="w-2 h-2 rounded-full bg-rose-400 shrink-0"></span>';
-        return `<div class="p-2 rounded-2xl border border-slate-800 bg-slate-900/90 flex items-start gap-2">
-          <span class="text-2xl">${n.icon || '🔔'}</span>
-          <div class="flex-1 min-w-0"><div class="flex items-center gap-1"><b class="text-[10px] text-white">${escapeHtmlText(n.title)}</b>${dot}</div><p class="text-[8px] text-slate-400 leading-relaxed">${escapeHtmlText(n.body)}</p><span class="text-[7px] text-slate-600 font-bold">Ngày ${n.day}</span></div>
-        </div>`;
-      }).join('');
+      const filter = window.BPVQNotificationFilter || 'all';
+      const defs = [['all','Tất cả'],['weather','Thời tiết'],['events','Sự kiện'],['other','Khác']];
+      const filters = defs.map(([key,label]) => `<button type="button" class="v8774-filter ${filter === key ? 'is-active' : ''}" onclick="bpvqSetNotificationFilter('${key}')">${label}</button>`).join('');
+      const visible = gameState.notifications.filter(n => filter === 'all' || getBPVQNotificationGroup(n) === filter);
+      const unread = gameState.notifications.filter(n => !n.read).length;
+      const cards = visible.length ? visible.map(n => {
+        const icon = escapeHtmlText(String(n.icon || '🔔'));
+        const dot = n.read ? '' : '<i class="v8774-dot" aria-label="Chưa đọc"></i>';
+        return `<button type="button" class="v8774-notification ${n.read ? 'is-read' : 'is-unread'}" onclick="bpvqReadGameNotification(${Number(n.id)||0})">
+          <span class="v8774-notification-icon">${icon}</span>
+          <span class="v8774-notification-text"><span class="v8774-notification-title">${escapeHtmlText(n.title)}</span><span class="v8774-notification-copy">${escapeHtmlText(n.body)}</span><span class="v8774-notification-day">Ngày ${Number(n.day)||1} · ${n.read ? 'Đã đọc' : 'Chạm để đánh dấu đã đọc'}</span></span>${dot}
+        </button>`;
+      }).join('') : '<div class="v8774-empty">🔕 Chưa có thông báo ở nhóm này.</div>';
+      list.innerHTML = `<div class="v8774-inbox-tools"><span>${unread} tin chưa đọc</span><button type="button" onclick="bpvqReadAllNotifications()" ${!unread?'disabled':''}>✓ Đọc tất cả</button></div><div class="v8774-inbox-filters">${filters}</div><div class="v8774-inbox-cards">${cards}</div>`;
     }
 
     function getActiveWorldEventConfig() {
