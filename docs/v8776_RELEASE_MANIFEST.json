@@ -1,0 +1,13 @@
+{
+  "version": "v87.7.6",
+  "base": "v87.7.5.1",
+  "changed": [
+    "index.html",
+    "css/v8776-swipe-notifications.css",
+    "js/v8776-swipe-notifications.js",
+    "docs/v8776_BAN_GIAO_VA_KIEM_THU.md"
+  ],
+  "all_scripts_checked": 11,
+  "verified_css": 19,
+  "verified_js": 12
+}
