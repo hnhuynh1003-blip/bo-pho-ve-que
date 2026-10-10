@@ -1,0 +1,20 @@
+/* Bỏ Phố Về Quê v87.8.0.1 — chọn giống và huy chương Nhà Nông */
+.farm-seed-picker { position: fixed; inset:0; z-index:9999; display:flex; align-items:center; justify-content:center; padding:14px; }
+.farm-seed-picker.hidden { display:none; }
+.farm-seed-picker-backdrop { position:absolute; inset:0; background:rgba(11,36,27,.70); backdrop-filter:blur(4px); }
+.farm-seed-picker-card { position:relative; width:min(440px,100%); max-height:min(82dvh,720px); overflow:auto; border:2px solid #d0ac75; border-radius:24px; background:linear-gradient(#fffdf5,#fff2d9); color:#4b3720; box-shadow:0 15px 45px #0005; padding:15px; }
+.farm-seed-picker-top { display:flex; justify-content:space-between; align-items:flex-start; gap:12px; margin-bottom:10px; }
+.farm-seed-picker-top h3 { font-size:16px; font-weight:900; }
+.farm-seed-picker-top p { font-size:11px; color:#896941; margin-top:3px; }
+.farm-seed-picker-top>button { min-width:40px; min-height:40px; border-radius:12px; background:#eedcbe; font-weight:900; }
+#farm-seed-picker-grid { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px; }
+.farm-seed-choice { display:flex; align-items:center; gap:7px; text-align:left; min-height:70px; padding:8px; border:1px solid #c6dba9; border-radius:14px; background:#f1fbea; color:#234a37; }
+.farm-seed-choice:active { transform:scale(.99); }
+.farm-seed-choice.farm-seed-unavailable { opacity:.63; background:#f1eee8; border-color:#dfd9ce; color:#6e6559; }
+.farm-seed-icon { font-size:24px; flex:none; }
+.farm-seed-choice-body { flex:1; min-width:0; display:flex; flex-direction:column; gap:3px; }
+.farm-seed-choice-body b { font-size:11px; font-weight:800; }
+.farm-seed-choice-body small { font-size:10px; }
+.farm-seed-choice-tail { font-size:9px; font-weight:800; white-space:nowrap; }
+.farm-seed-picker-hint { font-size:10px; color:#7c6343; padding:10px 2px 0; }
+@media (max-width:365px) { .farm-seed-choice { padding:6px; gap:5px; } .farm-seed-icon { font-size:20px; } .farm-seed-choice-tail { font-size:8px; } }

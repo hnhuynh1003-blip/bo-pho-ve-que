@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v87.7.7.2 — Phone Home Weather</title>
+  <title>Bỏ Phố Về Quê v87.8.0 — Nguồn Nguyên Liệu</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -39,6 +39,8 @@
   <link rel="stylesheet" href="css/v8777-phone-premium.css?v=87.7.7" />
   <link rel="stylesheet" href="css/v87771-phone-repair.css?v=87.7.7.1" />
   <link rel="stylesheet" href="css/v87772-phone-weather-wallpaper.css?v=87.7.7.2" />
+  <link rel="stylesheet" href="css/v8780-source-ledger.css?v=87.8.0" />
+  <link rel="stylesheet" href="css/v87801-farm-balance.css?v=87.8.0.1" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -612,6 +614,7 @@
 
         <div id="farm-automation-panel" class="rounded-2xl border border-emerald-200 bg-emerald-50/70 p-2.5 shadow-sm"></div>
         <div id="farm-event-panel" class="rounded-2xl border border-lime-200 bg-lime-50/80 p-2.5 shadow-sm"></div>
+        <div id="farm-medal-panel" class="rounded-2xl border border-emerald-200 bg-gradient-to-r from-emerald-50 to-amber-50 p-2.5 shadow-sm"></div>
         <div class="grid grid-cols-2 gap-2" id="farm-plots-grid"></div>
 
         <div class="tab-soft-card p-2.5 rounded-2xl shadow-sm space-y-1.5">
@@ -799,6 +802,32 @@
           <button type="button" data-v877-filter="farm" onclick="filterWarehouseCategory('farm')">🌾 Nông sản</button>
           <button type="button" data-v877-filter="special" onclick="filterWarehouseCategory('special')">🎁 Vật phẩm</button>
           <button type="button" data-v877-filter="souvenir" onclick="filterWarehouseCategory('souvenir')">🏆 Lưu niệm</button>
+        </div>
+
+
+        <div class="v8780-source-overview">
+          <div class="v8780-source-summary">
+            <span class="v8780-source-symbol" aria-hidden="true">🌾</span>
+            <div class="v8780-source-intro">
+              <strong>Hành trình nguyên liệu</strong>
+              <span>Vườn & Chuồng → Kho → Chế biến → Quầy</span>
+            </div>
+            <button id="v8780-source-toggle" type="button" aria-controls="v8780-source-panel" aria-expanded="false">Xem nguồn <span aria-hidden="true">⌄</span></button>
+          </div>
+          <section id="v8780-source-panel" class="v8780-source-panel" hidden aria-label="Nguồn nguyên liệu và đường chế biến dự kiến">
+            <div class="v8780-source-filters" role="group" aria-label="Lọc nguồn nguyên liệu">
+              <button type="button" class="active" data-v8780-filter="all" aria-pressed="true">Tất cả</button>
+              <button type="button" data-v8780-filter="farm" aria-pressed="false">🌱 Vườn</button>
+              <button type="button" data-v8780-filter="barn" aria-pressed="false">🐄 Chuồng</button>
+              <button type="button" data-v8780-filter="owned" aria-pressed="false">📦 Đang có</button>
+            </div>
+            <p class="v8780-source-note">Đây là <b>sơ đồ định hướng</b> cho các đợt chế biến sắp tới; <b>chưa tự đổi vật phẩm</b> hoặc mở công thức. Số lượng lấy từ Kho hiện tại.</p>
+            <div id="v8780-source-list" class="v8780-source-list" aria-live="polite"></div>
+            <div class="v8780-source-bottom">
+              <button type="button" id="v8780-source-refresh">↻ Cập nhật tồn kho</button>
+              <span>Một kho chung, không cấp thưởng hay trừ Xu.</span>
+            </div>
+          </section>
         </div>
 
         <div class="grid grid-cols-3 gap-1.5" id="warehouse-items-grid"></div>
@@ -1598,5 +1627,6 @@
   <script src="js/v8777-phone-premium.js?v=87.7.7"></script>
   <script src="js/v87771-phone-repair.js?v=87.7.7.1"></script>
   <script src="js/v87772-phone-weather-wallpaper.js?v=87.7.7.2"></script>
+  <script src="js/v8780-source-ledger.js?v=87.8.0"></script>
 </body>
 </html>

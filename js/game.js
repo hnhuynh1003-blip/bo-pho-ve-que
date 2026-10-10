@@ -1140,16 +1140,34 @@ clearTimeout(window._toastTimeout);
       if (!gameState.automation || typeof gameState.automation !== 'object') gameState.automation = { farmEnabled: false, barnEnabled: false, shopFastEnabled: false };
       gameState.automation.farmEnabled = !!gameState.automation.farmEnabled;
       gameState.automation.barnEnabled = !!gameState.automation.barnEnabled;
+      // v87.8.0.1: unlock medals via gameplay, not inventory or external clock.
+      if (!gameState.farmAchievements || typeof gameState.farmAchievements !== 'object') {
+        gameState.farmAchievements = { totalHarvests: 0, cropVarieties: [], medalTier: 0 };
+      }
+      const farming = gameState.farmAchievements;
+      farming.totalHarvests = Math.max(0, Math.floor(Number(farming.totalHarvests) || 0));
+      farming.cropVarieties = Array.isArray(farming.cropVarieties)
+        ? [...new Set(farming.cropVarieties.filter(key => Object.prototype.hasOwnProperty.call(FARM_SEEDS_CONFIG, key)))] : [];
+      const earnedTier = farming.totalHarvests >= 150 && farming.cropVarieties.length >= 5 ? 2
+        : farming.totalHarvests >= 30 && farming.cropVarieties.length >= 3 ? 1 : 0;
+      farming.medalTier = Math.min(2, Math.max(earnedTier, Math.floor(Number(farming.medalTier) || 0)));
       if (Array.isArray(gameState.farmPlots)) {
         gameState.farmPlots.forEach(plot => {
           if (!plot || typeof plot !== 'object') return;
           if (typeof plot.lastSeed !== 'string') plot.lastSeed = plot.seed || null;
+          if (!Number.isFinite(Number(plot.harvestDay))) plot.harvestDay = 0;
+          if (!Number.isFinite(Number(plot.harvestCount))) plot.harvestCount = 0;
+          plot.harvestCount = Math.max(0, Math.floor(Number(plot.harvestCount)));
         });
       }
       if (gameState.animals && typeof gameState.animals === 'object') {
         Object.values(gameState.animals).forEach(anim => {
           if (!anim || typeof anim !== 'object') return;
           anim.autoFed = !!anim.autoFed;
+          // For old saves where an animal is already fed, preserve that feed
+          // for the current day rather than silently allowing a second one.
+          if (!Number.isFinite(Number(anim.lastFedDay))) anim.lastFedDay = anim.autoFed ? Number(gameState.day) || 1 : 0;
+          if (!Number.isFinite(Number(anim.lastCollectDay))) anim.lastCollectDay = 0;
           anim.affection = Math.max(0, Math.min(100, Number(anim.affection) || 10));
           anim.careCooldown = Math.max(0, Number(anim.careCooldown) || 0);
         });
@@ -8520,9 +8538,68 @@ function v8752BuyFestival(id){
       saveGameToStorage();
     }
 
+    // v87.8.0.1 — daily harvest quotas and persistent farmer medals.
+    function farmDayHarvestCount(plot) {
+      return plot && Number(plot.harvestDay) === Number(gameState.day) ? Math.max(0, Number(plot.harvestCount) || 0) : 0;
+    }
+    function farmHarvestLimit() {
+      return 1 + Math.min(2, Math.max(0, Number(gameState.farmAchievements?.medalTier) || 0));
+    }
+    function farmRegisterHarvest(plot, cropKey) {
+      const day = Number(gameState.day) || 1;
+      plot.harvestCount = farmDayHarvestCount(plot) + 1;
+      plot.harvestDay = day;
+      const a = gameState.farmAchievements;
+      a.totalHarvests += 1;
+      if (!a.cropVarieties.includes(cropKey)) a.cropVarieties.push(cropKey);
+      const newTier = a.totalHarvests >= 150 && a.cropVarieties.length >= 5 ? 2
+        : a.totalHarvests >= 30 && a.cropVarieties.length >= 3 ? 1 : 0;
+      if (newTier > a.medalTier) {
+        a.medalTier = newTier;
+        const label = newTier === 2 ? '🥈 Huy Chương Bạc' : '🥉 Huy Chương Đồng';
+        const extra = newTier === 2 ? 2 : 1;
+        showToast(`Đạt ${label}! Mỗi thửa được thêm ${extra} lượt thu hoạch/ngày.`, '🏅');
+        if (typeof pushGameNotification === 'function') {
+          pushGameNotification('🏅 Thành tựu Nhà Nông', `Bạn đã nhận ${label}: mỗi thửa được thu hoạch tối đa ${1 + extra} lần mỗi ngày!`, '🏅', 'farm');
+        }
+      }
+    }
+    function renderFarmMedalPanel() {
+      const box = document.getElementById('farm-medal-panel');
+      if (!box) return;
+      const a = gameState.farmAchievements;
+      const tier = a.medalTier;
+      const next = tier === 0 ? {count:30,varieties:3,name:'Đồng 🥉'} : {count:150,varieties:5,name:'Bạc 🥈'};
+      const progress = tier === 2 ? 'Đã đạt cấp huy chương tối đa của bản này.'
+        : `Tiếp theo: ${next.name} • ${Math.min(a.totalHarvests,next.count)}/${next.count} lượt • ${Math.min(a.cropVarieties.length,next.varieties)}/${next.varieties} giống khác nhau`;
+      box.innerHTML = `<div class="flex items-center gap-2 justify-between">
+        <div class="min-w-0"><b class="text-[11px] text-emerald-950">🏅 Huy Chương Nhà Nông ${tier === 2 ? '🥈 Bạc' : tier === 1 ? '🥉 Đồng' : '· Chưa có'}</b>
+        <p class="text-[9px] text-emerald-800">Mỗi thửa được thu hoạch <b>${farmHarvestLimit()} lần/ngày</b> • Tự động cũng tuân thủ giới hạn</p></div>
+        <span class="shrink-0 bg-white/90 border border-emerald-200 text-emerald-900 px-2 py-1 rounded-xl text-[10px] font-bold">${a.totalHarvests} lần</span>
+      </div><p class="text-[9px] text-emerald-700 mt-1">${progress}</p>`;
+    }
+    function closeFarmSeedPicker() {
+      document.getElementById('farm-seed-picker')?.classList.add('hidden');
+    }
+    function plantFarmSelectedSeed(plotIdx, cropKey) {
+      const plot = gameState.farmPlots[plotIdx], cfg = FARM_SEEDS_CONFIG[cropKey];
+      if (!plot || !plot.unlocked || plot.mortgaged || plot.seed || !cfg) return showToast('Thửa đất không thể gieo lúc này.', '⚠️');
+      if (Number(gameState.level) < cfg.unlockLv) return showToast(`Cần Lv.${cfg.unlockLv} mới được gieo giống này!`, '🔒');
+      if (!tryConsumeFarmSeed(cropKey, false)) return showToast('Không còn hạt giống này trong Kho!', '⚠️');
+      plot.seed = cropKey;
+      plot.lastSeed = cropKey; // auto gieo lại dùng giống đã chọn riêng cho thửa này
+      plot.growTimer = 0;
+      plot.watered = false;
+      closeFarmSeedPicker();
+      playSound('serve');
+      showToast(`Đã gieo ${cfg.name}!`, cfg.icon);
+      renderFarmUI();
+      saveGameToStorage();
+    }
+
     function autoHarvestPlot(plotIdx) {
       const plot = gameState.farmPlots[plotIdx];
-      if (!plot || !plot.seed || plot.mortgaged) return false;
+      if (!plot || !plot.seed || plot.mortgaged || farmDayHarvestCount(plot) >= farmHarvestLimit()) return false;
       const cropKey = plot.seed;
       const cropCfg = FARM_SEEDS_CONFIG[cropKey];
       if (!cropCfg || plot.growTimer < cropCfg.growTime) return false;
@@ -8530,6 +8607,7 @@ function v8752BuyFestival(id){
       const eventBonus = getFarmEventBonuses();
       const qty = 3 + bonus.farmYield + eventBonus.yield;
       gameState.inventory[cropCfg.cropKey] = (gameState.inventory[cropCfg.cropKey] || 0) + qty;
+      farmRegisterHarvest(plot, cropKey);
       plot.lastSeed = cropKey;
       plot.seed = null;
       plot.growTimer = 0;
@@ -8540,9 +8618,9 @@ function v8752BuyFestival(id){
 
     function autoReplantPlot(plotIdx) {
       const plot = gameState.farmPlots[plotIdx];
-      if (!plot || !plot.unlocked || plot.mortgaged || plot.seed || !plot.lastSeed) return false;
+      if (!plot || !plot.unlocked || plot.mortgaged || plot.seed || !plot.lastSeed || farmDayHarvestCount(plot) >= farmHarvestLimit()) return false;
       const cropKey = plot.lastSeed;
-      if (!FARM_SEEDS_CONFIG[cropKey]) return false;
+      if (!FARM_SEEDS_CONFIG[cropKey] || gameState.level < FARM_SEEDS_CONFIG[cropKey].unlockLv) return false;
       if (!tryConsumeFarmSeed(cropKey, true)) return false;
       plot.seed = cropKey;
       plot.growTimer = 0;
@@ -8567,7 +8645,7 @@ function v8752BuyFestival(id){
           </button>
         </div>
         <div class="grid grid-cols-2 gap-1 mt-2 text-[7px] font-bold">
-          <div class="rounded-lg p-1.5 ${gameState.level >= 14 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-400'}">🌾 Lv.14 • Tự chăm/cho ăn 1 lần mỗi chu kỳ</div>
+          <div class="rounded-lg p-1.5 ${gameState.level >= 14 ? 'bg-amber-100 text-amber-800' : 'bg-slate-100 text-slate-400'}">🌾 Lv.14 • Tự chăm/cho ăn 1 lần/ngày</div>
           <div class="rounded-lg p-1.5 ${gameState.level >= 22 ? 'bg-orange-100 text-orange-800' : 'bg-slate-100 text-slate-400'}">🥛 Lv.22 • Tự thu sản phẩm khi sẵn sàng</div>
         </div>
         <div class="mt-1.5 text-[7px] text-slate-500 font-bold">${formatFarmBarnBonus('barn')}</div>`;
@@ -8585,10 +8663,11 @@ function v8752BuyFestival(id){
     function autoCareBarnAnimal(animalKey) {
       const cfg = BARN_ANIMALS_CONFIG[animalKey];
       const anim = gameState.animals[animalKey];
-      if (!cfg || !anim || !anim.unlocked || anim.ready || anim.autoFed) return false;
+      if (!cfg || !anim || !anim.unlocked || anim.ready || anim.autoFed || Number(anim.lastFedDay) === Number(gameState.day)) return false;
       if (cfg.feedCostItem && !tryConsumeBarnFeed(cfg.feedCostItem, true)) return false;
       anim.timer += 4;
       anim.autoFed = true;
+      anim.lastFedDay = Number(gameState.day);
       anim.affection = Math.min(100, (Number(anim.affection) || 10) + 1);
       return true;
     }
@@ -8596,7 +8675,7 @@ function v8752BuyFestival(id){
     function autoCollectBarnProduct(animalKey) {
       const cfg = BARN_ANIMALS_CONFIG[animalKey];
       const anim = gameState.animals[animalKey];
-      if (!cfg || !anim || !anim.unlocked || !anim.ready) return false;
+      if (!cfg || !anim || !anim.unlocked || !anim.ready || Number(anim.lastCollectDay) === Number(gameState.day)) return false;
       const bonus = getFarmBarnSouvenirBonuses();
       const eventBonus = getBarnEventBonuses();
       const affectionBonus = getAnimalAffectionYield(anim);
@@ -8604,13 +8683,16 @@ function v8752BuyFestival(id){
       gameState.inventory[cfg.productKey] = (gameState.inventory[cfg.productKey] || 0) + qty;
       anim.ready = false;
       anim.timer = 0;
-      anim.autoFed = false;
+      anim.lastCollectDay = Number(gameState.day);
+      anim.autoFed = Number(anim.lastFedDay) === Number(gameState.day);
       addExp(8);
       return true;
     }
 
     function renderFarmUI() {
+      ensureV6State();
       renderFarmAutomationPanel();
+      renderFarmMedalPanel();
       renderFarmEventPanel();
       const plotsGrid = document.getElementById('farm-plots-grid');
       if (plotsGrid) {
@@ -8645,11 +8727,13 @@ function v8752BuyFestival(id){
                 <span class="text-3xl mb-0.5">🌱</span>
                 <b class="text-[10px] text-emerald-800">${cfg.name}</b>
                 <span class="text-[8px] text-emerald-600 font-bold">Chạm Gieo Hạt</span>
+                <span class="text-[8px] text-emerald-600">🧺 ${farmDayHarvestCount(plot)}/${farmHarvestLimit()} lượt hôm nay</span>
               </div>
             `;
           } else {
             const cropCfg = FARM_SEEDS_CONFIG[plot.seed];
             const isReady = plot.growTimer >= cropCfg.growTime;
+            const reachedLimit = farmDayHarvestCount(plot) >= farmHarvestLimit();
             const pct = Math.min(100, Math.floor((plot.growTimer / cropCfg.growTime) * 100));
 
             plotsGrid.innerHTML += `
@@ -8664,11 +8748,13 @@ function v8752BuyFestival(id){
                 </div>
 
                 <div>
-                  ${isReady ? `
-                    <button onclick="harvestPlot(${idx})" class="w-full py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-[8px] rounded-lg shadow tap-scale">
-                      Thu Hoạch (+EXP)
-                    </button>
+                  ${isReady ? (reachedLimit ? `
+                    <div class="text-center bg-slate-200 text-slate-600 text-[8px] rounded-lg py-0.5 font-bold">⏳ Hết ${farmHarvestLimit()} lượt hôm nay</div>
                   ` : `
+                    <button onclick="harvestPlot(${idx})" class="w-full py-0.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-[8px] rounded-lg shadow tap-scale">
+                      🧺 Thu hoạch (${farmDayHarvestCount(plot)}/${farmHarvestLimit()})
+                    </button>
+                  `) : `
                     <button onclick="waterPlot(${idx})" class="w-full py-0.5 ${plot.watered ? 'bg-slate-200 text-slate-500' : 'bg-blue-500 hover:bg-blue-600 text-white'} font-bold text-[8px] rounded-lg tap-scale">
                       ${plot.watered ? 'Đã Tưới 💧' : 'Tưới Nước'}
                     </button>
@@ -8743,27 +8829,31 @@ function v8752BuyFestival(id){
     }
 
     function openPlantSelectModal(plotIdx) {
-      const availableCrops = Object.keys(FARM_SEEDS_CONFIG).filter(k => {
-        const sKey = FARM_SEEDS_CONFIG[k].seedKey;
-        return (gameState.inventory[sKey] || 0) > 0;
-      });
-
-      if (availableCrops.length === 0) {
-        return showToast("Bạn chưa có hạt giống nào! Hãy mua ở dưới!", "⚠️");
+      const plot = gameState.farmPlots[plotIdx];
+      if (!plot || !plot.unlocked || plot.mortgaged || plot.seed) return;
+      let modal = document.getElementById('farm-seed-picker');
+      if (!modal) {
+        modal = document.createElement('div');
+        modal.id = 'farm-seed-picker';
+        modal.className = 'farm-seed-picker hidden';
+        modal.innerHTML = '<div class="farm-seed-picker-backdrop" onclick="closeFarmSeedPicker()"></div><div class="farm-seed-picker-card" role="dialog" aria-modal="true" aria-labelledby="farm-seed-picker-title"><div class="farm-seed-picker-top"><div><h3 id="farm-seed-picker-title">🌱 Chọn giống cây</h3><p id="farm-seed-picker-subtitle"></p></div><button aria-label="Đóng" onclick="closeFarmSeedPicker()">✕</button></div><div id="farm-seed-picker-grid"></div><p class="farm-seed-picker-hint">Mỗi thửa ghi nhớ giống cuối cùng cho trợ lý tự gieo lại.</p></div>';
+        document.body.appendChild(modal);
       }
-
-      const pick = availableCrops[0];
-      const cfg = FARM_SEEDS_CONFIG[pick];
-      if (!tryConsumeFarmSeed(pick, false)) return showToast("Hạt giống vừa hết khỏi kho!", "⚠️");
-      gameState.farmPlots[plotIdx].seed = pick;
-      gameState.farmPlots[plotIdx].lastSeed = pick;
-      gameState.farmPlots[plotIdx].growTimer = 0;
-      gameState.farmPlots[plotIdx].watered = false;
-
-      playSound('serve');
-      showToast(`Đã gieo ${cfg.name}!`, cfg.icon);
-      renderFarmUI();
-      saveGameToStorage();
+      const sub = modal.querySelector('#farm-seed-picker-subtitle');
+      if (sub) sub.textContent = `${FARM_PLOTS_CONFIG[plotIdx].name} · ${farmDayHarvestCount(plot)}/${farmHarvestLimit()} lượt hôm nay`;
+      const grid = modal.querySelector('#farm-seed-picker-grid');
+      if (!grid) return;
+      grid.innerHTML = Object.keys(FARM_SEEDS_CONFIG).map(key => {
+        const cfg = FARM_SEEDS_CONFIG[key];
+        const qty = Math.max(0, Number(gameState.inventory[cfg.seedKey]) || 0);
+        const lvOk = gameState.level >= cfg.unlockLv;
+        const canUse = lvOk && qty > 0;
+        return `<button type="button" class="farm-seed-choice ${canUse ? '' : 'farm-seed-unavailable'}" ${canUse ? `onclick="plantFarmSelectedSeed(${plotIdx},'${key}')"` : 'disabled'}>
+          <span class="farm-seed-icon">${cfg.icon}</span><span class="farm-seed-choice-body"><b>${cfg.name}</b><small>${lvOk ? `Trong kho: ${qty} hạt` : `🔒 Mở ở Lv.${cfg.unlockLv}`}</small></span>
+          <span class="farm-seed-choice-tail">${canUse ? 'Gieo ›' : (lvOk ? 'Hết giống' : 'Khóa')}</span>
+        </button>`;
+      }).join('');
+      modal.classList.remove('hidden');
     }
 
     function waterPlot(plotIdx) {
@@ -8780,14 +8870,17 @@ function v8752BuyFestival(id){
     function harvestPlot(plotIdx) {
       const plot = gameState.farmPlots[plotIdx];
       if (!plot || !plot.seed) return;
+      if (farmDayHarvestCount(plot) >= farmHarvestLimit()) return showToast('Thửa này đã hết lượt thu hoạch hôm nay! 🌙', '⏳');
       const cropKey = plot.seed;
       const cropCfg = FARM_SEEDS_CONFIG[cropKey];
+      if (!cropCfg || plot.growTimer < cropCfg.growTime) return showToast('Cây chưa chín để thu hoạch!', '🌱');
       const cropItemKey = cropCfg.cropKey;
       const bonus = getFarmBarnSouvenirBonuses();
       const eventBonus = getFarmEventBonuses();
       const qty = 3 + bonus.farmYield + eventBonus.yield;
 
       gameState.inventory[cropItemKey] = (gameState.inventory[cropItemKey] || 0) + qty;
+      farmRegisterHarvest(plot, cropKey);
       addExp(18);
       playSound('coin');
       showToast(`Thu hoạch +${qty} ${cropCfg.name}!`, cropCfg.icon);
@@ -8847,7 +8940,8 @@ function v8752BuyFestival(id){
         const pct = Math.min(100, Math.floor((stateAnim.timer / cfg.cycleTime) * 100));
         const affection = Math.max(0, Math.min(100, Number(stateAnim.affection) || 0));
         const affectionLabel = getAnimalAffectionLabel(affection);
-        const fed = !!stateAnim.autoFed;
+        const fed = !!stateAnim.autoFed || Number(stateAnim.lastFedDay) === Number(gameState.day);
+        const collectedToday = Number(stateAnim.lastCollectDay) === Number(gameState.day);
         const canCare = (Number(stateAnim.careCooldown) || 0) <= 0;
         const feedText = cfg.feedCostItem ? (fed ? '🍚 Đã Ăn' : '🍚 Cho Ăn') : (fed ? '🌼 Đã Có Hoa' : '🌼 Bổ Sung Hoa');
 
@@ -8873,7 +8967,7 @@ function v8752BuyFestival(id){
               </div>
 
               <div class="grid grid-cols-2 gap-1.5">
-                ${isReady ? `<button onclick="collectBarnProduct('${k}')" class="py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-[9px] rounded-xl shadow tap-scale">${cfg.productIcon} Thu Hoạch</button>` : `<button onclick="feedBarnAnimal('${k}')" ${fed ? 'disabled' : ''} class="py-1.5 ${fed ? 'bg-slate-200 text-slate-400' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-black text-[9px] rounded-xl tap-scale">${feedText}</button>`}
+                ${isReady ? (collectedToday ? `<button disabled class="py-1.5 bg-slate-200 text-slate-500 font-black text-[9px] rounded-xl">⏳ Đã thu hôm nay</button>` : `<button onclick="collectBarnProduct('${k}')" class="py-1.5 bg-amber-500 hover:bg-amber-600 text-white font-black text-[9px] rounded-xl shadow tap-scale">${cfg.productIcon} Thu Hoạch</button>`) : `<button onclick="feedBarnAnimal('${k}')" ${fed ? 'disabled' : ''} class="py-1.5 ${fed ? 'bg-slate-200 text-slate-400' : 'bg-emerald-600 hover:bg-emerald-700 text-white'} font-black text-[9px] rounded-xl tap-scale">${feedText}</button>`}
                 <button onclick="careBarnAnimal('${k}')" ${canCare ? '' : 'disabled'} class="py-1.5 ${canCare ? 'bg-rose-500 hover:bg-rose-600 text-white' : 'bg-slate-200 text-slate-400'} font-black text-[9px] rounded-xl tap-scale">${canCare ? '🫶 Chăm Sóc' : `❤️ Chờ ${Math.ceil(stateAnim.careCooldown)}s`}</button>
               </div>
               <div class="text-[7px] text-center text-amber-800 font-bold">Cho ăn giúp chu kỳ chạy nhanh hơn • chăm sóc tăng tình cảm lâu dài</div>
@@ -8908,7 +9002,7 @@ function v8752BuyFestival(id){
       const anim = gameState.animals[animalKey];
       if (!cfg || !anim || !anim.unlocked) return;
       if (anim.ready) return showToast('Thu hoạch sản phẩm trước rồi hãy bắt đầu chu kỳ mới!', cfg.icon);
-      if (anim.autoFed) return showToast(`${anim.name} đã được cho ăn/chăm nguồn thức ăn trong chu kỳ này rồi!`, '🍚');
+      if (anim.autoFed || Number(anim.lastFedDay) === Number(gameState.day)) return showToast(`${anim.name} đã được cho ăn/chăm hôm nay rồi!`, '🍚');
 
       if (cfg.feedCostItem) {
         const feedCount = gameState.inventory[cfg.feedCostItem] || 0;
@@ -8921,6 +9015,7 @@ function v8752BuyFestival(id){
 
       anim.timer += cfg.feedCostItem ? 4 : 3;
       anim.autoFed = true;
+      anim.lastFedDay = Number(gameState.day);
       anim.affection = Math.min(100, (Number(anim.affection) || 10) + (cfg.feedCostItem ? 3 : 2));
       playSound('serve');
       showToast(cfg.feedCostItem ? `Đã cho ${anim.name} ăn no! ❤️ +3` : `Đã bổ sung hoa quanh ${anim.name}! ❤️ +2`, cfg.icon);
@@ -8948,7 +9043,8 @@ function v8752BuyFestival(id){
     function collectBarnProduct(animalKey) {
       const cfg = BARN_ANIMALS_CONFIG[animalKey];
       const anim = gameState.animals[animalKey];
-      if (!anim.ready) return;
+      if (!cfg || !anim || !anim.unlocked || !anim.ready) return;
+      if (Number(anim.lastCollectDay) === Number(gameState.day)) return showToast('Ô chuồng này đã nhận sản phẩm hôm nay rồi!', '⏳');
 
       const bonus = getFarmBarnSouvenirBonuses();
       const eventBonus = getBarnEventBonuses();
@@ -8957,7 +9053,8 @@ function v8752BuyFestival(id){
       gameState.inventory[cfg.productKey] = (gameState.inventory[cfg.productKey] || 0) + qty;
       anim.ready = false;
       anim.timer = 0;
-      anim.autoFed = false;
+      anim.lastCollectDay = Number(gameState.day);
+      anim.autoFed = Number(anim.lastFedDay) === Number(gameState.day);
       addExp(22);
       playSound('coin');
       showToast(`Đã thu hoạch +${qty} ${cfg.productName}!`, cfg.productIcon);
@@ -9150,6 +9247,9 @@ function v8752BuyFestival(id){
         currentCustomer=null;
         activeOnlineOrders=[];
         gameState.day += 1;
+        // Feed is once per day, not once per product cycle. Keep day stamps for persistence.
+        Object.values(gameState.animals || {}).forEach(anim => { if (anim) anim.autoFed = false; });
+        closeFarmSeedPicker();
         v8775FinishConstructionIfReady();
         v87531Morning();
         v87532Morning();
@@ -12984,7 +13084,7 @@ function v8752BuyFestival(id){
           const affectionSpeed = getAnimalAffectionSpeed(anim);
           anim.timer += 0.5 * feedFactor * (1 + fbBonus.barnGrowthPct + barnEventBonus.growthPct + affectionSpeed);
           barnChanged = true;
-          if (gameState.automation.barnEnabled && gameState.level >= 14 && !anim.autoFed) {
+          if (gameState.automation.barnEnabled && gameState.level >= 14 && !anim.autoFed && Number(anim.lastFedDay) !== Number(gameState.day)) {
             if (autoCareBarnAnimal(k)) barnChanged = true;
           }
           if (anim.timer >= cfg.cycleTime) anim.ready = true;

@@ -1,0 +1,19 @@
+{
+  "version": "v87.8.0.1",
+  "base_version": "v87.8.0",
+  "name": "Cân Bằng Nông Trại & Huy Chương Nhà Nông",
+  "changes": [
+    "Seed picker for 6 crops; selected crop remembered per plot",
+    "Daily harvest cap, bronze+silver medals",
+    "Animal daily feeding and collection cap",
+    "Save migration"
+  ],
+  "changed_files": [
+    "index.html",
+    "js/game.js",
+    "css/v87801-farm-balance.css",
+    "docs/v87801_CAN_BANG_NONG_TRAI_HUY_CHUONG.md"
+  ],
+  "fixture_tests": "20 functional browser checks; UI widths 320/375/390/430; node syntax checks",
+  "pending": "Full GitHub Pages and real device acceptance"
+}
