@@ -21,3 +21,71 @@ body.v8771-playing #v877-mika-launch{display:flex!important;z-index:75}
 .v8771-resume{width:100%;border:1px solid #e6b86e;background:#fff0ce;color:#765027;font-weight:900;font-size:11px;padding:9px;border-radius:10px;margin-bottom:8px}
 @media(max-width:420px){#v877-warehouse-filters{gap:5px!important}#v877-warehouse-filters button{padding:7px 9px!important;font-size:9.5px!important;min-height:33px}.v8771-story-card,.v8771-welcome-card{padding:12px}.v8771-scene{height:175px}#v8771-coach{bottom:78px;right:7px}}
 @media(prefers-reduced-motion:reduce){.v8771-spotlight{animation:none}}
+
+
+/* ===== v87.7.1 KHO / 5 bo loc tren CUNG MOT HANG =====
+   Gioi han trong #v877-warehouse-filters. Khong cham vao tab chinh, JS hay save.
+   Text goc trong button duoc giu lai cho screen reader; icon va nhan dung CSS. */
+#v877-warehouse-filters {
+    display: grid !important;
+    grid-template-columns: repeat(5, minmax(0, 1fr)) !important;
+    column-gap: 4px !important;
+    row-gap: 0 !important;
+    flex-wrap: nowrap !important;
+    width: 100% !important;
+    align-items: stretch !important;
+}
+#v877-warehouse-filters > button {
+    box-sizing: border-box !important;
+    display: flex !important;
+    flex-direction: column !important;
+    align-items: center !important;
+    justify-content: center !important;
+    flex: none !important;
+    min-width: 0 !important;
+    width: 100% !important;
+    height: 47px !important;
+    min-height: 47px !important;
+    padding: 4px 1px !important;
+    gap: 1px !important;
+    font-size: 0 !important; /* An noi dung nhan goc khi da dat nhan 2 dong bang pseudo */
+    line-height: 1 !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: clip !important;
+    border-radius: 13px !important;
+    -webkit-tap-highlight-color: transparent;
+}
+#v877-warehouse-filters > button::before {
+    display: block;
+    flex: 0 0 auto;
+    font-size: 17px !important;
+    line-height: 20px !important;
+    font-weight: 400 !important;
+}
+#v877-warehouse-filters > button::after {
+    display: block;
+    flex: 0 0 auto;
+    max-width: 100%;
+    font-family: inherit;
+    font-size: 10px !important;
+    font-weight: 850 !important;
+    line-height: 13px !important;
+    letter-spacing: -0.15px;
+    white-space: nowrap;
+}
+#v877-warehouse-filters > button[data-v877-filter="all"]::before { content: "📦"; }
+#v877-warehouse-filters > button[data-v877-filter="all"]::after { content: "Tất cả"; }
+#v877-warehouse-filters > button[data-v877-filter="craft"]::before { content: "🍳"; }
+#v877-warehouse-filters > button[data-v877-filter="craft"]::after { content: "Chế biến"; }
+#v877-warehouse-filters > button[data-v877-filter="farm"]::before { content: "🌾"; }
+#v877-warehouse-filters > button[data-v877-filter="farm"]::after { content: "Nông sản"; }
+#v877-warehouse-filters > button[data-v877-filter="special"]::before { content: "🎁"; }
+#v877-warehouse-filters > button[data-v877-filter="special"]::after { content: "Vật phẩm"; }
+#v877-warehouse-filters > button[data-v877-filter="souvenir"]::before { content: "🏆"; }
+#v877-warehouse-filters > button[data-v877-filter="souvenir"]::after { content: "Lưu niệm"; }
+@media (max-width: 360px) {
+    #v877-warehouse-filters { column-gap: 3px !important; }
+    #v877-warehouse-filters > button::after { font-size: 9px !important; letter-spacing: -0.2px; }
+    #v877-warehouse-filters > button::before { font-size: 16px !important; }
+}
