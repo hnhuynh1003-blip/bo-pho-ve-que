@@ -12,6 +12,7 @@
 .v877-empty{font-size:10px;color:#64748b;padding:5px 8px}.v877-info{font-size:10px;color:#64748b;line-height:1.5}
 #v877-mika-launch{position:fixed;bottom:85px;left:12px;z-index:48;border:2px solid #fff;border-radius:20px;padding:4px 7px 4px 4px;box-shadow:0 4px 18px #182a3666;background:#fef2db;color:#794d24;display:none;align-items:center;gap:5px;font-size:11px;font-weight:900;max-width:124px}
 #v877-mika-launch img{width:38px;height:38px;object-fit:cover;object-position:center 13%;border-radius:14px;background:#fff4de;}
+#v877-mika-launch span{display:inline-block}
 body:has(#screen-account.hidden):has(#screen-intro.hidden) #v877-mika-launch{display:flex}
 #v877-mika-nudge{position:fixed;bottom:139px;left:12px;z-index:48;max-width:min(290px,65vw);padding:8px;border-radius:12px;background:#fffaf0;border:1px solid #f4cf86;box-shadow:0 3px 12px #0003;color:#815d34;font-size:11px;opacity:0;pointer-events:none;transition:opacity .15s}
 #v877-mika-nudge.show{opacity:1}
@@ -29,4 +30,4 @@ body:has(#screen-account.hidden):has(#screen-intro.hidden) #v877-mika-launch{dis
 #v877-current-guide{background:white;border-radius:13px;padding:12px;border:1px solid #ebd8b9;color:#493e31}#v877-current-guide strong{font-size:13px}#v877-current-guide p{font-size:12px;line-height:1.6;margin:7px 0;color:#495467}#v877-current-guide small{font-size:10px;color:#24775f}
 .v877-actions{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}.v877-actions button{font-size:10px;padding:8px 9px;border-radius:8px;background:#f1ede4;border:1px solid #e3d5bd;color:#71512a;font-weight:850;flex:1 1 auto}.v877-actions button:first-child{background:#d97706;color:white;border-color:#d97706}
 .v877-privacy{display:block;font-size:9px;color:#7c8291;padding:9px 0 0}
-@media(max-width:440px){#warehouse-items-grid.v877-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#v877-mika-launch{bottom:76px;left:7px}#v877-warehouse-filters button{flex:1 1 auto} .v877-dialog{max-height:92dvh}}
+@media(max-width:440px){#warehouse-items-grid.v877-grid{grid-template-columns:repeat(2,minmax(0,1fr))}#v877-mika-launch{bottom:66px;left:8px;padding:3px 6px 3px 3px;gap:4px;border-radius:18px;max-width:90px;font-size:10px;box-shadow:0 3px 12px #182a3650}#v877-mika-launch img{width:30px;height:30px;border-radius:11px}#v877-mika-launch span{font-size:0;line-height:1}#v877-mika-launch span::after{content:"Mika";font-size:10px;font-weight:900}#v877-mika-nudge{bottom:108px;left:8px;max-width:min(250px,74vw);padding:7px;font-size:10px}#v877-warehouse-filters button{flex:1 1 auto} .v877-dialog{max-height:92dvh}}
