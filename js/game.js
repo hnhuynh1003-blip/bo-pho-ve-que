@@ -479,6 +479,7 @@
     }
 
     function isItemStoryUnlocked(itemKey, career = gameState.currentCareer) {
+      if (bpvqAdminTestActive() && gameState.adminSandbox.recipes && ITEM_DICTIONARY[itemKey]) return true;
       if(itemKey === 'crop_sim') return false; // Only found by harvesting in Đồi Sim
 
       const owner = getItemOwnerCareer(itemKey);
@@ -607,6 +608,7 @@
     }
 
     function getUnlockedRecipes(career) {
+      if (bpvqAdminTestActive() && gameState.adminSandbox.recipes) return (RECIPE_BOOK[career] || []).slice();
       const pool = RECIPE_BOOK[career] || [];
       const lv = Number(gameState.level) || 1;
       const stage = Number(gameState.shopStage) || 0;
@@ -2823,6 +2825,7 @@ clearTimeout(window._toastTimeout);
     }
 
     function isVillageZoneUnlocked(zone) {
+      if (bpvqAdminTestActive() && gameState.adminSandbox.maps && VILLAGE_ZONES[zone]) return true;
       return gameState.shopStage >= (zone.reqStage || 0) && gameState.level >= (zone.reqLevel || 1);
     }
 
@@ -7845,6 +7848,7 @@ function v8752BuyFestival(id){
       if(!gameState.v8743RecipeBox||gameState.v8743RecipeBox.day!==gameState.day)gameState.v8743RecipeBox={day:gameState.day,count:0};
     }
     function v8743RecipeReady(recipe){
+      if (bpvqAdminTestActive() && gameState.adminSandbox.recipes) return true;
       if(recipe.v8743Npc&&!gameState.v874NpcRewards?.[recipe.v8743Npc])return false;
       if(recipe.v8743Discover){v8743Ensure();return (Number(gameState.v8743RecipeFragments[recipe.id])||0)>=2;}
       return true;
@@ -12703,7 +12707,7 @@ function v8752BuyFestival(id){
       if (!confirm(`Xóa tài khoản "${acc.name}" và toàn bộ tiến trình của tài khoản này?`)) return;
       const accounts = readAccountRegistry().filter(a => a && a.id !== profileId);
       writeAccountRegistry(accounts);
-      try { localStorage.removeItem(getProfileStorageKey(profileId)); } catch (err) {}
+      try { localStorage.removeItem(getProfileStorageKey(profileId)); localStorage.removeItem('bpvq:admin:seed:'+profileId); } catch (err) {}
       if (activeProfileId === profileId) {
         activeProfileId = null;
         sessionGameActive = false;
@@ -12806,6 +12810,130 @@ function v8752BuyFestival(id){
       } catch (err) {}
       return false;
     }
+
+
+    // v87.7.5.1 Admin Test Mode — sandbox isolation lives in the game-state owner.
+    // This is a developer convenience, NOT authentication/security for a public static site.
+    function bpvqAdminTestActive(){
+      if (!activeProfileId || !String(activeProfileId).startsWith('test_')) return false;
+      const account=getAccountById(activeProfileId);
+      return !!(account?.adminTest && gameState?.adminSandbox?.id===activeProfileId);
+    }
+    function bpvqAdminInfo(){
+      const acc=activeProfileId && getAccountById(activeProfileId);
+      return {profileId:activeProfileId,isActive:!!sessionGameActive,isTest:bpvqAdminTestActive(),
+        sourceId:bpvqAdminTestActive()?gameState.adminSandbox.sourceId:null,
+        level:Number(gameState?.level)||1,stage:(Number(gameState?.shopStage)||0)+1,
+        day:Number(gameState?.day)||1,career:gameState?.currentCareer||'boba',
+        coins:Number(gameState?.coins)||0,sp:Number(gameState?.sp)||0,
+        recipes:!!(bpvqAdminTestActive()&&gameState.adminSandbox.recipes),
+        maps:!!(bpvqAdminTestActive()&&gameState.adminSandbox.maps)};
+    }
+    function bpvqAdminCreateSandbox(){
+      if (!activeProfileId||!sessionGameActive||!gameState.hasStarted) return {ok:false,reason:'Hãy vào một hồ sơ đã bắt đầu chơi trước.'};
+      if (bpvqAdminTestActive()) return {ok:false,reason:'Bạn đang ở hồ sơ TEST. Hãy quay về hồ sơ thường để tạo bản sao mới.'};
+      if (!saveGameToStorage(false))return {ok:false,reason:'Không lưu được hồ sơ gốc; đã hủy sao chép để bảo vệ dữ liệu.'};
+      const originalId=activeProfileId;
+      const id='test_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,8);
+      const clone=JSON.parse(JSON.stringify(gameState));
+      clone.adminSandbox={id,sourceId:originalId,createdAt:Date.now(),recipes:false,maps:false};
+      const account={id,adminTest:true,sourceId:originalId,name:('🧪 TEST '+(gameState.playerName||'Người chơi')).slice(0,32),
+        shopName:gameState.shopName,shopAvatar:gameState.shopAvatar,playerChibi:gameState.playerChibi,
+        createdAt:Date.now(),lastPlayedAt:Date.now(),summary:{playerName:clone.playerName,shopName:clone.shopName,
+          playerChibi:clone.playerChibi,career:clone.currentCareer,day:clone.day,level:clone.level,hasStarted:true}};
+      const key=getProfileStorageKey(id),seedKey='bpvq:admin:seed:'+id;
+      try{
+        localStorage.setItem(key,JSON.stringify(clone));
+        localStorage.setItem(seedKey,JSON.stringify(clone));
+        const registry=readAccountRegistry();registry.push(account);writeAccountRegistry(registry);
+        if(!getAccountById(id))throw Error('Không ghi được danh sách hồ sơ TEST');
+        return {ok:true,id};
+      }catch(err){
+        try{localStorage.removeItem(key);localStorage.removeItem(seedKey)}catch(_){}
+        return {ok:false,reason:'Không đủ dung lượng lưu dữ liệu thử nghiệm hoặc trình duyệt chặn lưu.'};
+      }
+    }
+    function bpvqAdminEnterSandbox(id){
+      const a=getAccountById(id);
+      if(!a?.adminTest || !String(id).startsWith('test_'))return false;
+      if(activeProfileId&&sessionGameActive&&!saveGameToStorage(false))return false;
+      try{continueLocalAccount(id);return bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Enter sandbox',e);return false}
+    }
+    function bpvqAdminLeaveSandbox(){
+      if(!bpvqAdminTestActive())return false;
+      const source=gameState.adminSandbox.sourceId;
+      if(!getAccountById(source))return false;
+      if(!saveGameToStorage(false))return false;
+      try{continueLocalAccount(source);return !bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Leave sandbox',e);return false}
+    }
+    function bpvqAdminResetSandbox(){
+      if(!bpvqAdminTestActive())return false;
+      const id=activeProfileId,raw=localStorage.getItem('bpvq:admin:seed:'+id);
+      if(!raw)return false;
+      try{
+        const parsed=JSON.parse(raw);
+        if(parsed?.adminSandbox?.id!==id)return false;
+        localStorage.setItem(getProfileStorageKey(id),raw);
+        continueLocalAccount(id);return bpvqAdminTestActive();
+      }catch(e){console.warn('[ADMIN] Reset sandbox',e);return false}
+    }
+    function bpvqAdminApply(action,raw){
+      if(!bpvqAdminTestActive())return {ok:false,reason:'Chỉ có thể chỉnh sửa hồ sơ TEST.'};
+      const number=Number(raw);
+      const validInt=(min,max)=>Number.isInteger(number)&&number>=min&&number<=max;
+      const s=gameState;
+      let text='';
+      switch(action){
+        case 'level':
+          if(!validInt(1,100))return {ok:false,reason:'Level cần nằm trong khoảng 1–100.'};
+          s.level=number;s.exp=0;text='Đặt cấp nhân vật thành Lv.'+number;break;
+        case 'sp':
+          if(!validInt(0,999))return {ok:false,reason:'SP cần nằm trong khoảng 0–999.'};
+          s.sp=number;text='Đặt điểm kỹ năng: '+number+' SP';break;
+        case 'coins':
+          if(!validInt(0,5000000))return {ok:false,reason:'Xu thử nghiệm cần nằm trong khoảng 0–5.000.000.'};
+          s.coins=number;text='Đặt số Xu thử nghiệm: '+number;break;
+        case 'stage':
+          if(!validInt(1,SHOP_STAGE_CONFIG.length))return {ok:false,reason:'Bậc quán không hợp lệ.'};
+          s.shopStage=number-1;s.shopConstruction=null;
+          text='Mô phỏng quán Bậc '+number+' (không cấp SP, không tính chi phí hoặc thưởng).';break;
+        case 'rating':
+          s.reputation=5;text='Đặt đánh giá quán: 5 sao';break;
+        case 'recipes':
+          s.adminSandbox.recipes=!!raw;
+          text=s.adminSandbox.recipes?'Bật mở khóa công thức/nguyên liệu thử nghiệm.':'Tắt mở khóa công thức/nguyên liệu thử nghiệm.';break;
+        case 'maps':
+          s.adminSandbox.maps=!!raw;
+          text=s.adminSandbox.maps?'Cho phép vào các khu vực Làng trong bản TEST.':'Khôi phục điều kiện bản đồ trong bản TEST.';break;
+        case 'skills':
+          for(const career of Object.keys(V8744_CAREERS))s.careerServed[career]=Math.max(30,Number(s.careerServed[career])||0);
+          text='Mô phỏng đã đạt 30 đơn thành công cho từng nghề, mở điều kiện kỹ năng nghề.';break;
+        case 'inventory':
+          Object.keys(ITEM_DICTIONARY).forEach(k=>{s.inventory[k]=Math.max(Number(s.inventory[k])||0,99)});
+          text='Cấp ít nhất 99 mỗi loại vật phẩm hiện có trong từ điển.';break;
+        case 'farm':
+          for(const p of s.farmPlots||[]){p.unlocked=true;p.mortgaged=false}
+          s.mortgagedPlots=0;text='Đã mở tất cả thửa đất trong hồ sơ TEST.';break;
+        case 'barn':
+          Object.keys(BARN_ANIMALS_CONFIG).forEach(k=>{if(s.animals[k])s.animals[k].unlocked=true});
+          text='Đã mở tất cả loại vật nuôi trong hồ sơ TEST.';break;
+        case 'career':
+          if(!['boba','noodle','streetfood'].includes(raw))return {ok:false,reason:'Nghề chưa được hỗ trợ.'};
+          resetRuntimeForProfile();s.currentCareer=raw;s.careerLocked=true;
+          workbenchDish=JSON.parse(JSON.stringify({career:raw,container:raw==='noodle'?'bowl_m':raw==='streetfood'?'tray_plate':'cup_m',base:raw==='noodle'?'broth_kimchi':'tea_black',sugar:70,ice:50,spicyLevel:3,fryHeat:170,tray:'plate',sauce:'sauce_sweet_chili',toppings:['topping_boba'],skewerCounts:{skewer_fish:2},listedPrice:45,isShaken:false,isCooked:false,fryProgress:0,fryState:'unfried'}));
+          text='Chuyển nghề trong bản TEST sang '+({boba:'Trà Sữa',noodle:'Mì Cay',streetfood:'Xiên Que'})[raw];break;
+        default: return {ok:false,reason:'Lệnh thử nghiệm không tồn tại.'};
+      }
+      // Only the active TEST account is saved; source profile storage is never modified by these actions.
+      const draws=[updateHeaderStats,refreshShopStageQuickBadge,renderFarmUI,renderBarnUI,renderVillageUI,
+        renderWorkbenchControls,renderShopReviews,renderGrowthApp,renderSoppiApp,renderBankApp,applyCareerLockToUI,refreshShopFloorSummary];
+      for(const fn of draws){try{fn()}catch(err){console.warn('[ADMIN] Refresh UI',err)}}
+      const saved=saveGameToStorage(false);
+      if(!saved)return {ok:false,reason:'Đã thay đổi bản TEST trong bộ nhớ nhưng không lưu được. Hãy sao lưu hoặc giải phóng dung lượng.'};
+      showToast(text,'🧪');return {ok:true,message:text};
+    }
+    window.BPVQAdminBridge={info:bpvqAdminInfo,create:bpvqAdminCreateSandbox,enter:bpvqAdminEnterSandbox,
+      leave:bpvqAdminLeaveSandbox,reset:bpvqAdminResetSandbox,apply:bpvqAdminApply};
 
     function masterGameLoop() {
       if (!sessionGameActive || !activeProfileId) return;
