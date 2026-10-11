@@ -36,6 +36,9 @@ for(const width of [320,390,430]){
       check(el('v8775-construction-content')?.querySelectorAll('.v88-decor-item').length===14,'14 decor inventory rows missing');
       window.BPVQReborn.constructionTab('shop');
       check(el('growth-decor-grid')?.children.length===14,'14 legacy shop decor cards missing');
+      window.BPVQReborn.constructionTab('paint');
+      check(el('v8775-construction-content')?.querySelectorAll('.v88-paint-preset').length===8,'missing color presets');
+      check(el('v8775-construction-content')?.querySelectorAll('.v88-paint-region').length===6,'missing paint regions');
       window.BPVQReborn.constructionTab('stage');
       check(el('growth-panel-story')?.parentElement?.id==='v8775-construction-content' && (el('growth-panel-story')?.textContent||'').includes('Bậc 1'),'stage view missing growth stage content');
       window.VillageOS.open('notifications');
