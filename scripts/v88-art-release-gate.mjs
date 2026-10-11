@@ -51,7 +51,10 @@ function dimensions(file){
  else if(format==='VP8 '&&b[23]===0x9d&&b[24]===1&&b[25]===0x2a){w=b.readUInt16LE(26)&0x3fff;h=b.readUInt16LE(28)&0x3fff;}
  return w>0&&h>0?{w,h,type:'webp'}:null;
 }
-const isCandidate=r=>r?.approved===true||r?.artReview==='approved'||!!r?.artwork||Object.keys(r?.anchors||{}).length>0;
+// A record that proposes art metadata is not a blank draft: audit it even without an image path.
+const isCandidate=r=>r?.approved===true||r?.artReview==='approved'||!!r?.artwork
+ ||!!r?.sourceKind||!!r?.assetType||!!r?.artApproval
+ ||Object.keys(r?.anchors||{}).length>0||Object.keys(r?.paintLayers||{}).length>0;
 export function auditRecord(record,root){
  const reasons=[];
  const id=record?.id||'unknown';
@@ -78,6 +81,10 @@ export function auditRecord(record,root){
    reasons.push('Bad measured anchor '+s);
  }
  const zones=paintFor(tier),layers=record.paintLayers||{};
+ // Reject forbidden or premature color regions (notably the locked B9 roof).
+ for(const z of Object.keys(layers)){
+  if(!zones.includes(z))reasons.push('Unexpected or locked paint layer '+z);
+ }
  for(const z of zones){
   const layer=layers[z];
   if(!layer){reasons.push('Missing paint layer '+z);continue}
