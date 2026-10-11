@@ -3,7 +3,7 @@ on:
   push:
     branches: [feat/v88-phone-os-core]
   pull_request:
-    paths: [index.html, 'js/phone-os-v88.js', 'css/phone-os-v88.css', 'tests/verify_phone_os_v88.mjs']
+    paths: [index.html, 'js/phone-os-v88.js', 'css/phone-os-v88.css', 'tests/**']
   workflow_dispatch:
 jobs:
   phone-os:
@@ -21,3 +21,20 @@ jobs:
         run: node tests/verify_phone_os_v88.mjs
       - name: Decor inventory, slots and save regression
         run: node tests/test_decor_v88.mjs
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runner
+        run: npm install --no-save playwright@1.56.1
+      - name: Install Chromium dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run browser against local game HTTP server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-v88-http.log 2>&1 &
+          sleep 2
+          node tests/test_phone_browser_v88.mjs
