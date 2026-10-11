@@ -3,7 +3,7 @@ on:
   push:
     branches: [feat/v88-phone-os-core]
   pull_request:
-    paths: [index.html, 'js/phone-os-v88.js', 'js/v88-shop-paint.js', 'css/phone-os-v88.css', 'tests/**']
+    paths: [index.html, 'js/phone-os-v88.js', 'js/v88-shop-paint.js', 'js/v88-shop-sign.js', 'css/phone-os-v88.css', 'tests/**']
   workflow_dispatch:
 jobs:
   phone-os:
@@ -33,6 +33,10 @@ jobs:
           node tests/test_shop_scenes_v88.mjs
       - name: B1 art-review masks remain draft until approved clean-pass
         run: node tests/test_b1_mask_draft_v88.mjs
+      - name: Dynamic S1 shop-name label and scene coordinate correctness
+        run: |
+          node --check js/v88-shop-sign.js
+          node tests/test_shop_sign_v88.mjs
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
