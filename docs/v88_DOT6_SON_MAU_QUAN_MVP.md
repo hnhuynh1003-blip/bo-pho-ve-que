@@ -48,3 +48,23 @@ gameState.shopAppearanceV88 = {
 9. Đảm bảo Phone đang bán dừng/tiếp tục khách đúng luật hiện tại.
 
 **Giới hạn nghiệm thu:** kiểm thử tự động chứng minh UI, save và preview; chỉ test ảnh quán thực khi có đủ clean shell + mask được duyệt.
+
+## Bàn giao MVP 11/10/2026 — ĐÃ CODE / ĐÃ TEST
+- **UI:** `Xây Quán → 🎨 Sơn Màu`; vẫn giữ 4 thẻ cũ. Tổng 5 tab, thiết kế hai cột để đọc dễ trên mobile.
+- **Lõi độc lập:** `js/v88-shop-paint.js`, nạp từ `index.html`. Bảng mã 8 preset, 6 vùng, 14 màu trong whitelist. Mái B9 ép `midnight (#263B53)` bất kể preset/override.
+- **Save:** `gameState.shopAppearanceV88` chỉ xuất hiện khi người chơi chủ động chọn preset hoặc màu; `reset()` xóa trường, `saveGameToStorage(false)` thất bại rollback. Không chiếm slot hoặc thay `gameState.decorV88`.
+- **Preview:** mô phỏng màu qua HTML/CSS dạng xe/quầy/nhà. 9 ảnh concept Trà Sữa B1–B9 **không được tự nhuộm**; để có ảnh thật đổi màu phải cung cấp clean shell + mask vùng đủ cho 3 nghề × 9 bậc.
+- **Kiểm thử Node:** `tests/test_shop_paint_v88.mjs`: preset, 3 nghề, level gates, B9 roof, save lạ, rollback, XSS-safe.
+- **Kiểm thử Chromium:** `tests/test_shop_paint_browser_v88.mjs`: tạo hồ sơ thật cho cả 3 nghề, lưu preset + màu biển hiệu, kiểm tra game money/bonus/nội thất/hợp đồng, reload.
+- **Kiểm thử hình học:** `tests/test_phone_visual_v88.mjs`: 5 viewport × 9 màn hình = **45 screenshot + JSON**, không tràn khung hoặc nút tabs chồng nhau.
+- **WebKit mobile:** `tests/test_phone_webkit_v88.mjs`: 375,390,430 px, mở Sơn Màu và xác minh không tràn ngang.
+- **GitHub Actions tại commit `b141e7536b85aa5b07e6c651a975b11a1198c018`:** [run #38143905101](https://github.com/hnhuynh1003-blip/bo-pho-ve-que/actions/runs/38143905101), `phone-os` / `browser-smoke` / `webkit-mobile` đều **PASS**.
+
+### Chưa được coi là hoàn thành
+1. Sơn màu trực tiếp ảnh quán đang bán: **CHƯA**, vì chưa có mask vùng/shell sạch.
+2. Trộn màu RGB/HSL hoặc preset mua bằng Xu: **CHƯA**. MVP miễn phí, tránh lỗ hổng kinh tế.
+3. Kiểm tra iPhone/iPad vật lý và đánh giá mỹ thuật bằng mắt: **CHƯA**; WebKit/Linux là smoke engine, không phải thiết bị thật.
+4. Reset/tách lớp cho bản B9 mới đã duyệt: **CHƯA**; không dùng B9 ngói đỏ trong ZIP cũ.
+5. Save xuất từ người chơi qua nhiều phiên bản lịch sử: **CHƯA**; đã test save cũ mô phỏng.
+
+**Quy tắc phát hành:** PR #1 vẫn là Draft, không merge `main` khi chưa UAT.
