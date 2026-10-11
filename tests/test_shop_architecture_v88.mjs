@@ -8,7 +8,7 @@ const index=code.lastIndexOf(marker);
 assert.ok(index>0,'27-shell module not found in unified Phone OS');
 let s={currentCareer:'boba',shopStage:0,coins:27500,sp:2,decorations:['welcome_sign'],inventory:{tea_black:24}};
 let saved=0;
-const holder={innerHTML:''};
+const holder={innerHTML:'',querySelector:()=>({open:false})};
 const win={BPVQDecorV88:{slots:()=>Array.from({length:24},(_,i)=>({tier:i<6?1:Math.min(9,Math.floor(i/3)+2),kind:i<2?'system':'counter'}))}};
 const sandbox={window:win,get gameState(){return s;},document:{getElementById:id=>id==='v88-architecture-preview'?holder:null}};
 vm.runInNewContext(code.slice(index),sandbox,{filename:'architecture-v88.js'});
