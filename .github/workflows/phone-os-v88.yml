@@ -39,6 +39,8 @@ jobs:
           node tests/test_art_batch_v88.mjs
       - name: Batch A distinct careers, B1–B3 architecture and paint/slot contracts
         run: node tests/test_art_batch_a_v88.mjs
+      - name: Batch A reference-image provenance and no-premature-approval gate
+        run: node tests/test_batch_a_review_rev2_v88.mjs
       - name: Dynamic S1 shop-name label and scene coordinate correctness
         run: |
           node --check js/v88-shop-sign.js
