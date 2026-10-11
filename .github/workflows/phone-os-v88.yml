@@ -19,3 +19,5 @@ jobs:
         run: node --check js/phone-os-v88.js
       - name: Structural compatibility checks
         run: node tests/verify_phone_os_v88.mjs
+      - name: Decor inventory, slots and save regression
+        run: node tests/test_decor_v88.mjs
