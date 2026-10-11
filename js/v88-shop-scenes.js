@@ -30,6 +30,25 @@
       });
     })
   ));
+  // Recovered user-authored Trà Sữa concept PREVIEWS, NOT approved game art.
+  // Source: DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1(1).zip, supplied 11 Oct 2026.
+  // Binary WebP files are distributed in the review ZIP, not committed to the repo.
+  // In particular boba-b9 is an OLDER red-roof reference, not the locked blue-roof B9.
+  const conceptLabels=Object.freeze([
+    'Mẫu đúng hướng','Cần tinh chỉnh','Cần tinh chỉnh','Mốc so sánh',
+    'Mốc so sánh','Cần sửa hình khối','Mốc so sánh','Đã duyệt concept',
+    'Concept cũ; không thay B9 mái xanh than đã khóa'
+  ]);
+  const bobaConcepts=Object.freeze(Array.from({length:9},(_,i)=>Object.freeze({
+    sceneId:'boba-b'+(i+1),career:'boba',tier:i+1,
+    sourceFile:'TRA_SUA_B'+String(i+1).padStart(2,'0')+'_PREVIEW.webp',
+    proposedPreviewPath:'assets/images/v88/concepts/boba-b'+(i+1)+'-concept.webp',
+    reviewStatus:conceptLabels[i],isProductionShell:false,
+    inRepository:false,
+    requiresCleanPass:true,
+    supersededByLaterApprovedB9:i===8
+  })));
+  const bobaConceptIndex=new Map(bobaConcepts.map(x=>[x.sceneId,x]));
   const lookup=new Map(spec.map(x=>[x.id,x]));
   function stageSlots(tier){
     const number=Number(tier);
@@ -91,6 +110,8 @@
     });
   }
   w.BPVQShopScenesV88=Object.freeze({
-    catalog:()=>spec.slice(),get:resolve,stageSlots,validate,diagnostics
+    catalog:()=>spec.slice(),get:resolve,stageSlots,validate,diagnostics,
+    conceptReferences:()=>bobaConcepts.slice(),
+    getConcept:(career,tier)=>bobaConceptIndex.get(career+'-b'+Number(tier))||null
   });
 })(window);
