@@ -39,3 +39,12 @@ jobs:
           sleep 2
           node tests/test_phone_browser_v88.mjs
           node tests/test_phone_profile_v88.mjs
+          node tests/test_phone_visual_v88.mjs
+      - name: Upload viewport screenshots and geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v88-phone-visual-qa
+          path: artifacts/v88-layout/
+          if-no-files-found: warn
+          retention-days: 14
