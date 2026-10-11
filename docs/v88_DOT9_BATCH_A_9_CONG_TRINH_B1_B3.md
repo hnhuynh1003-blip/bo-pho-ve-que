@@ -41,3 +41,12 @@
 - Trạng thái repo: **3 concept độc lập trong gói ZIP ngoài repo, 6 crop của bảng hướng dẫn, 0/9 ảnh clean shell production**. Không suy đoán ảnh ở Library là art đã duyệt khi chưa kiểm tra ảnh thực.
 
 **Đường phát hành:** PR #1 tiếp tục Draft, main không đổi. Duyệt cả lô, không duyệt từng chiếc đèn hay slot riêng lẻ.
+## 6. Bản kiểm duyệt REV2 — 11/10/2026
+- Từ lần dựng hình mới, hệ thống vẫn trả về **ảnh infographic 3×3**, không phải 9 shell cảnh riêng. Không dùng nguyên bảng hoặc các ảnh crop trong `assets/images/v88/shops/`.
+- Gói kiểm duyệt ngoài repo: **`BPVQ_V88_LO_A_REV2_9_HINH_THAM_KHAO_QA.zip`**, gồm 3 WebP concept Trà Sữa **giữ nguyên byte**, 6 crop tham khảo Mì Cay/Xiên Que **có nhãn gốc** và bản B1 clean-pass draft3 **chưa duyệt**.
+- `docs/v88_BATCH_A_REVIEW_REV2.json` ghi rõ nguồn 9 hình, trường `productionArt:null`, `approved:false`, cờ `measuredAnchorsReady:false`, `maskReady:false`. Những file crop có `sourceType:infographic-crop-reference`; **không được quảng bá là ảnh shell**.
+- **Ngoại lệ phải sửa trước khi duyệt:** Trà Sữa B1 còn lỗi ghép cột/nền, Trà Sữa B2 concept có **bánh xe** trái quy chuẩn quầy cố định, Trà Sữa B3 còn decor baked; sáu hình nghề khác chưa được tạo dạng cảnh riêng và còn nhãn banner. B1 nghề khác trong bảng chỉ là hướng ngoại hình, không thay cho tài nguyên game.
+- `tests/test_batch_a_review_rev2_v88.mjs` kiểm tra đủ 9 mã cảnh, có **3 ảnh concept gốc**, **6 infographic crop**, và **0 production shell**; QA chạy trong CI. Điều này không đồng nghĩa 9 hình đã hoàn thành.
+- Cổng sản xuất thực sự: mỗi công trình có ảnh WebP độc lập, đúng bậc, không dính UI/decor mua thêm, mask sơn theo bậc và số neo 6/9/11 được đo trên ảnh đã sửa. Chỉ bật manifest công trình khi qua duyệt mỹ thuật và kiểm thử mobile/save.
+
+**Trạng thái lô A sau REV2: 9 tham khảo, 0 ảnh nền sạch đạt chuẩn gameplay.** PR tiếp tục Draft và `main` vẫn là v87.8.0.1.
