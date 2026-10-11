@@ -413,6 +413,7 @@ function renderConstruction(tab=buildTab){
  if(tab==='stage'&&story){content.appendChild(story);showGrowth('story');content.insertAdjacentHTML('afterbegin','<section id="v88-architecture-preview" class="v88-arch-preview" aria-label="Bản vẽ kiến trúc theo nghề và bậc"></section>');window.BPVQArchitectureV88?.render(document.getElementById('v88-architecture-preview'));content.insertAdjacentHTML('beforeend','<p class="v8775-help">Thuê thợ và tiến độ khánh thành dùng luật 1–3 ngày game hiện có. Bậc và +1 SP chỉ nhận khi qua đủ ngày.</p>');}
  else if(tab==='shop'&&decor){content.appendChild(decor);showGrowth('decor');}
  else if(tab==='layout'||tab==='inventory'){window.BPVQDecorV88?.render(tab,content);}
+  else if(tab==='paint'){window.BPVQShopPaintV88?.render(content);}
 }
 function renderStaff(){
  const s=state();if(!s)return;
