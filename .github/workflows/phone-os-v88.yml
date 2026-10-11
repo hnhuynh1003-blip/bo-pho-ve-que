@@ -21,6 +21,8 @@ jobs:
         run: node tests/verify_phone_os_v88.mjs
       - name: Decor inventory, slots and save regression
         run: node tests/test_decor_v88.mjs
+      - name: 27 architecture concepts and immutable game state
+        run: node tests/test_shop_architecture_v88.mjs
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
