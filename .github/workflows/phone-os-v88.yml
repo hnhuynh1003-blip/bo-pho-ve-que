@@ -38,3 +38,4 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-v88-http.log 2>&1 &
           sleep 2
           node tests/test_phone_browser_v88.mjs
+          node tests/test_phone_profile_v88.mjs
