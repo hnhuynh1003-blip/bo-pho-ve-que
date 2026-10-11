@@ -731,7 +731,7 @@ body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-blo
 #modal-smartphone .v88-arch-art-pending{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;min-height:94px;padding:12px;border:1px dashed rgba(234,193,128,.45);border-radius:12px;background:rgba(11,26,31,.67);color:#f0dbac;font-size:10px;text-align:center;line-height:1.45}
 #modal-smartphone .v88-arch-art-pending small{font-size:9px;color:#b9d4d0;line-height:1.45}
 #modal-smartphone .v88-arch-scene{position:relative;margin:0;border-radius:11px;overflow:hidden;line-height:0;background:#182e34;border:1px solid #64867e}
-#modal-smartphone .v88-arch-scene img{display:block;width:100%;height:auto;aspect-ratio:3/4;object-fit:contain}
+#modal-smartphone .v88-arch-scene img{display:block;width:100%;height:auto;object-fit:contain}
 #modal-smartphone .v88-arch-anchor{position:absolute;transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;min-width:24px;min-height:22px;padding:2px 3px;border-radius:7px;border:1px solid #f8ecc7;color:#1c3335;background:rgba(245,226,171,.88);font-size:9px;font-weight:900;line-height:1}
 #modal-smartphone .v88-arch-anchor.v88-arch-occupied{background:#73d8b8}
 #modal-smartphone .v88-arch-scene figcaption{position:absolute;bottom:0;left:0;right:0;background:rgba(13,28,32,.84);padding:8px 5px;line-height:1.35;color:#fff;font-size:9px;text-align:center}
@@ -796,3 +796,10 @@ body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-blo
 #modal-smartphone .v88-paint-scene.flagship .v88-paint-wall{border-left-width:18px;border-right-width:18px}
 #modal-smartphone .v88-paint-preview-watermark{position:absolute;bottom:3px;left:0;right:0;z-index:6;text-align:center;font-size:7px;font-weight:900;letter-spacing:.02em;color:#263d43;background:#e1e7cfbb}
 @media(max-width:359px){#modal-smartphone .v88-paint-scene{height:151px}#modal-smartphone .v88-paint-presets{gap:4px}#modal-smartphone .v88-paint-color span{width:21px;height:20px}}
+
+/* The approved shell keeps its intrinsic aspect ratio: anchors are image-relative. */
+#modal-smartphone .v88-arch-shop-sign{position:absolute;transform:translate(-50%,-50%);display:flex;align-items:center;justify-content:center;max-width:72%;min-width:21%;min-height:25px;padding:5px 8px;border-radius:7px;border:2px solid #edd4a5;outline:1px solid rgba(69,36,20,.72);background:linear-gradient(#a26a3b,#734525);box-shadow:0 3px 5px #1b1d2188, inset 0 1px 2px #ffdc9177;pointer-events:none}
+#modal-smartphone .v88-arch-shop-sign::before,#modal-smartphone .v88-arch-shop-sign::after{content:'';position:absolute;top:50%;transform:translateY(-50%);width:3px;height:3px;border-radius:50%;background:#eedca2;box-shadow:0 0 0 1px #664326}
+#modal-smartphone .v88-arch-shop-sign::before{left:4px}
+#modal-smartphone .v88-arch-shop-sign::after{right:4px}
+#modal-smartphone .v88-arch-sign-name{max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;display:block;font-family:system-ui,sans-serif;font-size:clamp(9px,2.7vw,13px);font-weight:900;line-height:1.15;letter-spacing:.02em;color:#fff1d1;text-shadow:0 1px 2px #2b2116}
