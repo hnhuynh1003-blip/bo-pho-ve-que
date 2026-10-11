@@ -4,6 +4,8 @@
 
 ## 1. Kiểm kê tại thời điểm lập hồ sơ
 - GitHub hiện có ~303 mục trong `assets/images/` (nguyên liệu, NPC, bối cảnh làng, mascot, phone...). **Chưa tìm thấy nhóm ảnh shell sạch, riêng bậc và nghề, theo tên định danh v88.**
+- **Đã tìm lại bộ ảnh lịch sử, KHÔNG tạo lại mẫu B1:** trong Thư viện của Project có `DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1.zip` (9 ảnh riêng của quán Trà Sữa B1–B9), kèm `BAO_CAO_QA_9_BAC_TRA_SUA_V1.md` và `BANG_SO_SANH_9_BAC_TRA_SUA.png`. Báo cáo QA ghi **B1 xe đẩy khởi nghiệp mẫu đúng hướng**, **0/9 ảnh đạt chuẩn shell final**, một số decor còn vẽ dính ảnh. Các ảnh này là concept đã có, không phải tài nguyên mới cần tạo từ đầu.
+- **Giới hạn truy xuất ngày 11/10/2026:** công cụ đọc được metadata và báo cáo QA nhưng không lấy được bytes của ZIP lưu trong Thư viện vào container; cần đính kèm ZIP gốc vào cuộc trò chuyện/phiên phát triển để giải nén, kiểm duyệt B1 và clean-pass. Không giả vờ đã kiểm tra pixel hay commit 9 ảnh từ ZIP khi chưa truy xuất được.
 - Đã có **bản vẽ nội dung** 27 trường hợp trong `BPVQArchitectureV88`; đây là dữ liệu mô tả, KHÔNG phải 27 PNG/WebP.
 - File concept người dùng cung cấp riêng ở Project (chưa có dưới `assets/images/v88/shops/`): `DUDU_B7_shell_reference_v3.png`, `DUDU_B8_shell_reference_v3.png`, bản review vị trí S1–S22 và ảnh B9 gốc. Đây là **tham chiếu để đối chiếu**, không phải ảnh dựng sạch có neo hoàn chỉnh.
 - `js/v88-shop-scenes.js` quản lý **27 record** nghệ × bậc. **Tất cả 27 record đang chờ duyệt**, có `artwork:null`, `anchors:{}`. Điều này là chủ đích để không tải ảnh hỏng và không tự nhận artwork đã hoàn thành.
@@ -74,7 +76,14 @@ Làm theo một nghề/bậc mẫu trước, đối chiếu rồi mới xuất h
 | SAVE-ART-01 | Save v87 cũ không có `decorV88` | Vẫn mở được, 14 món theo sở hữu, không tự tạo |
 | ART-09 | Ảnh shell không có nội thất baked | Đồ chỉ vẽ khi thật sự đã sở hữu/đặt |
 
-## 6. Các quyết định cần duyệt trước khi vẽ hàng loạt
+## 6. Khôi phục ảnh cũ trước khi tạo mới
+1. **Không tạo mới Trà Sữa B1:** đã tìm thấy gói `DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1.zip` trong Thư viện cùng báo cáo QA xác nhận B1 đúng hướng.
+2. Sau khi ZIP được đính kèm để có raw bytes: giải nén 9 ảnh, chọn ảnh B1 gốc, đối chiếu với hồ sơ decor `DUDU_STUDIO_HO_SO_DECOR_BAC_1_5_9_DOT_2_CHO_DUYET.md`, rồi tạo bản clean-pass riêng **trên bản sao**, không thay concept gốc.
+3. Giữ B1 chỉ có **xe gỗ hai bánh + dù kem, không nhà**, S1/S5/S6/S8/S11/S14. Loại bỏ nội thất phải mua bị baked, giữ quầy/dụng cụ cơ bản; không tự tặng decor.
+4. Khi shell sạch được người dùng duyệt và đo đủ 6 anchor trên ảnh: mới cập nhật `assets/images/v88/shops/boba-b1.webp` và manifest `js/v88-shop-scenes.js`.
+5. Thông tin **0/27 shell game-ready** là trạng thái kỹ thuật trên GitHub, **không phải** nhận định rằng chưa từng có bản vẽ/ảnh concept B1–B9.
+
+## 7. Các quyết định cần duyệt trước khi vẽ hàng loạt
 1. **Batch A**: xác nhận làm mẫu đầu tiên **Trà Sữa B1** (xe gỗ hai bánh + dù kem), sau đó mở rộng B1–B3 cho cả 3 nghề.
 2. B7: xử lý diện tích sân quanh S17/S18/S19 và điểm treo S20 theo bản review v2.
 3. B8: **đài nước ở sân là phần kiến trúc nền hay decor mua riêng?** Chưa tự chọn để tránh tặng đồ miễn phí.
