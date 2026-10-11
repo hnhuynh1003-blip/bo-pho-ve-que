@@ -398,17 +398,20 @@ function renderCharacter(view=charTab){
  if(view==='skills'&&skill){$('v8775-character-content').appendChild(skill);showGrowth('skills');}
 }
 function renderConstruction(tab=buildTab){
+ tab=tab==='decor'?'shop':tab;
+ if(!['stage','layout','inventory','shop'].includes(tab))tab='stage';
  buildTab=tab;const s=state();if(!s)return;
  const stage=(Number(s.shopStage)||0)+1,project=s.shopConstruction;
- const count=9;
- const stageCaption=project?`🏗️ Đang thi công · dự kiến ngày ${project.finishDay}`:`Bậc ${stage}/${count} · ${fmt(s.coins)} Xu`;
+ const stageCaption=project?`🏗️ Đang thi công · dự kiến ngày ${project.finishDay}`:`Bậc ${stage}/9 · ${fmt(s.coins)} Xu`;
  for(const x of [story,decor])if(x?.parentElement===views.construction)views.construction.removeChild(x);
- views.construction.innerHTML=pfx('🏗️','Xây Quán','Thuê thợ · Mở rộng · Trang trí')+
- `<div class="v8775-info">${stageCaption}${project?`<br>📅 Từ ngày ${project.startedDay} tới ngày ${project.finishDay} · đã trả ${fmt(project.cost)} Xu`:''}<br>Chi phí thi công dùng đúng bảng giá nâng bậc cũ, không thu thêm phí thuê thợ.</div>`+
- `<div class="v8775-tabs"><button data-on="${tab==='stage'}" onclick="BPVQReborn.constructionTab('stage')">🏗️ Mở rộng</button><button data-on="${tab==='decor'}" onclick="BPVQReborn.constructionTab('decor')">🪴 Trang trí</button></div><div id="v8775-construction-content"></div>`;
- const curr=tab==='stage'?story:decor;
- if(curr){$('v8775-construction-content').appendChild(curr);showGrowth(tab==='stage'?'story':'decor');}
- if(tab==='stage')$('v8775-construction-content')?.insertAdjacentHTML('beforeend','<p class="v8775-help">Hợp đồng trọn gói chỉ bắt đầu sau khi bạn xác nhận. Công trình hoàn tất khi chủ động qua đủ ngày trong game; bậc, SP và mở khóa chỉ thay đổi lúc khánh thành.</p>');
+ const pages=[['stage','🏗️ Mở rộng'],['layout','🪑 Bố trí'],['inventory','📦 Kho nội thất'],['shop','🛍️ Cửa hàng']];
+ views.construction.innerHTML=pfx('🏗️','Xây Quán','Mở rộng · Kho Nội Thất · Bố trí theo bậc')+
+ `<div class="v8775-info">${stageCaption}${project?`<br>📅 Từ ngày ${project.startedDay} tới ngày ${project.finishDay} · đã trả ${fmt(project.cost)} Xu`:''}<br>Trang trí và đặt đồ không thay đổi phí xây, Xu hoặc bonus sở hữu.</div>`+
+ `<div class="v8775-tabs v88-decor-tabs">${pages.map(([id,label])=>`<button data-on="${tab===id}" onclick="BPVQReborn.constructionTab('${id}')">${label}</button>`).join('')}</div><div id="v8775-construction-content"></div>`;
+ const content=$('v8775-construction-content');
+ if(tab==='stage'&&story){content.appendChild(story);showGrowth('story');content.insertAdjacentHTML('beforeend','<p class="v8775-help">Thuê thợ và tiến độ khánh thành dùng luật 1–3 ngày game hiện có. Bậc và +1 SP chỉ nhận khi qua đủ ngày.</p>');}
+ else if(tab==='shop'&&decor){content.appendChild(decor);showGrowth('decor');}
+ else if(tab==='layout'||tab==='inventory'){window.BPVQDecorV88?.render(tab,content);}
 }
 function renderStaff(){
  const s=state();if(!s)return;
@@ -1054,3 +1057,173 @@ updateMode();
  os.addRelease?.('v87.7.7.2','Sửa lớp hình nền Home, đồng bộ dock và thêm thẻ dự báo thời tiết với câu thơ nông thôn ngắn.');
 })();
 
+
+/* === BPVQ v88 / Xây Quán 2.0: owned decor inventory + slot placement ===
+ * No new merchandise and no modification to existing decoration bonuses.
+ * Source of truth for ownership remains gameState.decorations.
+ * S1/S2 are system slots; 22 other slots are player-customizable.
+ */
+(function(w){
+ 'use strict';
+ const SLOT_SPEC=[
+  ['S1','Biển tên quán',1,'system'],['S2','Huy hiệu quán',2,'system'],
+  ['S3','Biển phía trước',3,'banner'],['S4','Bảng mái trang trí',4,'banner'],
+  ['S5','Quầy chính',1,'counter'],['S6','Kệ trên quầy',1,'counter'],
+  ['S7','Góc quầy',2,'counter'],['S8','Kệ treo trên',1,'shelf-top'],
+  ['S9','Kệ trưng bày',2,'shelf-top'],['S10','Kệ trên mở rộng',4,'shelf-top'],
+  ['S11','Kệ dưới',1,'shelf-low'],['S12','Góc kệ dưới',4,'shelf-low'],
+  ['S13','Kệ dưới mở rộng',6,'shelf-low'],['S14','Góc sân',1,'ground'],
+  ['S15','Lối vào',3,'ground'],['S16','Sân vườn',5,'ground'],
+  ['S17','Góc tiểu cảnh',7,'ground'],['S18','Bàn ghế khách',5,'seating'],
+  ['S19','Bàn ghế mở rộng',6,'seating'],['S20','Đèn sân vườn',7,'lamp'],
+  ['S21','Khu VIP',8,'vip'],['S22','Tường thành tựu',8,'display'],
+  ['S23','Linh vật cao cấp',9,'mascot'],['S24','Cổng lễ hội',9,'festival']
+ ].map(([id,name,tier,kind])=>Object.freeze({id,name,tier,kind}));
+ const SPEC=Object.freeze(Object.fromEntries(SLOT_SPEC.map(x=>[x.id,x])));
+ const ALLOW=Object.freeze({
+   welcome_sign:['S5','S6','S3','S4'],
+   flower_corner:['S14','S15','S16','S17'],
+   warm_lights:['S8','S9','S20','S24'],
+   lucky_bamboo:['S11','S12','S14','S15'],
+   menu_board:['S5','S7','S9','S3'],
+   cat:['S11','S12','S13'],
+   music_corner:['S6','S7','S9'],
+   neon_sign:['S3','S4'],
+   aquarium:['S12','S13','S16'],
+   wood_furniture:['S18','S19'],
+   koi_corner:['S16','S17'],
+   stone_counter:['S5'],
+   vip_room:['S21'],
+   heritage_wall:['S22']
+ });
+ // Counter stone is one purchased item occupying 3 adjacent logical slots.
+ const FOOTPRINT=Object.freeze({stone_counter:['S5','S6','S7']});
+ const esc=v=>String(v??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const state=()=>typeof gameState==='object'&&gameState?gameState:null;
+ const catalog=()=>typeof SHOP_DECOR_CONFIG==='object'?SHOP_DECOR_CONFIG:{};
+ const level=s=>Math.max(1,Math.min(9,Math.floor(Number(s?.shopStage)||0)+1));
+ const owned=s=>new Set(Array.isArray(s?.decorations)?s.decorations.filter(x=>typeof x==='string'&&catalog()[x]):[]);
+ const raw=s=>(s?.decorV88?.placements&&typeof s.decorV88.placements==='object'&&!Array.isArray(s.decorV88.placements))?s.decorV88.placements:{};
+ const footprint=(id,slot)=>FOOTPRINT[id]||[slot];
+ function project(s){
+   const entries=Object.entries(raw(s));const items=owned(s);
+   const active={},occupied={},stored=new Set(items);
+   // Preserve earlier valid assignments by canonical order. No duplicate, phantom or bonus mutation.
+   for(const [slot,id] of entries){
+     if(!SPEC[slot]||!items.has(id)||!ALLOW[id]?.includes(slot)||stored.has(id)===false)continue;
+     const footprintSlots=footprint(id,slot);
+     if(footprintSlots.some(k=>SPEC[k].tier>level(s)||occupied[k]))continue;
+     active[slot]=id;
+     for(const k of footprintSlots)occupied[k]=slot;
+     stored.delete(id);
+   }
+   return {active,occupied,stored:[...stored],tier:level(s)};
+ }
+ function persist(s,next){
+   const old=s.decorV88;
+   s.decorV88={schema:1,placements:next,lastStage:level(s)};
+   try {
+     if(typeof saveGameToStorage!=='function'||saveGameToStorage(false)!==true){
+       if(old===undefined)delete s.decorV88;else s.decorV88=old;
+       return {ok:false,message:'Không thể lưu vị trí. Vui lòng kiểm tra hồ sơ và bộ nhớ.'};
+     }
+   }catch(e){if(old===undefined)delete s.decorV88;else s.decorV88=old;return {ok:false,message:'Lỗi lưu vị trí: '+String(e.message||e)}}
+   return {ok:true};
+ }
+ function place(s,id,slot){
+   if(!s||!catalog()[id]||!SPEC[slot])return {ok:false,message:'Vật phẩm hoặc ô không hợp lệ.'};
+   if(!owned(s).has(id))return {ok:false,message:'Bạn chưa sở hữu nội thất này.'};
+   if(SPEC[slot].kind==='system'||SPEC[slot].tier>level(s))return {ok:false,message:'Ô này chưa mở hoặc thuộc hệ thống.'};
+   if(!ALLOW[id]?.includes(slot))return {ok:false,message:'Món này không phù hợp vị trí đã chọn.'};
+   const before=project(s),next={...raw(s)};
+   // A purchased ID represents exactly one owned piece across all slots.
+   for(const [oldSlot,oldId] of Object.entries(next))if(oldId===id)delete next[oldSlot];
+   const footprints=footprint(id,slot);
+   for(const k of footprints){
+     if(SPEC[k].tier>level(s))return {ok:false,message:'Cần nâng bậc để đặt trọn bộ nội thất.'};
+     const occupyingAnchor=before.occupied[k];
+     if(occupyingAnchor&&raw(s)[occupyingAnchor]!==id)return {ok:false,message:'Ô '+k+' đã có nội thất. Hãy cất món đó trước.'};
+   }
+   if(next[slot]&&next[slot]!==id)return {ok:false,message:'Ô này đang có món khác.'};
+   next[slot]=id;
+   return persist(s,next);
+ }
+ function store(s,slot){
+   if(!s||!Object.hasOwn(raw(s),slot))return {ok:false,message:'Ô này không có đồ cần cất.'};
+   const next={...raw(s)};delete next[slot];
+   return persist(s,next);
+ }
+ function transfer(s){
+   if(!s)return {ok:false};
+   // Tier upgrades preserve every valid logical slot. Layout is normalized only
+   // when a conflict is encountered; no silent overwrite of historic mappings.
+   const placed=project(s),orig=raw(s);
+   const unchanged=Object.keys(orig).length===Object.keys(placed.active).length&&
+     Object.entries(orig).every(([k,v])=>placed.active[k]===v);
+   if(unchanged)return {ok:true,changed:false};
+   const next={...placed.active},busy=new Set(Object.keys(placed.occupied));
+   const preserve=[...new Set(Object.values(orig).filter(x=>owned(s).has(x)))];
+   for(const id of preserve){
+     if(Object.values(next).includes(id))continue;
+     const candidate=(ALLOW[id]||[]).find(slot=>{
+       if(SPEC[slot].tier>level(s)||SPEC[slot].kind==='system')return false;
+       return footprint(id,slot).every(k=>!busy.has(k)&&SPEC[k].tier<=level(s));
+     });
+     if(candidate){next[candidate]=id;for(const k of footprint(id,candidate))busy.add(k)}
+   }
+   // Invalid entries remain stored as ownership, never deleted from decorations.
+   const result=persist(s,next);
+   return {...result,changed:result.ok};
+ }
+ let selected='';
+ let view='layout';
+ const notify=(msg,success)=>{if(typeof showToast==='function')showToast(msg,success?'🪴':'⚠️')};
+ function rerender(){const host=document.getElementById('v8775-construction-content');if(host)render(view,host)}
+ const api={
+  slots:()=>SLOT_SPEC.slice(),compatibility:id=>(ALLOW[id]||[]).slice(),snapshot:()=>{const s=state();return s?project(s):null},
+  place:(id,slot)=>place(state(),id,slot),store:slot=>store(state(),slot),
+  reconcileStage:()=>transfer(state()),
+  choose(id){const s=state();if(!s||!owned(s).has(id))return notify('Chưa sở hữu món này.',false);
+   selected=id;w.BPVQReborn?.constructionTab('layout');},
+  chooseSlot(slot){
+   const s=state();if(!s)return;
+   if(!selected)return notify('Hãy chọn một món từ Kho Nội Thất trước.',false);
+   const result=place(s,selected,slot);
+   notify(result.ok?'Đã đặt nội thất vào '+slot+'.':result.message,result.ok);
+   if(result.ok){selected='';rerender();}
+  },
+  putAway(slot){const result=store(state(),slot);notify(result.ok?'Đã cất nội thất vào Kho.':result.message,result.ok);if(result.ok)rerender()},
+  showShop(){w.BPVQReborn?.constructionTab('shop')},
+  render(which,host){
+   const s=state();if(!s||!host)return;
+   view=which;const data=project(s),ownedIds=owned(s),conf=catalog();
+   const current=level(s),filled=Object.keys(data.active).length,unlocked=SLOT_SPEC.filter(v=>v.tier<=current);
+   if(which==='inventory'){
+    const ids=Object.keys(ALLOW);host.innerHTML=
+    `<div class="v88-decor-summary">📦 <b>Kho Nội Thất</b> · ${ownedIds.size}/14 món sở hữu<br><small>Đồ cất vẫn giữ buff theo quyền sở hữu như game hiện tại.</small></div>`+
+    `<div class="v88-decor-items">`+ids.map(id=>{
+      const c=conf[id],have=ownedIds.has(id),anchor=Object.entries(data.active).find(([,i])=>i===id)?.[0];
+      const unlockedItem=current>=((Number(c.reqStage)||0)+1)&&(Number(s.level)||1)>=(Number(c.reqLevel)||1);
+      const status=have?(anchor?'Đang dùng · '+anchor:'Đã sở hữu · Đang cất'):(unlockedItem?'Chưa mua':'Chưa mở');
+      return `<div class="v88-decor-item ${have?'v88-owned':''}"><span class="v88-decor-icon">${esc(c.icon)}</span><div><b>${esc(c.name)}</b><small>${esc(status)}</small><small>${esc(c.desc||'')}</small></div><button type="button" ${have?'':'disabled'} onclick="BPVQDecorV88.choose('${id}')">${have?'Bố trí':'🔒'}</button></div>`;
+    }).join('')+`</div><button type="button" class="v88-decor-footer" onclick="BPVQDecorV88.showShop()">🛍️ Tới cửa hàng trang trí</button>`;
+   }else{
+    const selectedLabel=selected&&conf[selected]?conf[selected].name:'Chưa chọn món nào';
+    host.innerHTML=`<div class="v88-decor-summary"><b>🏠 Bố trí Bậc ${current}/9</b> · ${unlocked.length}/24 ô mở · ${filled} món đang trưng bày<br><small>${selected?'Đang chọn: '+esc(selectedLabel)+' — chạm một ô phù hợp để đặt':'Chọn món trong Kho rồi chạm vào ô muốn đặt'}</small></div>`+
+    `<div class="v88-decor-action-row"><button type="button" onclick="BPVQReborn.constructionTab('inventory')">📦 Chọn nội thất</button><button type="button" onclick="BPVQDecorV88.realign()">↻ Kiểm tra chuyển đồ</button></div>`+
+    `<div class="v88-decor-slots">`+SLOT_SPEC.map(slot=>{
+      const open=slot.tier<=current,id=data.active[slot.id],reserved=data.occupied[slot.id]&&!id,sys=slot.kind==='system';
+      const icon=sys?(slot.id==='S1'?'🪧':'🏅'):id?conf[id]?.icon||'🪑':reserved?'💎':open?'＋':'🔒';
+      const contents=sys?(slot.id==='S1'?'Tên quán':'Huy hiệu') : id?conf[id]?.name : reserved?'Thuộc bộ quầy đá':open?'Ô trống':'Mở ở bậc '+slot.tier;
+      const canTarget=!!selected&&open&&!sys&&!reserved&&ALLOW[selected]?.includes(slot.id);
+      return `<div class="v88-decor-slot ${!open?'v88-locked':''} ${sys?'v88-system':''} ${id?'v88-filled':''} ${canTarget?'v88-target':''}">
+       <button type="button" ${!canTarget?'disabled':''} onclick="BPVQDecorV88.chooseSlot('${slot.id}')"><b>${slot.id}</b><span>${esc(icon)}</span><small>${esc(slot.name)}</small><em>${esc(contents)}</em></button>
+       ${id?`<button class="v88-decor-store" type="button" onclick="BPVQDecorV88.putAway('${slot.id}')">Cất vào kho</button>`:''}
+      </div>`;
+    }).join('')+`</div><div class="v88-decor-hint">S1–S2 là hệ thống. S4 là bảng mái, không phải vị trí đặt bàn. Quầy Đá chiếm S5–S7. Hình slot hiện là sơ đồ tương tác; sprite và điểm neo theo 27 công trình sẽ tích hợp ở đợt mỹ thuật.</div>`;
+   }
+  },
+  realign(){const result=transfer(state());notify(result.ok?(result.changed?'Đã chuyển các món phù hợp, phần còn lại trong Kho.':'Bố trí đang hợp lệ, không mất món nào.'):result.message,result.ok);if(result.ok)rerender()}
+ };
+ w.BPVQDecorV88=Object.freeze(api);
+})(window);
