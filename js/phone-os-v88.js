@@ -410,7 +410,7 @@ function renderConstruction(tab=buildTab){
  `<div class="v8775-info">${stageCaption}${project?`<br>📅 Từ ngày ${project.startedDay} tới ngày ${project.finishDay} · đã trả ${fmt(project.cost)} Xu`:''}<br>Trang trí và đặt đồ không thay đổi phí xây, Xu hoặc bonus sở hữu.</div>`+
  `<div class="v8775-tabs v88-decor-tabs">${pages.map(([id,label])=>`<button data-on="${tab===id}" onclick="BPVQReborn.constructionTab('${id}')">${label}</button>`).join('')}</div><div id="v8775-construction-content"></div>`;
  const content=$('v8775-construction-content');
- if(tab==='stage'&&story){content.appendChild(story);showGrowth('story');content.insertAdjacentHTML('beforeend','<p class="v8775-help">Thuê thợ và tiến độ khánh thành dùng luật 1–3 ngày game hiện có. Bậc và +1 SP chỉ nhận khi qua đủ ngày.</p>');}
+ if(tab==='stage'&&story){content.appendChild(story);showGrowth('story');content.insertAdjacentHTML('afterbegin','<section id="v88-architecture-preview" class="v88-arch-preview" aria-label="Bản vẽ kiến trúc theo nghề và bậc"></section>');window.BPVQArchitectureV88?.render(document.getElementById('v88-architecture-preview'));content.insertAdjacentHTML('beforeend','<p class="v8775-help">Thuê thợ và tiến độ khánh thành dùng luật 1–3 ngày game hiện có. Bậc và +1 SP chỉ nhận khi qua đủ ngày.</p>');}
  else if(tab==='shop'&&decor){content.appendChild(decor);showGrowth('decor');}
  else if(tab==='layout'||tab==='inventory'){window.BPVQDecorV88?.render(tab,content);}
 }
@@ -1232,4 +1232,84 @@ updateMode();
   realign(){const result=transfer(state());notify(result.ok?(result.changed?'Đã chuyển các món phù hợp, phần còn lại trong Kho.':'Bố trí đang hợp lệ, không mất món nào.'):result.message,result.ok);if(result.ok)rerender()}
  };
  w.BPVQDecorV88=Object.freeze(api);
+})(window);
+
+// === DUDU v88: data-driven architecture catalog — 3 careers × 9 stages (27 shells).
+// Reference-blueprint descriptions only. Approved art/architecture is NOT regenerated,
+// and all 24 decor slot IDs retain their original contracts. No save/economy mutation.
+(function(w){
+ 'use strict';
+ const CAREERS=Object.freeze({
+  boba:Object.freeze({name:'Trà Sữa',icon:'🧋',color:'trà sữa',area:'Khu lắc trà · kệ topping · quầy giao ly',
+   signs:Object.freeze(['TRÀ SỮA Nhà Mình','TRÀ SỮA Đặc Sản'])}),
+  noodle:Object.freeze({name:'Mì Cay',icon:'🍜',color:'gạch đỏ và gỗ ấm',area:'Trạm nước cốt · nồi mì · quầy topping',
+   signs:Object.freeze(['MÌ CAY Nhà Mình','MÌ CAY Đặc Sản'])}),
+  streetfood:Object.freeze({name:'Xiên Que',icon:'🍢',color:'tre và đèn hội chợ',area:'Bếp nướng · kệ xiên · bàn nước chấm',
+   signs:Object.freeze(['XIÊN QUE Nhà Mình','XIÊN QUE Đặc Sản'])})
+ });
+ const TIERS=Object.freeze([
+  {name:'Quầy Khởi Nghiệp',shape:'Xe đẩy hai bánh, dù màu kem',roof:'Dù vải, không có nhà xây',yard:'Góc sân nhỏ sát quầy',notes:'Giữ dáng xe đẩy 2 bánh. Không được dựng nhà ở B1.'},
+  {name:'Quán Nhỏ Có Mái',shape:'Quầy cố định có mái che',roof:'Mái nhỏ một tầng',yard:'Lối khách đứng chờ',notes:'Chuyển từ xe đẩy sang quầy cố định; chưa phải nhà hàng.'},
+  {name:'Tiệm Đông Khách',shape:'Tiệm gỗ mở mặt tiền',roof:'Mái tiệm gỗ đơn',yard:'Góc biển hiệu và chậu cây',notes:'Thêm mặt tiền, biển hiệu nhưng không làm hai tầng.'},
+  {name:'Quán Ăn Gia Đình',shape:'Quán một phòng ấm cúng',roof:'Mái một tầng đơn giản',yard:'Góc bàn gia đình',notes:'Giữ cảm giác quán gia đình gần gũi.'},
+  {name:'Nhà Hàng Làng Quê',shape:'Nhà hàng một tầng mở rộng, có hiên',roof:'Mái ngói đỏ làng quê',yard:'Sân trước và hiên rộng',notes:'Không biến B5 thành nhà hai tầng; có sân và mái đỏ.'},
+  {name:'Nhà Hàng Phố Huyện',shape:'Tiệm phố huyện có gác lửng một phần',roof:'Phố huyện, gác lửng không phủ kín',yard:'Lối khách thị trấn',notes:'Chỉ gác lửng một phần, chưa phải nhà hai tầng hoàn chỉnh.'},
+  {name:'Nhà Hàng Sân Vườn',shape:'Một nhà chính hai tầng, cầu thang bên ngoài',roof:'Mái nhà chính hai tầng và ban công',yard:'Vườn rộng quanh nhà và lối lên tầng',notes:'B7 chỉ có MỘT nhà chính; S17 tránh cầu thang, S20 gắn dầm, không đặt đèn lên ban công.'},
+  {name:'Trung Tâm Ẩm Thực Quê',shape:'Ba khối nhà tạo sân mở hình chữ U',roof:'Mái ba khối riêng ôm sân trung tâm',yard:'Sân U; cánh trái VIP và tường thành tựu trung tâm',notes:'B8 có BA công trình ôm sân chữ U, quy mô vừa, nhỏ hơn rõ rệt so với B9.'},
+  {name:'Thương Hiệu Đặc Sản',shape:'Công trình hoành tráng cân xứng: sảnh giữa và hai cánh',roof:'Mái xanh than/xanh đen theo hình B9 đã duyệt',yard:'Quảng trường nước, đèn lồng và ánh hoàng hôn',notes:'Bảo toàn kiến trúc B9 đã duyệt: hai cánh cân xứng, khối trung tâm, quảng trường nước. Không thiết kế lại.'}
+ ].map((item,index)=>Object.freeze({...item,tier:index+1})));
+ const CAREER_FEATURES=Object.freeze({
+  boba:Object.freeze([
+   'Xe trà sữa, thùng đá và ly mang đi','Kệ trân châu dưới mái mới','Biển trà sữa và góc pha lắc','Bàn uống trà cùng gia đình','Hiên trà sữa, góc bánh và topping','Quầy thức uống nhìn xuống phố','Quầy trà sữa ở tầng trệt; ban công dành khách','Cánh khu trải nghiệm trà và góc check-in','Sảnh trà sữa trung tâm, biển “TRÀ SỮA Đặc Sản”']),
+  noodle:Object.freeze([
+   'Xe mì cay với nồi nước cốt','Quầy mì, hơi nước dưới mái che','Tủ topping nấm, cá và thịt','Góc ăn mì cay gia đình','Hiên ăn mì và bàn gia vị','Trạm nước cốt lớn cạnh gác lửng','Bếp mì tầng trệt; ban công khách nhìn vườn','Cánh nồi lẩu và gian gia vị; sân U thoáng','Sảnh Mì Cay Đặc Sản giữ nguyên tỷ lệ kiến trúc B9']),
+  streetfood:Object.freeze([
+   'Xe xiên que với vỉ nướng nhỏ','Mái quầy nướng và hộp nước chấm','Kệ xiên, than và bàn gọi món','Góc ăn xiên của cả nhà','Hiên nướng và bàn khách ngoài sân','Quầy nướng phố huyện dưới gác lửng','Bếp xiên tầng trệt, vườn ăn tối','Ba gian: vỉ nướng, quầy sốt, sân thưởng thức','Sảnh Xiên Que Đặc Sản giữ nguyên tỷ lệ kiến trúc B9'])
+ });
+ const ALL=Object.freeze(Object.keys(CAREERS).flatMap(career=>TIERS.map((tier,index)=>Object.freeze({
+  id:career+'-b'+(index+1),career,stage:index+1,title:tier.name,shape:tier.shape,roof:tier.roof,
+  yard:tier.yard,notes:tier.notes,feature:CAREER_FEATURES[career][index],
+  sign:index===8?CAREERS[career].signs[1]:CAREERS[career].signs[0],
+  assetStatus:'pending-approved-art'
+ }))));
+ const INDEX=new Map(ALL.map(item=>[item.id,item]));
+ const esc=x=>String(x??'').replace(/[&<>"']/g,ch=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[ch]));
+ const find=(career,stage)=>INDEX.get(career+'-b'+stage)||null;
+ let selected=0; // 0 = current tier; never stored in game save.
+ const current=()=>typeof gameState==='object'&&gameState?gameState:null;
+ function render(target){
+  const root=target||document.getElementById('v88-architecture-preview');
+  const s=current();if(!root||!s)return false;
+  const career=CAREERS[s.currentCareer]?s.currentCareer:'boba';
+  const tier=Math.max(1,Math.min(9,Math.floor(Number(s.shopStage)||0)+1));
+  const chosen=Math.max(1,Math.min(9,selected||tier));
+  const item=find(career,chosen),meta=CAREERS[career];
+  if(!item)return false;
+  const slots=typeof w.BPVQDecorV88?.slots==='function'?w.BPVQDecorV88.slots().filter(x=>x.tier<=chosen):[];
+  const customizable=slots.filter(x=>x.kind!=='system').length;
+  root.innerHTML=`<details class="v88-arch-fold">
+    <summary><span>🏡 Bản vẽ quán theo nghề</span><small>${esc(meta.icon)} ${esc(meta.name)} · B${tier}/9 · 27 mẫu kế hoạch</small></summary>
+    <div class="v88-arch-body">
+      <p class="v88-arch-hint">Bản vẽ tham chiếu trước khi gắn ảnh. Chỉ xem kiến trúc — không mở khóa, mua hay thay đổi save.</p>
+      <div class="v88-arch-tiers" role="group" aria-label="Xem bản vẽ bậc quán">${TIERS.map(t=>`<button type="button" class="${t.tier===chosen?'active':''}" aria-pressed="${t.tier===chosen}" onclick="BPVQArchitectureV88.select(${t.tier})">B${t.tier}${t.tier>tier?' 🔒':''}</button>`).join('')}</div>
+      <article class="v88-arch-card">
+        <b>${esc(meta.icon)} ${esc(item.title)} — ${esc(meta.name)}</b>
+        <p>${esc(item.feature)}</p>
+        <dl><div><dt>Kiến trúc</dt><dd>${esc(item.shape)}</dd></div><div><dt>Mái</dt><dd>${esc(item.roof)}</dd></div><div><dt>Sân / ngoại cảnh</dt><dd>${esc(item.yard)}</dd></div><div><dt>Quầy nghề</dt><dd>${esc(meta.area)}</dd></div><div><dt>Vị trí decor</dt><dd>${slots.length} slot đã mở ở B${chosen}, ${customizable} slot tùy biến</dd></div></dl>
+        <p class="v88-arch-note">⚠️ ${esc(item.notes)}</p><small>Ảnh công trình và điểm neo sprite: chưa tích hợp. Không thay thế thiết kế B9 đã duyệt.</small>
+      </article>
+    </div></details>`;
+  return true;
+ }
+ w.BPVQArchitectureV88=Object.freeze({
+  all:()=>ALL.slice(),
+  get:(career,stage)=>find(career,stage),
+  careers:()=>Object.keys(CAREERS),
+  stages:()=>TIERS.slice(),
+  render,
+  select(stage){const n=Number(stage);if(!Number.isInteger(n)||n<1||n>9)return false;selected=n;
+   const root=document.getElementById('v88-architecture-preview');const wasOpen=!!root?.querySelector('details')?.open;
+   const result=render(root);const fold=root?.querySelector('details');if(fold)fold.open=wasOpen;return result;},
+  reset(){selected=0}
+ });
 })(window);
