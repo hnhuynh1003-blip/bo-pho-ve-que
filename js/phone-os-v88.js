@@ -402,6 +402,7 @@ function renderConstruction(tab=buildTab){
  if(!['stage','layout','inventory','shop'].includes(tab))tab='stage';
  buildTab=tab;const s=state();if(!s)return;
  const stage=(Number(s.shopStage)||0)+1,project=s.shopConstruction;
+ if(s.decorV88&&Number(s.decorV88.lastStage)<stage)window.BPVQDecorV88?.reconcileStage?.();
  const stageCaption=project?`🏗️ Đang thi công · dự kiến ngày ${project.finishDay}`:`Bậc ${stage}/9 · ${fmt(s.coins)} Xu`;
  for(const x of [story,decor])if(x?.parentElement===views.construction)views.construction.removeChild(x);
  const pages=[['stage','🏗️ Mở rộng'],['layout','🪑 Bố trí'],['inventory','📦 Kho nội thất'],['shop','🛍️ Cửa hàng']];
@@ -1160,7 +1161,12 @@ updateMode();
    const placed=project(s),orig=raw(s);
    const unchanged=Object.keys(orig).length===Object.keys(placed.active).length&&
      Object.entries(orig).every(([k,v])=>placed.active[k]===v);
-   if(unchanged)return {ok:true,changed:false};
+   if(unchanged){
+     if(s.decorV88&&Number(s.decorV88.lastStage)!==level(s)){
+       const result=persist(s,{...orig});return {...result,changed:false};
+     }
+     return {ok:true,changed:false};
+   }
    const next={...placed.active},busy=new Set(Object.keys(placed.occupied));
    const preserve=[...new Set(Object.values(orig).filter(x=>owned(s).has(x)))];
    for(const id of preserve){
@@ -1214,7 +1220,7 @@ updateMode();
     `<div class="v88-decor-slots">`+SLOT_SPEC.map(slot=>{
       const open=slot.tier<=current,id=data.active[slot.id],reserved=data.occupied[slot.id]&&!id,sys=slot.kind==='system';
       const icon=sys?(slot.id==='S1'?'🪧':'🏅'):id?conf[id]?.icon||'🪑':reserved?'💎':open?'＋':'🔒';
-      const contents=sys?(slot.id==='S1'?'Tên quán':'Huy hiệu') : id?conf[id]?.name : reserved?'Thuộc bộ quầy đá':open?'Ô trống':'Mở ở bậc '+slot.tier;
+      const contents=sys?(slot.id==='S1'?(s.shopName||'Tên quán'):('Huy hiệu · '+(s.shopAvatar||'quán'))) : id?conf[id]?.name : reserved?'Thuộc bộ quầy đá':open?'Ô trống':'Mở ở bậc '+slot.tier;
       const canTarget=!!selected&&open&&!sys&&!reserved&&ALLOW[selected]?.includes(slot.id);
       return `<div class="v88-decor-slot ${!open?'v88-locked':''} ${sys?'v88-system':''} ${id?'v88-filled':''} ${canTarget?'v88-target':''}">
        <button type="button" ${!canTarget?'disabled':''} onclick="BPVQDecorV88.chooseSlot('${slot.id}')"><b>${slot.id}</b><span>${esc(icon)}</span><small>${esc(slot.name)}</small><em>${esc(contents)}</em></button>
