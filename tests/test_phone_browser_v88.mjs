@@ -34,7 +34,7 @@ for(const width of [320,390,430]){
       window.BPVQReborn.constructionTab('shop');
       check(el('growth-decor-grid')?.children.length===14,'14 legacy shop decor cards missing');
       window.BPVQReborn.constructionTab('stage');
-      check(el('v8775-construction-content')?.textContent.includes('Đã'),'stage view seems blank');
+      check(el('growth-panel-story')?.parentElement?.id==='v8775-construction-content' && (el('growth-panel-story')?.textContent||'').includes('Bậc 1'),'stage view missing growth stage content');
       window.VillageOS.open('notifications');
       check(!el('phone-app-notifications').classList.contains('hidden'),'notifications screen missing');
       window.VillageOS.open('settings');
