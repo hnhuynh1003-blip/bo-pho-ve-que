@@ -23,6 +23,10 @@ jobs:
         run: node tests/test_decor_v88.mjs
       - name: 27 architecture concepts and immutable game state
         run: node tests/test_shop_architecture_v88.mjs
+      - name: Reviewed scene manifest and real-art gates
+        run: |
+          node --check js/v88-shop-scenes.js
+          node tests/test_shop_scenes_v88.mjs
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
