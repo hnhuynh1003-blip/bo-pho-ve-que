@@ -50,6 +50,10 @@ jobs:
         run: |
           node --check js/v88-shop-sign.js
           node tests/test_shop_sign_v88.mjs
+      - name: Main Quán B1 QA scene and save-safety regression
+        run: |
+          node --check js/v88-live-scene-qa.js
+          node tests/test_v88_live_scene_qa.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest
         run: |
           mkdir -p v88-game-playtest
