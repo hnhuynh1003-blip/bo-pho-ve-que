@@ -25,6 +25,9 @@ for(const width of [320,390,430]){
       window.VillageOS.open('construction');
       check(!el('phone-app-construction').classList.contains('hidden'),'Xây Quán screen hidden');
       check(el('v8775-construction-content')?.textContent.includes('Bậc 1'),'stage overview did not render');
+      check(window.BPVQShopScenesV88?.diagnostics().total===27,'27-stage scene manifest missing');
+      check(window.BPVQShopScenesV88?.diagnostics().ready===0,'unapproved placeholder art was incorrectly activated');
+      check(document.querySelector('#v88-architecture-preview .v88-arch-art-pending')?.textContent.includes('0/27'),'missing-shell warning must be visible');
       window.BPVQReborn.constructionTab('layout');
       const slots=el('v8775-construction-content')?.querySelectorAll('.v88-decor-slot');
       check(slots?.length===24,'expected 24 rendered decor slots, got '+slots?.length);
