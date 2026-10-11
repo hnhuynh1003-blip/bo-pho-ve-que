@@ -52,10 +52,10 @@ jobs:
           node tests/test_shop_sign_v88.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest
         run: |
-          mkdir -p .v88-game-playtest
-          cp index.html asset-manifest.json chuyen-save.html .v88-game-playtest/
-          cp -R css js assets .v88-game-playtest/
-          cat > .v88-game-playtest/README_PLAYTEST.txt <<'EOF'
+          mkdir -p v88-game-playtest
+          cp index.html asset-manifest.json chuyen-save.html v88-game-playtest/
+          cp -R css js assets v88-game-playtest/
+          cat > v88-game-playtest/README_PLAYTEST.txt <<'EOF'
           BO PHO VE QUE v88 - GAME PLAYTEST (DRAFT - NOT A RELEASE)
           1. Download the GitHub Actions artifact BPVQ_v88_GAME_TEST_DRAFT and extract it.
           2. Open index.html with Chrome or Edge. Keep css, js and assets together.
@@ -69,7 +69,7 @@ jobs:
         uses: actions/upload-artifact@v4
         with:
           name: BPVQ_v88_GAME_TEST_DRAFT
-          path: .v88-game-playtest/
+          path: v88-game-playtest/
           retention-days: 14
           if-no-files-found: error
   browser-smoke:
