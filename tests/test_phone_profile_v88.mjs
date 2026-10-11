@@ -23,6 +23,8 @@ try{
         check(!!activeProfileId,'account not created');
         check(gameState.shopName===shop,'shop name not saved to game state');
         selectIntroCareer(career);
+        // v87.7.1 onboarding deliberately clears this input after creating a profile.
+        document.getElementById('intro-shop-name').value=shop;
         confirmStartGameFromIntro();
         check(gameState.currentCareer===career,'incorrect selected career');
         check(gameState.hasStarted===true,'game not started');
