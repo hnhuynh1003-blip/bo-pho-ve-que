@@ -620,5 +620,21 @@
         "standalone WebP approved by user, then responsive and save UAT"
       ]
     }
-  ]
+  ],
+  "designDecision": {
+    "status": "approved-art-direction-only",
+    "approvedDate": "2026-10-11",
+    "approvedBy": "project-owner",
+    "scope": "9 architectural outlines for B1-B3 across boba, noodle, streetfood, including independent vocational equipment, stage silhouettes, compatible slots and paint unlocks, and review by batch",
+    "doesNotApprove": [
+      "infographic panels or cropped images as production scene art",
+      "any B1 clean-pass draft without retouch",
+      "unfinished paid decor separation",
+      "unmeasured placement anchors",
+      "unfinished paint masks",
+      "publishing or merging into main"
+    ],
+    "productionScenesApproved": 0,
+    "nextProductionGate": "Submit nine independent, clean, correctly staged, decoration-free scene images together for art QA, then measured anchors and paint masks."
+  }
 }
