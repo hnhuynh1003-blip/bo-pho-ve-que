@@ -667,3 +667,42 @@ body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-blo
 }
 @media(prefers-reduced-motion:reduce){#modal-smartphone.v87772-home-polish .v87772-wallpaper-layer{transition:none!important}}
 
+
+/* === Xây Quán v88: Kho Nội Thất + 24-slot logical placement === */
+#modal-smartphone .v88-decor-tabs{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px;margin:8px 0}
+#modal-smartphone .v88-decor-tabs button{min-width:0;white-space:normal;min-height:39px;line-height:1.2;font-size:11px}
+#modal-smartphone .v88-decor-summary{margin:8px 0 9px;padding:12px;color:#fff1d7;font-size:11px;line-height:1.6;border-radius:16px;background:linear-gradient(145deg,#1b4647,#132c3c);border:1px solid rgba(245,220,154,.45)}
+#modal-smartphone .v88-decor-summary small{font-size:10px;color:#f0dfc5;font-weight:400}
+#modal-smartphone .v88-decor-action-row{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px}
+#modal-smartphone .v88-decor-action-row button,
+#modal-smartphone .v88-decor-footer{background:#f7daa1;border:1px solid #af8b4b;border-radius:11px;font-size:11px;font-weight:800;color:#3f321c;padding:10px 8px;min-height:39px}
+#modal-smartphone .v88-decor-slots{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;margin-bottom:12px}
+#modal-smartphone .v88-decor-slot{min-width:0;display:flex;flex-direction:column;justify-content:space-between;text-align:center;border:1px solid #7ca99b;border-radius:13px;background:linear-gradient(165deg,#234b4c,#162e36);color:#fff0d5;overflow:hidden}
+#modal-smartphone .v88-decor-slot.v88-filled{border-color:#f1ca70}
+#modal-smartphone .v88-decor-slot.v88-target{box-shadow:0 0 0 2px #f9e79a}
+#modal-smartphone .v88-decor-slot.v88-locked{opacity:.55;background:#172835}
+#modal-smartphone .v88-decor-slot.v88-system{background:linear-gradient(165deg,#344c51,#263743)}
+#modal-smartphone .v88-decor-slot>button:first-child{display:flex;flex-direction:column;align-items:center;gap:3px;width:100%;background:none;border:0;padding:8px 4px;color:inherit;min-height:104px;cursor:pointer;white-space:normal}
+#modal-smartphone .v88-decor-slot>button:disabled{cursor:default}
+#modal-smartphone .v88-decor-slot b{font-size:10px;color:#fad58f}
+#modal-smartphone .v88-decor-slot span{font-size:23px;line-height:1.15}
+#modal-smartphone .v88-decor-slot small{font-size:9px;line-height:1.2;font-weight:800;max-width:100%;overflow-wrap:anywhere}
+#modal-smartphone .v88-decor-slot em{font-size:9px;color:#dbe3dc;font-style:normal;line-height:1.25;max-width:100%;overflow-wrap:anywhere}
+#modal-smartphone .v88-decor-store{margin:0 5px 6px;padding:6px 2px;border-radius:7px;border:1px solid #c7a263;background:#fce2b0;color:#3b311b;font-size:10px;font-weight:800}
+#modal-smartphone .v88-decor-hint{margin:8px 0;padding:10px 12px;border-radius:12px;background:#203c43;color:#dbd4be;font-size:10px;line-height:1.6}
+#modal-smartphone .v88-decor-items{display:flex;flex-direction:column;gap:7px}
+#modal-smartphone .v88-decor-item{min-width:0;display:flex;gap:9px;align-items:center;padding:9px;border-radius:12px;border:1px solid #4c6871;background:#1d333d;color:#f8e7c5}
+#modal-smartphone .v88-decor-item.v88-owned{border-color:#a7a16c;background:#25403f}
+#modal-smartphone .v88-decor-item .v88-decor-icon{flex:0 0 31px;font-size:25px;text-align:center}
+#modal-smartphone .v88-decor-item>div{min-width:0;flex:1;display:flex;flex-direction:column;gap:3px}
+#modal-smartphone .v88-decor-item b{font-size:11px;line-height:1.2}
+#modal-smartphone .v88-decor-item small{font-size:9px;color:#e4e4d0;line-height:1.3}
+#modal-smartphone .v88-decor-item>button{flex:0 0 auto;padding:9px 7px;border-radius:9px;background:#f8daa2;border:0;color:#3b301b;font-size:10px;font-weight:900;min-height:35px}
+#modal-smartphone .v88-decor-item>button:disabled{background:#485b64;color:#cbd2cb}
+#modal-smartphone .v88-decor-footer{display:block;width:100%;margin:10px 0}
+@media(max-width:350px){
+ #modal-smartphone .v88-decor-slots{gap:5px}
+ #modal-smartphone .v88-decor-slot>button:first-child{padding:6px 2px;min-height:96px}
+ #modal-smartphone .v88-decor-item{gap:5px;padding:6px}
+ #modal-smartphone .v88-decor-item>button{padding:7px 4px}
+}
