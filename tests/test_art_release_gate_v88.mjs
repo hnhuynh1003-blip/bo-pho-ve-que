@@ -38,7 +38,16 @@ assert.ok(result.reason.some(x=>x.includes('Missing or invalid tier slot set')))
 result=auditRecord({...proposed,artwork:'../../etc/passwd'},root);
 assert.ok(result.reason.some(x=>x.includes('Expected canonical game asset')));
 assert.ok(result.reason.some(x=>x.includes('Production image does not exist')));
-result=auditRecord({...proposed,artwork:null,approved:false,artReview:'pending',anchors:{}},root);
+result=auditRecord({...proposed,paintLayers:{
+ ...proposed.paintLayers,roof:{type:'mask',path:'assets/images/v88/masks/boba-b1-roof.png'}
+}},root);
+assert.ok(result.reason.some(x=>x.includes('Unexpected or locked paint layer roof')),'B1 roof color layer is premature');
+result=auditRecord({...proposed,artwork:null,approved:false,artReview:'pending',anchors:{},
+ sourceKind:'concept-preview',assetType:'concept-preview',artApproval:undefined,paintLayers:{}},root);
+assert.equal(result.pending,false,'metadata-bearing concept is not a blank draft');
+assert.ok(result.reason.some(x=>x.includes('standalone clean shell')));
+result=auditRecord({...proposed,artwork:null,approved:false,artReview:'pending',anchors:{},
+ sourceKind:undefined,assetType:undefined,artApproval:undefined,paintLayers:{}},root);
 assert.equal(result.pending,true);
 assert.equal(result.valid,false);
 console.log('ART RELEASE V88: 27 draft scenes remain locked; CI denies missing art/masks, concept crops, absent approval and incomplete anchors PASS');
