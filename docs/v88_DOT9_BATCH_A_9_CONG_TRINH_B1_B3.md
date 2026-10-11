@@ -50,3 +50,14 @@
 - Cổng sản xuất thực sự: mỗi công trình có ảnh WebP độc lập, đúng bậc, không dính UI/decor mua thêm, mask sơn theo bậc và số neo 6/9/11 được đo trên ảnh đã sửa. Chỉ bật manifest công trình khi qua duyệt mỹ thuật và kiểm thử mobile/save.
 
 **Trạng thái lô A sau REV2: 9 tham khảo, 0 ảnh nền sạch đạt chuẩn gameplay.** PR tiếp tục Draft và `main` vẫn là v87.8.0.1.
+
+## 7. Xác nhận chủ dự án: CHỐT HƯỚNG THIẾT KẾ LÔ A — 11/10/2026
+**Quyết định:** ĐÃ DUYỆT phương án kiến trúc và hướng sản xuất lô A gồm **3 nghề × B1–B3 = 9 cảnh**. Chốt quy trình kiểm duyệt theo lô thay vì kiểm duyệt từng món trang trí.
+
+**Phạm vi đã duyệt:** B1 xe đẩy hai bánh, B2 quầy cố định không bánh xe, B3 tiệm gỗ một tầng; Trà Sữa dùng bình trà/topping, Mì Cay dùng bếp/nồi nước cốt, Xiên Que dùng vỉ nướng/khay xiên; bảo toàn bộ ID slot và vùng sơn đã thống nhất. Tái sử dụng ảnh Trà Sữa gốc làm tham chiếu, không vẽ lại toàn bộ kiến trúc đã thống nhất một cách vô ích.
+
+**Không được hiểu là duyệt ảnh sản xuất:** 9 hình đối chiếu trong gói REV2 là **3 concept cũ + 6 crop từ infographic**. Chưa có 9 shell sạch độc lập. B1 draft chưa retouch mỹ thuật, B2 Trà Sữa gốc còn bánh xe, các cảnh nghề khác vẫn chưa có file chuẩn; do đó **số ảnh game-ready = 0/9**. Không tự cập nhật `approved:true`, không copy ảnh crop vào thư mục `shops`.
+
+**Trình tự đã chốt:** (1) hoàn thiện clean-pass + mask/anchor mẫu B1; (2) sản xuất đủ 9 ảnh đơn lẻ đúng nghề, đúng bậc; (3) QA nghệ thuật và bố cục chung bằng một contact sheet; (4) đo anchor theo từng ảnh, xuất mask/asset tối ưu; (5) kiểm thử giao diện dọc, ca bán, save cũ rồi mới đề xuất nghiệm thu asset. **Không merge `main` nếu chưa có yêu cầu phát hành riêng.**
+
+Máy đọc quyết định này ở trường `designDecision` trong `docs/v88_BATCH_A_9_SCENES_SPEC.json`; trường `scenes[].ready` vẫn là `false` cho cả 9 cảnh.
