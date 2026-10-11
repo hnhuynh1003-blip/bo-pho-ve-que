@@ -50,6 +50,28 @@ jobs:
         run: |
           node --check js/v88-shop-sign.js
           node tests/test_shop_sign_v88.mjs
+      - name: Bundle complete v88 gameplay for manual draft playtest
+        run: |
+          mkdir -p .v88-game-playtest
+          cp index.html asset-manifest.json chuyen-save.html .v88-game-playtest/
+          cp -R css js assets .v88-game-playtest/
+          cat > .v88-game-playtest/README_PLAYTEST.txt <<'EOF'
+          BO PHO VE QUE v88 - GAME PLAYTEST (DRAFT - NOT A RELEASE)
+          1. Download the GitHub Actions artifact BPVQ_v88_GAME_TEST_DRAFT and extract it.
+          2. Open index.html with Chrome or Edge. Keep css, js and assets together.
+          3. Create a NEW TEST PROFILE; do not overwrite or remove your real game save.
+          4. If your browser blocks some file:// features, use a local HTTP server instead.
+          5. This build contains current v88 Phone OS, Kho Noi That, Son Mau, 27 blueprints.
+          6. B1 Draft5 review art is NOT integrated; 0/27 production shop shells are approved.
+          7. Do NOT merge main based only on a successful CI run. Back up your real saves.
+          EOF
+      - name: Upload complete v88 draft game test (14-day artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPVQ_v88_GAME_TEST_DRAFT
+          path: .v88-game-playtest/
+          retention-days: 14
+          if-no-files-found: error
   browser-smoke:
     runs-on: ubuntu-latest
     timeout-minutes: 15
