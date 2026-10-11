@@ -34,7 +34,7 @@ for(const row of plan.scenes){
  assert.equal(row.slotIds.length,[6,9,11][row.tier-1]);
  assert.deepEqual([...row.slotIds].sort(),Array.from(scenes.stageSlots(row.tier)).sort(),'slot IDs disagree with existing game');
  const paintUnlocked=paint.regions().filter(zone=>row.tier>=zone.min&&row.tier<=zone.max).map(zone=>zone.id);
- assert.deepEqual([...row.paintZones].sort(),paintUnlocked.sort(),'paint zones violate existing restrictions');
+ assert.deepEqual([...row.paintZones].sort(),Array.from(paintUnlocked).sort(),'paint zones violate existing restrictions');
  assert.ok(row.approvedGeometry.includes(stageShapes.get(row.tier)),'missing locked structural stage shape');
  assert.ok(row.qualityGates.length>=6);
  if(row.career==='boba'){
