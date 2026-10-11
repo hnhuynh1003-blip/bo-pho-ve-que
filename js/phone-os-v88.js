@@ -1287,6 +1287,13 @@ updateMode();
   if(!item)return false;
   const slots=typeof w.BPVQDecorV88?.slots==='function'?w.BPVQDecorV88.slots().filter(x=>x.tier<=chosen):[];
   const customizable=slots.filter(x=>x.kind!=='system').length;
+  // The scene registry is data-only and refuses to display unapproved/missing artwork.
+  const scene=w.BPVQShopScenesV88?.get(career,chosen);
+  const artProgress=w.BPVQShopScenesV88?.diagnostics?.();
+  const placed=w.BPVQDecorV88?.snapshot?.()?.active||{};
+  const sceneMarkup=scene?.isReady
+    ? `<figure class="v88-arch-scene"><img src="${esc(scene.artwork)}" alt="Kiến trúc ${esc(item.title)} · ${esc(meta.name)}" loading="lazy">${Object.entries(scene.anchors).map(([slot,pin])=>`<span class="v88-arch-anchor ${chosen===tier&&placed[slot]?'v88-arch-occupied':''}" title="${esc(slot)}" style="left:${pin.x*100}%;top:${pin.y*100}%;z-index:${pin.layer}">${esc(slot)}</span>`).join('')}<figcaption>Ảnh shell đã duyệt · anchor đo riêng cho B${chosen}</figcaption></figure>`
+    : `<div class="v88-arch-art-pending" role="status">🖼️ Chưa có ảnh shell sạch được duyệt cho ${esc(meta.name)} B${chosen}<small>${artProgress?.ready||0}/27 ảnh đạt hợp đồng xuất bản · Không lấy ảnh cắt từ concept làm nền</small></div>`;
   root.innerHTML=`<details class="v88-arch-fold">
     <summary><span>🏡 Bản vẽ quán theo nghề</span><small>${esc(meta.icon)} ${esc(meta.name)} · B${tier}/9 · 27 mẫu kế hoạch</small></summary>
     <div class="v88-arch-body">
@@ -1294,9 +1301,10 @@ updateMode();
       <div class="v88-arch-tiers" role="group" aria-label="Xem bản vẽ bậc quán">${TIERS.map(t=>`<button type="button" class="${t.tier===chosen?'active':''}" aria-pressed="${t.tier===chosen}" onclick="BPVQArchitectureV88.select(${t.tier})">B${t.tier}${t.tier>tier?' 🔒':''}</button>`).join('')}</div>
       <article class="v88-arch-card">
         <b>${esc(meta.icon)} ${esc(item.title)} — ${esc(meta.name)}</b>
+        ${sceneMarkup}
         <p>${esc(item.feature)}</p>
         <dl><div><dt>Kiến trúc</dt><dd>${esc(item.shape)}</dd></div><div><dt>Mái</dt><dd>${esc(item.roof)}</dd></div><div><dt>Sân / ngoại cảnh</dt><dd>${esc(item.yard)}</dd></div><div><dt>Quầy nghề</dt><dd>${esc(meta.area)}</dd></div><div><dt>Vị trí decor</dt><dd>${slots.length} slot đã mở ở B${chosen}, ${customizable} slot tùy biến</dd></div></dl>
-        <p class="v88-arch-note">⚠️ ${esc(item.notes)}</p><small>Ảnh công trình và điểm neo sprite: chưa tích hợp. Không thay thế thiết kế B9 đã duyệt.</small>
+        <p class="v88-arch-note">⚠️ ${esc(item.notes)}</p><small>${scene?.isReady?'Điểm neo hiển thị theo shell đã duyệt.':'Ảnh công trình và điểm neo sprite chưa tích hợp.'} Không thay thế thiết kế B9 đã duyệt.</small>
       </article>
     </div></details>`;
   return true;
