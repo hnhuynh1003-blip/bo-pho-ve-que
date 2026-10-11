@@ -28,6 +28,12 @@ for(const width of [320,390,430]){
       check(window.BPVQShopScenesV88?.diagnostics().total===27,'27-stage scene manifest missing');
       check(window.BPVQShopScenesV88?.diagnostics().ready===0,'unapproved placeholder art was incorrectly activated');
       check(document.querySelector('#v88-architecture-preview .v88-arch-art-pending')?.textContent.includes('0/27'),'missing-shell warning must be visible');
+      check(typeof window.BPVQShopSignV88?.render==='function','S1 dynamic shop-name component missing');
+      check(window.BPVQShopSignV88.render(window.BPVQShopScenesV88.get('boba',1),'Quán Test')==='','draft B1 must not display a production shop sign');
+      const signFixture=document.createElement('div');
+      signFixture.innerHTML=window.BPVQShopSignV88.render({career:'boba',tier:1,isReady:true,anchors:{S1:{x:.505,y:.373,layer:4}}},'Tiệm <b>Test</b>');
+      check(signFixture.querySelector('.v88-arch-shop-sign')?.textContent==='Tiệm <b>Test</b>','S1 shop title must be escaped text, not parsed HTML');
+      check(!signFixture.querySelector('b'),'S1 sign must not inject arbitrary tags');
       window.BPVQReborn.constructionTab('layout');
       const slots=el('v8775-construction-content')?.querySelectorAll('.v88-decor-slot');
       check(slots?.length===24,'expected 24 rendered decor slots, got '+slots?.length);
