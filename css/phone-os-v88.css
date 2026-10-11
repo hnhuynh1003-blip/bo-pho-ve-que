@@ -735,3 +735,64 @@ body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-blo
 #modal-smartphone .v88-arch-anchor{position:absolute;transform:translate(-50%,-50%);pointer-events:none;display:flex;align-items:center;justify-content:center;min-width:24px;min-height:22px;padding:2px 3px;border-radius:7px;border:1px solid #f8ecc7;color:#1c3335;background:rgba(245,226,171,.88);font-size:9px;font-weight:900;line-height:1}
 #modal-smartphone .v88-arch-anchor.v88-arch-occupied{background:#73d8b8}
 #modal-smartphone .v88-arch-scene figcaption{position:absolute;bottom:0;left:0;right:0;background:rgba(13,28,32,.84);padding:8px 5px;line-height:1.35;color:#fff;font-size:9px;text-align:center}
+
+/* ===== v88 Sơn Màu Quán — preview-only, responsive and isolated from game scene. ===== */
+#modal-smartphone.v8775-reborn .v8775-tabs.v88-decor-tabs{display:grid!important;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px;overflow:visible!important}
+#modal-smartphone.v8775-reborn .v8775-tabs.v88-decor-tabs button{min-width:0;min-height:35px;padding:5px 4px;white-space:normal;overflow-wrap:anywhere;font-size:10px;line-height:1.2}
+#modal-smartphone.v8775-reborn .v8775-tabs.v88-decor-tabs button:last-child:nth-child(odd){grid-column:1/-1;min-height:31px}
+#modal-smartphone .v88-paint-panel{display:flex;flex-direction:column;gap:10px;min-width:0;padding:0;color:#f4e7cb;overflow-wrap:anywhere}
+#modal-smartphone .v88-paint-heading{display:flex;flex-direction:column;gap:3px;min-width:0;background:linear-gradient(135deg,#295557,#25394e);border:1px solid #7b8f81;border-radius:12px;padding:10px}
+#modal-smartphone .v88-paint-heading>b{font-size:13px;color:#ffe3a2}
+#modal-smartphone .v88-paint-heading>small{font-size:10px;color:#dbebdf}
+#modal-smartphone .v88-paint-panel h4{font-size:12px;font-weight:900;color:#ffdc95;margin:3px 0 0}
+#modal-smartphone .v88-paint-disclaimer,#modal-smartphone .v88-paint-footnote{font-size:10px;line-height:1.6;color:#e1ded0;background:#233d43;border-radius:10px;padding:9px;margin:0}
+#modal-smartphone .v88-paint-presets{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:6px}
+#modal-smartphone .v88-paint-preset{min-width:0;display:flex;align-items:center;flex-direction:column;gap:3px;justify-content:center;padding:8px 3px;min-height:66px;border-radius:11px;border:1px solid #6e8580;background:linear-gradient(140deg,#264a4a,#1e3540);color:#f6e9c9;cursor:pointer}
+#modal-smartphone .v88-paint-preset span{font-size:21px;line-height:1.15}
+#modal-smartphone .v88-paint-preset b{font-size:10px;text-align:center}
+#modal-smartphone .v88-paint-preset small{font-size:9px;text-align:center;color:#d1dccc}
+#modal-smartphone .v88-paint-preset.selected{border:2px solid #ffdd82;background:#3d584b}
+#modal-smartphone .v88-paint-preset:disabled{opacity:.48;cursor:default}
+#modal-smartphone .v88-paint-regions{display:flex;flex-direction:column;gap:7px}
+#modal-smartphone .v88-paint-region{padding:8px;background:#193840;border:1px solid #577772;border-radius:10px;min-width:0}
+#modal-smartphone .v88-paint-region.locked{opacity:.57}
+#modal-smartphone .v88-paint-region-title{display:flex;align-items:start;justify-content:space-between;gap:6px;min-width:0}
+#modal-smartphone .v88-paint-region-title b{font-size:11px;flex:1}
+#modal-smartphone .v88-paint-region-title small{font-size:9px;max-width:48%;text-align:right;color:#ead9b0;line-height:1.35}
+#modal-smartphone .v88-paint-colors{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;margin-top:7px}
+#modal-smartphone .v88-paint-color{min-width:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;padding:4px 1px;min-height:49px;border:1px solid #567275;border-radius:8px;background:#29404a;color:#eee0bf}
+#modal-smartphone .v88-paint-color.selected{border:2px solid #f6db85;background:#334f4b}
+#modal-smartphone .v88-paint-color span{display:block;width:25px;height:22px;border-radius:6px;border:1px solid #e9d7bd;flex-shrink:0}
+#modal-smartphone .v88-paint-color small{font-size:8px;line-height:1.2;overflow-wrap:anywhere;text-align:center}
+#modal-smartphone .v88-paint-reset{border:1px solid #d8b778;border-radius:10px;background:#ecd09a;color:#382e22;padding:10px 8px;font-weight:900;font-size:11px;min-height:39px}
+#modal-smartphone .v88-paint-scene{position:relative;isolation:isolate;overflow:hidden;width:100%;height:172px;border-radius:13px;border:1px solid #9d946d;background:#b9e2df}
+#modal-smartphone .v88-paint-sky{position:absolute;inset:0 0 28%;background:linear-gradient(175deg,#9dcbe4,#e2f3e8)}
+#modal-smartphone .v88-paint-land{position:absolute;inset:65% 0 0;background:linear-gradient(170deg,#89a77a 10%,#cab88b 70%)}
+#modal-smartphone .v88-paint-building{position:absolute;bottom:17px;left:50%;transform:translateX(-50%);width:53%;height:106px}
+#modal-smartphone .v88-paint-wall{position:absolute;bottom:6px;left:6%;right:6%;height:60%;background:var(--paint-wall);border:5px solid var(--paint-wood);border-radius:3px}
+#modal-smartphone .v88-paint-roof{position:absolute;bottom:59%;left:0;right:0;height:40%;clip-path:polygon(50% 0,100% 95%,100% 100%,0 100%,0 95%);background:var(--paint-roof);filter:drop-shadow(0 3px 2px #3b342655);z-index:2}
+#modal-smartphone .v88-paint-wood{position:absolute;left:22%;right:22%;bottom:7px;height:31%;border:4px solid var(--paint-wood);border-bottom:0;border-radius:3px 3px 0 0;background:rgba(50,72,68,.18)}
+#modal-smartphone .v88-paint-sign{position:absolute;left:12%;right:12%;top:52%;text-align:center;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;padding:3px 4px;border-radius:5px;border:2px solid var(--paint-wood);background:var(--paint-sign);color:#fffaf0;text-shadow:0 1px 2px #302b25;font-size:10px;font-weight:900;z-index:4}
+#modal-smartphone .v88-paint-canopy{display:none;position:absolute;bottom:75%;left:-8%;right:-8%;height:37%;background:var(--paint-canopy);clip-path:polygon(50% 0,95% 90%,100% 100%,0 100%,5% 90%);border-radius:12px}
+#modal-smartphone .v88-paint-wheel{display:none;position:absolute;bottom:-3px;width:19px;height:19px;border-radius:50%;background:#392b21;border:4px solid #8e7654}
+#modal-smartphone .v88-paint-wheel.left{left:15%}
+#modal-smartphone .v88-paint-wheel.right{right:15%}
+#modal-smartphone .v88-paint-lamp{position:absolute;bottom:63%;font-size:15px;color:var(--paint-light);text-shadow:0 0 7px var(--paint-light);z-index:5}
+#modal-smartphone .v88-paint-lamp.left{left:6%}
+#modal-smartphone .v88-paint-lamp.right{right:6%}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-building{width:43%;height:82px;bottom:27px}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-roof{display:none}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-canopy{display:block}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-wall{height:50%}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-sign{top:50%}
+#modal-smartphone .v88-paint-scene.cart .v88-paint-wheel{display:block}
+#modal-smartphone .v88-paint-scene.stall .v88-paint-building{width:48%;height:95px}
+#modal-smartphone .v88-paint-scene.stall .v88-paint-wall{height:54%}
+#modal-smartphone .v88-paint-scene.stall .v88-paint-sign{top:52%}
+#modal-smartphone .v88-paint-scene.house .v88-paint-building{width:55%;height:112px}
+#modal-smartphone .v88-paint-scene.courtyard .v88-paint-building{width:70%;height:120px}
+#modal-smartphone .v88-paint-scene.courtyard .v88-paint-wall{border-left-width:15px;border-right-width:15px}
+#modal-smartphone .v88-paint-scene.flagship .v88-paint-building{width:80%;height:132px}
+#modal-smartphone .v88-paint-scene.flagship .v88-paint-wall{border-left-width:18px;border-right-width:18px}
+#modal-smartphone .v88-paint-preview-watermark{position:absolute;bottom:3px;left:0;right:0;z-index:6;text-align:center;font-size:7px;font-weight:900;letter-spacing:.02em;color:#263d43;background:#e1e7cfbb}
+@media(max-width:359px){#modal-smartphone .v88-paint-scene{height:151px}#modal-smartphone .v88-paint-presets{gap:4px}#modal-smartphone .v88-paint-color span{width:21px;height:20px}}
