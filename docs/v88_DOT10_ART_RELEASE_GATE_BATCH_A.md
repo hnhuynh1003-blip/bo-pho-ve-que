@@ -23,3 +23,11 @@
 6. Không merge `main`, không sửa save, Xu, SP, slot hay thưởng decor nếu người dùng chưa chốt phát hành.
 
 **Phân biệt rõ:** chốt **hướng thiết kế** lô A ≠ duyệt **chín ảnh production**. `BPVQShopScenesV88.diagnostics().ready` tiếp tục phải là **0**.
+
+## 11/10/2026 — Trà Sữa B1 clean-pass draft 4 (kiểm duyệt offline)
+- Sau khi thử tạo độc lập **Mì Cay B1**, công cụ vẫn xuất **bảng 3×3** có cả ba nghề. Đã **dừng** cách sinh ảnh đó thay vì sử dụng crop độ phân giải thấp làm art.
+- Quay lại **ảnh thật B1 Trà Sữa 1200×900**: từ `B1_CLEAN_BASE_DRAFT_3.png`, xử lý vùng di tích gỗ/đèn treo R2 ở phía phải bằng ghép patch cùng ảnh với offset 43 px và alpha feather Gaussian (sigma 6); không thay toàn bộ scene.
+- Xuất `B1_CLEANPASS_DRAFT4_RETOUCH_NHAP.png` và sáu trạng thái màu dù **gốc/Kem Sữa/Trắng Kem/Hồng Trà/Xanh Quê/Mật Ong** trong gói offline `BPVQ_V88_TRA_SUA_B1_CLEANPASS_DRAFT4_KIEM_DUYET.zip`, cùng ảnh đối chiếu `BPVQ_V88_B1_DRAFT3_SO_VOI_DRAFT4.jpg` và manifest kỹ thuật.
+- Đã kiểm tra pixel giữ nguyên 4 crop: vùng vải dù chính, bánh lớn, bình trà, mặt trước quầy. Phạm vi retouch nhắm vào polygon gần `x=805–858, y=299–385`.
+- **Chưa chứng nhận art-ready:** vẫn có khả năng lặp texture mái/cây tại mép vá, còn cần rà toàn cảnh hàng rào và bên trái, làm bảng tên S1, chốt 6 anchor trên ảnh cuối. Hình chưa tải binary vào GitHub và chưa được người dùng duyệt mỹ thuật.
+- `boba-b1` tiếp tục `approved:false`, `artReview:'pending'`, `isReady:false`. `main` và save không đổi. Các phiên bản màu và manifest ở gói QA chỉ để duyệt, **không** cấp quyền asset production.
