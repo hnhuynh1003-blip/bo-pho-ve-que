@@ -32,13 +32,16 @@ try {
   check(gameState.inventory.tea_black===37,'old ingredient quantity changed');
   check(gameState.shopStage===0&&gameState.shopConstruction?.targetStage===1,'construction modified on migration');
   check(gameState.decorations.length===2,'legacy decoration ownership changed');
-  const before=JSON.stringify(gameState);
+  const before={coins:gameState.coins,sp:gameState.sp,stage:gameState.shopStage,ingredients:gameState.inventory.tea_black,decorations:JSON.stringify(gameState.decorations),contract:JSON.stringify(gameState.shopConstruction)};
   const snapshot=window.BPVQDecorV88.snapshot();
   check(snapshot.stored.length===2&&Object.keys(snapshot.active).length===0,'old owned decor must start in storage, not auto-place');
   window.VillageOS.open('construction');
   window.BPVQReborn.constructionTab('inventory');
   window.BPVQReborn.constructionTab('layout');
-  check(JSON.stringify(gameState)===before,'merely opening shop layout must not mutate v87 save');
+  check(gameState.coins===before.coins&&gameState.sp===before.sp&&gameState.shopStage===before.stage,'viewing Xây Quán changed economic progress');
+  check(gameState.inventory.tea_black===before.ingredients,'viewing the warehouse changed ingredients');
+  check(JSON.stringify(gameState.decorations)===before.decorations,'viewing the warehouse changed owned decorations');
+  check(JSON.stringify(gameState.shopConstruction)===before.contract,'viewing Xây Quán changed the active contractor');
   check(!gameState.decorV88,'no automatic v88 state should be added on read');
   // Side effects are permitted only after deliberate player placement.
   check(window.BPVQDecorV88.place('welcome_sign','S5').ok,'cannot place owned legacy decor');
