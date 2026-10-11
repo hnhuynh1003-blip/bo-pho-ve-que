@@ -1,0 +1,117 @@
+{
+  "version": "v88-b1-mask-review-1",
+  "id": "boba-b1",
+  "source": "TRA_SUA_B01_PREVIEW.webp",
+  "canvas": {
+    "width": 1200,
+    "height": 900
+  },
+  "sourceStatus": "recovered-concept-unaltered",
+  "productionReady": false,
+  "assetsUploadedToGitHub": false,
+  "phase": "color-mask-and-cleanpass-qa-not-final",
+  "acceptedRemoveCandidates": [
+    "R1",
+    "R2",
+    "R3",
+    "R4",
+    "R5",
+    "R6",
+    "R7"
+  ],
+  "regions": {
+    "canopy": {
+      "kind": "cloth-green-panels-color-mask",
+      "originalImageOnly": true,
+      "sourceResolution": [
+        1200,
+        900
+      ],
+      "maskFile": "MASK_B1_CANOPY_FABRIC_DRAFT.png",
+      "baseGreenTintCandidates": [
+        "cream",
+        "vanilla",
+        "tea_rose",
+        "sage",
+        "honey"
+      ],
+      "awaitingEdgeRetouch": true
+    },
+    "sign": {
+      "kind": "proposed-overlay-not-existing-baked-sign",
+      "pixelBox": [
+        492,
+        323,
+        706,
+        368
+      ],
+      "maskFile": "MASK_B1_SIGN_PROPOSED_DRAFT.png",
+      "needsArtistApproval": true,
+      "textFromPlayerShopName": true
+    },
+    "purchasableDecor": {
+      "kind": "remove-from-clean-copy",
+      "maskFile": "MASK_B1_PURCHASED_PROPS_DRAFT.png",
+      "physicallyRemoved": false,
+      "needsInpainting": true
+    }
+  },
+  "anchors": {
+    "S1": {
+      "x": 0.505,
+      "y": 0.373,
+      "layer": 4
+    },
+    "S5": {
+      "x": 0.322,
+      "y": 0.557,
+      "layer": 3
+    },
+    "S6": {
+      "x": 0.612,
+      "y": 0.557,
+      "layer": 3
+    },
+    "S8": {
+      "x": 0.298,
+      "y": 0.448,
+      "layer": 4
+    },
+    "S11": {
+      "x": 0.242,
+      "y": 0.706,
+      "layer": 3
+    },
+    "S14": {
+      "x": 0.172,
+      "y": 0.836,
+      "layer": 3
+    }
+  },
+  "sourceFileChecks": {
+    "keep": [
+      "wooden two-wheel cart silhouette",
+      "cream-olive striped awning",
+      "basic tea urn cups toppings worktop",
+      "natural village environment"
+    ],
+    "doNotBake": [
+      "paid lights",
+      "paid menu board",
+      "loose stools",
+      "movable pots/flowers",
+      "player shop-name text"
+    ],
+    "allRemovalsCompleted": false
+  },
+  "reviewSources": {
+    "archive": "DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1(1).zip",
+    "previous": "docs/v88_DOT7_B1_CLEANPASS_REVIEW.md"
+  },
+  "notes": [
+    "Only green cloth panels are color-sampled from exact source; cream strips retain their original color.",
+    "Illustrative B1 canopy masks are not validated production painting layers.",
+    "Masks, recolor variants, and QA images are in external downloadable review ZIP, not checked in.",
+    "Geometry points are estimated against concept and require remeasurement on final clean shell."
+  ]
+}
