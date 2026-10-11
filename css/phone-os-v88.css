@@ -706,3 +706,23 @@ body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-blo
  #modal-smartphone .v88-decor-item{gap:5px;padding:6px}
  #modal-smartphone .v88-decor-item>button{padding:7px 4px}
 }
+
+/* v88 architecture catalogue (read-only, within the EXISTING Xây Quán app). */
+#modal-smartphone .v88-arch-preview{margin:4px 0 10px;min-width:0}
+#modal-smartphone .v88-arch-fold{border:1px solid rgba(234,196,134,.52);border-radius:14px;background:linear-gradient(150deg,#213a44,#1a2e37);overflow:hidden}
+#modal-smartphone .v88-arch-fold summary{display:flex;align-items:start;flex-direction:column;gap:2px;list-style-position:inside;padding:10px 12px;cursor:pointer;color:#f5deaf;font-size:12px;font-weight:900}
+#modal-smartphone .v88-arch-fold summary small{font-size:10px;font-weight:500;color:#cde1d8}
+#modal-smartphone .v88-arch-body{padding:0 10px 10px}
+#modal-smartphone .v88-arch-hint{color:#d6e4e3;font-size:10px;line-height:1.45;margin:4px 0 8px}
+#modal-smartphone .v88-arch-tiers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px;margin:6px 0 10px}
+#modal-smartphone .v88-arch-tiers button{border:1px solid #537477;background:#203842;border-radius:8px;color:#e5d9b9;min-height:30px;min-width:0;font-size:10px;font-weight:800}
+#modal-smartphone .v88-arch-tiers button.active{background:#ddbc7e;color:#312d24;border-color:#f9dfb0}
+#modal-smartphone .v88-arch-card{min-width:0;display:flex;flex-direction:column;gap:7px;background:#102b31;border:1px solid #526e6a;border-radius:12px;padding:10px;color:#e9ebd8;overflow-wrap:anywhere}
+#modal-smartphone .v88-arch-card>b{font-size:12px;color:#f7d69e;line-height:1.4}
+#modal-smartphone .v88-arch-card>p{font-size:10px;line-height:1.5;margin:0}
+#modal-smartphone .v88-arch-card dl{display:flex;flex-direction:column;gap:5px;margin:0}
+#modal-smartphone .v88-arch-card dl>div{display:grid;grid-template-columns:34% minmax(0,1fr);gap:6px;padding:6px 0;border-top:1px solid rgba(255,255,255,.1)}
+#modal-smartphone .v88-arch-card dt{font-size:9px;font-weight:900;color:#e4c987}
+#modal-smartphone .v88-arch-card dd{font-size:10px;line-height:1.45;margin:0}
+#modal-smartphone .v88-arch-note{background:#3c3223;padding:7px 9px;border-radius:8px;color:#ffdc9d}
+#modal-smartphone .v88-arch-card>small{font-size:9px;color:#afc7c4;line-height:1.5}
