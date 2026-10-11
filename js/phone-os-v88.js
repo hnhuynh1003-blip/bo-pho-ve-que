@@ -405,7 +405,7 @@ function renderConstruction(tab=buildTab){
  if(s.decorV88&&Number(s.decorV88.lastStage)<stage)window.BPVQDecorV88?.reconcileStage?.();
  const stageCaption=project?`🏗️ Đang thi công · dự kiến ngày ${project.finishDay}`:`Bậc ${stage}/9 · ${fmt(s.coins)} Xu`;
  for(const x of [story,decor])if(x?.parentElement===views.construction)views.construction.removeChild(x);
- const pages=[['stage','🏗️ Mở rộng'],['layout','🪑 Bố trí'],['inventory','📦 Kho nội thất'],['shop','🛍️ Cửa hàng']];
+ const pages=[['stage','🏗️ Mở rộng'],['layout','🪑 Bố trí'],['inventory','📦 Kho nội thất'],['shop','🛍️ Cửa hàng'],['paint','🎨 Sơn Màu']];
  views.construction.innerHTML=pfx('🏗️','Xây Quán','Mở rộng · Kho Nội Thất · Bố trí theo bậc')+
  `<div class="v8775-info">${stageCaption}${project?`<br>📅 Từ ngày ${project.startedDay} tới ngày ${project.finishDay} · đã trả ${fmt(project.cost)} Xu`:''}<br>Trang trí và đặt đồ không thay đổi phí xây, Xu hoặc bonus sở hữu.</div>`+
  `<div class="v8775-tabs v88-decor-tabs">${pages.map(([id,label])=>`<button data-on="${tab===id}" onclick="BPVQReborn.constructionTab('${id}')">${label}</button>`).join('')}</div><div id="v8775-construction-content"></div>`;
