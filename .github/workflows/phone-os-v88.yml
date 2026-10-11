@@ -1,0 +1,21 @@
+name: Phone OS v88 check
+on:
+  push:
+    branches: [feat/v88-phone-os-core]
+  pull_request:
+    paths: [index.html, 'js/phone-os-v88.js', 'css/phone-os-v88.css', 'tests/verify_phone_os_v88.mjs']
+  workflow_dispatch:
+jobs:
+  phone-os:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse gameplay JS
+        run: node --check js/game.js
+      - name: Parse merged Phone OS JS
+        run: node --check js/phone-os-v88.js
+      - name: Structural compatibility checks
+        run: node tests/verify_phone_os_v88.mjs
