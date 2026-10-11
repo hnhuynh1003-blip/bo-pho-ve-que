@@ -41,6 +41,11 @@ jobs:
         run: node tests/test_art_batch_a_v88.mjs
       - name: Batch A reference-image provenance and no-premature-approval gate
         run: node tests/test_batch_a_review_rev2_v88.mjs
+      - name: Physical shell masks anchors and owner approval release gate
+        run: |
+          node --check scripts/v88-art-release-gate.mjs
+          node tests/test_art_release_gate_v88.mjs
+          node scripts/v88-art-release-gate.mjs
       - name: Dynamic S1 shop-name label and scene coordinate correctness
         run: |
           node --check js/v88-shop-sign.js
