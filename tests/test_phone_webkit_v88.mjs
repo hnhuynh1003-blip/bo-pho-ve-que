@@ -12,7 +12,7 @@ try{
     await page.route('https://cdnjs.cloudflare.com/**',r=>r.abort('blockedbyclient'));
     try{
       await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded',timeout:45000});
-      await page.waitForFunction(()=>!!window.VillageOS&&!!window.BPVQReborn&&!!window.BPVQDecorV88&&!!window.BPVQArchitectureV88,{timeout:30000});
+      await page.waitForFunction(()=>!!window.VillageOS&&!!window.BPVQReborn&&!!window.BPVQDecorV88&&!!window.BPVQArchitectureV88&&!!window.BPVQShopPaintV88,{timeout:30000});
       const snapshot=await page.evaluate(()=>{
         const require=(ok,why)=>{if(!ok)throw Error(why)};
         window.openSmartPhoneModal();
@@ -23,6 +23,12 @@ try{
         require(document.querySelectorAll('.v88-decor-slot').length===24,'layout slots missing');
         window.BPVQReborn.constructionTab('inventory');
         require(document.querySelectorAll('.v88-decor-item').length===14,'inventory rows missing');
+        window.BPVQReborn.constructionTab('paint');
+        const paint=document.querySelector('#v8775-construction-content .v88-paint-panel');
+        require(paint?.querySelectorAll('.v88-paint-preset').length===8,'paint presets missing on WebKit');
+        const pRect=paint.getBoundingClientRect();
+        const phoneBox=document.querySelector('.phone-shell').getBoundingClientRect();
+        require(pRect.width>0&&pRect.left>=phoneBox.left-2&&pRect.right<=phoneBox.right+2,'paint panel exceeds WebKit phone width');
         window.BPVQReborn.constructionTab('stage');
         const details=document.querySelector('#v88-architecture-preview details');
         require(!!details,'architecture preview missing');
@@ -35,7 +41,7 @@ try{
         require(!document.getElementById('phone-app-home').classList.contains('hidden'),'back home failure');
         window.closeSmartPhoneModal();
         require(document.getElementById('modal-smartphone').classList.contains('hidden'),'close phone failure');
-        return {apps:window.VillageOS.listApps().length,slotCount:24,decorCount:14,blueprints:window.BPVQArchitectureV88.all().length};
+        return {apps:window.VillageOS.listApps().length,slotCount:24,decorCount:14,blueprints:window.BPVQArchitectureV88.all().length,paintPresets:window.BPVQShopPaintV88.presets().length};
       });
       assert.deepEqual(errors,[],'JS runtime errors');
       console.log('WEBKIT MOBILE PASS',width+'px',JSON.stringify(snapshot));
