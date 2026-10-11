@@ -1293,7 +1293,7 @@ updateMode();
   const artProgress=w.BPVQShopScenesV88?.diagnostics?.();
   const placed=w.BPVQDecorV88?.snapshot?.()?.active||{};
   const sceneMarkup=scene?.isReady
-    ? `<figure class="v88-arch-scene"><img src="${esc(scene.artwork)}" alt="Kiến trúc ${esc(item.title)} · ${esc(meta.name)}" loading="lazy">${Object.entries(scene.anchors).map(([slot,pin])=>`<span class="v88-arch-anchor ${chosen===tier&&placed[slot]?'v88-arch-occupied':''}" title="${esc(slot)}" style="left:${pin.x*100}%;top:${pin.y*100}%;z-index:${pin.layer}">${esc(slot)}</span>`).join('')}<figcaption>Ảnh shell đã duyệt · anchor đo riêng cho B${chosen}</figcaption></figure>`
+    ? `<figure class="v88-arch-scene"><img src="${esc(scene.artwork)}" alt="Kiến trúc ${esc(item.title)} · ${esc(meta.name)}" loading="lazy">${Object.entries(scene.anchors).filter(([slot])=>slot!=='S1').map(([slot,pin])=>`<span class="v88-arch-anchor ${chosen===tier&&placed[slot]?'v88-arch-occupied':''}" title="${esc(slot)}" style="left:${pin.x*100}%;top:${pin.y*100}%;z-index:${pin.layer}">${esc(slot)}</span>`).join('')}${w.BPVQShopSignV88?.render(scene,s.shopName)||''}<figcaption>Ảnh shell đã duyệt · anchor đo riêng cho B${chosen}</figcaption></figure>`
     : `<div class="v88-arch-art-pending" role="status">🖼️ Chưa có ảnh shell sạch được duyệt cho ${esc(meta.name)} B${chosen}<small>${artProgress?.ready||0}/27 ảnh đạt hợp đồng xuất bản · Không lấy ảnh cắt từ concept làm nền</small></div>`;
   root.innerHTML=`<details class="v88-arch-fold">
     <summary><span>🏡 Bản vẽ quán theo nghề</span><small>${esc(meta.icon)} ${esc(meta.name)} · B${tier}/9 · 27 mẫu kế hoạch</small></summary>
