@@ -399,7 +399,7 @@ function renderCharacter(view=charTab){
 }
 function renderConstruction(tab=buildTab){
  tab=tab==='decor'?'shop':tab;
- if(!['stage','layout','inventory','shop'].includes(tab))tab='stage';
+ if(!['stage','layout','inventory','shop','paint'].includes(tab))tab='stage';
  buildTab=tab;const s=state();if(!s)return;
  const stage=(Number(s.shopStage)||0)+1,project=s.shopConstruction;
  if(s.decorV88&&Number(s.decorV88.lastStage)<stage)window.BPVQDecorV88?.reconcileStage?.();
