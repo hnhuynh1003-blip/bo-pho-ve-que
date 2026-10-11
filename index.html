@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v88.12.1 — Game Test Sân Quán B1</title>
+  <title>Bỏ Phố Về Quê v88.14.0 — Cooking Station 2.0 TEST</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -34,6 +34,7 @@
   <link rel="stylesheet" href="css/v88-live-scene-qa.css?v=88.12.1-test" />
   <link rel="stylesheet" href="css/v8780-source-ledger.css?v=87.8.0" />
   <link rel="stylesheet" href="css/v87801-farm-balance.css?v=87.8.0.1" />
+  <link rel="stylesheet" href="css/v88-cooking-station.css?v=88.14.0" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -357,6 +358,17 @@
           </div>
         </aside>
 
+        <!-- v88 Cooking Station 2.0: single mobile-portrait interactive kitchen -->
+        <section id="cs20-station" hidden aria-label="Bếp có hồn, trạm chế biến tương tác">
+          <div class="cs20-head"><div><h2>🍃 Bếp Có Hồn</h2><div class="cs20-sub">Dấu Ấn Chế Biến · Mobile Cooking 2.0</div></div><span class="cs20-brand">TRẠM NẤU</span></div>
+          <div class="cs20-ticket" aria-live="off"><div class="cs20-ticket-head"><span id="cs20-customer-name">Đang chờ khách</span><span id="cs20-order-time">—</span></div><div id="cs20-order-text">Chưa có đơn.</div></div>
+          <div class="cs20-stage"><figcaption><strong id="cs20-dish-name">Món đang làm</strong><small id="cs20-dish-detail"></small><div class="cs20-field"><span id="cs20-gauge-label">Tiến độ</span><div class="cs20-meter"><span id="cs20-gauge"></span></div></div><small id="cs20-valuation">Vốn / Giá</small><small id="cs20-craft">✨ Dấu ấn món</small></figcaption><div id="cs20-visual"></div></div>
+          <div class="cs20-price"><span id="cs20-profit">Lãi dự kiến</span><div class="cs20-stepper"><button id="cs20-price-down" type="button" aria-label="Giảm giá bán 5 Xu">−</button><strong id="cs20-sale-price">45 Xu</strong><button id="cs20-price-up" type="button" aria-label="Tăng giá bán 5 Xu">+</button></div></div>
+          <div class="cs20-pantry"><div id="cs20-groups" aria-label="Chọn nhóm nguyên liệu"></div><div id="cs20-shelf" aria-label="Khay nguyên liệu cuộn ngang"></div></div>
+          <div class="cs20-feedback" id="cs20-feedback" role="status" aria-live="polite"></div>
+          <div class="cs20-grill-actions"><button type="button" id="cs20-flip" hidden>↻ Lật xiên</button><button type="button" id="cs20-sauce" hidden>✦ Quét sốt</button></div>
+          <div class="cs20-actions"><button class="cs20-button" type="button" id="cs20-undo">↺ Làm lại</button><button class="cs20-button" type="button" id="cs20-primary">Bắt đầu</button></div>
+        </section>
         <div class="workbench-shell v52-shop-workbench bench-frame text-white rounded-3xl p-3 shadow-xl border space-y-2.5">
           <div class="workbench-topbar">
             <div class="flex items-center gap-1.5">
@@ -1642,6 +1654,7 @@
   <script src="js/v88-shop-sign.js?v=88.0.1-preview"></script>
   <script src="js/v88-shop-paint.js?v=88.0.1-preview"></script>
   <script src="js/v88-live-scene-qa.js?v=88.12.1-test"></script>
+  <script src="js/v88-cooking-station.js?v=88.14.0"></script>
   <script src="js/v8780-source-ledger.js?v=87.8.0"></script>
 </body>
 </html>

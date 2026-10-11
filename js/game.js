@@ -6084,7 +6084,9 @@ function v8752BuyFestival(id){
       playSound('serve');
 
       clearTimeout(shakeTimer);
+      const csShakeCustomer=currentCustomer;
       shakeTimer = setTimeout(() => {
+        if(window.BPVQCookingStation?.isActive?.() && (currentCustomer!==csShakeCustomer || gameState.phase!=='open'))return;
         workbenchDish.isShaken = true;
         if (btn) btn.disabled = false;
         if (st) st.innerText = 'Đã lắc lạnh sâu & dập nắp ✨';
@@ -6219,7 +6221,9 @@ function v8752BuyFestival(id){
       playSound('serve');
 
       clearTimeout(noodleCookTimer);
+      const csNoodleCustomer=currentCustomer;
       noodleCookTimer = setTimeout(() => {
+        if(window.BPVQCookingStation?.isActive?.() && (currentCustomer!==csNoodleCustomer || gameState.phase!=='open'))return;
         workbenchDish.isCooked = true;
         if (btn) btn.disabled = false;
         if (statusTxt) statusTxt.innerText = 'Thố đất sôi sùng sục! 🍲';
@@ -6361,8 +6365,10 @@ function v8752BuyFestival(id){
 
       clearInterval(fryInterval);
       workbenchDish.fryProgress = 0;
+      const csGrillCustomer=currentCustomer;
       fryInterval = setInterval(() => {
-        workbenchDish.fryProgress += 4;
+        if(window.BPVQCookingStation?.isActive?.() && (currentCustomer!==csGrillCustomer || gameState.phase!=='open')){clearInterval(fryInterval);return;}
+        workbenchDish.fryProgress += (window.BPVQCookingStation?.isActive?.() ? 2 : 4);
         if (bar) bar.style.width = `${Math.min(100, workbenchDish.fryProgress)}%`;
 
         if (workbenchDish.fryProgress >= 100) {
@@ -13221,6 +13227,79 @@ function v8752BuyFestival(id){
     setInterval(v68UpdateOrderDock, 700);
 
   
+
+
+
+/* V88 Cooking Station bridge: no independent economy/save engine. */
+(function installBPVQCookingBridge(){
+  const orderKeys=new WeakMap();let counter=0;
+  const copy=o=>JSON.parse(JSON.stringify(o));
+  const itemGroups={
+    boba:{container:['cup_m','cup_l','cup_xl'],base:['tea_black','tea_green','tea_strawberry','tea_taro','milk_fresh','tea_honey','tea_oolong','tea_jasmine'],topping:['topping_boba','topping_pudding','topping_jelly','topping_white_boba','topping_aloe','topping_redbean','topping_cheese_foam','topping_grass_jelly','topping_cookie','topping_crystal','topping_mochi','topping_lychee']},
+    noodle:{container:['bowl_m','bowl_l','bowl_xl'],base:['broth_kimchi','broth_tomyum','broth_beef','broth_mushroom','broth_mala','broth_collagen','broth_tonkotsu','broth_herbal'],topping:['ntop_beef','ntop_shrimp','ntop_squid','ntop_fishcake','ntop_sausage','ntop_enoki','ntop_egg','ntop_cheese','ntop_tofu','ntop_bokchoy','ntop_crabstick','ntop_corn','ntop_meatball','ntop_dumpling']},
+    streetfood:{container:['tray_plate','tray_basket','tray_box'],topping:['skewer_fish','skewer_beef','skewer_shrimp','skewer_sausage','skewer_tofu','skewer_quail','skewer_mushroom','skewer_crabstick','skewer_okra','skewer_chicken','skewer_squid'],sauce:['sauce_sweet_chili','sauce_tamarind','sauce_butter_garlic','sauce_cheese','sauce_satay','sauce_mayo','sauce_honey_mustard','sauce_bbq']}
+  };
+  const permitted=()=>gameState&&gameState.hasStarted&&['boba','noodle','streetfood'].includes(gameState.currentCareer);
+  function snapshot(){
+    const career=gameState.currentCareer||'boba',d=copy(workbenchDish),i=gameState.inventory||{};
+    let customer=null;
+    if(gameState.phase==='open'&&currentCustomer){
+      if(!orderKeys.has(currentCustomer))orderKeys.set(currentCustomer,++counter);
+      customer={key:'o'+orderKeys.get(currentCustomer),name:String(currentCustomer.name||'Khách'),description:formatCustomerOrder(currentCustomer.order),patience:Math.max(0,Number(currentCustomer.patience)||0)};
+    }
+    const label={};const catalog=[];
+    const sets=itemGroups[career]||itemGroups.boba;
+    Object.entries(sets).forEach(([group,keys])=>keys.forEach(id=>{
+      const def=ITEM_DICTIONARY[id]||{};label[id]=String(def.name||id);
+      catalog.push({id,group,name:label[id],icon:def.icon||'',stock:Number(i[id]||0),unlocked:!!isItemStoryUnlocked(id,career)});
+    }));
+    return {career,phase:gameState.phase,started:!!gameState.hasStarted,customer,dish:d,catalog,label,cost:calculateDishCost(),stockStamp:catalog.map(x=>x.stock).join(','),pause:!!phonePauseActive};
+  }
+  function choose(group,key,delta=1){
+    if(!permitted())return false;
+    const career=gameState.currentCareer;
+    const resetFinish=()=>{clearTimeout(shakeTimer);clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;};
+    if(group==='sugar'&&career==='boba'&&[30,70,100].includes(Number(key))){resetFinish();setBobaSugar(Number(key));return true;}
+    if(group==='ice'&&career==='boba'&&[0,50,100].includes(Number(key))){resetFinish();setBobaIce(Number(key));return true;}
+    if(group==='spice'&&career==='noodle'&&Number.isInteger(Number(key))&&Number(key)>=0&&Number(key)<=7){resetFinish();setNoodleSpicyLevel(Number(key));return true;}
+    if(!Array.isArray(itemGroups[career]?.[group])||!itemGroups[career][group].includes(key))return false;
+    if(!isItemStoryUnlocked(key,career))return false;
+    if(delta>=0&&Number(gameState.inventory[key]||0)<=0){openQuickRestock(key);return false;}
+    resetFinish();
+    if(group==='container'){
+      if(career==='boba')setBobaCupSize(key.slice(4).toUpperCase());
+      else if(career==='noodle')setNoodleBowlSize(key.slice(5).toUpperCase());
+      else setSkewerTray(({tray_plate:'plate',tray_basket:'basket',tray_box:'box'}[key]));
+    }else if(group==='base'){
+      if(career==='boba')setBobaTeaBase(key);else setNoodleBroth(key);
+    }else if(group==='sauce')setSkewerSauce(key);
+    else if(group==='topping'){
+      if(career==='streetfood')adjustSkewerCount(key,Math.sign(delta)||1);
+      else toggleDishTopping(key);
+    }
+    return true;
+  }
+  function complete(kind){
+    if(!permitted()||gameState.phase!=='open'||!currentCustomer)return false;
+    if(kind==='boba'&&gameState.currentCareer==='boba')startShakeProcess();
+    else if(kind==='noodle'&&gameState.currentCareer==='noodle')startCookNoodleProcess();
+    else if(kind==='startGrill'&&gameState.currentCareer==='streetfood')startFryProcess();
+    else if(kind==='streetfood'&&gameState.currentCareer==='streetfood')pullFryProcess();
+    else return false;
+    return true;
+  }
+  let lastServed=null;
+  function deliver(){
+    if(!permitted()||gameState.phase!=='open'||!currentCustomer||phonePauseActive)return false;
+    if(lastServed===currentCustomer)return false;
+    const missing=getMissingDishIngredients(getDishRequirements());
+    if(missing.length){showToast('Thiếu nguyên liệu, chưa giao món.','📦');return false;}
+    const person=currentCustomer;
+    if((gameState.currentCareer==='boba'&&!workbenchDish.isShaken)||(gameState.currentCareer==='noodle'&&!workbenchDish.isCooked)||(gameState.currentCareer==='streetfood'&&workbenchDish.fryState==='unfried')){showToast('Chưa hoàn thiện công đoạn chế biến.','🍲');return false;}
+    lastServed=person;serveDishToCustomer();return true;
+  }
+  window.BPVQCookingBridge=Object.freeze({snapshot,choose,complete,deliver,adjustPrice(delta){if(!permitted())return false;adjustDishPrice(Number(delta)||0);return true;},reset(){cleanWorkbenchDish();renderWorkbenchControls();updateWorkbenchPreview();return true;}});
+})();
 
 /* ==== V73 art override ==== */
 (function applyV73ArtRefresh() {
