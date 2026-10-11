@@ -51,4 +51,19 @@ const badCoordinate={...accepted,anchors:{...allPins,S1:{x:1.1,y:.2,layer:2}}};
 assert.equal(api.validate(badCoordinate).ready,false,'normalized coordinates must lie inside 0..1');
 const corrupt={...accepted,id:'boba-b9'};
 assert.equal(api.validate(corrupt).ready,false,'id and tier cannot disagree');
+const refs=api.conceptReferences();
+assert.equal(refs.length,9,'previously created Trà Sữa concepts must be registered');
+for(let n=1;n<=9;n++){
+  const x=api.getConcept('boba',n);
+  assert.ok(x,'missing historical preview '+n);
+  assert.equal(x.sceneId,'boba-b'+n);
+  assert.equal(x.sourceFile,'TRA_SUA_B'+String(n).padStart(2,'0')+'_PREVIEW.webp');
+  assert.equal(x.proposedPreviewPath,'assets/images/v88/concepts/boba-b'+n+'-concept.webp');
+  assert.equal(x.isProductionShell,false,'a concept is not an approved clean scene');
+  assert.equal(x.inRepository,false,'binary previews have not been committed through the text-only GitHub connection');
+  assert.equal(api.get('boba',n).isReady,false,'concept must never bypass approved shell checks');
+}
+assert.equal(api.getConcept('boba',9).supersededByLaterApprovedB9,true,'historical red-roof B9 is not the new locked blue-roof B9');
+assert.equal(api.getConcept('noodle',1),null,'do not invent Mì Cay concepts from Trà Sữa artwork');
+assert.equal(api.getConcept('streetfood',1),null,'do not invent Xiên Que concepts from Trà Sữa artwork');
 console.log('V88: 27 pending safe manifests, per-tier slot contract and approved local shell validation PASS');
