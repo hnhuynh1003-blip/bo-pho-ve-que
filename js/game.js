@@ -13313,7 +13313,19 @@ function v8752BuyFestival(id){
     if(group==='spice'&&career==='noodle'&&Number.isInteger(Number(key))&&Number(key)>=0&&Number(key)<=7){resetFinish();setNoodleSpicyLevel(Number(key));return true;}
     if(!Array.isArray(itemGroups[career]?.[group])||!itemGroups[career][group].includes(key))return false;
     if(!isItemStoryUnlocked(key,career))return false;
-    if(group==='topping'&&career!=='streetfood'&&delta<0)return adjustDishToppingPortion(key,delta);
+    // Changing a topping invalidates cooking completion. Reject attempts that cannot
+    // change the portion count *before* resetting the cooked state or a running timer.
+    if(group==='topping'&&career!=='streetfood'){
+      const currentPortions=dishToppingCounts(workbenchDish)[key]||0;
+      const nextPortions=Math.max(0,Math.min(3,currentPortions+Math.sign(delta)));
+      if(nextPortions===currentPortions)return false;
+      if(nextPortions>Number(gameState.inventory[key]||0)){
+        openQuickRestock(key);return false;
+      }
+      const changed=adjustDishToppingPortion(key,delta);
+      if(changed)resetFinish();
+      return changed;
+    }
     if(delta>=0&&Number(gameState.inventory[key]||0)<=0){openQuickRestock(key);return false;}
     resetFinish();
     if(group==='container'){
