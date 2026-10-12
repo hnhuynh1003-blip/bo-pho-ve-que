@@ -14,6 +14,9 @@ try{
   await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
   await page.waitForFunction(()=>!!window.BPVQCookingStation&&!!window.BPVQUnifiedShop);
   await page.evaluate(c=>{
+   document.getElementById('account-new-name').value='Quầy TEST '+c;createLocalAccount();
+   document.getElementById('intro-shop-name').value='Quầy TEST';selectedIntroCareerChoice=c;confirmStartGameFromIntro();
+   if(window.v8771SkipStory)window.v8771SkipStory();if(window.v8771ChooseHelp)window.v8771ChooseHelp('off');
    for(const id of ['screen-account','screen-intro'])document.getElementById(id).classList.add('hidden');
    gameState.hasStarted=true;gameState.currentCareer=c;gameState.phase='open';gameState.shiftClosed=false;
    gameState.level=20;gameState.shopStage=0;gameState.coins=450;
@@ -41,7 +44,7 @@ try{
   assert.equal(geometry.tapCount,0,'tea base must not have a second selector');
   assert.equal(geometry.containerCount,geometry.catalogContainerCount,'all native container choices stay available');
   assert.ok(!geometry.groups.some(x=>['Chọn ly','Chọn thố','Chọn khay','Điều vị'].includes(x)),'no repeated size/flavor pantry tabs');
-  assert.ok(geometry.item.height<=64,'compact topping height');
+  assert.ok(geometry.item.height<=80,'ingredient art remains compact and touchable');
   assert.ok(geometry.horizontal<=1,'no horizontal overflow');
   assert.ok(geometry.header.height<=56,'header stays compact');
   assert.ok(Math.abs(geometry.nav.bottom-height)<=1,'area dock touches bottom');
@@ -54,7 +57,7 @@ try{
    const groups=page.locator('#cs20-groups');await groups.getByRole('button',{name:'Cốt trà',exact:true}).click();
    assert.ok(await page.locator('#cs20-shelf .cs20-item').count()>0,'native tea catalog available');
    await groups.getByRole('button',{name:'Siro',exact:true}).click();
-   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.ok(shelf.height<=64,'single siro uses one row');
+   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'siro preserves installed counter space');
    await groups.getByRole('button',{name:'Topping',exact:true}).click();
   }
   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(60);

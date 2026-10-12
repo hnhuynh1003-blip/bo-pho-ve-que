@@ -1,0 +1,59 @@
+/* v88.16.3: installed counter slots never depend on customer presence. */
+#v88-live-scene.us21-unified .cs27-shop-controls{height:40px;min-height:40px;max-height:40px;flex-wrap:nowrap;overflow:hidden}
+#v88-live-scene.us21-unified .v88-live-frame,#v88-live-scene.us21-unified.us21-serving .v88-live-frame{aspect-ratio:4/3!important;max-height:none!important;transition:none!important}
+#v88-live-scene.us21-unified .us21-train-note{display:none!important}
+#v88-live-scene.us21-unified #cs20-station,#v88-live-scene.us21-unified #cs20-station[data-state="idle"]{display:grid!important;padding:7px!important;gap:4px!important;background:repeating-linear-gradient(90deg,#be906321 0 1px,transparent 1px 48px),repeating-linear-gradient(178deg,transparent 0 28px,#e4b47929 29px 30px),linear-gradient(105deg,#f4dcb5,#fff0ce 45%,#ecd0a5)!important;border-top:3px solid #b88b58!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-ticket,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-ticket,#v88-live-scene.us21-unified.us21-practicing #cs20-station .cs20-ticket{display:grid!important;grid-template-rows:26px 12px minmax(0,1fr);height:100px;min-height:100px;max-height:100px;box-sizing:border-box;padding:5px 7px!important;gap:2px;background:#fffaf0!important;border:1px solid #d7ba8e;border-radius:12px;box-shadow:0 2px 3px #92633615}
+#v88-live-scene.us21-unified #cs20-station .cs20-ticket-head{height:26px;min-height:26px}
+#v88-live-scene.us21-unified #cs20-station #cs20-customer-name{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#v88-live-scene.us21-unified #cs20-station .cs27-customer-meta,#v88-live-scene.us21-unified #cs20-station[data-state="practice"] .cs27-customer-meta{display:flex!important;height:12px;min-height:12px;overflow:hidden}
+#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs27-customer-meta,#v88-live-scene.us21-unified #cs20-station[data-state="practice"] .cs27-customer-meta{visibility:hidden}
+#v88-live-scene.us21-unified #cs20-station #cust-avatar,#v88-live-scene.us21-unified #cs20-station[data-state="practice"] #cust-avatar{display:grid!important}
+#v88-live-scene.us21-unified #cs20-station[data-state="idle"] #cust-avatar,#v88-live-scene.us21-unified #cs20-station[data-state="practice"] #cust-avatar{visibility:hidden}
+#v88-live-scene.us21-unified #cs20-station #cs20-order-text{min-height:0;max-height:100%;overflow-y:auto;overscroll-behavior:contain;font-size:10.5px;line-height:14px;scrollbar-width:thin;padding-right:2px}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-stage{display:grid!important;height:164px;min-height:164px!important;max-height:164px;padding:4px 5px!important;border-radius:12px!important;border:1px solid #b79161;background:repeating-linear-gradient(90deg,transparent 0 37px,#b4875333 38px 39px),linear-gradient(110deg,#f8e6c6,#f3d5a4 75%,#e9c894);box-shadow:inset 0 2px 0 #fff1d9,inset 0 -3px 0 #d0a57328}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage figcaption{height:152px;gap:3px;grid-template-rows:14px 40px 28px 23px 14px 18px;align-content:start}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-detail{height:28px;line-height:12px;overflow:hidden}
+#v88-live-scene.us21-unified #cs20-station #cs20-craft{height:18px;overflow:hidden;font-size:9px;line-height:10px}
+#v88-live-scene.us21-unified #cs20-station #cs20-valuation{font-size:9px;line-height:12px;overflow:hidden;white-space:nowrap}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual{height:150px;min-height:150px!important;padding-right:65px;filter:drop-shadow(0 3px 2px #855b2920)}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{height:145px!important;max-width:140px;overflow:visible}
+#cs26-meters{top:24px}
+#cs27-containers .cs27-container{position:relative;min-height:40px;height:40px;padding:1px;display:flex;align-items:center;justify-content:center;gap:3px;background:#fff4d8;border:1px solid #c8a574;box-shadow:inset 0 -2px 0 #ca9f6f22}
+#cs27-containers .cs27-container.picked{background:#e6f1cc;border-color:#559469;color:#376548;box-shadow:0 0 0 1px #87b78b}
+.cs28-cup-stack{display:inline-block;width:12px;height:19px;border:1.5px solid #a98460;border-radius:3px 3px 5px 5px;background:repeating-linear-gradient(0deg,#fff7e5 0 3px,#cdb697 4px 4.5px);transform:perspective(30px) rotateX(-9deg);box-shadow:0 2px 0 #b89774}
+#cs27-containers button:nth-child(2) .cs28-cup-stack{height:23px}
+#cs27-containers button:nth-child(3) .cs28-cup-stack{height:26px}
+#cs20-station:not([data-career="boba"]) .cs28-cup-stack{display:none}
+#v88-live-scene.us21-unified #cs20-station .cs20-price,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-price,#v88-live-scene.us21-unified.us21-practicing #cs20-station .cs20-price{display:flex!important;height:38px;min-height:38px;box-sizing:border-box}
+#v88-live-scene.us21-unified #cs20-station .cs20-pantry,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-pantry{display:grid!important;height:238px;min-height:238px;grid-template-rows:32px 160px 28px;box-sizing:border-box;padding:4px!important;gap:4px;border:1px solid #b8915e;border-radius:11px;background:linear-gradient(#c99b6833,#ffe6b888);box-shadow:inset 0 2px 0 #fff2da99}
+#v88-live-scene.us21-unified #cs20-station #cs20-groups{height:32px;min-height:32px}
+#v88-live-scene.us21-unified #cs20-station .cs20-group{background:#fff5df;border-color:#cdb18a!important;color:#886341!important;box-shadow:inset 0 -2px 0 #d4b08226}
+#v88-live-scene.us21-unified #cs20-station .cs20-group.selected{background:#7aa982!important;color:#fff!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf,#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-rows="1"]{grid-template-rows:repeat(2,78px)!important;height:160px!important;min-height:160px!important;max-height:160px;gap:4px;padding:0!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item{position:relative;height:78px!important;min-height:0!important;padding:0!important;gap:1px!important;justify-content:flex-start;background:transparent!important;border:0!important;border-radius:8px!important;box-shadow:none;overflow:visible;touch-action:manipulation}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item.picked{background:#d8e9bd55!important;outline:2px solid #70a075;outline-offset:-1px}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item:disabled{opacity:.58;filter:saturate(.65)}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-image{position:relative;height:54px;width:58px;min-height:54px;flex:none;display:grid;place-items:center;overflow:visible;font-size:30px}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-image>img{max-width:100%;max-height:100%}
+#v88-live-scene.us21-unified #cs20-station .cs20-item-name{height:21px;min-height:21px;max-height:21px;line-height:10px!important;font-size:9px!important;padding:1px 2px!important;color:#614933;background:#fff6dfb3;border-radius:5px;max-width:100%!important}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-stock{position:absolute;right:2px;top:1px;z-index:3;max-width:38px;min-width:15px;min-height:14px;padding:1px 3px;font-size:8px;line-height:12px;font-weight:900;background:#fff2cf;border:1px solid #ad895c;border-radius:8px;color:#6e5235;overflow:hidden;white-space:nowrap;box-shadow:0 1px 2px #6f482522}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-portion{top:2px;left:2px;right:auto;z-index:4;padding:1px 3px;font-size:8px;border-radius:5px}
+.cs28-tray-food{position:absolute;inset:18% 20% 22%;border-radius:13%;overflow:hidden;background:#ecd8ae;display:grid;place-items:center;font-size:23px}
+.cs28-tray-food img{width:150%;height:150%;max-width:none!important;max-height:none!important;object-fit:cover;position:absolute;left:-25%;top:-25%}
+.cs28-tray-rim{position:absolute;inset:0;width:100%;height:100%;max-width:100%;max-height:100%;object-fit:fill;pointer-events:none;filter:none!important}
+.cs28-dispenser .cs28-jar-shell{position:absolute;inset:0;width:100%;height:100%;object-fit:fill;filter:none!important}
+.cs28-dispenser .cs28-tea-fill{position:absolute;top:37%;left:14%;width:71%;height:35%;border-radius:13%;mix-blend-mode:multiply;opacity:.8;pointer-events:none}
+.cs28-dispenser .cs28-jar-tag{position:absolute;top:48%;left:33%;width:35%!important;height:24%!important;object-fit:cover;max-width:none!important;max-height:none!important;opacity:.85;border-radius:20%;filter:none!important;pointer-events:none}
+#cs26-pager,#cs26-pager:empty{height:28px;min-height:28px;max-height:28px}
+#cs26-pager:empty{visibility:hidden}
+#v88-live-scene.us21-unified #cs20-station .cs20-feedback{height:30px;min-height:30px!important;max-height:30px;padding:3px 6px!important;box-sizing:border-box;overflow-y:auto;line-height:12px;background:#fff5d780;border-radius:7px;color:#746849}
+#v88-live-scene.us21-unified #cs20-station .cs20-actions,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-actions{display:grid!important;height:40px;min-height:40px;max-height:40px;grid-template-columns:1fr 2fr;padding:1px 0;background:transparent!important;gap:5px}
+#v88-live-scene.us21-unified #cs20-station #cs20-primary{background:linear-gradient(#89b88b,#5f966b);border:1px solid #4f7f58;color:#fffaf0;box-shadow:inset 0 1px 0 #dceccc,0 2px 0 #44724b}
+#v88-live-scene.us21-unified #cs20-station .cs20-grill-actions,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-grill-actions{display:none!important}
+#v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions{display:flex!important;height:36px;min-height:36px;gap:5px}
+#v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions button{display:block!important;height:36px;min-height:36px;padding:3px}
+#v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions button[hidden]{visibility:hidden}
+body:has(#tab-shop.cs20-enabled:not(.hidden)) .app-shell>div.fixed.bottom-3.right-3,body:has(#tab-shop.cs20-enabled:not(.hidden)) #v877-mika-launch,body:has(#tab-shop.cs20-enabled:not(.hidden)) #v877-mika-nudge{display:none!important}
+@media(max-width:350px){#v88-live-scene.us21-unified #cs20-station .cs26-jar-image{width:57px;height:54px}#v88-live-scene.us21-unified #cs20-station #cs20-dish-name{font-size:10px}.cs28-cup-stack{width:10px}}
+@media(prefers-reduced-motion:reduce){#cs20-station *{animation:none!important;transition:none!important}}
