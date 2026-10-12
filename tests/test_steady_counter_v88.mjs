@@ -63,7 +63,7 @@ try{
    await page.waitForFunction(()=>[...document.querySelectorAll('img.cs28-jar-shell')].every(im=>im.complete&&im.naturalWidth>0));
    const asset=await page.evaluate(()=>[...document.querySelectorAll('img.cs28-jar-shell')].every(im=>im.complete&&im.naturalWidth>0));assert.ok(asset,'dispenser raster is available');
    await page.screenshot({path:`${dest}/${width}-tea.png`});
-   await page.locator('#cs20-groups').getByRole('button',{name:'Topping',exact:true}).click();
+   await page.locator('#cs20-groups').getByRole('button',{name:'Topping & siro',exact:true}).click();
    await page.screenshot({path:`${dest}/${width}-topping.png`});
   }
   await page.evaluate(()=>{gameState.phase='prep';currentCustomer=null;renderCustomerBooth();window.BPVQUnifiedShop.update()});

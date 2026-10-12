@@ -1,0 +1,47 @@
+/* v88.16.5: one warm timber counter, matching the courtyard canopy. */
+.main-stage>#tab-shop.us21-enabled{gap:3px!important;margin-top:-6px!important}
+#tab-shop.us21-enabled>*{margin-top:0!important;margin-bottom:0!important}
+@media(min-width:768px){.main-stage>#tab-shop.us21-enabled{margin-top:-10px!important}}
+#v88-live-scene.us21-unified{border-color:#acaa86!important;border-radius:12px!important;background:#f7f3e9!important;box-shadow:0 2px 7px #493b271a!important}
+#v88-live-scene.us21-unified .cs27-shop-controls{height:36px;min-height:36px;max-height:36px;padding:2px 6px;background:#f6f2e8;border-bottom:1px solid #c5b898}
+#v88-live-scene.us21-unified .cs27-shop-controls #btn-toggle-shop{background:#63896c!important;border-color:#55785e!important;color:#fffdf1!important;box-shadow:inset 0 1px 0 #acc7a5;min-height:30px!important}
+#v88-live-scene.us21-unified .cs27-shop-controls .us21-status{color:#57735b;font-size:9px}
+#v88-live-scene.us21-unified .cs27-shop-controls .us21-train-start,#v88-live-scene.us21-unified .cs27-shop-controls .us21-train-exit{background:#e9ecd9;border-color:#b9c2a6;color:#557056}
+#v88-live-scene.us21-unified #cs20-station,#v88-live-scene.us21-unified #cs20-station[data-state="idle"]{--cs30-ink:#65503c;--cs30-leaf:#6d8c6b;gap:3px!important;padding:6px!important;border-top:3px solid #8e6744!important;background:repeating-linear-gradient(178deg,transparent 0 34px,#9e795712 35px 36px),linear-gradient(105deg,#d8b992,#efe3ce 47%,#d6b68c)!important;box-shadow:inset 0 2px 0 #f9f3e5!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-stage{height:164px;min-height:164px!important;max-height:164px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:3px 4px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage figcaption{height:152px;grid-template-rows:14px 36px 22px 23px 12px 33px;gap:2px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-name{color:#604a35;font-size:11px}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-detail{height:22px;color:#85735b;font-size:9px;line-height:11px}
+#v88-live-scene.us21-unified #cs20-station #cs20-craft{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-feedback{height:33px;min-height:33px!important;max-height:33px;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;line-height:11px;font-size:9px;color:#4f7455;font-weight:750;overflow-y:auto;overscroll-behavior:contain}
+#v88-live-scene.us21-unified #cs20-station #cs20-valuation{color:#876e50;font-size:9px}
+#cs27-containers .cs27-container{min-height:36px;height:36px;background:#f7f3e7;border-color:#b9a585;border-radius:8px;box-shadow:inset 0 -2px 0 #d2b79433;color:#78634b}
+#cs27-containers .cs27-container.picked{background:#e8eddc;border-color:#718d6b;color:#4b6b4e;box-shadow:inset 0 -2px 0 #92ac8322}
+#cs26-meters .cs26-meter{background:#f9f6ed;border-color:#baa98a;box-shadow:0 1px 2px #75604022;border-radius:12px;color:#77684e}
+#cs26-meters .cs26-meter.ice{background:#edf3ed}
+#cs26-meters .cs26-range{accent-color:#c19560}
+#cs26-meters .cs26-meter.ice .cs26-range{accent-color:#8faea1}
+#v88-live-scene.us21-unified #cs20-station .cs20-price,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-price,#v88-live-scene.us21-unified.us21-practicing #cs20-station .cs20-price{height:36px;min-height:36px;padding:0 4px;background:transparent;border:0;border-radius:0;color:#68775a;font-size:10px}
+#cs20-station .cs20-stepper{background:#f9f5eb;border-color:#b9b396;box-shadow:0 1px 2px #82664d20}
+#cs20-station .cs20-stepper button{background:#e8ecd9;color:#5e775c}
+#cs20-station .cs20-stepper strong{color:#577354}
+#v88-live-scene.us21-unified #cs20-station .cs20-pantry,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-pantry{height:124px;min-height:124px;max-height:124px;grid-template-rows:34px 78px;gap:4px;padding:4px!important;background:linear-gradient(#99765212,#d6bf9826);border:0;border-top:1px solid #b69b74;border-bottom:1px solid #b69b74;border-radius:0;box-shadow:inset 0 1px 0 #fff8e077}
+.cs30-pantry-bar{display:flex;gap:5px;align-items:center;min-width:0}
+#v88-live-scene.us21-unified #cs20-station #cs20-groups{flex:1;min-width:0;height:34px;min-height:34px;gap:4px}
+#v88-live-scene.us21-unified #cs20-station .cs20-group{height:34px;min-height:34px!important;border-radius:9px!important;background:#f4f0e4!important;border-color:#bfab8a!important;color:#806a4d!important;box-shadow:inset 0 -2px 0 #bc9e6c22}
+#v88-live-scene.us21-unified #cs20-station .cs20-group.selected{background:#7e9a76!important;border-color:#6b8965!important;color:#fffdf3!important}
+#v88-live-scene.us21-unified #cs20-station #cs26-pager{height:34px;min-height:34px;max-height:34px;gap:3px;flex:none;visibility:visible}
+#cs26-pager[hidden]{display:none!important}
+#cs26-pager button{width:30px;min-height:34px;height:34px;border-color:#bda889;border-radius:9px;background:#f5f0e4;color:#7d7651;font-size:20px;padding:0}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf,#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-rows="1"]{display:flex!important;grid-template:none!important;height:78px!important;min-height:78px!important;max-height:78px;gap:5px;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;scroll-snap-type:x proximity!important;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item{flex:0 0 74px!important;width:74px!important;min-width:74px!important;max-width:74px!important;height:78px!important;border-radius:9px!important;scroll-snap-align:start;overflow:hidden;background:transparent!important;outline-offset:-2px;box-shadow:none}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item.picked{background:#dce7cb66!important;outline-color:#7f9b74}
+#v88-live-scene.us21-unified #cs20-station .cs20-item-name{background:#f8f3e3b3;color:#6c553c;font-size:9px!important;border-radius:5px}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-stock{background:#f5efdc;border-color:#ae9571;color:#7e6b4f;box-shadow:0 1px 1px #735a3022}
+#v88-live-scene.us21-unified #cs20-station .cs20-actions,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-actions{position:static!important;gap:4px;box-shadow:none;border-radius:0;padding:0;margin-top:0;height:40px;min-height:40px;max-height:40px}
+#v88-live-scene.us21-unified #cs20-station #cs20-undo{background:#e7dac3;color:#796047;border-color:#b39a73;border-radius:9px;box-shadow:inset 0 1px 0 #fff2d8}
+#v88-live-scene.us21-unified #cs20-station #cs20-primary{background:linear-gradient(#8ba680,#698a63);color:#fffcf1;border-color:#5b7753;border-radius:9px;box-shadow:inset 0 1px 0 #cedbbd,0 2px 0 #536b49}
+@media(max-width:350px){#v88-live-scene.us21-unified #cs20-station .cs20-group{font-size:9px!important}#cs26-pager button{width:28px}#v88-live-scene.us21-unified #cs20-station #cs20-feedback{font-size:8.5px}}
+#v88-live-scene.us21-unified #cs20-station .cs20-flavor{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,32px);height:78px;box-sizing:border-box;padding:3px;gap:4px;background:transparent;border-radius:0;flex:none;width:100%;min-width:100%}
+#v88-live-scene.us21-unified #cs20-station .cs20-flavor .cs20-pill{min-width:0;min-height:32px;height:32px;padding:2px;font-size:10px;background:#f6f0e3;color:#7b654c;border-color:#baa384}
+#v88-live-scene.us21-unified #cs20-station .cs20-flavor .cs20-pill.picked{background:#7e9a76;color:#fffdf3;border-color:#6b8965}

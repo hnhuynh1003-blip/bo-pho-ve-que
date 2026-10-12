@@ -13,8 +13,8 @@ assert.match(core,/if\(changed\)resetFinish\(\)/,'successful topping edit invali
 assert.match(core,/if\(nextPortions===currentPortions\)return false/,'no-op quantity edit does not invalidate completion');
 assert.match(core,/lastServed=person;serveDishToCustomer\(\)/,'one-shot native settlement guard unchanged');
 assert.match(station,/cs26-jar-portion/,'quantity chip on reusable toppings');
-assert.match(station,/const pages=Math\.max\(1,Math\.ceil\(data\.length\/pageSize\)\)/,'ingredient grid paging');
-assert.match(station,/window\.innerWidth\|\|390/,'mobile columns use viewport width');
+assert.match(station,/const visible=data/,'all native ingredients share scroll shelf');
+assert.match(station,/shelf\.scrollBy/,'native horizontal scrolling');
 assert.match(station,/cs26-meters/,'ice and sugar meters');
 assert.match(css,/grid-template-columns:repeat\(4/,'8 visible on standard phones');
 assert.match(css,/grid-template-columns:repeat\(3/,'6 visible on smallest phones');

@@ -1,10 +1,13 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
-const browser=await chromium.launch({headless:true});
+const options={headless:true,args:['--no-sandbox','--disable-gpu']};
+if(process.env.BPVQ_TEST_BROWSER_PATH)options.executablePath=process.env.BPVQ_TEST_BROWSER_PATH;
+const browser=await chromium.launch(options);
 try {
   for(const width of [320,360,375,390,430]) {
     const page=await browser.newPage({viewport:{width,height:width===320?568:width===360?640:width===375?812:width===390?844:932}});
     const errors=[];page.on('pageerror',e=>errors.push(String(e)));
+    await page.route('https://cdnjs.cloudflare.com/**',r=>r.abort());
     await page.goto('http://127.0.0.1:8765/',{waitUntil:'domcontentloaded'});
     await page.waitForFunction(()=>!!window.BPVQCookingBridge&&!!window.BPVQCookingStation);
     await page.evaluate(()=>{
@@ -18,7 +21,7 @@ try {
     const data=await page.evaluate(()=>({shelf:document.querySelectorAll('#cs20-shelf .cs20-item').length,
       docWidth:document.documentElement.scrollWidth,viewport:document.documentElement.clientWidth,
       snapshot:window.BPVQCookingBridge.snapshot()}));
-    assert.equal(data.shelf,width<=365?6:8,`${width}px ingredient grid`);
+    assert.equal(data.shelf,data.snapshot.catalog.filter(x=>x.group==='topping').length,`${width}px all native topping and siro choices remain on rail`);
     assert.ok(data.docWidth<=data.viewport+1,`${width}px horizontal overflow`);
     assert.match(data.snapshot.customer.description,/×2/,'customer order contains quantity');
     if(width===390){

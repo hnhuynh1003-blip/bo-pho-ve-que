@@ -7,7 +7,7 @@ if(!bridge||!root)return;
 const fields=new Map();
 const $=id=>{if(!fields.has(id))fields.set(id,document.getElementById(id));return fields.get(id);};
 const groups={
- boba:[['base','Cốt trà'],['topping','Topping'],['syrup','Siro']],
+ boba:[['base','Cốt trà'],['topping','Topping & siro']],
  noodle:[['base','Nước cốt'],['topping','Topping'],['flavor','Cấp cay']],
  streetfood:[['skewer','Chọn xiên'],['sauce','Nước sốt']]
 };
@@ -49,17 +49,19 @@ function attr(el,name,value){const v=String(value);if(el.getAttribute(name)!==v)
 function disable(el,value){if(el.disabled!==!!value)el.disabled=!!value;}
 function hide(el,value){if(el.hidden!==!!value)el.hidden=!!value;}
 function setNotice(s){ui.notice=s;textField('cs20-feedback',s);}
+function touchMotion(el,frames,duration=180){if(!el||w.matchMedia('(prefers-reduced-motion: reduce)').matches)return;el.getAnimations().forEach(a=>a.cancel());el.animate(frames,{duration,easing:'ease-out'});}
 function reset(key,career){
  const sameCareer=career===ui.career,group=sameCareer?ui.group:career==='boba'?'topping':groups[career]?.[0][0]||'size',page=sameCareer?ui.page:0;
  ui={key,career,group,page,stage:'choose',pour:0,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'Chọn nguyên liệu rồi thao tác trực tiếp với món nhé!',lastTick:performance.now(),started:0,painted:'',active:false,delivering:false};
  lastPortionKey='';
+ setNotice(career==='boba'?'Chọn nguyên liệu → rót trà → dập nắp.':career==='noodle'?'Chọn nguyên liệu rồi canh lửa nấu mì.':'Chọn xiên rồi lật, quét sốt và canh độ chín.');
  renderGroups();
 }
 function itemsFor(s,group){
  const catalog=s.catalog || [];
  if(group==='size')return catalog.filter(x=>x.group==='container');
  if(group==='base')return catalog.filter(x=>x.group==='base');
- if(group==='topping')return catalog.filter(x=>x.group==='topping'&&x.id!=='syrup_rainbow');
+ if(group==='topping')return catalog.filter(x=>x.group==='topping');
  if(group==='syrup')return catalog.filter(x=>x.group==='topping'&&x.id==='syrup_rainbow');
  if(group==='sauce')return catalog.filter(x=>x.group==='sauce');
  if(group==='skewer')return catalog.filter(x=>x.group==='topping');
@@ -92,6 +94,7 @@ function emitSelection(x,delta){
  ui.page=Math.max(0,ui.page||0);
  ui.stage='choose';ui.active=false;ui.pour=0;ui.hold=0;ui.heat=0;ui.flip=false;ui.sauce=false;ui.stir=0;ui.craft=0;
  setNotice('Đã đổi thành phần. Chế biến lại để món đạt chuẩn.');
+ touchMotion($('cs20-visual').querySelector('svg'),[{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}]);
  refresh(true);
 }
 // Existing asset mapping only; no newly minted item IDs or repainted source art.
@@ -101,6 +104,23 @@ tea_black:'057_tea-black_8c43c9fdf1.webp',tea_green:'058_tea-green_c593521943.we
 const cs26Pager=document.createElement('nav');cs26Pager.id='cs26-pager';cs26Pager.setAttribute('aria-label','Trang nguyên liệu');shelf.after(cs26Pager);
 const cs27Containers=document.createElement('div');cs27Containers.id='cs27-containers';cs27Containers.setAttribute('role','group');
 const caption=stage.querySelector('figcaption');if(caption)caption.querySelector('#cs20-dish-name').after(cs27Containers);
+// Status belongs to the installed preparation surface, not an empty strip below.
+if(caption)caption.append($('cs20-feedback'));
+const pantryBar=document.createElement('div');pantryBar.className='cs30-pantry-bar';
+tabs.before(pantryBar);pantryBar.append(tabs,cs26Pager);
+const previous=document.createElement('button'),next=document.createElement('button');
+previous.type=next.type='button';previous.textContent='‹';next.textContent='›';
+previous.setAttribute('aria-label','Nguyên liệu trước');next.setAttribute('aria-label','Nguyên liệu tiếp theo');
+cs26Pager.append(previous,next);
+function shiftShelf(direction){shelf.scrollBy({left:direction*Math.max(1,shelf.clientWidth*.8),behavior:w.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'});}
+previous.addEventListener('click',()=>shiftShelf(-1));next.addEventListener('click',()=>shiftShelf(1));
+function updateRail(){
+ const overflow=shelf.scrollWidth>shelf.clientWidth+1;
+ hide(cs26Pager,!overflow);
+ disable(previous,shelf.scrollLeft<2);disable(next,shelf.scrollLeft+shelf.clientWidth>=shelf.scrollWidth-2);
+}
+shelf.addEventListener('scroll',updateRail,{passive:true});
+
 const cs26Meters=document.createElement('div');cs26Meters.id='cs26-meters';$('cs20-visual').after(cs26Meters);
 const teaColors={tea_black:'#a57042',tea_green:'#83a35a',tea_strawberry:'#e993a7',tea_taro:'#b299c9',milk_fresh:'#ffefcc',tea_honey:'#e7b461',tea_oolong:'#b78550',tea_jasmine:'#b4be80',tea_matcha:'#72a76c'};
 const meterViews=[],containerViews=[];
@@ -154,20 +174,19 @@ function renderShelf(){
  renderContainers();renderMiniMeters();
  if(ui.group==='flavor'){
   if(shelfStamp===ui.career+':flavor'){for(const b of shelf.querySelectorAll('[data-spice]'))b.classList.toggle('picked',Number(current.dish.spicyLevel)===Number(b.dataset.spice));return;}
-  shelfStamp=ui.career+':flavor';shelf.replaceChildren();shelfViews=[];cs26Pager.replaceChildren();
+  shelfStamp=ui.career+':flavor';shelf.replaceChildren();shelfViews=[];hide(cs26Pager,true);
   if(ui.career==='boba'){const p=document.createElement('p');p.className='cs26-flavor-help';p.textContent='🍯 Đường và 🧊 Đá chỉnh tại hai ống bên ly nhé!';shelf.append(p);return;}
   const box=document.createElement('div');box.className='cs20-flavor';
   for(let i=0;i<=7;i++){const b=document.createElement('button');b.className='cs20-pill'+(Number(current.dish.spicyLevel)===i?' picked':'');b.dataset.spice=i;b.textContent='🌶️ '+i;b.addEventListener('click',()=>chooseFlavor('spice',i));box.append(b)}shelf.append(box);return;
  }
  const data=itemsFor(current,ui.group);
- const width=window.innerWidth||390;const cols=width<=365?3:4;const pageSize=cols*2;
- const pages=Math.max(1,Math.ceil(data.length/pageSize));ui.page=Math.max(0,Math.min(pages-1,ui.page||0));
- const visible=data.slice(ui.page*pageSize,(ui.page+1)*pageSize);
- const stamp=JSON.stringify([ui.career,ui.group,ui.page,cols,visible.map(x=>x.id)]);
+ // An installed horizontal shelf has no reserved second row or short last page.
+ const visible=data;
+ const stamp=JSON.stringify([ui.career,ui.group,visible.map(x=>x.id)]);
  if(shelfStamp!==stamp){
- shelfStamp=stamp;shelf.replaceChildren();cs26Pager.replaceChildren();shelfViews=[];
+ shelfStamp=stamp;shelf.replaceChildren();shelfViews=[];shelf.scrollLeft=0;
  for(const x of visible){
-  const b=document.createElement('button');b.type='button';b.className='cs20-item cs26-jar';
+  const b=document.createElement('button');b.type='button';b.className='cs20-item cs26-jar';b.dataset.item=x.id;
   const art=document.createElement('span');art.className='cs26-jar-image';
   const src=INGREDIENT_ART[x.id]||({'tea_matcha':'v8761_tea_matcha.svg','topping_peach':'v8761_topping_peach.svg','topping_brown_boba':'v8761_topping_brown_boba.svg','topping_salted_cream':'v8761_topping_salted_cream.svg','syrup_rainbow':'v8761_syrup_rainbow.svg'}[x.id]);
   if(ui.career==='boba'&&x.group==='base'){
@@ -185,18 +204,11 @@ function renderShelf(){
   const q=document.createElement('span');q.className='cs26-jar-portion';q.hidden=true;b.append(q);
   b.append(art,name,count);
   const delta=x.group==='topping'?1:1;
-  b.addEventListener('click',()=>emitSelection(current.catalog.find(y=>y.id===x.id)||x,delta));
+  b.addEventListener('click',()=>{emitSelection(current.catalog.find(y=>y.id===x.id)||x,delta);touchMotion(art,[{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}]);});
   shelf.append(b);shelfViews.push({id:x.id,b,count,q});
  }
- // A secondary accessible removal action stays inside the jar, not beside every card.
- // Long-press is not compulsory: tap the topping already in the dish (cs20-visual) to remove.
- if(pages>1){
-  const prev=document.createElement('button');prev.type='button';prev.textContent='‹';prev.disabled=ui.page===0;prev.setAttribute('aria-label','Trang trước');
-  const center=document.createElement('span');center.textContent=(ui.page+1)+' / '+pages;
-  const next=document.createElement('button');next.type='button';next.textContent='›';next.disabled=ui.page===pages-1;next.setAttribute('aria-label','Trang sau');
-  prev.addEventListener('click',()=>{ui.page--;renderShelf()});next.addEventListener('click',()=>{ui.page++;renderShelf()});cs26Pager.append(prev,center,next);
  }
- }
+ updateRail();
  for(const v of shelfViews){const x=visible.find(x=>x.id===v.id);if(!x)continue;
   disable(v.b,!x.unlocked);v.b.classList.toggle('picked',selected(current,x));attr(v.b,'aria-pressed',selected(current,x));
   const title=x.name+(x.unlocked?' · Tồn kho '+x.stock:' · Chưa mở khóa');if(v.b.title!==title)v.b.title=title;
@@ -220,7 +232,7 @@ function buildVisual(s){
   const pearls=Array.from({length:36},(_,j)=>`<circle data-pearl cx="${67+(j%7)*11}" cy="${147-Math.floor(j/7)*10}" r="4.5" fill="#553c30" opacity="0" stroke="#b49265" stroke-width=".6"/>`).join('');
   const ice=Array.from({length:8},(_,j)=>`<rect data-ice x="${67+(j%4)*18}" y="${66+Math.floor(j/4)*25}" width="13" height="17" rx="4" fill="#f5fbff" fill-opacity=".6" stroke="#fcffff" stroke-opacity=".7" opacity="0" transform="rotate(${j%2?12:-9} ${73+(j%4)*18} ${75+Math.floor(j/4)*25})"/>`).join('');
   content=`<defs><clipPath id="cs20-cup-clip"><path d="M52 35 Q100 29 148 35 L138 156 Q100 170 62 156 Z"/></clipPath><linearGradient id="cs28-glass" x1="0" y1="0" x2="1" y2="0"><stop stop-color="#fffef0" stop-opacity=".86"/><stop offset=".5" stop-color="#fff4d6" stop-opacity=".28"/><stop offset="1" stop-color="#fffef0" stop-opacity=".8"/></linearGradient></defs>
-  <ellipse cx="101" cy="170" rx="58" ry="7" fill="#996837" opacity=".15"/>
+  <path data-pour-stream d="M150 6 Q132 12 119 48" stroke="#bf8c55" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/><ellipse cx="101" cy="170" rx="58" ry="7" fill="#996837" opacity=".15"/>
   <path d="M52 35 Q100 29 148 35 L138 156 Q100 170 62 156 Z" fill="url(#cs28-glass)" stroke="#8f684b" stroke-width="2.8"/>
   <g clip-path="url(#cs20-cup-clip)"><rect data-tea x="47" y="148" width="107" height="170" fill="#bc9463"/><path data-wave d="M52 150 Q80 146 110 151 T148 150" stroke="#fff8df" opacity=".55" stroke-width="3" fill="none"/>${pearls}${ice}<path d="M65 44 Q57 96 72 148" stroke="#fff" stroke-width="6" opacity=".46" fill="none" stroke-linecap="round"/></g>
   <path d="M132 37 L146 12" stroke="#86a57d" stroke-width="7" stroke-linecap="round"/><ellipse data-lid cx="100" cy="35" rx="49" ry="6" fill="#fff2d6" stroke="#936c4a" stroke-width="2.5" opacity=".65"/>
@@ -240,10 +252,11 @@ function paintVessel(s){
  if(visualCareer!==s.career){
   visualCareer=s.career;visual.innerHTML=buildVisual(s);
   const one=q=>visual.querySelector(q),all=q=>[...visual.querySelectorAll(q)];
-  visualRefs={tea:one('[data-tea]'),wave:one('[data-wave]'),lid:one('[data-lid]'),pearls:all('[data-pearl]'),ice:all('[data-ice]'),tops:all('[data-noodle-top]'),bubbles:all('[data-bubble]'),soup:one('[data-soup]'),steam:one('[data-steam]'),flame:one('[data-flame]'),rows:all('[data-skewer-row]'),fire:one('[data-grill-fire]')};
+  visualRefs={stream:one('[data-pour-stream]'),tea:one('[data-tea]'),wave:one('[data-wave]'),lid:one('[data-lid]'),pearls:all('[data-pearl]'),ice:all('[data-ice]'),tops:all('[data-noodle-top]'),bubbles:all('[data-bubble]'),soup:one('[data-soup]'),steam:one('[data-steam]'),flame:one('[data-flame]'),rows:all('[data-skewer-row]'),fire:one('[data-grill-fire]')};
  }
  const v=visualRefs;
  if(s.career==='boba'){
+  attr(v.stream,'opacity',ui.active?'.75':'0');
   const fill=ui.pour>0?Math.max(3,Math.round(ui.pour)):d.isShaken?78:8,y=153-fill*1.1;
   attr(v.tea,'y',y.toFixed(1));attr(v.tea,'fill',teaColors[d.base]||'#bb9163');
   attr(v.wave,'d',`M52 ${y+4} Q80 ${y-1} 110 ${y+4} T148 ${y+4}`);attr(v.lid,'opacity',d.isShaken?'1':'.65');
@@ -350,6 +363,7 @@ function primaryAction(){
   else{
    ui.stage='done';ui.craft=result==='perfect'?1:.75;
    if(practiceDish)practiceDish.isShaken=true;
+   touchMotion($('cs20-visual').querySelector('svg'),[{transform:'translateY(-5px)'},{transform:'translateY(3px)'},{transform:'translateY(0)'}],230);
    setNotice(result==='perfect'?(practiceDish?'Perfect! Luyện tập không cộng Xu.':'Perfect! Giao đúng món để nhận tip biểu diễn 10%, tối đa 8 Xu.'):'Nắp đã kín! Sẵn sàng giao món.');
   }
   refresh(true);return;
@@ -389,8 +403,9 @@ function refresh(force=false){
  textField('cs20-customer-name',hasOrder?s.customer.name:s.phase==='open'?'Đang đợi khách ghé quán':'Quán đang nghỉ ca');
  textField('cs20-order-text',hasOrder?s.customer.description:s.phase==='open'?'Quầy đã sẵn sàng. Khách đến sẽ gọi món tại đây.':'Mở quán để đón khách, hoặc chọn Tập chế biến.');
  textField('cs20-order-time',hasOrder?(s.pause?'⏸':`${Math.ceil(s.customer.patience)}s`):'—');
- if(force || ui.painted!==JSON.stringify([s.career,s.dish,s.customer?.key,s.stockStamp,ui.group])){
-   ui.painted=JSON.stringify([s.career,s.dish,s.customer?.key,s.stockStamp,ui.group]);renderShelf();
+ const paintStamp=JSON.stringify([s.career,s.dish,s.customer?.key,s.stockStamp,ui.group,s.catalog.map(x=>x.unlocked)]);
+ if(force || ui.painted!==paintStamp){
+   ui.painted=paintStamp;renderShelf();
  }
  if(s.career==='boba'&&s.dish.isShaken&&ui.stage==='finishing')setNotice('Ly đã dập nắp. Sẵn sàng giao món!');
  if(s.career==='noodle'&&s.dish.isCooked&&ui.stage==='heating')setNotice('Thố mì đã chín. Sẵn sàng giao!');
@@ -429,7 +444,7 @@ function animate(t){
 }
 root.hidden=false;root.closest('#tab-shop')?.classList.add('cs20-enabled');setNotice(ui.notice);refresh(true);
 w.setInterval(()=>refresh(false),550);
-w.addEventListener('resize',()=>{if(current)renderShelf();},{passive:true});
+w.addEventListener('resize',()=>{if(current){renderShelf();updateRail();}},{passive:true});
 w.BPVQCookingStation=Object.freeze({
  isActive:()=>!!root&&!root.hidden,
  startPractice:()=>{

@@ -49,6 +49,10 @@ try{
   assert.ok(geometry.header.height<=56,'header stays compact');
   assert.ok(Math.abs(geometry.nav.bottom-height)<=1,'area dock touches bottom');
   assert.ok(geometry.scene.top>=geometry.header.bottom,'scene starts below the header');
+  assert.ok(geometry.scene.top-geometry.header.bottom<=4,'shop sits close to header');
+  assert.equal(geometry.shelf.height,78,'no reserved empty second row');
+  assert.ok(await page.locator('.cs20-stage #cs20-feedback').count()===1,'status is inside preparation, not a blank block');
+  const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=430,'counter is compact for every career');
   const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
   const size=page.locator('#cs27-containers button:enabled').first();await size.click();
   assert.equal(await size.getAttribute('aria-pressed'),'true','container choice feeds native dish');
@@ -56,9 +60,33 @@ try{
   if(career==='boba'){
    const groups=page.locator('#cs20-groups');await groups.getByRole('button',{name:'Cốt trà',exact:true}).click();
    assert.ok(await page.locator('#cs20-shelf .cs20-item').count()>0,'native tea catalog available');
-   await groups.getByRole('button',{name:'Siro',exact:true}).click();
-   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'siro preserves installed counter space');
-   await groups.getByRole('button',{name:'Topping',exact:true}).click();
+   await groups.getByRole('button',{name:'Topping & siro',exact:true}).click();
+   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'all groups preserve one installed shelf row');
+   assert.equal(await page.locator('#cs20-shelf .cs20-item').count(),await page.evaluate(()=>window.BPVQCookingBridge.snapshot().catalog.filter(x=>x.group==='topping').length),'all toppings and siro share the rail');
+   if(width===390){
+    const money=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
+    await page.getByRole('button',{name:'Nguyên liệu tiếp theo',exact:true}).click();
+    await page.waitForFunction(()=>document.getElementById('cs20-shelf').scrollLeft>50);
+    const siro=page.locator('#cs20-shelf [data-item="syrup_rainbow"]');
+    assert.equal(await siro.isDisabled(),true,'UI keeps original story lock');
+    await page.evaluate(()=>{gameState.shopStage=4;gameState.v874NpcRewards={...(gameState.v874NpcRewards||{}),chiHa:true};});
+    await page.waitForFunction(()=>!document.querySelector('[data-item="syrup_rainbow"]').disabled);
+    await siro.click();
+    assert.equal(await siro.getAttribute('aria-pressed'),'true','siro remains a real native topping');
+    assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.toppingPortions.syrup_rainbow),1);
+    await page.locator('#cs20-visual').click();
+    assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.toppingPortions.syrup_rainbow||0),0,'tap vessel removes the native portion');
+    assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),money,'rail choices do not consume stock or pay');
+    await page.evaluate(()=>{gameState.shopStage=0;document.getElementById('cs20-shelf').scrollLeft=0;window.BPVQUnifiedShop.update();});
+   }
+
+  }
+  if(career==='noodle'){
+   await page.locator('#cs20-groups').getByRole('button',{name:'Cấp cay',exact:true}).click();
+   const spice=await page.evaluate(()=>{const shelf=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('[data-spice]')].map(b=>{const r=b.getBoundingClientRect();return {bottom:r.bottom,shelfBottom:shelf.bottom,width:r.width};})});
+   assert.equal(spice.length,8);assert.ok(spice.every(b=>b.bottom<=b.shelfBottom&&b.width>=44),'all spice choices fit without clipping');
+   await page.locator('[data-spice="7"]').click();assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.spicyLevel),7);
+   await page.locator('#cs20-groups').getByRole('button',{name:'Nước cốt',exact:true}).click();
   }
   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(60);
   const final=await page.evaluate(()=>{
