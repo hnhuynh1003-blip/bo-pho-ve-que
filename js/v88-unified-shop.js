@@ -15,17 +15,32 @@ scene.append(cook);    // one shop scene, not 3 unrelated cards
 const others=document.getElementById('v88-live-other-career');
 if(others)frame.append(others);
 const status=document.createElement('div');status.className='us21-status';status.setAttribute('aria-live','off');frame.prepend(status);
+const practiceStart=document.createElement('button');
+practiceStart.className='us21-train-start';practiceStart.type='button';practiceStart.textContent='🎓 Tập chế biến';
+practiceStart.setAttribute('aria-label','Luyện nấu ăn không mất nguyên liệu khi nghỉ ca');
+const practiceExit=document.createElement('button');
+practiceExit.className='us21-train-exit';practiceExit.type='button';practiceExit.textContent='✕ Thoát luyện tập';practiceExit.hidden=true;
+const practiceNote=document.createElement('div');practiceNote.className='us21-train-note';practiceNote.hidden=true;
+practiceNote.textContent='👩‍🍳 Đang luyện tay nghề · Không trừ nguyên liệu, không cộng Xu';
+frame.append(practiceStart,practiceExit,practiceNote);
+practiceStart.addEventListener('click',()=>{w.BPVQCookingStation?.startPractice?.();update();});
+practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();update();});
 function safeSnapshot(){try{return bridge.snapshot()}catch(e){return null;}}
 let lastKey='',lastPhase='',lastCareer='';
 function update(){
  const s=safeSnapshot(); if(!s)return;
  const career=s.career||'boba',hasOrder=!!s.customer,phase=s.phase||'preparing';
+ const practice=!!w.BPVQCookingStation?.status?.()?.practice;
  let tier=0;try{tier=Number(gameState?.shopStage||0)}catch{}
  const artReadyForPreview=career==='boba'&&tier===0;
  scene.dataset.career=career;
- scene.classList.toggle('us21-serving',hasOrder);
+ scene.classList.toggle('us21-serving',hasOrder||practice);
+ scene.classList.toggle('us21-practicing',practice);
+ practiceStart.hidden=phase==='open'||hasOrder||practice||!s.started;
+ practiceExit.hidden=!practice;
+ practiceNote.hidden=!practice;
  scene.dataset.unavailable=String(!artReadyForPreview);
- const label=hasOrder?'🍀 Khách đang gọi món':phase==='open'?'🟢 Quán đang mở':'🌿 Quán đang nghỉ';
+ const label=hasOrder?'🍀 Khách đang gọi món':practice?'🎓 Đang luyện tay nghề':phase==='open'?'🟢 Quán đang mở':'🌿 Quán đang nghỉ';
  if(status.textContent!==label)status.textContent=label;
  if(lastCareer!==career){lastCareer=career;}
  w.document.body.classList.toggle('us21-has-sign',artReadyForPreview);

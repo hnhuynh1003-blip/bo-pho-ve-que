@@ -19,3 +19,12 @@ assert.match(core,/const cfg=CAREER_WORKBENCH_KEYS\[c\]/,'same ingredient catalo
 assert.ok(!/gameState\.coins\s*\+\+|gameState\.inventory\s*=/.test(js),'no economy fork');
 assert.match(html,/js\/v88-unified-shop\.js/);assert.match(html,/css\/v88-unified-shop\.css/);
 console.log('Unified Quán v88.14.1: native customer + cooking are one scene, paint in Xây Quán: PASS');
+
+assert.match(js,/us21-train-start/,'training entry embedded in the scene');
+assert.match(js,/us21-practicing/,'practice uses the same scene without customer');
+assert.match(css,/us21-practicing #customer-booth-card/,'native NPC hidden only during independent practice');
+const cooking=read('js/v88-cooking-station.js');
+assert.match(cooking,/startPractice:/,'practice session available without order');
+assert.match(cooking,/stopPractice:/,'practice session has a safe exit');
+assert.match(cooking,/if\(practiceDish\)\{practiceDish=null/,'training does not settle a real customer');
+assert.match(cooking,/if\(!practiceDish\)bridge\.adjustPrice/,'training cannot change price in the real save');

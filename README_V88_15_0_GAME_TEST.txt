@@ -1,0 +1,11 @@
+BO PHO VE QUE v88.15.0 — MOBILE ONE-SCENE GAME TEST
+- Unzip the full GitHub Actions artifact and open index.html in Chrome/Edge.
+- Create a NEW TEST PROFILE; never overwrite the real saved account.
+- Tab QUAN: guest and real order dialogue are placed inside the shop scene.
+- Cooking controls appear below the scene in the SAME unified panel when an order is active.
+- While resting, tap “Tap che bien” (training). It can be played without a customer.
+- Training state is RAM-only; it MUST NOT remove ingredients, change game money or grant rewards.
+- Tap “Thoat luyen tap” to exit training. All actual orders use legacy settlement/validation.
+- Customizing umbrella colors moved to Xay Quan -> Son Mau; decor to Xay Quan -> Bo tri.
+- Only draft B1 Trà Sữa scene exists; B2–B9 and other careers have placeholders.
+- Not a release; no merge to main; mobile emulator test is NOT a physical-device guarantee.

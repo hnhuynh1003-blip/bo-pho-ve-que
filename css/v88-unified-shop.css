@@ -79,3 +79,16 @@ body.us21-has-sign .v8774-identity .v8774-pencil{display:none!important}
 
 #v88-live-scene.us21-unified[data-unavailable="true"] .v88-live-frame{background:radial-gradient(circle at 80% 22%,#fff3b3 0 8%,transparent 9%),linear-gradient(#a2daeb 0 55%,#a1c79b 56% 68%,#c5aa85 69% 100%)}
 #v88-live-scene.us21-unified[data-unavailable="true"] #v88-live-shop-sign{display:none!important}
+
+/* v88.15 gameplay practice mode uses the very same unified scene, never a new card. */
+#v88-live-scene.us21-unified .us21-train-start,
+#v88-live-scene.us21-unified .us21-train-exit{position:absolute;z-index:10;right:9px;top:9px;min-height:43px;padding:7px 10px;border:1px solid #fff4d2;border-radius:12px;background:#fff8dfef;color:#477253;box-shadow:0 3px 9px #1b402c4c;font-size:11px;font-weight:900}
+#v88-live-scene.us21-unified .us21-train-exit{background:#e9f3e4;color:#396c4a}
+#v88-live-scene.us21-unified .us21-train-start[hidden],
+#v88-live-scene.us21-unified .us21-train-exit[hidden],
+#v88-live-scene.us21-unified .us21-train-note[hidden]{display:none!important}
+#v88-live-scene.us21-unified.us21-practicing #customer-booth-card{display:none!important}
+#v88-live-scene.us21-unified .us21-train-note{position:absolute;z-index:8;bottom:10px;left:10px;right:10px;background:#fff9e7f4;border:2px solid #fff8da;border-radius:13px;padding:9px 10px;color:#587653;font-size:11px;font-weight:850;line-height:1.35;box-shadow:0 4px 10px #35523d55}
+#v88-live-scene.us21-unified.us21-practicing #cs20-station .cs20-price{display:none!important}
+#v88-live-scene.us21-unified.us21-practicing #cs20-station .cs20-ticket{display:none!important}
+@media(max-width:350px){#v88-live-scene.us21-unified .us21-train-start,#v88-live-scene.us21-unified .us21-train-exit{font-size:10px;padding:6px;right:5px}}
