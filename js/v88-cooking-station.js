@@ -328,7 +328,7 @@ w.BPVQCookingStation=Object.freeze({
   if(!s.started||s.phase==='open'||s.customer)return false;
   practiceDish=clone(s.dish);practiceDish.isShaken=false;practiceDish.isCooked=false;practiceDish.fryState='unfried';practiceDish.fryProgress=0;
   ++practiceNumber;refresh(true);
-  w.requestAnimationFrame(()=>root.scrollIntoView({block:'start',behavior:'smooth'}));
+  // Keep the player's scroll position unchanged when entering practice.
   return true;
  },
  stopPractice:()=>{if(!practiceDish)return false;practiceDish=null;refresh(true);return true;},
