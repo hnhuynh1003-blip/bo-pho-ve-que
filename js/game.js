@@ -1666,12 +1666,14 @@ clearTimeout(window._toastTimeout);
         workbenchDish.sugar = 70;
         workbenchDish.ice = 50;
         workbenchDish.toppings = [];
+      workbenchDish.toppingPortions = {};
         workbenchDish.listedPrice = 45;
       } else if (c === 'noodle') {
         workbenchDish.container = 'bowl_m';
         workbenchDish.base = 'broth_kimchi';
         workbenchDish.spicyLevel = 3;
         workbenchDish.toppings = [];
+      workbenchDish.toppingPortions = {};
         workbenchDish.listedPrice = 65;
       } else {
         workbenchDish.tray = 'plate';
@@ -5202,6 +5204,7 @@ function v8752BuyFestival(id){
       workbenchDish.fryProgress = 0;
       workbenchDish.fryState = 'unfried';
       workbenchDish.toppings = [];
+      workbenchDish.toppingPortions = {};
       workbenchDish.skewerCounts = {};
       const order = JSON.parse(JSON.stringify(recipe.order || {}));
       if (career === 'boba') {
@@ -5210,12 +5213,14 @@ function v8752BuyFestival(id){
         workbenchDish.sugar = order.sugar ?? 70;
         workbenchDish.ice = order.ice ?? 50;
         workbenchDish.toppings = [...(order.toppings || [])];
+        workbenchDish.toppingPortions = {...(order.toppingPortions || {})};
         workbenchDish.listedPrice = Math.max(35, calculateDishCost() + 20);
       } else if (career === 'noodle') {
         workbenchDish.container = order.container || 'bowl_m';
         workbenchDish.base = order.base || 'broth_kimchi';
         workbenchDish.spicyLevel = order.spicyLevel ?? 2;
         workbenchDish.toppings = [...(order.toppings || [])];
+        workbenchDish.toppingPortions = {...(order.toppingPortions || {})};
         workbenchDish.listedPrice = Math.max(50, calculateDishCost() + 24);
       } else {
         workbenchDish.tray = ({ tray_plate:'plate', tray_basket:'basket', tray_box:'box' }[order.container] || order.tray || 'plate');
@@ -5568,20 +5573,46 @@ function v8752BuyFestival(id){
       saveGameToStorage();
     }
 
+    // UI-Q2.6: positive portions map is optional. Legacy toppings[] always means one portion.
+    function dishToppingCounts(dish) {
+      const portions = dish.toppingPortions || {};
+      const keys = new Set([...(dish.toppings || []), ...Object.keys(portions)]);
+      const counts = {};
+      keys.forEach(id => {
+        const n = Object.prototype.hasOwnProperty.call(portions,id) ? Number(portions[id]) : (dish.toppings || []).includes(id) ? 1 : 0;
+        if(Number.isFinite(n) && n>0)counts[id] = Math.min(3,Math.floor(n));
+      });
+      return counts;
+    }
+    function adjustDishToppingPortion(key, delta=1) {
+      const career=gameState.currentCareer;
+      if(!['boba','noodle'].includes(career))return false;
+      if(!(CAREER_WORKBENCH_KEYS[career]?.toppings || []).includes(key)||!isItemStoryUnlocked(key,career))return false;
+      const existing=dishToppingCounts(workbenchDish);
+      const next=Math.max(0,Math.min(3,(existing[key]||0)+Math.sign(delta)));
+      if(next === (existing[key]||0))return false;
+      if(next>Number(gameState.inventory[key]||0)){
+        openQuickRestock(key);return false;
+      }
+      workbenchDish.toppingPortions={...existing,[key]:next};
+      workbenchDish.toppings=Object.keys(workbenchDish.toppingPortions).filter(k=>workbenchDish.toppingPortions[k]>0);
+      playSound('click');updateWorkbenchPreview();return true;
+    }
+
     function calculateDishCost() {
       let cost = 0;
       const dict = ITEM_DICTIONARY;
       if (workbenchDish.career === 'boba') {
         cost += (dict[workbenchDish.container] && dict[workbenchDish.container].basePrice) || 3;
         cost += (dict[workbenchDish.base] && dict[workbenchDish.base].basePrice) || 8;
-        (workbenchDish.toppings || []).forEach(topKey => {
-          cost += (dict[topKey] && dict[topKey].basePrice) || 5;
+        Object.entries(dishToppingCounts(workbenchDish)).forEach(([topKey,qty]) => {
+          cost += ((dict[topKey] && dict[topKey].basePrice) || 5) * qty;
         });
       } else if (workbenchDish.career === 'noodle') {
         cost += (dict[workbenchDish.container] && dict[workbenchDish.container].basePrice) || 6;
         cost += (dict[workbenchDish.base] && dict[workbenchDish.base].basePrice) || 12;
-        (workbenchDish.toppings || []).forEach(topKey => {
-          cost += (dict[topKey] && dict[topKey].basePrice) || 8;
+        Object.entries(dishToppingCounts(workbenchDish)).forEach(([topKey,qty]) => {
+          cost += ((dict[topKey] && dict[topKey].basePrice) || 8) * qty;
         });
       } else {
         const trayKey = ({plate:'tray_plate',basket:'tray_basket',box:'tray_box'}[workbenchDish.tray] || 'tray_plate');
@@ -5662,6 +5693,7 @@ function v8752BuyFestival(id){
 
     function cleanWorkbenchDish() {
       workbenchDish.toppings = [];
+      workbenchDish.toppingPortions = {};
       workbenchDish.skewerCounts = {};
       workbenchDish.isShaken = false;
       workbenchDish.isCooked = false;
@@ -5696,14 +5728,14 @@ function v8752BuyFestival(id){
         workbenchDish = {
           career:'boba', container:'cup_m', base:'tea_black', sugar:70, ice:50,
           spicyLevel:0, fryHeat:170, tray:null, sauce:null,
-          toppings:['topping_boba'], skewerCounts:{}, listedPrice:45,
+          toppings:['topping_boba'], toppingPortions:{}, skewerCounts:{}, listedPrice:45,
           isShaken:false, isCooked:false, fryProgress:0, fryState:'unfried'
         };
       } else if (career === 'noodle') {
         workbenchDish = {
           career:'noodle', container:'bowl_m', base:'broth_kimchi', sugar:0, ice:0,
           spicyLevel:2, fryHeat:170, tray:null, sauce:null,
-          toppings:['ntop_beef'], skewerCounts:{}, listedPrice:65,
+          toppings:['ntop_beef'], toppingPortions:{}, skewerCounts:{}, listedPrice:65,
           isShaken:false, isCooked:false, fryProgress:0, fryState:'unfried'
         };
       } else {
@@ -6070,6 +6102,7 @@ function v8752BuyFestival(id){
         }
         workbenchDish.toppings.push(topKey);
       }
+      workbenchDish.toppingPortions=Object.fromEntries((workbenchDish.toppings||[]).map(k=>[k,1]));
       playSound('click');
       renderBobaControls();
       renderNoodleControls();
@@ -6500,13 +6533,13 @@ function v8752BuyFestival(id){
       if (!order) return 'Cho tôi một phần món đúng yêu cầu nhé!';
 
       if (order.career === 'boba') {
-        const topText = order.toppings.length ? order.toppings.map(itemLabel).join(' + ') : 'không topping';
+        const topText = (order.toppings||[]).length ? order.toppings.map(k => itemLabel(k)+(dishToppingCounts(order)[k]>1?' ×'+dishToppingCounts(order)[k]:'' )).join(' + ') : 'không topping';
         const size = ({cup_m:'M',cup_l:'L',cup_xl:'XL'}[order.container]) || 'M';
         return `${order.recipeName ? `📖 ${order.recipeName}: ` : ''}${itemLabel(order.base)} size ${size}, đường ${order.sugar}%, đá ${order.ice}%, ${topText}. Nhớ lắc hoàn chỉnh nhé! Tối đa ${order.maxPrice} Xu.`;
       }
 
       if (order.career === 'noodle') {
-        const topText = order.toppings.length ? order.toppings.map(itemLabel).join(' + ') : 'không topping';
+        const topText = (order.toppings||[]).length ? order.toppings.map(k => itemLabel(k)+(dishToppingCounts(order)[k]>1?' ×'+dishToppingCounts(order)[k]:'' )).join(' + ') : 'không topping';
         const size = ({bowl_m:'M',bowl_l:'L',bowl_xl:'XL'}[order.container]) || 'M';
         return `${order.recipeName ? `📖 ${order.recipeName}: ` : ''}${itemLabel(order.base)} thố ${size}, cay cấp ${order.spicyLevel}, ${topText}. Phải nấu chín nhé! Tối đa ${order.maxPrice} Xu.`;
       }
@@ -6557,13 +6590,13 @@ function v8752BuyFestival(id){
         if (dish.base !== order.base) addIssue('base', 'sai cốt trà', 2);
         if (dish.sugar !== order.sugar) addIssue('sugar', 'khác mức đường', 1);
         if (dish.ice !== order.ice) addIssue('ice', 'khác mức đá', 1);
-        if (!sameStringSet(dish.toppings || [], order.toppings || [])) addIssue('toppings', 'biến tấu topping', 2);
+        if (!sameCountMap(dishToppingCounts(dish),dishToppingCounts(order))) addIssue('toppings', 'khác loại hoặc lượng topping', 2);
         if (order.requiresShaken && !dish.isShaken) addIssue('finish', 'chưa lắc/dập nắp', 3);
       } else if (order.career === 'noodle') {
         if (dish.container !== order.container) addIssue('container', 'sai cỡ thố', 1);
         if (dish.base !== order.base) addIssue('base', 'sai nước lèo', 2);
         if (dish.spicyLevel !== order.spicyLevel) addIssue('spice', 'khác cấp cay', 1);
-        if (!sameStringSet(dish.toppings || [], order.toppings || [])) addIssue('toppings', 'biến tấu topping', 2);
+        if (!sameCountMap(dishToppingCounts(dish),dishToppingCounts(order))) addIssue('toppings', 'khác loại hoặc lượng topping', 2);
         if (order.requiresCooked && !dish.isCooked) addIssue('finish', 'mì chưa nấu chín', 3);
       } else {
         if (dish.tray !== order.tray) addIssue('container', 'khác loại khay/mẹt', 1);
@@ -7178,6 +7211,16 @@ function v8752BuyFestival(id){
       };
       v8732MarkCustomer(template.id);
       currentCustomer.order = createCustomerOrder(gameState.currentCareer, currentCustomer);
+      // Varied topping amounts only when stock and the customer's budget support them.
+      // Classic recipes without toppingPortions remain 1 portion per topping.
+      const guestTops=currentCustomer.order?.toppings||[];
+      if(['boba','noodle'].includes(gameState.currentCareer) && guestTops.length && Math.random()<.32){
+        const top=guestTops[Math.floor(Math.random()*guestTops.length)];
+        const qty=Math.min(3,Math.floor(Number(gameState.inventory[top]||0)));
+        if(qty>=2 && Number(currentCustomer.budget||0)>=65){
+          currentCustomer.order.toppingPortions={[top]: Math.min(qty,Math.random()<.8?2:3)};
+        }
+      }
       v87532TrackVisitor();
       currentCustomer.quote = formatCustomerOrder(currentCustomer.order);
       // v87.4.5: guest judges occasionally visit after the first food-fair milestone.
@@ -7304,11 +7347,11 @@ function v8752BuyFestival(id){
       if (gameState.currentCareer === 'boba') {
         add(workbenchDish.container, 1);
         add(workbenchDish.base, 1);
-        (workbenchDish.toppings || []).forEach(k => add(k, 1));
+        Object.entries(dishToppingCounts(workbenchDish)).forEach(([k,n]) => add(k,n));
       } else if (gameState.currentCareer === 'noodle') {
         add(workbenchDish.container, 1);
         add(workbenchDish.base, 1);
-        (workbenchDish.toppings || []).forEach(k => add(k, 1));
+        Object.entries(dishToppingCounts(workbenchDish)).forEach(([k,n]) => add(k,n));
       } else if (gameState.currentCareer === 'streetfood') {
         // Xiên que chỉ dùng khay/mẹt + đúng số xiên. Không dùng ly hoặc trà.
         const trayKey = ({plate:'tray_plate',basket:'tray_basket',box:'tray_box'}[workbenchDish.tray] || 'tray_plate');
@@ -13270,6 +13313,7 @@ function v8752BuyFestival(id){
     if(group==='spice'&&career==='noodle'&&Number.isInteger(Number(key))&&Number(key)>=0&&Number(key)<=7){resetFinish();setNoodleSpicyLevel(Number(key));return true;}
     if(!Array.isArray(itemGroups[career]?.[group])||!itemGroups[career][group].includes(key))return false;
     if(!isItemStoryUnlocked(key,career))return false;
+    if(group==='topping'&&career!=='streetfood'&&delta<0)return adjustDishToppingPortion(key,delta);
     if(delta>=0&&Number(gameState.inventory[key]||0)<=0){openQuickRestock(key);return false;}
     resetFinish();
     if(group==='container'){
@@ -13281,7 +13325,7 @@ function v8752BuyFestival(id){
     }else if(group==='sauce')setSkewerSauce(key);
     else if(group==='topping'){
       if(career==='streetfood')adjustSkewerCount(key,Math.sign(delta)||1);
-      else toggleDishTopping(key);
+      else return adjustDishToppingPortion(key,delta);
     }
     return true;
   }

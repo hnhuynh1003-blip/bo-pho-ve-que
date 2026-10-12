@@ -56,6 +56,7 @@ jobs:
           node tests/test_v88_live_scene_qa.mjs
           node --check js/v88-cooking-station.js
           node tests/test_cooking_station_v88.mjs
+          node tests/test_ingredient_playground_v88.mjs
           node --check js/v88-unified-shop.js
           node tests/test_unified_shop_v88.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest
@@ -101,6 +102,7 @@ jobs:
           node tests/test_save_upgrade_v88.mjs
           node tests/test_all_shop_stages_v88.mjs
           node tests/test_phone_live_shift_v88.mjs
+          node tests/test_uiq26_browser_v88.mjs
           node tests/test_shop_paint_browser_v88.mjs
           node tests/test_phone_visual_v88.mjs
       - name: Upload viewport screenshots and geometry
