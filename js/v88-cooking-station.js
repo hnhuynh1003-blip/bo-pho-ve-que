@@ -6,9 +6,9 @@ const bridge=w.BPVQCookingBridge, root=document.getElementById('cs20-station');
 if(!bridge||!root)return;
 const $=id=>root.querySelector('#'+id);
 const groups={
- boba:[['size','Chọn ly'],['base','Cốt trà'],['topping','Topping'],['syrup','Siro'],['flavor','Điều vị']],
- noodle:[['size','Chọn thố'],['base','Nước cốt'],['topping','Topping'],['flavor','Cấp cay']],
- streetfood:[['size','Chọn khay'],['skewer','Chọn xiên'],['sauce','Nước sốt']]
+ boba:[['base','Cốt trà'],['topping','Topping'],['syrup','Siro']],
+ noodle:[['base','Nước cốt'],['topping','Topping'],['flavor','Cấp cay']],
+ streetfood:[['skewer','Chọn xiên'],['sauce','Nước sốt']]
 };
 let ui={key:'',career:'',group:'',page:0,stage:'choose',pour:0,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'',lastTick:0,started:0,painted:'',active:false,delivering:false};
 let current=null;
@@ -84,8 +84,8 @@ const INGREDIENT_ART=Object.fromEntries(Object.keys({tea_black:1,tea_green:1,tea
 tea_black:'057_tea-black_8c43c9fdf1.webp',tea_green:'058_tea-green_c593521943.webp',tea_oolong:'059_tea-oolong_76378ca6ec.webp',tea_jasmine:'060_tea-jasmine_6eb0f1a20e.webp',tea_honey:'062_tea-honey_c540b7e03e.webp',tea_strawberry:'063_tea-strawberry_e9002fe325.webp',tea_taro:'064_tea-taro_f92cdc8eba.webp',topping_boba:'065_topping-boba_50721c0e58.webp',topping_white_boba:'066_topping-white-boba_665b19cd9f.webp',topping_pudding:'067_topping-pudding_33e17cfd13.webp',topping_jelly:'068_topping-jelly_61dbd58c82.webp',topping_cheese_foam:'069_topping-cheese-foam_0190b7ff02.webp',topping_lychee:'070_topping-lychee_b30470ed21.webp',topping_cookie:'071_topping-cookie_9b347a4826.webp',topping_aloe:'072_topping-aloe_a17bf92f08.webp',topping_grass_jelly:'073_topping-grass-jelly_d917e5f37f.webp',topping_redbean:'074_topping-redbean_416456d0bc.webp',topping_crystal:'075_topping-crystal_e2ce5320db.webp',topping_mochi:'076_topping-mochi_5c7b9aa32e.webp'
 }[id]]));
 const cs26Pager=document.createElement('nav');cs26Pager.id='cs26-pager';cs26Pager.setAttribute('aria-label','Trang nguyên liệu');shelf.after(cs26Pager);
-const cs26Taps=document.createElement('div');cs26Taps.id='cs26-taps';cs26Taps.setAttribute('aria-label','Vòi cốt trà');
-const caption=stage.querySelector('figcaption');if(caption)caption.append(cs26Taps);
+const cs27Containers=document.createElement('div');cs27Containers.id='cs27-containers';cs27Containers.setAttribute('role','group');
+const caption=stage.querySelector('figcaption');if(caption)caption.querySelector('#cs20-dish-name').after(cs27Containers);
 const cs26Meters=document.createElement('div');cs26Meters.id='cs26-meters';$('cs20-visual').after(cs26Meters);
 function chooseFlavor(kind,n){
  if(practiceDish)practiceSelect(kind,n,1);else if(!bridge.choose(kind,n))return;
@@ -107,21 +107,23 @@ function renderMiniMeters(){
   wrap.append(text,slide,number);cs26Meters.append(wrap);
  }
 }
-function renderTeaTaps(){
- cs26Taps.replaceChildren();cs26Taps.hidden=ui.career!=='boba';if(cs26Taps.hidden)return;
- const tea=itemsFor(current,'base').filter(x=>x.unlocked).slice(0,3);
- for(const x of tea){
-  const b=document.createElement('button');b.type='button';b.className='cs26-tap'+(selected(current,x)?' picked':'');b.title='Rót '+x.name;
-  const im=document.createElement('span');im.className='cs26-tap-jar';
-  if(INGREDIENT_ART[x.id]){const image=document.createElement('img');image.src='assets/images/'+INGREDIENT_ART[x.id];image.alt='';im.append(image);}else im.textContent=x.icon||'🍃';
-  const sp=document.createElement('span');sp.textContent=x.name;
-  b.append(im,sp);b.addEventListener('click',()=>emitSelection(x,1));cs26Taps.append(b);
+function renderContainers(){
+ cs27Containers.replaceChildren();
+ cs27Containers.setAttribute('aria-label',ui.career==='boba'?'Chọn size ly':ui.career==='noodle'?'Chọn size thố':'Chọn khay');
+ const labels={cup_m:'M',cup_l:'L',cup_xl:'XL',bowl_m:'M',bowl_l:'L',bowl_xl:'XL',tray_plate:'Đĩa',tray_basket:'Giỏ',tray_box:'Hộp'};
+ for(const x of itemsFor(current,'size')){
+  const b=document.createElement('button');b.type='button';b.className='cs27-container'+(selected(current,x)?' picked':'');
+  b.textContent=labels[x.id]||x.name;b.disabled=!x.unlocked;
+  b.title=x.name+(x.unlocked?' · Kho '+x.stock:' · Chưa mở khóa');
+  b.setAttribute('aria-label',b.title);b.setAttribute('aria-pressed',String(selected(current,x)));
+  b.addEventListener('click',()=>emitSelection(x,1));cs27Containers.append(b);
  }
 }
 function renderShelf(){
  if(!current)return;
  shelf.replaceChildren();cs26Pager.replaceChildren();
- renderTeaTaps();renderMiniMeters();
+ shelf.dataset.rows='1';
+ renderContainers();renderMiniMeters();
  if(ui.group==='flavor'){
   if(ui.career==='boba'){const p=document.createElement('p');p.className='cs26-flavor-help';p.textContent='🍯 Đường và 🧊 Đá chỉnh tại hai ống bên ly nhé!';shelf.append(p);return;}
   const box=document.createElement('div');box.className='cs20-flavor';
@@ -131,6 +133,7 @@ function renderShelf(){
  const width=window.innerWidth||390;const cols=width<=365?3:4;const pageSize=cols*2;
  const pages=Math.max(1,Math.ceil(data.length/pageSize));ui.page=Math.max(0,Math.min(pages-1,ui.page||0));
  const visible=data.slice(ui.page*pageSize,(ui.page+1)*pageSize);
+ shelf.dataset.rows=visible.length>cols?'2':'1';
  for(const x of visible){
   const b=document.createElement('button');b.type='button';b.className='cs20-item cs26-jar'+(selected(current,x)?' picked':'');b.disabled=!x.unlocked;
   b.title=x.name+(x.unlocked?' · Tồn kho '+x.stock:' · Chưa mở khóa');
@@ -292,7 +295,7 @@ function refresh(force=false){
  root.dataset.state=s.practice?'practice':hasOrder?'order':'idle';root.dataset.career=s.career;root.closest('#tab-shop')?.classList.toggle('cs20-active-order',hasOrder&&!s.practice);const courtyard=document.getElementById('v88-live-scene');if(courtyard)courtyard.dataset.cs20Compact=hasOrder?'true':'false';
  $('cs20-customer-name').textContent=hasOrder?s.customer.name:s.phase==='open'?'Đang đợi khách ghé quán':'Quán đang nghỉ ca';
  $('cs20-order-text').textContent=hasOrder?s.customer.description:'Mở Quán ở phía trên để nhận đơn. Quầy chế biến sẽ sẵn sàng khi khách đến.';
- $('cs20-order-time').textContent=hasOrder?`${Math.ceil(s.customer.patience)}s`:'—';
+ $('cs20-order-time').textContent=hasOrder?(s.pause?'⏸':`${Math.ceil(s.customer.patience)}s`):'—';
  if(force || ui.painted!==JSON.stringify([s.career,s.dish,s.customer?.key,s.stockStamp,ui.group])){
    ui.painted=JSON.stringify([s.career,s.dish,s.customer?.key,s.stockStamp,ui.group]);renderShelf();
  }

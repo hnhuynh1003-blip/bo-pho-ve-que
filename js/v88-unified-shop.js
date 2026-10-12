@@ -10,11 +10,19 @@ const cook=document.getElementById('cs20-station');
 const live=w.BPVQLiveSceneQA, bridge=w.BPVQCookingBridge;
 if(!shop||!scene||!frame||!customer||!cook||!live||!bridge)return;
 shop.classList.add('us21-enabled');scene.classList.add('us21-unified');
-frame.append(customer); // keeps btn-toggle-shop/cust-avatar/order legacy IDs working as before
+frame.append(customer); // hidden legacy fields retain their IDs for native renderers
 scene.append(cook);    // one shop scene, not 3 unrelated cards
 const others=document.getElementById('v88-live-other-career');
 if(others)frame.append(others);
-const status=document.createElement('div');status.className='us21-status';status.setAttribute('aria-live','off');frame.prepend(status);
+const controls=document.createElement('div');controls.className='cs27-shop-controls';scene.prepend(controls);
+const status=document.createElement('div');status.className='us21-status';status.setAttribute('aria-live','off');controls.append(status);
+const toggle=document.getElementById('btn-toggle-shop');if(toggle)controls.append(toggle);
+// One visible order ticket, with native customer metadata; no duplicate name/quote.
+const ticket=cook.querySelector('.cs20-ticket'),head=cook.querySelector('.cs20-ticket-head');
+const avatar=document.getElementById('cust-avatar');if(avatar&&head)head.prepend(avatar);
+const metadata=document.createElement('div');metadata.className='cs27-customer-meta';
+for(const id of ['cust-strict-badge','cust-budget']){const el=document.getElementById(id);if(el)metadata.append(el);}
+if(ticket&&head)head.after(metadata);
 const practiceStart=document.createElement('button');
 practiceStart.className='us21-train-start';practiceStart.type='button';practiceStart.textContent='🎓 Tập chế biến';
 practiceStart.setAttribute('aria-label','Luyện nấu ăn không mất nguyên liệu khi nghỉ ca');
@@ -22,7 +30,7 @@ const practiceExit=document.createElement('button');
 practiceExit.className='us21-train-exit';practiceExit.type='button';practiceExit.textContent='✕ Thoát luyện tập';practiceExit.hidden=true;
 const practiceNote=document.createElement('div');practiceNote.className='us21-train-note';practiceNote.hidden=true;
 practiceNote.textContent='👩‍🍳 Đang luyện tay nghề · Không trừ nguyên liệu, không cộng Xu';
-frame.append(practiceStart,practiceExit,practiceNote);
+controls.append(practiceStart,practiceExit);frame.append(practiceNote);
 practiceStart.addEventListener('click',()=>{w.BPVQCookingStation?.startPractice?.();update();});
 practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();update();});
 function safeSnapshot(){try{return bridge.snapshot()}catch(e){return null;}}
@@ -40,7 +48,7 @@ function update(){
  practiceExit.hidden=!practice;
  practiceNote.hidden=!practice;
  scene.dataset.unavailable=String(!artReadyForPreview);
- const label=hasOrder?'🍀 Khách đang gọi món':practice?'🎓 Đang luyện tay nghề':phase==='open'?'🟢 Quán đang mở':'🌿 Quán đang nghỉ';
+ const label=practice?'🎓 Luyện tập':phase==='open'?'🟢 Đang mở':'🌿 Nghỉ ca';
  if(status.textContent!==label)status.textContent=label;
  if(lastCareer!==career){lastCareer=career;}
  w.document.body.classList.toggle('us21-has-sign',artReadyForPreview);

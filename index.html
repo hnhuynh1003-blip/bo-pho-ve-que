@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v88.16.1 — Ingredient Playground BETA</title>
+  <title>Bỏ Phố Về Quê v88.16.2 — Quầy gọn & Tab đáy BETA</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -37,6 +37,7 @@
   <link rel="stylesheet" href="css/v88-cooking-station.css?v=88.14.0" />
   <link rel="stylesheet" href="css/v88-unified-shop.css?v=88.15.0" />
   <link rel="stylesheet" href="css/v88-ingredient-playground.css?v=88.16.0" />
+  <link rel="stylesheet" href="css/v88-compact-counter.css?v=88.16.2" />
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -240,7 +241,7 @@
       </section>
     </header>
 
-    <nav class="compact-nav sticky z-30 bg-white/95 backdrop-blur border-b border-amber-200/80 px-2 shadow-sm">
+    <nav data-dock="bottom" aria-label="Các khu vực" class="compact-nav z-30 bg-white/95 backdrop-blur border-b border-amber-200/80 px-2 shadow-sm">
       <div class="compact-nav-grid grid grid-cols-6 text-center text-xs font-bold text-slate-500">
         <button id="nav-btn-shop" onclick="switchTab('shop')" class="compact-nav-btn bg-amber-500 text-white shadow-sm tap-scale flex flex-col items-center">
           <img class="nav-art-img" src="assets/images/004_html-004_34928c2267.webp" alt="Quán">
@@ -1656,8 +1657,8 @@
   <script src="js/v88-shop-sign.js?v=88.0.1-preview"></script>
   <script src="js/v88-shop-paint.js?v=88.0.1-preview"></script>
   <script src="js/v88-live-scene-qa.js?v=88.12.1-test"></script>
-  <script src="js/v88-cooking-station.js?v=88.16.0"></script>
-<script src="js/v88-unified-shop.js?v=88.15.0"></script>
+  <script src="js/v88-cooking-station.js?v=88.16.2"></script>
+<script src="js/v88-unified-shop.js?v=88.16.2"></script>
   <script src="js/v8780-source-ledger.js?v=87.8.0"></script>
 </body>
 </html>

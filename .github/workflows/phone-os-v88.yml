@@ -103,6 +103,7 @@ jobs:
           node tests/test_all_shop_stages_v88.mjs
           node tests/test_phone_live_shift_v88.mjs
           node tests/test_uiq26_browser_v88.mjs
+          node tests/test_compact_counter_v88.mjs
           node tests/test_shop_paint_browser_v88.mjs
           node tests/test_phone_visual_v88.mjs
       - name: Upload viewport screenshots and geometry

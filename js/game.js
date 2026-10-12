@@ -13421,9 +13421,10 @@ function v8752BuyFestival(id){
     const navH = Math.max(60, Math.ceil(nav.getBoundingClientRect().height || nav.offsetHeight || 0));
     const shellTop = Math.max(0, Math.round(shell.getBoundingClientRect().top || 0));
     const breathingRoom = window.matchMedia('(min-width: 768px)').matches ? 10 : 6;
-    const totalTop = headerH + navH + breathingRoom;
+    const bottomNav = nav.dataset.dock === 'bottom';
+    const totalTop = headerH + (bottomNav ? 0 : navH) + breathingRoom;
     header.style.setProperty('top', `${shellTop}px`, 'important');
-    nav.style.setProperty('top', `${shellTop + headerH}px`, 'important');
+    nav.style.setProperty('top', bottomNav ? 'auto' : `${shellTop + headerH}px`, 'important');
     main.style.setProperty('padding-top', `${totalTop}px`, 'important');
     document.documentElement.style.setProperty('--v75-header-h', `${headerH}px`);
     document.documentElement.style.setProperty('--v75-nav-h', `${navH}px`);
