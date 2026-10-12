@@ -10,7 +10,7 @@ assert.equal(count(html,'id="cs20-station"'),1,'exactly one new cooking station'
 for(const id of ['cs20-visual','cs20-groups','cs20-shelf','cs20-order-text','cs20-primary','cs20-price-down','cs20-price-up','cs20-flip','cs20-sauce'])assert.ok(html.includes(`id="${id}"`),id);
 for(const career of ['boba','noodle','streetfood'])assert.ok(station.includes(career));
 for(const token of ['.cs20-stage','.cs20-item','.cs20-actions','@media(max-width:350px)','prefers-reduced-motion'])assert.ok(css.includes(token),token);
-for(const word of ['snapshot,choose,complete,deliver,adjustPrice','serveDishToCustomer()','getMissingDishIngredients(getDishRequirements())','lastServed===currentCustomer'])assert.ok(bridge.includes(word),word);
+for(const word of ['snapshot,choose,complete,deliver','serveDishToCustomer()','getMissingDishIngredients(getDishRequirements())','lastServed===currentCustomer'])assert.ok(bridge.includes(word),word);
 for(const call of ['setBobaCupSize','setNoodleBowlSize','setSkewerTray','startShakeProcess','startCookNoodleProcess','startFryProcess','pullFryProcess'])assert.ok(bridge.includes(call),call);
 assert.match(station,/current\?\.customer/,'no cooking while idle');
 assert.ok(!station.includes('gameState.coins')&&!station.includes('gameState.inventory')&&!station.includes('saveGameToStorage('),'UI must never touch money, inventory or save');

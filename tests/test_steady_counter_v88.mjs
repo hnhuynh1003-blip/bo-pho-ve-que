@@ -22,7 +22,7 @@ try{
   },career);
   await page.waitForTimeout(650);
   const baseline=await page.evaluate(()=>{
-   const names=['#cs20-station','.cs20-ticket','.cs20-stage','.cs20-price','.cs20-pantry','#cs20-shelf','#cs26-pager','#cs20-feedback','.cs20-grill-actions','.cs20-actions'];
+   const names=['#cs20-station','.cs20-stage','.cs20-price','.cs20-pantry','#cs20-shelf','#cs26-pager','#cs20-feedback','.cs20-grill-actions','.cs20-actions'];
    const rect=el=>{const r=el.getBoundingClientRect();return {top:r.top,height:r.height}};
    window.__counterRefs={svg:document.querySelector('#cs20-visual svg'),size:document.querySelector('#cs27-containers button'),ingredient:document.querySelector('#cs20-shelf button'),slider:document.querySelector('#cs26-meters input'),group:document.querySelector('#cs20-groups button'),ticket:document.querySelector('.cs20-ticket')};
    return Object.fromEntries(names.map(s=>[s,rect(document.querySelector(s))]));
@@ -75,7 +75,9 @@ try{
    const money=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
    if(career==='boba'){
     await page.locator('#cs20-primary').click();await page.waitForTimeout(1100);await page.locator('#cs20-primary').click();
-    for(let i=0;i<3;i++)await page.locator('#cs20-primary').click();
+    await page.locator('#cs20-primary').click();
+    await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});
+    await page.evaluate(()=>document.getElementById('cs20-primary').click());
    }else if(career==='noodle'){
     for(let i=0;i<3;i++)await page.locator('#cs20-primary').click();
    }else{

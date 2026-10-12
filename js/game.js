@@ -5692,6 +5692,7 @@ function v8752BuyFestival(id){
     }
 
     function cleanWorkbenchDish() {
+      window.BPVQCookingBridge?.invalidateCap?.();
       workbenchDish.toppings = [];
       workbenchDish.toppingPortions = {};
       workbenchDish.skewerCounts = {};
@@ -7403,6 +7404,9 @@ function v8752BuyFestival(id){
       const accepted = decision.accepted;
       const stars = decision.stars;
       const comment = decision.comment;
+      // A transient cap performance belongs to this exact dish/customer and is
+      // consumed once here, including rejected/changed dishes. Never paid in UI.
+      const capTip = window.BPVQCookingBridge?.consumeCapTip?.(currentCustomer,workbenchDish,accepted&&decision.exact) || 0;
 
       // Đã bưng món ra cho khách thì nguyên liệu bị tiêu hao, kể cả khách từ chối.
       consumeDishIngredients(requirements);
@@ -7422,6 +7426,8 @@ function v8752BuyFestival(id){
         else if (stars === 4) tip = Math.max(0, Math.floor(earned * 0.05));
         const masteryTip=v8745MasteryTip(gameState.currentCareer,currentCustomer.order?.recipeId,accepted,decision.exact,stars);
         tip = Math.round(tip * (1 + Math.min(.65,growthBonus.tipPct+careerBonus.tipPct+masteryTip) + eventBonus.tipPct) * Math.max(.5, Number(currentCustomer.tipMod) || 1));
+        tip += capTip;
+        if(capTip)showToast(`Perfect! Khách tip thêm ${capTip} Xu cho màn dập nắp.`, '✨');
         gameState.coins += earned + tip;
         v8744RecordOrder(gameState.currentCareer);
         v8753OnOrder(stars,accepted);
@@ -13289,12 +13295,41 @@ function v8752BuyFestival(id){
     }];
   }));
   const permitted=()=>gameState&&gameState.hasStarted&&['boba','noodle','streetfood'].includes(gameState.currentCareer);
+  // Existing full-body NPC art used as appearance templates, not new identities
+  // or a transfer of village relationship/unlock state to counter customers.
+  const guestLooks={ba_sau:'baTu',ong_bay:'bacTam',khai_si:'anhKhai',loan_cho:'coSau',tu_tho:'chuNam',lan_doctor:'yTaLinh',nam_farmer:'bacBinh',thao_mom:'chiHa',ngoc_idol:'chiNgoc',chi_bep:'coLua',chef_quang:'anhPho'};
+  const guestArt=p=>VILLAGE_NPC_ART[p.npcId]||VILLAGE_NPC_ART[guestLooks[p.npcId]]||getPlayerChibiSource(['👩','📷','⚖️','💐'].includes(p.avatar)?'female':'male');
+  let capSession=null,capAward=null;
+  const capSignature=d=>JSON.stringify([d.container,d.base,d.sugar,d.ice,dishToppingCounts(d),d.listedPrice]);
+  const validCap=s=>s&&s.person===currentCustomer&&s.dish===workbenchDish&&s.signature===capSignature(workbenchDish)&&permitted()&&gameState.currentCareer==='boba'&&gameState.phase==='open'&&currentCustomer.patience>0;
+  function capPosition(){
+    if(!validCap(capSession)){capSession=null;return null;}
+    const now=performance.now(),delta=Math.max(0,now-capSession.tick);capSession.tick=now;
+    if(!phonePauseActive&&document.visibilityState!=='hidden')capSession.elapsed+=Math.min(delta,120);
+    const cycle=(capSession.elapsed/1800)%2;return (cycle<=1?cycle:2-cycle)*100;
+  }
+  function beginCap(){
+    if(!permitted()||gameState.currentCareer!=='boba'||gameState.phase!=='open'||!currentCustomer||currentCustomer.patience<=0||phonePauseActive||workbenchDish.isShaken)return false;
+    capAward=null;capSession={person:currentCustomer,dish:workbenchDish,signature:capSignature(workbenchDish),elapsed:0,tick:performance.now()};return true;
+  }
+  function hitCap(){
+    if(phonePauseActive||document.visibilityState==='hidden')return null;
+    const position=capPosition();if(position===null)return null;
+    const result=position>=44&&position<=56?'perfect':position>=32&&position<=68?'good':'miss';
+    if(result==='miss'){capSession=null;return result;}
+    capAward={...capSession,result};capSession=null;clearTimeout(shakeTimer);
+    workbenchDish.isShaken=true;renderWorkbenchControls();updateWorkbenchPreview();return result;
+  }
+  function consumeCapTip(person,dish,exact){
+    const earned=capAward;capAward=null;capSession=null;
+    return exact&&person===currentCustomer&&dish===workbenchDish&&validCap(earned)&&earned.result==='perfect'&&dish.isShaken?Math.min(8,Math.max(0,Math.round(Number(dish.listedPrice)*.1))):0;
+  }
   function snapshot(){
     const career=gameState.currentCareer||'boba',d=copy(workbenchDish),i=gameState.inventory||{};
     let customer=null;
     if(gameState.phase==='open'&&currentCustomer){
       if(!orderKeys.has(currentCustomer))orderKeys.set(currentCustomer,++counter);
-      customer={key:'o'+orderKeys.get(currentCustomer),name:String(currentCustomer.name||'Khách'),description:formatCustomerOrder(currentCustomer.order),patience:Math.max(0,Number(currentCustomer.patience)||0)};
+      customer={key:'o'+orderKeys.get(currentCustomer),name:String(currentCustomer.name||'Khách'),art:guestArt(currentCustomer),description:formatCustomerOrder(currentCustomer.order),patience:Math.max(0,Number(currentCustomer.patience)||0)};
     }
     const label={};const catalog=[];
     const sets=itemGroups[career]||itemGroups.boba;
@@ -13307,7 +13342,7 @@ function v8752BuyFestival(id){
   function choose(group,key,delta=1){
     if(!permitted())return false;
     const career=gameState.currentCareer;
-    const resetFinish=()=>{clearTimeout(shakeTimer);clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;};
+    const resetFinish=()=>{capSession=null;capAward=null;clearTimeout(shakeTimer);clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;};
     if(group==='sugar'&&career==='boba'&&[30,70,100].includes(Number(key))){resetFinish();setBobaSugar(Number(key));return true;}
     if(group==='ice'&&career==='boba'&&[0,50,100].includes(Number(key))){resetFinish();setBobaIce(Number(key));return true;}
     if(group==='spice'&&career==='noodle'&&Number.isInteger(Number(key))&&Number(key)>=0&&Number(key)<=7){resetFinish();setNoodleSpicyLevel(Number(key));return true;}
@@ -13343,7 +13378,7 @@ function v8752BuyFestival(id){
   }
   function complete(kind){
     if(!permitted()||gameState.phase!=='open'||!currentCustomer)return false;
-    if(kind==='boba'&&gameState.currentCareer==='boba')startShakeProcess();
+    if(kind==='boba'&&gameState.currentCareer==='boba'){capAward=null;capSession=null;startShakeProcess();}
     else if(kind==='noodle'&&gameState.currentCareer==='noodle')startCookNoodleProcess();
     else if(kind==='startGrill'&&gameState.currentCareer==='streetfood')startFryProcess();
     else if(kind==='streetfood'&&gameState.currentCareer==='streetfood')pullFryProcess();
@@ -13360,7 +13395,7 @@ function v8752BuyFestival(id){
     if((gameState.currentCareer==='boba'&&!workbenchDish.isShaken)||(gameState.currentCareer==='noodle'&&!workbenchDish.isCooked)||(gameState.currentCareer==='streetfood'&&workbenchDish.fryState==='unfried')){showToast('Chưa hoàn thiện công đoạn chế biến.','🍲');return false;}
     lastServed=person;serveDishToCustomer();return true;
   }
-  window.BPVQCookingBridge=Object.freeze({snapshot,choose,complete,deliver,adjustPrice(delta){if(!permitted())return false;adjustDishPrice(Number(delta)||0);return true;},reset(){cleanWorkbenchDish();renderWorkbenchControls();updateWorkbenchPreview();return true;}});
+  window.BPVQCookingBridge=Object.freeze({snapshot,choose,complete,deliver,beginCap,capPosition,hitCap,consumeCapTip,invalidateCap(){capAward=null;capSession=null;},adjustPrice(delta){if(!permitted())return false;capAward=null;capSession=null;adjustDishPrice(Number(delta)||0);return true;},reset(){capAward=null;capSession=null;cleanWorkbenchDish();renderWorkbenchControls();updateWorkbenchPreview();return true;}});
 })();
 
 /* ==== V73 art override ==== */

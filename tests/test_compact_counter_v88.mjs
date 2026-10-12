@@ -81,7 +81,9 @@ try{
    await page.waitForFunction(()=>document.getElementById('cs20-station').dataset.state==='practice');
    await page.locator('#cs27-containers button:enabled').first().click();
    await page.locator('#cs20-primary').click();await page.waitForTimeout(1100);await page.locator('#cs20-primary').click();
-   for(let i=0;i<3;i++)await page.locator('#cs20-primary').click();
+   await page.locator('#cs20-primary').click();
+    await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});
+    await page.evaluate(()=>document.getElementById('cs20-primary').click());
    await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
    await page.locator('#cs20-primary').click();
    assert.equal(await page.locator('#cs20-station').getAttribute('data-state'),'idle','training finishes safely');

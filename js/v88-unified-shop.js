@@ -23,6 +23,16 @@ const avatar=document.getElementById('cust-avatar');if(avatar&&head)head.prepend
 const metadata=document.createElement('div');metadata.className='cs27-customer-meta';
 for(const id of ['cust-strict-badge','cust-budget']){const el=document.getElementById(id);if(el)metadata.append(el);}
 if(ticket&&head)head.after(metadata);
+// Reuse the one order DOM in the courtyard. It never occupies counter space.
+if(ticket){frame.append(ticket);ticket.classList.add('cs29-speech');ticket.hidden=true;ticket.setAttribute('aria-label','Khách gọi món trong sân quán');}
+const guest=document.createElement('img');guest.id='cs29-guest';guest.alt='';guest.hidden=true;guest.decoding='async';frame.append(guest);
+const tools=document.createElement('div');tools.className='cs29-yard-tools';
+for(const [name,src,open] of [['Điện thoại','assets/images/phone/icons/settings.webp',()=>w.openSmartPhoneModal?.()],['Hỏi Mika','assets/images/117_mika_6fcbe1c0ec.webp',()=>w.v877MikaOpen?.()]]){
+ const b=document.createElement('button');b.type='button';b.setAttribute('aria-label',name);b.title=name;
+ if(name==='Điện thoại'){const icon=document.createElement('span');icon.className='cs29-phone-icon';icon.setAttribute('aria-hidden','true');b.append(icon);}
+ else {const im=document.createElement('img');im.src=src;im.alt='';b.append(im);}
+ const label=document.createElement('small');label.textContent=name==='Điện thoại'?'Điện thoại':'Mika';b.append(label);b.addEventListener('click',open);tools.append(b);
+}frame.append(tools);
 const practiceStart=document.createElement('button');
 practiceStart.className='us21-train-start';practiceStart.type='button';practiceStart.textContent='🎓 Tập chế biến';
 practiceStart.setAttribute('aria-label','Luyện nấu ăn không mất nguyên liệu khi nghỉ ca');
@@ -39,6 +49,14 @@ function update(){
  const s=safeSnapshot(); if(!s)return;
  const career=s.career||'boba',hasOrder=!!s.customer,phase=s.phase||'preparing';
  const practice=!!w.BPVQCookingStation?.status?.()?.practice;
+ if(ticket)ticket.hidden=!hasOrder;
+ guest.hidden=!hasOrder;
+ if(hasOrder&&lastKey!==s.customer.key){
+  guest.src=s.customer.art;guest.alt=s.customer.name;
+  // One brief arrival per actual order, not a repeating animation or DOM insertion.
+  guest.getAnimations().forEach(a=>a.cancel());
+  if(!w.matchMedia('(prefers-reduced-motion: reduce)').matches)guest.animate([{transform:'translateX(-70px)',opacity:0},{transform:'translateX(0)',opacity:1}],{duration:650,easing:'ease-out'});
+ }
  let tier=0;try{tier=Number(gameState?.shopStage||0)}catch{}
  const artReadyForPreview=career==='boba'&&tier===0;
  scene.dataset.career=career;

@@ -5,7 +5,7 @@
 const bridge=w.BPVQCookingBridge, root=document.getElementById('cs20-station');
 if(!bridge||!root)return;
 const fields=new Map();
-const $=id=>{if(!fields.has(id))fields.set(id,root.querySelector('#'+id));return fields.get(id);};
+const $=id=>{if(!fields.has(id))fields.set(id,document.getElementById(id));return fields.get(id);};
 const groups={
  boba:[['base','Cốt trà'],['topping','Topping'],['syrup','Siro']],
  noodle:[['base','Nước cốt'],['topping','Topping'],['flavor','Cấp cay']],
@@ -273,6 +273,14 @@ function renderDish(){
  if($('cs20-gauge').style.width!==width)$('cs20-gauge').style.width=width;
  textField('cs20-gauge-label',s.career==='boba'?`Lượng rót ${Math.round(ui.pour)}%`:s.career==='noodle'?`Nhiệt ${Math.round(ui.heat)}% · Giữ nhịp ${ui.hold.toFixed(1)}s`:`Độ chín ${Math.round(d.fryProgress||0)}%`);
  textField('cs20-craft',ui.craft>0?`Dấu ấn ${Math.round(ui.craft*100)}% (hiển thị)`:'Pha một ly theo ý bạn');
+ const capping=s.career==='boba'&&ui.stage==='capping';
+ const meter=$('cs20-gauge').parentElement;meter.classList.toggle('cs29-cap-meter',capping);
+ if(capping){
+  const p=s.practice?ui.capPosition:bridge.capPosition();
+  if(p!==null){ui.capPosition=p;meter.style.setProperty('--cap-position',p+'%');}
+  textField('cs20-gauge-label','Canh kim ở giữa • Dập nắp!');
+  textField('cs20-craft','Xanh: đạt · Vàng giữa: Perfect');
+ }
 }
 function renderAction(){
  const ready=current?.dish?.isShaken||current?.dish?.isCooked||current?.dish?.fryState==='perfect';
@@ -282,7 +290,8 @@ function renderAction(){
  else if(ready){label=safe(current?.practice?'✨ Hoàn thành bài luyện':'✨ Giao món cho khách');secondary='send';}
  else if(ui.career==='boba'){
   if(ui.stage==='choose'||ui.stage==='pour'){label=ui.active?'⏹ Dừng rót':'🫖 Rót trà vào ly';secondary='pour';}
-  else if(ui.stage==='mix'){label=`🥤 Lắc hòa vị · ${ui.stir}/3`;secondary='mix';}
+  else if(ui.stage==='mix'){label='🥤 Canh nhịp dập nắp';secondary='cap-start';}
+  else if(ui.stage==='capping'){label='✦ Dập nắp ngay!';secondary='cap-hit';}
   else {label='Đang dập nắp…';disabled=true;}
  } else if(ui.career==='noodle'){
   label=ui.stage==='cook'?'🔥 Tăng lửa / Giữ nhiệt':ui.stage==='heating'?'Đang bày món…':'🔥 Bắt đầu nấu';secondary='heat';disabled=ui.stage==='heating';
@@ -302,7 +311,7 @@ function renderAction(){
 function endPour(){
  if(!ui.active)return;
  ui.active=false;ui.stage='mix';ui.craft=.55*clamp(1-Math.abs(ui.pour-72)/50,0,1);
- setNotice(ui.pour>=48&&ui.pour<=92?'Dòng trà đã đều! Hãy lắc hòa vị 3 nhịp.':'Ly hơi lệch vạch, vẫn có thể phục vụ. Thử rót chuẩn hơn ở đơn sau.');
+ setNotice('Đã rót trà. Bấm canh nhịp, rồi dập nắp khi kim vào vùng giữa.');
  renderDish();renderAction();
 }
 function pour(){
@@ -327,10 +336,23 @@ function primaryAction(){
   refresh(true);return;
  }
  if(a==='pour'){pour();return;}
- if(a==='mix'){
-  ui.stir++; setNotice(`Lắc nhịp ${ui.stir}/3 — phần thưởng là sự khéo léo, không tự cộng Xu.`);
-  if(ui.stir>=3){ui.craft=clamp(ui.craft+.45,0,1);markReady();}
-  renderAction();ensureAnimation();return;
+ if(a==='cap-start'){
+  if(!practiceDish&&!bridge.beginCap())return;
+  ui.stage='capping';ui.capElapsed=0;ui.capPosition=0;ui.lastTick=performance.now();
+  setNotice('Kim chạy qua lại. Nhấn khi kim ở vùng xanh; giữa màu vàng là Perfect!');renderDish();renderAction();ensureAnimation();return;
+ }
+ if(a==='cap-hit'){
+  let result;
+  if(practiceDish){const p=ui.capPosition;result=p>=44&&p<=56?'perfect':p>=32&&p<=68?'good':'miss';}
+  else result=bridge.hitCap();
+  if(!result)return;
+  if(result==='miss'){ui.stage='mix';setNotice('Hụt nhịp rồi! Canh lại nhé, khách vẫn đang chờ.');}
+  else{
+   ui.stage='done';ui.craft=result==='perfect'?1:.75;
+   if(practiceDish)practiceDish.isShaken=true;
+   setNotice(result==='perfect'?(practiceDish?'Perfect! Luyện tập không cộng Xu.':'Perfect! Giao đúng món để nhận tip biểu diễn 10%, tối đa 8 Xu.'):'Nắp đã kín! Sẵn sàng giao món.');
+  }
+  refresh(true);return;
  }
  if(a==='heat'){
   if(ui.stage==='choose'){ui.stage='cook';ui.heat=25;ui.hold=0;ui.lastTick=performance.now();setNotice('Chạm tăng lửa, giữ nhiệt ổn định trong vùng 58–82%.');}
@@ -376,7 +398,7 @@ function refresh(force=false){
  renderDish();renderAction();ensureAnimation();
 }
 let animationId=0,lastVisualFrame=0;
-function needsMotion(){return !!current&&!current.pause&&current.phase==='open'&&!!current.customer&&current.customer.patience>0&&(ui.active||ui.stage==='cook'||ui.stage==='grilling');}
+function needsMotion(){return !!current&&!current.pause&&document.visibilityState!=='hidden'&&current.phase==='open'&&!!current.customer&&current.customer.patience>0&&(ui.active||ui.stage==='capping'||ui.stage==='cook'||ui.stage==='grilling');}
 function ensureAnimation(){
  if(!needsMotion()){if(animationId)w.cancelAnimationFrame(animationId);animationId=0;return;}
  if(!animationId){ui.lastTick=performance.now();animationId=w.requestAnimationFrame(animate);}
@@ -386,6 +408,11 @@ function animate(t){
  const dt=Math.min(.07,(t-(ui.lastTick||t))/1000);ui.lastTick=t;
  if(!needsMotion())return;
  if(ui.active){ui.pour=clamp(ui.pour+dt*35,0,100);if(ui.pour>=100)endPour();}
+ if(ui.stage==='capping'){
+  // Native clock owns real scoring; practice uses an isolated, ephemeral clock.
+  if(practiceDish){ui.capElapsed+=dt*1000;const c=(ui.capElapsed/1800)%2;ui.capPosition=(c<=1?c:2-c)*100;}
+  else {const p=bridge.capPosition();if(p===null){ui.stage='choose';refresh(true);return;}ui.capPosition=p;}
+ }
  if(ui.stage==='cook'){
    ui.heat=clamp(ui.heat-dt*7,0,100);
    if(ui.heat>58&&ui.heat<82)ui.hold+=dt;else ui.hold=Math.max(0,ui.hold-dt*1.6);
@@ -397,7 +424,7 @@ function animate(t){
     if(practiceDish.fryProgress>=100)practiceDish.fryState='burnt';
  }
  if(ui.stage==='grilling'&&!practiceDish && (t-(ui.grillSyncedAt||0))>100){ui.grillSyncedAt=t;refresh(false);}
- else if((ui.active||ui.stage==='cook'||(practiceDish&&ui.stage==='grilling'))&&t-lastVisualFrame>=33){lastVisualFrame=t;renderDish();renderAction();}
+ else if((ui.active||ui.stage==='capping'||ui.stage==='cook'||(practiceDish&&ui.stage==='grilling'))&&t-lastVisualFrame>=33){lastVisualFrame=t;renderDish();renderAction();}
  if(needsMotion()&&!animationId)animationId=w.requestAnimationFrame(animate);
 }
 root.hidden=false;root.closest('#tab-shop')?.classList.add('cs20-enabled');setNotice(ui.notice);refresh(true);
@@ -414,6 +441,6 @@ w.BPVQCookingStation=Object.freeze({
   return true;
  },
  stopPractice:()=>{if(!practiceDish)return false;practiceDish=null;refresh(true);return true;},
- status:()=>({career:ui.career,stage:ui.stage,key:ui.key,craft:ui.craft,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
+ status:()=>({career:ui.career,stage:ui.stage,key:ui.key,craft:ui.craft,capPosition:ui.capPosition,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
 });
 })(window);
