@@ -27,3 +27,9 @@ Figma cả ba frame 390×844 đã có **hai cột định lượng dọc cạnh 
 - Bỏ 6 nút chọn mức trong `cs20-shelf`. Đường/Đá gắn luôn vào vùng pha chế, tránh mở thêm card làm thay đổi chiều cao layout; khay dưới chỉ dành cho topping, cốt trà, ly, siro.
 - Định lượng topping và mô phỏng đá rơi vẫn cần xây tiếp. Chưa tăng độ chia bước tuyến tính 0–100% để tránh làm sai đơn NPC/validate/save hiện tại. Phần nghiệm thu **phải** kiểm tra state request, sử dụng touch một tay và không scroll jump.
 
+
+## UI-Q2.2 — Thu gọn bộ điều chỉnh Đường / Đá (12/10/2026)
+
+Đã **chỉnh trực tiếp 3 frame Figma**: mỗi cột 44 × 94 px (tính cả vùng chạm dự kiến), nằm gọn góc phải mặt bàn ở vị trí x=242 và x=289 của vùng chế biến 336 × 117 px; ly và hiệu ứng vẫn được dành vùng trái rộng khoảng 228 px. Thiết kế hiện còn là bản mock Figma, núm chưa kéo thật.
+
+Mục tiêu ưu tiên không gian: **ly/món là trung tâm → hai cột Đường/Đá phụ trợ → phía dưới dành cho nhóm cốt trà, topping, ly và siro**. Không thêm card lớn, không đẩy ingredient tray xuống và không thay hình học giữa các trạng thái nghỉ/khách/luyện. Giữ snap 30/70/100 đường, 0/50/100 đá của game cũ trong bước lập trình; drag và touch-accessibility cần QA trên điện thoại thật. Chưa tạo asset mới hoặc chỉnh game code.
