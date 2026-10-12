@@ -13234,11 +13234,17 @@ function v8752BuyFestival(id){
 (function installBPVQCookingBridge(){
   const orderKeys=new WeakMap();let counter=0;
   const copy=o=>JSON.parse(JSON.stringify(o));
-  const itemGroups={
-    boba:{container:['cup_m','cup_l','cup_xl'],base:['tea_black','tea_green','tea_strawberry','tea_taro','milk_fresh','tea_honey','tea_oolong','tea_jasmine'],topping:['topping_boba','topping_pudding','topping_jelly','topping_white_boba','topping_aloe','topping_redbean','topping_cheese_foam','topping_grass_jelly','topping_cookie','topping_crystal','topping_mochi','topping_lychee']},
-    noodle:{container:['bowl_m','bowl_l','bowl_xl'],base:['broth_kimchi','broth_tomyum','broth_beef','broth_mushroom','broth_mala','broth_collagen','broth_tonkotsu','broth_herbal'],topping:['ntop_beef','ntop_shrimp','ntop_squid','ntop_fishcake','ntop_sausage','ntop_enoki','ntop_egg','ntop_cheese','ntop_tofu','ntop_bokchoy','ntop_crabstick','ntop_corn','ntop_meatball','ntop_dumpling']},
-    streetfood:{container:['tray_plate','tray_basket','tray_box'],topping:['skewer_fish','skewer_beef','skewer_shrimp','skewer_sausage','skewer_tofu','skewer_quail','skewer_mushroom','skewer_crabstick','skewer_okra','skewer_chicken','skewer_squid'],sauce:['sauce_sweet_chili','sauce_tamarind','sauce_butter_garlic','sauce_cheese','sauce_satay','sauce_mayo','sauce_honey_mustard','sauce_bbq']}
-  };
+  // Single catalog source: customers can request any unlocked recipe ingredient.
+  // Copying a hand-maintained subset caused missing items (e.g. skewer_holo, tea_matcha).
+  const itemGroups=Object.fromEntries(['boba','noodle','streetfood'].map(c=>{
+    const cfg=CAREER_WORKBENCH_KEYS[c]||{};
+    return [c,{
+      container:[...(cfg.containers||[])],
+      base:[...(cfg.bases||[])],
+      topping:[...(cfg.toppings||[])],
+      sauce:[...(cfg.sauces||[])]
+    }];
+  }));
   const permitted=()=>gameState&&gameState.hasStarted&&['boba','noodle','streetfood'].includes(gameState.currentCareer);
   function snapshot(){
     const career=gameState.currentCareer||'boba',d=copy(workbenchDish),i=gameState.inventory||{};

@@ -1,0 +1,81 @@
+/* v88.14.1 / One Quán — one portrait-first play surface.
+   Only layout changes: original customer/order/settlement elements retain their IDs. */
+#tab-shop.us21-enabled{--us21-leaf:#2a6949;display:flex;flex-direction:column;gap:9px}
+#tab-shop.us21-enabled>#v87532-shop-board{order:2;margin:0}
+#tab-shop.us21-enabled>#v88-live-scene{order:0}
+#tab-shop.us21-enabled>#v8745-contest{order:3;margin:0}
+#tab-shop.us21-enabled>.workbench-shell{display:none!important}
+#tab-shop.us21-enabled>#v68-order-dock{display:none!important}
+#tab-shop.us21-enabled>#customer-booth-card{display:none!important} /* moved inside scene by JS */
+#v88-live-scene.us21-unified{overflow:hidden!important;padding:0!important;border-radius:17px!important;border:1px solid #8aab79!important;background:#f7f4dc!important;box-shadow:0 4px 12px #28493f1c!important;display:block!important;color:#3b513b}
+#v88-live-scene.us21-unified>.v88-live-head,#v88-live-scene.us21-unified .v88-live-controls,#v88-live-scene.us21-unified .v88-live-actions,#v88-live-scene.us21-unified>.v88-live-note{display:none!important}
+#v88-live-scene.us21-unified #v88-live-supported{display:block!important}
+#v88-live-scene.us21-unified .v88-live-frame{aspect-ratio:4/3!important;width:100%;max-height:none!important;overflow:hidden;position:relative;background:linear-gradient(#bde8ed 0%,#e2f6db 56%,#93b47c 57%,#c2a780 100%);isolation:isolate;transition:aspect-ratio .18s ease}
+#v88-live-scene.us21-unified.us21-serving .v88-live-frame{aspect-ratio:16/9!important;max-height:none!important;}
+#v88-live-scene.us21-unified.us21-serving .v88-live-frame>img{object-fit:cover!important;object-position:center 52%!important}
+#v88-live-scene.us21-unified .v88-live-frame>img{width:100%;height:100%;object-fit:cover}
+#v88-live-scene.us21-unified[data-career="noodle"] .v88-live-frame>img,#v88-live-scene.us21-unified[data-career="streetfood"] .v88-live-frame>img,#v88-live-scene.us21-unified[data-unavailable="true"] .v88-live-frame>img{display:none!important}
+#v88-live-scene.us21-unified[data-career="noodle"] .v88-live-frame,#v88-live-scene.us21-unified[data-career="streetfood"] .v88-live-frame{background:radial-gradient(circle at 77% 22%,#fff3a8 0 7%,transparent 8%),linear-gradient(#98d6ef 0 55%,#92c89d 56% 68%,#ba9973 69% 100%)}
+#v88-live-scene.us21-unified #v88-live-other-career{position:absolute;left:14px;right:14px;top:42%;transform:translateY(-50%);z-index:2;font-size:12px;font-weight:800;line-height:1.4;color:#28583d;background:#fffaebdf;border:1px solid #faf1d2;border-radius:12px;padding:12px;box-shadow:0 3px 8px #0002;text-align:center;max-width:260px;margin:auto}
+#v88-live-scene.us21-unified #v88-live-shop-sign{z-index:3}
+#v88-live-scene.us21-unified[data-career="noodle"] #v88-live-shop-sign,#v88-live-scene.us21-unified[data-career="streetfood"] #v88-live-shop-sign{display:none!important}
+#v88-live-scene.us21-unified #v88-live-markers{display:none!important}
+#v88-live-scene.us21-unified .us21-status{position:absolute;left:8px;top:8px;z-index:6;display:flex;align-items:center;gap:4px;border:1px solid #fff9d8b8;background:#fbf8e5e8;color:#2b6848;border-radius:99px;padding:5px 9px;font-size:10px;font-weight:900;max-width:70%;white-space:nowrap;box-shadow:0 2px 8px #22411b33;backdrop-filter:blur(3px)}
+#v88-live-scene.us21-unified.us21-serving .us21-status{background:#e1fae8eb;border-color:#c3ebcb;color:#136347}
+/* Reuse the real NPC card and the existing shop/open button, now a scene bubble. */
+#v88-live-scene.us21-unified #customer-booth-card{position:absolute!important;z-index:6;left:8px;right:8px;bottom:8px;min-width:0;width:auto!important;margin:0!important;padding:8px!important;border:1px solid #ffefc6e8!important;border-radius:14px!important;box-shadow:0 4px 14px #0e271850!important;background:#fff9e6f2!important;overflow:hidden!important;backdrop-filter:blur(5px);display:block!important;min-height:0!important}
+#v88-live-scene.us21-unified #customer-booth-card .shop-front-head{padding:0!important;display:flex!important;gap:7px!important;align-items:center!important;background:transparent!important;border:0!important;min-height:0!important}
+#v88-live-scene.us21-unified #customer-booth-card #cust-avatar{width:42px!important;height:42px!important;min-width:42px!important;min-height:42px!important;border-radius:100%;overflow:hidden}
+#v88-live-scene.us21-unified #cust-avatar img{max-width:100%;max-height:100%;object-fit:contain}
+#v88-live-scene.us21-unified #cust-name{font-size:11px!important;color:#55412f!important;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:165px}
+#v88-live-scene.us21-unified #cust-role{display:block;font-size:9px!important;max-width:175px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden;color:#6d715d!important}
+#v88-live-scene.us21-unified #btn-toggle-shop{padding:7px 9px!important;font-size:10px!important;min-height:39px!important;min-width:79px;border-radius:999px!important;flex-shrink:0;white-space:nowrap}
+#v88-live-scene.us21-unified #cust-strict-badge{bottom:-2px!important;font-size:8px!important}
+#v88-live-scene.us21-unified #customer-booth-card>.mt-2{border:0!important;background:#fff5d5!important;margin-top:5px!important;padding:4px 7px!important;border-radius:8px!important}
+#v88-live-scene.us21-unified #cust-order-quote{font-size:10px!important;color:#65513e!important;line-height:1.3;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#v88-live-scene.us21-unified #customer-booth-card .v30-shop-phase-row{margin-top:2px!important;line-height:1.1!important}
+#v88-live-scene.us21-unified #customer-booth-card #cust-patience-bar{transition:width .2s ease}
+#v88-live-scene.us21-unified #customer-booth-card .w-full.bg-slate-100{height:3px!important;margin-top:3px!important}
+/* Cooking is the lower half of this same scene, not an independent card. */
+#v88-live-scene.us21-unified #cs20-station{border:0!important;border-top:1px solid #c6d6b6!important;border-radius:0!important;box-shadow:none!important;display:grid!important;gap:7px!important;background:linear-gradient(#fcf6e6,#eaf3dd)!important;padding:10px 9px 13px!important;margin:0!important}
+#v88-live-scene.us21-unified #cs20-station[hidden],#v88-live-scene.us21-unified #cs20-station[data-state="idle"]{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-head{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-ticket{margin:0!important;background:#fffdfa!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage{border-radius:12px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-actions{z-index:10}
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card{padding:5px 7px!important;bottom:6px}
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card #cust-avatar{height:32px!important;width:32px!important;min-width:32px!important;min-height:32px!important}
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card #cust-role,#v88-live-scene.us21-unified.us21-serving #customer-booth-card .v30-shop-phase-row,#v88-live-scene.us21-unified.us21-serving #customer-booth-card .w-full.bg-slate-100{display:none!important}
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card>.mt-2{display:none!important} /* full requirement lives directly in cooking ticket */
+#v88-live-scene.us21-unified.us21-serving #btn-toggle-shop{font-size:9px!important;min-height:30px!important}
+body.us21-has-sign #header-shop-name{display:none!important}
+body.us21-has-sign .v8774-identity .v8774-pencil{display:none!important}
+@media(max-width:350px){#v88-live-scene.us21-unified #customer-booth-card{left:5px;right:5px;bottom:5px;padding:6px!important}#v88-live-scene.us21-unified #btn-toggle-shop{min-width:70px!important;font-size:9px!important}#v88-live-scene.us21-unified #cust-name{font-size:10px!important}#v88-live-scene.us21-unified .us21-status{font-size:9px;padding:4px 7px}}
+@media(prefers-reduced-motion:reduce){#v88-live-scene.us21-unified *{animation:none!important;transition:none!important}}
+/* Painter UI belongs to Phone → Xây Quán → Sơn Màu, never the main scene. */
+.us21-construction-palette{border:1px solid #b1d4aa;border-radius:15px;margin-top:10px;padding:10px;background:#f4f9e9;color:#355d45;font-size:12px}
+.us21-construction-palette h4{font-weight:900;font-size:13px;margin:0 0 4px}.us21-construction-palette p{font-size:10px;margin:3px 0 7px;line-height:1.4}
+.us21-palette-swatches{display:flex;flex-wrap:wrap;gap:6px}.us21-palette-swatches button{padding:7px 9px;border-radius:11px;border:2px solid #d0dac4;background:white;color:#245b45;font-size:11px;font-weight:800;min-height:44px;display:flex;align-items:center;gap:5px}
+.us21-palette-swatches button[aria-pressed="true"]{border-color:#249364;background:#dff6d9}.us21-swatch-dot{width:17px;height:17px;display:inline-block;border-radius:50%;border:1px solid #6b795b}
+/* Scene dialogue must not cover the stall itself; legacy form rows live in DOM only. */
+#v88-live-scene.us21-unified #customer-booth-card{padding:6px 7px!important}
+#v88-live-scene.us21-unified #customer-booth-card .v30-shop-phase-row,#v88-live-scene.us21-unified #customer-booth-card .w-full.bg-slate-100,#v88-live-scene.us21-unified #cust-role{display:none!important}
+#v88-live-scene.us21-unified #customer-booth-card .shop-front-head{min-height:40px!important;height:auto!important}
+#v88-live-scene.us21-unified #customer-booth-card>.mt-2{margin-top:3px!important;padding:4px 6px!important}
+#v88-live-scene.us21-unified #cust-order-quote{-webkit-line-clamp:1!important;max-height:18px!important}
+/* While serving, show the actual customer quote in the scene bubble, not just a name. */
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card>.mt-2{display:block!important;margin-top:2px!important;padding:3px 7px!important}
+#v88-live-scene.us21-unified.us21-serving #cust-order-quote{font-size:9.5px!important;-webkit-line-clamp:1!important}
+#v88-live-scene.us21-unified.us21-serving #customer-booth-card #cust-avatar{height:38px!important;width:38px!important;min-width:38px!important;min-height:38px!important}
+/* Mobile portrait compact dish surface; full text of order remains readable in ticket. */
+#v88-live-scene.us21-unified.us21-serving .v88-live-frame{aspect-ratio:16/8!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage{min-height:151px!important;padding:5px 7px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual{min-height:141px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{height:148px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-item{min-height:84px!important;flex-basis:80px!important;max-width:80px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf{min-height:93px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-group{min-height:40px!important;padding:5px 8px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-feedback{min-height:23px!important;padding:4px 7px!important}
+
+#v88-live-scene.us21-unified[data-unavailable="true"] .v88-live-frame{background:radial-gradient(circle at 80% 22%,#fff3b3 0 8%,transparent 9%),linear-gradient(#a2daeb 0 55%,#a1c79b 56% 68%,#c5aa85 69% 100%)}
+#v88-live-scene.us21-unified[data-unavailable="true"] #v88-live-shop-sign{display:none!important}

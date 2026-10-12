@@ -49,7 +49,7 @@
   function update(){
     const s=safeState(); const current=String(s?.currentCareer||'');
     const supported=current==='boba';
-    $('v88-live-supported').hidden=!supported;
+    $('v88-live-supported').hidden=!supported&&!w.BPVQUnifiedShop;
     $('v88-live-other-career').hidden=supported;
     const name=shopName(s);
     if(title.textContent!==name)title.textContent=name;

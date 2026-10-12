@@ -56,6 +56,8 @@ jobs:
           node tests/test_v88_live_scene_qa.mjs
           node --check js/v88-cooking-station.js
           node tests/test_cooking_station_v88.mjs
+          node --check js/v88-unified-shop.js
+          node tests/test_unified_shop_v88.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest
         run: |
           mkdir -p v88-game-playtest
