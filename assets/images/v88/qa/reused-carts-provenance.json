@@ -1,0 +1,33 @@
+{
+  "version": "88.16.9",
+  "records": [
+    {
+      "career": "noodle",
+      "tier": 1,
+      "sourceZip": "BPVQ_V88_LO_A_REV2_9_HINH_THAM_KHAO_QA.zip",
+      "sourceLibraryId": "libfile_8c03017d5d9c81919af4db8499a84c12",
+      "sourceMember": "tham_khao_info/noodle-b1_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "sourceSha256": "33f3a6178fe5d8dbc32b5824f651eb7fa0e68cac336a290e957cfb36f983e10c",
+      "asset": "noodle-b1-reused.webp",
+      "assetSha256": "a67778b5c61707aab4556f3ca6bcc52c9f7633a9dca2524a06d1012087e237fe",
+      "edit": "Built-in imagegen precise-object-edit: remove B1 infographic label and rounded outer border; preserve cart, roof, sign, tools, river village and art style; upscale/extend to16:10. WebP encoding quality85.",
+      "authorization": "User13Oct2026: kiểm tra và chỉnh sửa luôn thay vì làm mới hoàn toàn",
+      "usage": "B1 starter courtyard in existing draft playtest only",
+      "productionShellApproval": false
+    },
+    {
+      "career": "streetfood",
+      "tier": 1,
+      "sourceZip": "BPVQ_V88_LO_A_REV2_9_HINH_THAM_KHAO_QA.zip",
+      "sourceLibraryId": "libfile_8c03017d5d9c81919af4db8499a84c12",
+      "sourceMember": "tham_khao_info/streetfood-b1_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "sourceSha256": "bba6fbaf29bddfdb7ccdadd16f1583fef911a2bd3b79c82c748e6337fb57b661",
+      "asset": "streetfood-b1-reused.webp",
+      "assetSha256": "8b3e15e54106b94d00b1345e3662d187863e553bcef1a3b925edcb4a1874f8d9",
+      "edit": "Built-in imagegen precise-object-edit: remove B1 infographic label and rounded outer border; preserve cart, roof, sign, tools, river village and art style; upscale/extend to16:10. WebP encoding quality85.",
+      "authorization": "User13Oct2026: kiểm tra và chỉnh sửa luôn thay vì làm mới hoàn toàn",
+      "usage": "B1 starter courtyard in existing draft playtest only",
+      "productionShellApproval": false
+    }
+  ]
+}

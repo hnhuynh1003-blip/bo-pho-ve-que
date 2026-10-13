@@ -16,6 +16,12 @@ for(const c of colors){
  assert.equal(b.toString('ascii',8,12),'WEBP',f);
  assert.ok(b.length>100_000,'QA image must contain real source art '+f);
 }
+const noodleImage=fs.readFileSync('assets/images/v88/qa/noodle-b1-reused.webp');
+assert.equal(noodleImage.toString('ascii',8,12),'WEBP');
+assert.ok(noodleImage.length>100_000,'restored noodle cart contains actual art');
+const b=fs.readFileSync('assets/images/v88/qa/streetfood-b1-reused.webp');
+assert.equal(b.toString('ascii',8,12),'WEBP');
+assert.ok(b.length>100_000,'restored streetfood cart contains actual art');
 const regCtx={window:{}};
 vm.runInNewContext(read('js/v88-shop-scenes.js'),regCtx);
 assert.equal(regCtx.window.BPVQShopScenesV88.get('boba',1).isReady,false,
@@ -48,5 +54,15 @@ assert.equal(nodes['v88-live-markers'].children.length,5,'five purchasable slots
 assert.equal(nodes['v88-live-markers'].children.filter(x=>x.className.includes('v88-filled')).length,1);
 assert.equal(JSON.stringify(shop),before,'QA interactions must not mutate gameState');
 shop.currentCareer='noodle';api.update();
-assert.equal(nodes['v88-live-supported'].hidden,true,'Boba preview must not masquerade as noodle art');
+assert.equal(nodes['v88-live-supported'].hidden,false,'restored noodle scene is supported');
+assert.ok(nodes['v88-live-image'].src.endsWith('noodle-b1-reused.webp'),'no boba cart for noodle');
+shop.currentCareer='streetfood';api.update();
+assert.ok(nodes['v88-live-image'].src.endsWith('streetfood-b1-reused.webp'),'skewers use their own old cart');
+api.setColor('cream');
+assert.ok(nodes['v88-live-image'].src.endsWith('streetfood-b1-reused.webp'),'boba palette cannot repaint other careers');
+shop.currentCareer='boba';api.update();
+assert.ok(nodes['v88-live-image'].src.endsWith('boba-b1-cream.webp'),'boba palette is retained independently');
+shop.currentCareer='boba';
+assert.equal(JSON.stringify(shop),before,'restoring career art cannot mutate save');
 console.log('v88.12.1 LIVE SCENE QA: 6 real images, player name, 5 decor markers + S1, career guard, immutable save PASS');
+

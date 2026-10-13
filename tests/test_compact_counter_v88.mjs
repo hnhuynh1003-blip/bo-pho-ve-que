@@ -7,7 +7,7 @@ if(process.env.BPVQ_TEST_BROWSER_PATH)options.executablePath=process.env.BPVQ_TE
 const browser=await chromium.launch(options),reports=[];
 const dest='artifacts/v88-compact-counter';mkdirSync(dest,{recursive:true});
 try{
- for(const [width,height,career] of [[320,568,'boba'],[390,844,'boba'],[430,932,'boba'],[1366,768,'boba'],[390,844,'noodle'],[390,844,'streetfood']]){
+ for(const [width,height,career] of [[320,568,'boba'],[390,844,'boba'],[430,932,'boba'],[1366,768,'boba'],[320,568,'noodle'],[390,844,'noodle'],[430,932,'noodle'],[320,568,'streetfood'],[390,844,'streetfood'],[430,932,'streetfood']]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
   await page.route('https://cdnjs.cloudflare.com/**',r=>r.abort());
@@ -30,6 +30,7 @@ try{
    renderCustomerBooth();updateHeaderStats();window.BPVQUnifiedShop.update();window.__updateHeaderNavLayout();
   },career);
   await page.waitForTimeout(650);
+  await page.waitForFunction(()=>{const ticket=document.querySelector('.cs20-ticket');return ticket&&!ticket.hidden&&ticket.getClientRects().length>0;});
   const geometry=await page.evaluate(()=>{
    const rect=s=>{const r=document.querySelector(s).getBoundingClientRect();return {top:r.top,bottom:r.bottom,left:r.left,right:r.right,height:r.height,width:r.width}};
    const visible=s=>[...document.querySelectorAll(s)].filter(x=>x.getClientRects().length>0).length;
@@ -51,6 +52,14 @@ try{
   assert.ok(geometry.scene.top>=geometry.header.bottom,'scene starts below the header');
   assert.ok(geometry.scene.top-geometry.header.bottom<=4,'shop sits close to header');
   const yard=await page.locator('#v88-live-frame').boundingBox();assert.ok(Math.abs(yard.height-yard.width*10/16)<1,'courtyard keeps compact16:10 ratio');
+  await page.waitForFunction(()=>{const im=document.getElementById('v88-live-image');return im.complete&&im.naturalWidth>0;});
+  const sceneArt=await page.evaluate(()=>{const im=document.getElementById('v88-live-image');return {src:im.getAttribute('src'),display:getComputedStyle(im).display,available:document.getElementById('v88-live-scene').dataset.unavailable,accent:getComputedStyle(document.getElementById('v88-live-scene')).getPropertyValue('--cafe-accent').trim()};});
+  assert.equal(sceneArt.available,'false','all three starter carts have actual scene art');
+  assert.notEqual(sceneArt.display,'none','correct cart is visible');
+  assert.ok(sceneArt.src.includes(career==='boba'?'boba-b1-':`${career}-b1-reused.webp`),'scene uses the correct career asset');
+  assert.equal(sceneArt.accent,career==='noodle'?'#b35d48':career==='streetfood'?'#657d43':'#668454','materials match each cart');
+  assert.equal(await page.locator('#v88-live-other-career').isVisible(),false,'no missing-art notice covers a restored cart');
+  await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${dest}/${width}-${career}-yard.png`});
   const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,career==='boba','extra pour control only belongs to drinks');
   assert.equal(geometry.shelf.height,160,'two installed rows');
   const items=await page.evaluate(()=>{const rail=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('#cs20-shelf .cs20-item')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,width:r.width,visible:r.left>=rail.left-1&&r.right<=rail.right+1};});});

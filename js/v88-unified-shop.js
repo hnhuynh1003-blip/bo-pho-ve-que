@@ -51,7 +51,8 @@ function update(){
   if(!w.matchMedia('(prefers-reduced-motion: reduce)').matches)guest.animate([{transform:'translateX(-70px)',opacity:0},{transform:'translateX(0)',opacity:1}],{duration:650,easing:'ease-out'});
  }
  let tier=0;try{tier=Number(gameState?.shopStage||0)}catch{}
- const artReadyForPreview=career==='boba'&&tier===0;
+ const artReadyForPreview=['boba','noodle','streetfood'].includes(career)&&tier===0;
+ live.update();
  scene.dataset.career=career;
  scene.classList.toggle('us21-serving',hasOrder||practice);
  scene.classList.toggle('us21-practicing',practice);
@@ -62,10 +63,10 @@ function update(){
  const label=practice?'🎓 Luyện tập':phase==='open'?'🟢 Đang mở':'🌿 Nghỉ ca';
  if(status.textContent!==label)status.textContent=label;
  if(lastCareer!==career){lastCareer=career;}
- w.document.body.classList.toggle('us21-has-sign',artReadyForPreview);
+ w.document.body.classList.toggle('us21-has-sign',artReadyForPreview&&career==='boba');
  const supported=document.getElementById('v88-live-supported');if(supported)supported.hidden=false;
  if(others)others.hidden=artReadyForPreview;
- if(artReadyForPreview){
+ if(artReadyForPreview&&career==='boba'){
    const head=window.document.getElementById('v88-live-shop-sign');if(head)head.hidden=false;
  }else{
    const head=window.document.getElementById('v88-live-shop-sign');if(head)head.hidden=true;
