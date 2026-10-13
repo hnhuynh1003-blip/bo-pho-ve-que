@@ -29,12 +29,23 @@ try{
   await page.locator('[data-item="topping_boba"]').click();await same();await page.locator('#cs20-visual').click();await same();
   await page.getByRole('button',{name:'Cốt trà',exact:true}).click();await page.locator('[data-item="tea_green"]').click();await same();
   await page.locator('#cs27-containers button').nth(1).click();await same();
+  assert.equal(await page.locator('#cs20-top-up').isEnabled(),true,'stopped cup can be topped up');
+  await page.getByRole('button',{name:'Rót thêm trà vào ly',exact:true}).click();
+  await page.waitForTimeout(450);assert.ok((await status()).pour>stopped.pour,'top up continues above retained volume');
+  await page.locator('#cs20-primary').click();stopped.pour=(await status()).pour;await same();
+
   const cap=async()=>{await page.locator('#cs20-primary').click();await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});await page.evaluate(()=>document.getElementById('cs20-primary').click());await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');};
   await cap();await page.getByRole('button',{name:'Topping & siro',exact:true}).click();await page.locator('[data-item="topping_boba"]').click();await same();
   if(!practice)assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.isShaken),false,'editing after cap invalidates native lid');
   await cap();assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),economy,'editing and recapping never settle money/stock');
+  assert.equal(await page.locator('#cs20-top-up').isDisabled(),true,'sealed cup cannot silently resume pouring');
   await page.locator('#cs20-undo').click();assert.equal((await status()).pour,0);assert.equal((await status()).poured,false);assert.equal(await page.locator('#cs20-primary').getAttribute('data-act'),'pour');
   await page.locator('#cs20-primary').click();await page.waitForTimeout(400);await page.locator('#cs20-primary').click();assert.ok((await status()).pour>0);
+  await page.getByRole('button',{name:'Rót thêm trà vào ly',exact:true}).click();
+  await page.waitForFunction(()=>window.BPVQCookingStation.status().pour===100);assert.equal((await status()).stage,'mix');
+  assert.equal(await page.locator('#cs20-top-up').isDisabled(),true,'full cup cannot overflow');
+  await page.evaluate(()=>document.getElementById('cs20-top-up').click());assert.equal((await status()).pour,100);
+
   if(practice){await page.evaluate(()=>window.BPVQCookingStation.stopPractice());await page.evaluate(()=>window.BPVQCookingStation.startPractice());}
   else{const key=(await status()).key;await page.evaluate(()=>window.__replaceCustomer());await page.waitForFunction(k=>window.BPVQCookingStation.status().key!==k,key);}
   assert.equal((await status()).pour,0,'new drink starts empty');assert.deepEqual(errors,[]);console.log(`PASS retained pour ${practice?'practice':'live'}: sugar/ice/portions/base/size, edits during pour, recap, reset/new drink`);await page.close();

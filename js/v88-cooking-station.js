@@ -333,6 +333,8 @@ function renderAction(){
  hide($('cs20-sauce'),!(ui.career==='streetfood'&&ui.stage==='grilling'));
  disable($('cs20-flip'),ui.flip);disable($('cs20-sauce'),ui.sauce);
  disable($('cs20-undo'),!current?.customer||ui.delivering||!!current?.pause);
+ hide($('cs20-top-up'),ui.career!=='boba');
+ disable($('cs20-top-up'),!current?.customer||!ui.poured||ui.stage!=='mix'||ui.active||ui.pour>=100||ready||ui.delivering||!!current?.pause);
  disable($('cs20-price-down'),!current?.customer||!!current?.practice||!!current?.pause);disable($('cs20-price-up'),!current?.customer||!!current?.practice||!!current?.pause);
 }
 function endPour(){
@@ -342,8 +344,10 @@ function endPour(){
  renderDish();renderAction();
 }
 function pour(){
+ if(!current?.customer||current.pause||ui.delivering)return;
  if(ui.active){endPour();return;}
- if(ui.stage==='mix')return;
+ if(!['choose','mix'].includes(ui.stage))return;
+ if(ui.pour>=100){setNotice('Ly đã đầy 100%. Canh dập nắp rồi giao món nhé.');return;}
  ui.stage='pour';ui.active=true;ui.lastTick=performance.now();setNotice('Nhấn Dừng rót khi nước gần vạch 72%. Có thể chạm giữ nút.');renderAction();ensureAnimation();
 }
 function markReady(){
@@ -398,6 +402,7 @@ function primaryAction(){
 }
 let holdTimer=0, suppressClick=false;
 primary.addEventListener('click',e=>{if(suppressClick){suppressClick=false;return;}primaryAction();});
+$('cs20-top-up').addEventListener('click',()=>{if(!$('cs20-top-up').disabled)pour();});
 primary.addEventListener('pointerdown',e=>{if(primary.dataset.act!=='pour'||primary.disabled)return;
   // Native pointer events enable hold to pour; touch tap also works using click fallback.
   if(ui.active)endPour();else pour();holdTimer=performance.now();suppressClick=true;

@@ -1,4 +1,4 @@
-/* v88.16.7: one warm timber counter, matching the courtyard canopy. */
+/* v88.16.8: one warm timber counter, matching the courtyard canopy. */
 .main-stage>#tab-shop.us21-enabled{gap:3px!important;margin-top:-6px!important}
 #tab-shop.us21-enabled>*{margin-top:0!important;margin-bottom:0!important}
 @media(min-width:768px){.main-stage>#tab-shop.us21-enabled{margin-top:-10px!important}}
@@ -55,3 +55,10 @@
 #cs26-meters{top:14px}
 #cs26-meters .cs26-meter{height:110px}
 #cs26-meters .cs26-range{height:68px;min-height:60px}
+
+/* Less sky/ground, same scene dimensions across arrivals and practice. */
+#v88-live-scene.us21-unified .v88-live-frame,#v88-live-scene.us21-unified.us21-serving .v88-live-frame{aspect-ratio:16/10!important}
+#v88-live-scene.us21-unified #v88-live-image{object-fit:cover!important;object-position:center 55%!important}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-actions{grid-template-columns:minmax(0,.8fr) minmax(0,.8fr) minmax(0,1.4fr)}
+#v88-live-scene.us21-unified #cs20-station #cs20-top-up{background:#f5efd9;color:#6a7c50;border-color:#aaa67a;border-radius:9px;padding:3px 2px;font-size:10px;white-space:nowrap;box-shadow:inset 0 1px 0 #fffaf0}
+#v88-live-scene.us21-unified #cs20-station #cs20-primary{font-size:10px!important;padding:3px 4px!important}

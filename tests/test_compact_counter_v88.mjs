@@ -50,6 +50,8 @@ try{
   assert.ok(Math.abs(geometry.nav.bottom-height)<=1,'area dock touches bottom');
   assert.ok(geometry.scene.top>=geometry.header.bottom,'scene starts below the header');
   assert.ok(geometry.scene.top-geometry.header.bottom<=4,'shop sits close to header');
+  const yard=await page.locator('#v88-live-frame').boundingBox();assert.ok(Math.abs(yard.height-yard.width*10/16)<1,'courtyard keeps compact16:10 ratio');
+  const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,career==='boba','extra pour control only belongs to drinks');
   assert.equal(geometry.shelf.height,160,'two installed rows');
   const items=await page.evaluate(()=>{const rail=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('#cs20-shelf .cs20-item')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,width:r.width,visible:r.left>=rail.left-1&&r.right<=rail.right+1};});});
   assert.equal(items.filter(x=>x.visible).length,Math.min(10,items.length),'five columns show up to ten ingredients');
