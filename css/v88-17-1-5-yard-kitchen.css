@@ -1,0 +1,121 @@
+/* BPVQ 88.17.1.5 - Yard is for decorating; kitchen is a separate WORKING view.
+   Additive CSS only. This stylesheet intentionally loads after every old cafe skin.
+   Does not change price, recipe, inventory, minigame or save semantics. */
+#v88-live-scene.us21-unified{max-width:100%;min-width:0;box-sizing:border-box}
+#v88-live-scene.us21-unified #v88-live-shop-sign{display:none!important} /* user-approved: no name pasted on yard art */
+#v88-live-scene.us21-unified #v88-live-frame{cursor:default}
+#v88-live-scene.us21-unified #us21-enter-kitchen{display:block;position:absolute;bottom:105px;right:10px;z-index:12;min-height:46px;max-width:calc(100% - 20px);padding:9px 14px;border:2px solid #fff0c8;border-radius:16px;background:linear-gradient(155deg,#f9bd8b,#bd7755);color:#fffdf7;font-size:13px;font-weight:950;text-shadow:0 1px #633e35;box-shadow:0 5px 14px #3e3b2859;white-space:normal}
+#v88-live-scene.us21-unified #us21-enter-kitchen[hidden]{display:none!important}
+/* The original courtyard remains intact. Do NOT stack a second shop panorama underneath. */
+#v88-live-scene.us21-unified:not(.us21-kitchen-view) #cs20-station{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #v88-live-supported{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station{display:grid!important;min-width:0!important;max-width:100%!important;box-sizing:border-box!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[hidden],
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-state="idle"]{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view .cs27-shop-controls{display:none!important}
+#v88-live-scene.us21-unified #us21-exit-kitchen{display:block;position:relative;z-index:20;min-height:44px;max-width:100%;width:max-content;padding:9px 13px;border:2px solid #b78e64;border-radius:15px;background:linear-gradient(#fff9e7,#f0d9b4);box-shadow:0 3px 0 #976d43;color:#664830;font-size:12px;font-weight:950}
+#v88-live-scene.us21-unified #us21-exit-kitchen[hidden]{display:none!important}
+#v88-live-scene.us21-unified #us21-enter-kitchen:focus-visible,#v88-live-scene.us21-unified #us21-exit-kitchen:focus-visible{outline:3px solid #196844;outline-offset:2px}
+
+/* Boba: fresh responsive workstation, NOT a second complete facade above the yard. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]{
+ display:grid!important;grid-template-columns:minmax(0,1fr)!important;
+ grid-template-areas:"back" "price" "stage" "pantry" "actions" "feedback"!important;
+ gap:9px!important;padding:10px 9px 12px!important;
+ min-width:0!important;min-height:0!important;height:auto!important;max-height:none!important;
+ border:0!important;border-radius:0!important;overflow:visible!important;
+ background:linear-gradient(#f9e6ce 0%,#edceaa 45%,#e7bd8c 100%)!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"]>.cp171-backbar,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"]>.cp173-order-pegs{display:none!important} /* no 146px redundant wall or status tags */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]>#us21-exit-kitchen{grid-area:back!important;justify-self:start;margin:0 0 1px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]>.cs20-price{
+ grid-area:price!important;position:relative!important;z-index:4!important;
+ min-width:0!important;max-width:100%!important;width:100%!important;
+ height:auto!important;max-height:none!important;min-height:60px!important;padding:8px 9px!important;
+ display:flex!important;align-items:center!important;gap:6px!important;
+ border-radius:13px!important;box-sizing:border-box!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket{min-width:0!important;max-width:100%!important;flex:1 1 0!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket summary{min-width:0!important;max-width:100%!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stepper{min-width:0!important;flex:0 0 auto!important}
+/* Expanded recipe slips are INSIDE the station; they cannot spill out of the 390px screen. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-detail{
+ display:none;position:relative!important;inset:auto!important;bottom:auto!important;left:auto!important;right:auto!important;
+ width:100%!important;max-width:100%!important;box-sizing:border-box!important;
+ white-space:pre-line;overflow-wrap:anywhere!important;overflow-y:auto!important;
+ max-height:180px!important;padding:8px!important;z-index:8!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket[open] .cs33-order-detail{display:block!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-help-detail{
+ right:0!important;left:auto!important;width:min(240px,calc(100vw - 45px))!important;
+ max-width:100%!important;overflow-wrap:anywhere!important;box-sizing:border-box!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{
+ grid-area:stage!important;position:relative!important;isolation:isolate!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:240px!important;min-height:240px!important;max-height:240px!important;
+ padding:10px!important;box-sizing:border-box!important;
+ grid-template-columns:minmax(0,.9fr) minmax(0,1.1fr)!important;
+ overflow:hidden!important;
+ background:linear-gradient(180deg,#fff5e5 0 72%,#e2b483 72% 100%)!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage::before,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage::after{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-props{position:absolute!important;inset:0!important;pointer-events:none!important;z-index:1!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-tea-machine{position:absolute;left:44%;top:4px;max-width:46px;max-height:94px;object-fit:contain;opacity:.7}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-cup-stand{position:absolute;right:5%;bottom:10px;width:45%;height:auto;max-height:42px;object-fit:contain;opacity:.92}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage figcaption{position:relative;z-index:3!important;min-width:0!important;max-width:100%!important;height:auto!important;max-height:210px!important;padding:5px!important;box-sizing:border-box!important;overflow:hidden!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-dish-detail{height:auto!important;max-height:70px!important;min-height:0!important;overflow:auto!important;overflow-wrap:anywhere!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual{position:relative!important;z-index:4!important;min-width:0!important;max-width:100%!important;height:204px!important;min-height:204px!important;max-height:204px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual svg{max-width:100%!important;height:194px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs26-meters{right:1px!important;top:26px!important;z-index:6!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-pantry{
+ grid-area:pantry!important;position:relative!important;inset:auto!important;
+ left:auto!important;right:auto!important;bottom:auto!important;
+ transform:none!important;transition:none!important;display:grid!important;
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ min-height:0!important;max-height:none!important;height:auto!important;
+ grid-template-rows:42px auto minmax(0,1fr)!important;
+ padding:6px 8px 8px!important;box-sizing:border-box!important;
+ border-radius:15px!important;overflow:hidden!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp173-drawer-handle{min-width:0!important;gap:4px!important;align-items:center!important;display:flex!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cp173-pantry-toggle{min-height:40px!important;flex:0 0 auto}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp173-drawer-handle small{font-size:9px!important;line-height:1.2!important;min-width:0!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-pantry-open="false"] .cs20-pantry{grid-template-rows:42px!important;padding-bottom:4px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-pantry-open="false"] .cs30-pantry-bar,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-pantry-open="false"] #cs20-groups,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-pantry-open="false"] #cs20-shelf{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs30-pantry-bar{min-width:0!important;max-width:100%!important;display:flex!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-groups{min-width:0!important;max-width:100%!important;overflow-x:auto!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf[data-rows="1"]{
+ width:100%!important;min-width:0!important;max-width:100%!important;
+ height:auto!important;min-height:0!important;max-height:185px!important;
+ overflow-x:auto!important;overflow-y:hidden!important;
+ grid-template-rows:repeat(2,minmax(0,84px))!important;align-content:start!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs20-item{height:83px!important;min-height:83px!important;max-height:83px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-image{height:53px!important;min-height:53px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-actions{grid-area:actions!important;display:grid!important;position:relative!important;bottom:auto!important;z-index:5!important;width:100%!important;min-width:0!important;max-width:100%!important;height:auto!important;min-height:52px!important;max-height:none!important;gap:6px!important;padding:2px!important;grid-template-columns:minmax(0,.7fr) minmax(0,.85fr) minmax(0,1.5fr)!important;box-sizing:border-box!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-actions .cs20-button{min-width:0!important;height:auto!important;min-height:47px!important;white-space:normal!important;overflow-wrap:anywhere!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-feedback{grid-area:feedback!important;min-width:0!important}
+@media (min-width:720px){
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]{grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;grid-template-areas:"back back" "price price" "stage pantry" "actions actions" "feedback feedback"!important;align-items:start!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{height:296px!important;min-height:296px!important;max-height:296px!important}
+}
+@media (max-width:350px){
+ #v88-live-scene.us21-unified #us21-enter-kitchen{bottom:95px;right:6px;font-size:11px;padding:7px 10px}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{height:226px!important;min-height:226px!important;max-height:226px!important;grid-template-columns:minmax(0,.94fr) minmax(0,1.06fr)!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual{height:185px!important;min-height:185px!important;max-height:185px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual svg{height:178px!important}
+}
+@media(prefers-reduced-motion:reduce){#v88-live-scene.us21-unified #us21-enter-kitchen,#v88-live-scene.us21-unified #us21-exit-kitchen{transition:none!important}}
+
+/* Help is an intentional transient overlay, not a layout-expanding web card. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-help-detail{
+ position:fixed!important;inset:auto auto 90px 50%!important;transform:translateX(-50%)!important;
+ width:min(280px,calc(100vw - 34px))!important;max-width:calc(100vw - 34px)!important;
+ max-height:50vh!important;overflow-y:auto!important;z-index:500!important;
+}
