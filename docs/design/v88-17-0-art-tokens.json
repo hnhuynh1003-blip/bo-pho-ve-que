@@ -1,0 +1,87 @@
+{
+  "schema": "bpvq.v88.17.0.artlock.proposal",
+  "status": "PENDING_USER_VISUAL_APPROVAL",
+  "source": "v88.16.13.4 assets + v88.16.13.5 branch",
+  "careers": {
+    "boba": {
+      "palette": [
+        "#FFF3DF",
+        "#E7A5AC",
+        "#CFA479",
+        "#86AA8A",
+        "#594033"
+      ],
+      "mood": "Sweet Pastel / creamy-wood drink station"
+    },
+    "noodle": {
+      "palette": [
+        "#FFF0D7",
+        "#BF5940",
+        "#D96C47",
+        "#E6AD5B",
+        "#563A30"
+      ],
+      "mood": "Cozy Spicy / warm terracotta broth station"
+    },
+    "streetfood": {
+      "palette": [
+        "#F7ECD3",
+        "#9F6740",
+        "#C77642",
+        "#EDBC65",
+        "#5C8965",
+        "#3F4E3D"
+      ],
+      "mood": "Rustic Warm / bamboo charcoal grill"
+    }
+  },
+  "assets": {
+    "inventory_total": 92,
+    "by_career": {
+      "boba": 28,
+      "noodle": 32,
+      "streetfood": 32
+    },
+    "by_display_type": {
+      "raster_mapped": 58,
+      "svg_fallback": 16,
+      "css_emoji_or_unmapped": 18
+    },
+    "sample_ids": [
+      "topping_boba",
+      "topping_cheese_foam",
+      "broth_kimchi",
+      "ntop_shrimp",
+      "skewer_beef",
+      "sauce_tamarind"
+    ],
+    "issues": [
+      {
+        "id": "sauce_tamarind",
+        "broken": "109_sauce-tamarind_3b10d51b5c.webp",
+        "candidate": "045_sauce-tamarind_f5fa2f7f94.webp",
+        "status": "requires runtime path audit"
+      },
+      {
+        "id": "skewer_beef",
+        "broken": "036_skewer-beef_45ff36497f.webp",
+        "candidate": "098_skewer-beef_613e29801f.webp",
+        "status": "requires art approval"
+      },
+      {
+        "id": "ntop_shrimp",
+        "candidate": "084_ntop-shrimp_04ea544abc.webp",
+        "status": "asset exists but rendering fallback"
+      }
+    ]
+  },
+  "invariants": [
+    "no modified code or assets in v88.17.0",
+    "item IDs and save unchanged",
+    "no auto-approved 27 yard shell assets",
+    "3 careers share UI shell",
+    "artist approval before mass generation",
+    "9 tiers use modular decoration layers",
+    "timing difficulty tuning deferred"
+  ]
+}
