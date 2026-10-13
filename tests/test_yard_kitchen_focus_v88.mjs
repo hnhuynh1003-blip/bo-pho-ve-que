@@ -12,7 +12,8 @@ assert.ok(!html.includes('class="cp173-order-pegs"'),'decorative filler labels m
 assert.ok(js.includes("frame.append(customer)"),'customer booth stays native');
 assert.ok(js.includes('scene.append(cook)'),'cooking station remains one original DOM');
 assert.ok(js.includes('scene.dataset.view'),'view mode is UI-only');
-assert.ok(js.includes('setKitchenView(false,true)'),'new order ending returns to yard');
+assert.ok(!js.includes('if(lastKey&&!hasOrder&&kitchenView&&!practice)setKitchenView(false,true)'),'cancel/delivery must stay in kitchen');
+assert.ok(js.includes('enterKitchen.hidden=!s.started'),'enter button visible even without a customer after starting game');
 assert.match(js,/enterKitchen\.addEventListener\('click'/);
 assert.match(js,/exitKitchen\.addEventListener\('click'/);
 assert.ok(css.includes('us21-kitchen-view')&&css.includes('not(.us21-kitchen-view)'));
@@ -20,4 +21,4 @@ assert.ok(css.includes('.cs33-order-detail')&&css.includes('width:100%!important
 assert.ok(css.includes('#v88-live-shop-sign{display:none!important}'));
 for(const f of ['tea_dispenser.webp','cup_platform.webp'])assert.ok(existsSync(`assets/images/v88/cute-premium/${f}`),f);
 assert.ok(!js.includes('saveGameToStorage('),'new view should not write saves');
-console.log('PASS v88.17.1.5 independent yard/kitchen navigation contracts, native scene/cook, alpha props, no new economy or save owner');
+console.log('PASS v88.17.1.6 independent yard/kitchen navigation contracts; no auto-return, native scene/cook and no new economy/save owner');
