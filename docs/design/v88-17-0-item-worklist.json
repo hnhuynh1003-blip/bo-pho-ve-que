@@ -1,0 +1,597 @@
+{
+  "schema": "bpvq.v88.17.0.item-review-list",
+  "scope": "REVIEW_ONLY_NO_GAME_ASSET_MODIFICATIONS",
+  "source": "local current code item dictionary and kitchen art mappings",
+  "counts": {
+    "total": 92,
+    "boba": 28,
+    "noodle": 32,
+    "streetfood": 32
+  },
+  "notes": [
+    "Item ID not image count",
+    "Keep identifiers and save untouched",
+    "No mass-generation until user signs off 6 representative items",
+    "Local ZIP includes full CSV with original image paths"
+  ],
+  "items": [
+    {
+      "career": "boba",
+      "item_id": "cup_m",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "cup_l",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_black",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_green",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_strawberry",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_taro",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "milk_fresh",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_honey",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_boba",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1",
+      "sample": {
+        "decision": "KEEP_OR_MINOR_POLISH",
+        "source": "065_topping-boba_50721c0e58.webp"
+      }
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_white_boba",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_pudding",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_jelly",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_cheese_foam",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1",
+      "sample": {
+        "decision": "KEEP_OR_MINOR_POLISH",
+        "source": "069_topping-cheese-foam_0190b7ff02.webp"
+      }
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_redbean",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_grass_jelly",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_aloe",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_cookie",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "cup_xl",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_oolong",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_jasmine",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_mochi",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_crystal",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_lychee",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "tea_matcha",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_peach",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_brown_boba",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "topping_salted_cream",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "boba",
+      "item_id": "syrup_rainbow",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.1"
+    },
+    {
+      "career": "noodle",
+      "item_id": "bowl_m",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "bowl_l",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_kimchi",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2",
+      "sample": {
+        "decision": "REVIEW_ART_SHOW_BROTH",
+        "source": "014_broth-kimchi_3479262574.webp"
+      }
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_tomyum",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_beef",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_mushroom",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_mala",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "bowl_xl",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_collagen",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_tonkotsu",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_herbal",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_nori",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_meatball",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_corn",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_dumpling",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_porkbelly",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_beef",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_shrimp",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2",
+      "sample": {
+        "decision": "MAP_EXISTING_FIRST",
+        "source": "084_ntop-shrimp_04ea544abc.webp"
+      }
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_squid",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_fishcake",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_sausage",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_enoki",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_egg",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_cheese",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_tofu",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_bokchoy",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_crabstick",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_oyster_mushroom",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_beef_roll",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "ntop_cheese_ball",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_lemongrass_coconut",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "noodle",
+      "item_id": "broth_signature_satay",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.2"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "tray_plate",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "tray_basket",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_fish",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_beef",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3",
+      "sample": {
+        "decision": "REPLACE_BAD_CANDIDATE_AFTER_APPROVAL",
+        "source": "036_skewer-beef_45ff36497f.webp",
+        "candidate": "098_skewer-beef_613e29801f.webp"
+      }
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_shrimp",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_holo",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_sausage",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_tofu",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_quail",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_beef_enoki",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_corn",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_chicken",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_crabstick",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_okra",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_cheese_sausage",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "tray_box",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_mushroom",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_bacon_okra",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_squid",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_mayo",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_honey_mustard",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_bbq",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_sweet_chili",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_tamarind",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3",
+      "sample": {
+        "decision": "MAP_CLEAN_CANDIDATE_AFTER_QA",
+        "source": "109_sauce-tamarind_3b10d51b5c.webp",
+        "candidate": "045_sauce-tamarind_f5fa2f7f94.webp"
+      }
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_butter_garlic",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_cheese",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_satay",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_pineapple",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_cheese_stick",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_five_spice",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "skewer_pork_pineapple",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    },
+    {
+      "career": "streetfood",
+      "item_id": "sauce_festival",
+      "review_status": "PENDING_USER_ART_APPROVAL",
+      "package": "v88.17.3"
+    }
+  ]
+}
