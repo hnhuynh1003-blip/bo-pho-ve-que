@@ -58,8 +58,7 @@
 #cs20-station[data-state="idle"] .cs20-stage,#cs20-station[data-state="idle"] .cs20-pantry,#cs20-station[data-state="idle"] .cs20-grill-actions,#cs20-station[data-state="idle"] .cs20-actions{display:none!important}
 /* During active orders, the cooking ticket replaces the old floating order slip. */
 #tab-shop.cs20-active-order #v68-order-dock{display:none!important}
-/* Phone still accessible through top-right menu; don't cover the primary thumb CTA mid-order. */
-body:has(#tab-shop.cs20-active-order) .app-shell > div.fixed.bottom-3.right-3{display:none!important}
+/* Phone uses the same floating control as the other areas. */
 #cs20-station .cs20-actions{position:sticky;bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:9;background:#edf3ddf0;border-radius:13px;padding:5px 0}
 
 #cs20-station .cs20-price{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:11px;font-weight:800;color:#557352;padding:1px 3px}
@@ -71,5 +70,4 @@ body:has(#tab-shop.cs20-active-order) .app-shell > div.fixed.bottom-3.right-3{di
 #tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] #v88-live-shop-sign{display:none}
 /* Sticky header/nav must never cover the cooking station when it is scrolled into view. */
 #cs20-station{scroll-margin-top:calc(var(--v75-header-h,62px) + var(--v75-nav-h,65px) + 12px)}
-/* Legacy Mika floating shortcut must not cover the left cooking action during an order. */
-body:has(#tab-shop.cs20-active-order) #v877-mika-launch,body:has(#tab-shop.cs20-active-order) #v877-mika-nudge{display:none!important}
+/* Mika keeps native onboarding visibility and floating position. */

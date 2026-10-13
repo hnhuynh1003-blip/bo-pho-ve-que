@@ -50,9 +50,13 @@ try{
   assert.ok(Math.abs(geometry.nav.bottom-height)<=1,'area dock touches bottom');
   assert.ok(geometry.scene.top>=geometry.header.bottom,'scene starts below the header');
   assert.ok(geometry.scene.top-geometry.header.bottom<=4,'shop sits close to header');
-  assert.equal(geometry.shelf.height,78,'no reserved empty second row');
+  assert.equal(geometry.shelf.height,160,'two installed rows');
+  const items=await page.evaluate(()=>{const rail=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('#cs20-shelf .cs20-item')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,width:r.width,visible:r.left>=rail.left-1&&r.right<=rail.right+1};});});
+  assert.equal(items.filter(x=>x.visible).length,Math.min(10,items.length),'five columns show up to ten ingredients');
+  assert.equal(new Set(items.filter(x=>x.visible).map(x=>x.top)).size,2,'visible ingredients occupy two rows');
+  assert.ok(items.every(x=>x.width>=44),'compact ingredient targets stay touchable');
   assert.ok(await page.locator('.cs20-stage #cs20-feedback').count()===1,'status is inside preparation, not a blank block');
-  const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=430,'counter is compact for every career');
+  const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=520,'counter is compact for every career');
   const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
   const size=page.locator('#cs27-containers button:enabled').first();await size.click();
   assert.equal(await size.getAttribute('aria-pressed'),'true','container choice feeds native dish');
@@ -61,7 +65,7 @@ try{
    const groups=page.locator('#cs20-groups');await groups.getByRole('button',{name:'Cốt trà',exact:true}).click();
    assert.ok(await page.locator('#cs20-shelf .cs20-item').count()>0,'native tea catalog available');
    await groups.getByRole('button',{name:'Topping & siro',exact:true}).click();
-   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'all groups preserve one installed shelf row');
+   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'all groups preserve two installed shelf rows');
    assert.equal(await page.locator('#cs20-shelf .cs20-item').count(),await page.evaluate(()=>window.BPVQCookingBridge.snapshot().catalog.filter(x=>x.group==='topping').length),'all toppings and siro share the rail');
    if(width===390){
     const money=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
@@ -85,6 +89,7 @@ try{
    await page.locator('#cs20-groups').getByRole('button',{name:'Cấp cay',exact:true}).click();
    const spice=await page.evaluate(()=>{const shelf=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('[data-spice]')].map(b=>{const r=b.getBoundingClientRect();return {bottom:r.bottom,shelfBottom:shelf.bottom,width:r.width};})});
    assert.equal(spice.length,8);assert.ok(spice.every(b=>b.bottom<=b.shelfBottom&&b.width>=44),'all spice choices fit without clipping');
+   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));
    await page.locator('[data-spice="7"]').click();assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.spicyLevel),7);
    await page.locator('#cs20-groups').getByRole('button',{name:'Nước cốt',exact:true}).click();
   }

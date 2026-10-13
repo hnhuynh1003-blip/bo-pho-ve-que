@@ -1,4 +1,4 @@
-/* v88.16.5: one warm timber counter, matching the courtyard canopy. */
+/* v88.16.6: one warm timber counter, matching the courtyard canopy. */
 .main-stage>#tab-shop.us21-enabled{gap:3px!important;margin-top:-6px!important}
 #tab-shop.us21-enabled>*{margin-top:0!important;margin-bottom:0!important}
 @media(min-width:768px){.main-stage>#tab-shop.us21-enabled{margin-top:-10px!important}}
@@ -25,7 +25,7 @@
 #cs20-station .cs20-stepper{background:#f9f5eb;border-color:#b9b396;box-shadow:0 1px 2px #82664d20}
 #cs20-station .cs20-stepper button{background:#e8ecd9;color:#5e775c}
 #cs20-station .cs20-stepper strong{color:#577354}
-#v88-live-scene.us21-unified #cs20-station .cs20-pantry,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-pantry{height:124px;min-height:124px;max-height:124px;grid-template-rows:34px 78px;gap:4px;padding:4px!important;background:linear-gradient(#99765212,#d6bf9826);border:0;border-top:1px solid #b69b74;border-bottom:1px solid #b69b74;border-radius:0;box-shadow:inset 0 1px 0 #fff8e077}
+#v88-live-scene.us21-unified #cs20-station .cs20-pantry,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-pantry{height:206px;min-height:206px;max-height:206px;grid-template-rows:34px 160px;gap:4px;padding:4px!important;background:linear-gradient(#99765212,#d6bf9826);border:0;border-top:1px solid #b69b74;border-bottom:1px solid #b69b74;border-radius:0;box-shadow:inset 0 1px 0 #fff8e077}
 .cs30-pantry-bar{display:flex;gap:5px;align-items:center;min-width:0}
 #v88-live-scene.us21-unified #cs20-station #cs20-groups{flex:1;min-width:0;height:34px;min-height:34px;gap:4px}
 #v88-live-scene.us21-unified #cs20-station .cs20-group{height:34px;min-height:34px!important;border-radius:9px!important;background:#f4f0e4!important;border-color:#bfab8a!important;color:#806a4d!important;box-shadow:inset 0 -2px 0 #bc9e6c22}
@@ -33,8 +33,8 @@
 #v88-live-scene.us21-unified #cs20-station #cs26-pager{height:34px;min-height:34px;max-height:34px;gap:3px;flex:none;visibility:visible}
 #cs26-pager[hidden]{display:none!important}
 #cs26-pager button{width:30px;min-height:34px;height:34px;border-color:#bda889;border-radius:9px;background:#f5f0e4;color:#7d7651;font-size:20px;padding:0}
-#v88-live-scene.us21-unified #cs20-station #cs20-shelf,#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-rows="1"]{display:flex!important;grid-template:none!important;height:78px!important;min-height:78px!important;max-height:78px;gap:5px;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;scroll-snap-type:x proximity!important;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
-#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item{flex:0 0 74px!important;width:74px!important;min-width:74px!important;max-width:74px!important;height:78px!important;border-radius:9px!important;scroll-snap-align:start;overflow:hidden;background:transparent!important;outline-offset:-2px;box-shadow:none}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf,#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-rows="1"]{display:grid!important;grid-template-columns:none!important;grid-template-rows:repeat(2,78px)!important;grid-auto-flow:column;grid-auto-columns:calc((100% - 20px)/5);height:160px!important;min-height:160px!important;max-height:160px;column-gap:5px;row-gap:4px;padding:0!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none;scroll-snap-type:x proximity!important;overscroll-behavior-x:contain;touch-action:pan-x pan-y}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item{flex:none!important;width:100%!important;min-width:0!important;max-width:none!important;height:78px!important;border-radius:9px!important;scroll-snap-align:start;overflow:hidden;background:transparent!important;outline-offset:-2px;box-shadow:none}
 #v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item.picked{background:#dce7cb66!important;outline-color:#7f9b74}
 #v88-live-scene.us21-unified #cs20-station .cs20-item-name{background:#f8f3e3b3;color:#6c553c;font-size:9px!important;border-radius:5px}
 #v88-live-scene.us21-unified #cs20-station .cs26-jar-stock{background:#f5efdc;border-color:#ae9571;color:#7e6b4f;box-shadow:0 1px 1px #735a3022}
@@ -42,6 +42,10 @@
 #v88-live-scene.us21-unified #cs20-station #cs20-undo{background:#e7dac3;color:#796047;border-color:#b39a73;border-radius:9px;box-shadow:inset 0 1px 0 #fff2d8}
 #v88-live-scene.us21-unified #cs20-station #cs20-primary{background:linear-gradient(#8ba680,#698a63);color:#fffcf1;border-color:#5b7753;border-radius:9px;box-shadow:inset 0 1px 0 #cedbbd,0 2px 0 #536b49}
 @media(max-width:350px){#v88-live-scene.us21-unified #cs20-station .cs20-group{font-size:9px!important}#cs26-pager button{width:28px}#v88-live-scene.us21-unified #cs20-station #cs20-feedback{font-size:8.5px}}
-#v88-live-scene.us21-unified #cs20-station .cs20-flavor{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,32px);height:78px;box-sizing:border-box;padding:3px;gap:4px;background:transparent;border-radius:0;flex:none;width:100%;min-width:100%}
-#v88-live-scene.us21-unified #cs20-station .cs20-flavor .cs20-pill{min-width:0;min-height:32px;height:32px;padding:2px;font-size:10px;background:#f6f0e3;color:#7b654c;border-color:#baa384}
+#v88-live-scene.us21-unified #cs20-station .cs20-flavor{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));grid-template-rows:repeat(2,72px);height:160px;grid-column:1 / span 5;grid-row:1 / span 2;box-sizing:border-box;padding:3px;gap:4px;background:transparent;border-radius:0;flex:none;width:100%;min-width:100%}
+#v88-live-scene.us21-unified #cs20-station .cs20-flavor .cs20-pill{min-width:0;min-height:72px;height:72px;padding:2px;font-size:12px;background:#f6f0e3;color:#7b654c;border-color:#baa384}
 #v88-live-scene.us21-unified #cs20-station .cs20-flavor .cs20-pill.picked{background:#7e9a76;color:#fffdf3;border-color:#6b8965}
+
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs26-jar-image{width:min(100%,58px);max-width:100%;height:54px;min-height:54px}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-layout="flavor"]{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:160px!important;grid-auto-flow:row;grid-auto-columns:auto}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-layout="flavor"] .cs20-flavor{grid-column:1;grid-row:1;width:100%;min-width:0;justify-self:stretch}

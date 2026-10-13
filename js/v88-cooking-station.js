@@ -171,6 +171,7 @@ function renderContainers(){
 }
 function renderShelf(){
  if(!current)return;
+ attr(shelf,'data-layout',ui.group==='flavor'?'flavor':'ingredients');
  renderContainers();renderMiniMeters();
  if(ui.group==='flavor'){
   if(shelfStamp===ui.career+':flavor'){for(const b of shelf.querySelectorAll('[data-spice]'))b.classList.toggle('picked',Number(current.dish.spicyLevel)===Number(b.dataset.spice));return;}

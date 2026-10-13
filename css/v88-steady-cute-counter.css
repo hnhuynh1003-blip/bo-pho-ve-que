@@ -54,6 +54,5 @@
 #v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions{display:flex!important;height:36px;min-height:36px;gap:5px}
 #v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions button{display:block!important;height:36px;min-height:36px;padding:3px}
 #v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions button[hidden]{visibility:hidden}
-body:has(#tab-shop.cs20-enabled:not(.hidden)) .app-shell>div.fixed.bottom-3.right-3,body:has(#tab-shop.cs20-enabled:not(.hidden)) #v877-mika-launch,body:has(#tab-shop.cs20-enabled:not(.hidden)) #v877-mika-nudge{display:none!important}
 @media(max-width:350px){#v88-live-scene.us21-unified #cs20-station .cs26-jar-image{width:57px;height:54px}#v88-live-scene.us21-unified #cs20-station #cs20-dish-name{font-size:10px}.cs28-cup-stack{width:10px}}
 @media(prefers-reduced-motion:reduce){#cs20-station *{animation:none!important;transition:none!important}}
