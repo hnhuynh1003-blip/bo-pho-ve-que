@@ -9606,10 +9606,10 @@ function v8752BuyFestival(id){
         v87531DayClose();
         v87531SettleDay(gameState.coins,opCosts,interestCost);
         gameState.coins=values.coinsAfter;
-        if(gameState.debt>0)gameState.debt+=interestCost;
+        if(gameState.debt>0)gameState.debt+=values.interestCapitalized;
         ledger.operatingArrears+=values.unpaidOperating;
         ledger.lastSettledDay=closingDay;
-        ledger.history.unshift({day:closingDay,opCosts,interest:interestCost,wages:values.paidWages+values.unpaidWages,
+        ledger.history.unshift({day:closingDay,opCosts,interest:interestCost,interestPaid:values.paidInterest,interestCapitalized:values.interestCapitalized,wages:values.paidWages+values.unpaidWages,
           paid:values.paid,unpaidWages:values.unpaidWages,unpaidOperating:values.unpaidOperating,
           counterIssued:d3EnsurePlan().issuedCounter,deliveryIssued:d3EnsurePlan().issuedDelivery});
         ledger.history=ledger.history.slice(0,20);
