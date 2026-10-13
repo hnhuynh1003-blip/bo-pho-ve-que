@@ -411,7 +411,7 @@ function primaryAction(){
  const a=primary.dataset.act;
  if(a==='send'){
   if(practiceDish){practiceDish=null;practiceKitchen.reset();ui.delivering=false;refresh(true);return;}
- // Native settlement is single source of truth; this session never changes economy directly.
+  // Native settlement is single source of truth; this session never changes economy directly.
   if(ui.delivering)return;ui.delivering=true;
   const ok=bridge.deliver(); if(!ok){ui.delivering=false;setNotice('Vui lòng kiểm tra tồn kho và đúng trạng thái đơn trước khi giao.');}
   else {setNotice('Đã giao món — đang chờ khách tiếp theo.');}
