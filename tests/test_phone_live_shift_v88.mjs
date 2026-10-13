@@ -31,9 +31,19 @@ try{
   if(phonePauseActive)throw Error('phone pause remains active after close');
   // Use real spawn function (scheduling itself is also checked by the idle case above).
   clearTimeout(window._nextCustomerTimeout);
-  spawnNextCustomer();
-  if(!currentCustomer)throw Error('customer did not spawn after closing Phone');
-  return {name:currentCustomer.name,patience:currentCustomer.patience,rate:gameState.reputation,coins:gameState.coins};
+  const before=gameState.dailyVisitPlan?.issuedCounter||0;
+  const cap=gameState.dailyVisitPlan?.counterCap||0;
+  let attempts=0;
+  // Stage 3: a scheduled visitor may decline the menu and consume a daily slot.
+  // Repeat inside the existing daily cap until an actual customer is present.
+  while(!currentCustomer&&attempts<cap-before){
+    clearTimeout(window._nextCustomerTimeout);
+    spawnNextCustomer();
+    attempts++;
+  }
+  if(!currentCustomer)throw Error('no customer accepted the Menu within finite daily slots');
+  if(gameState.dailyVisitPlan.issuedCounter-before!==attempts)throw Error('slot usage mismatch after demand declines');
+  return {name:currentCustomer.name,patience:currentCustomer.patience,rate:gameState.reputation,coins:gameState.coins,demandAttempts:attempts};
  });
  await page.waitForTimeout(650);
  const afterWait=await page.evaluate(()=>({patience:currentCustomer?.patience}));
