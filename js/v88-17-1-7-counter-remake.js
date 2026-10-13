@@ -13,25 +13,24 @@ const prefix='assets/images/v88/cute-premium/';
 const shell=document.createElement('section');shell.id='cp177-workshop';
 shell.setAttribute('aria-label','Quầy trà sữa Cute Premium tương tác');
 shell.innerHTML=`
- <header class="cp177-top"><div class="cp177-top-left"></div><span class="cp177-top-caption">🧋 GÓC PHA CHẾ</span><span class="cp177-day-status"></span></header>
+ <header class="cp177-top"><div class="cp177-top-left"></div><span class="cp177-top-caption">Quầy trà sữa</span><span class="cp177-day-status"></span></header>
  <div class="cp177-upper">
-   <div class="cp177-order"><div class="cp177-panel-label">📋 Đơn khách</div><div class="cp177-order-slot"></div></div>
-   <div class="cp177-result"><div class="cp177-panel-label">🌟 Thành phẩm</div>
-     <div class="cp177-result-image"><img src="${prefix}cup_boba_deluxe.webp" alt="Minh họa ly trà sữa hoàn thiện"/></div>
-     <div class="cp177-result-desc">Ly đang pha sẽ xuất hiện ở đây khi hoàn thành.</div></div>
+  <div class="cp177-order"><div class="cp177-order-slot"></div></div>
+  <div class="cp177-result"><div class="cp177-result-image"></div><div class="cp177-result-desc"></div></div>
  </div>
- <div class="cp177-workbench" aria-label="Bàn pha chế có thể thao tác">
-   <div class="cp177-backbar-art" aria-hidden="true"></div>
-   <button type="button" id="cp177-pour-object" class="cp177-pour-object" aria-label="Chạm vào bình trà để rót hoặc dừng rót">
-     <img src="${prefix}tea_dispenser.webp" alt="Bình rót trà" draggable="false"/><span class="cp177-pour-tag">Chạm để rót</span>
-   </button>
-   <div class="cp177-cup-place"></div>
-   <div class="cp177-active-items" aria-label="Nguyên liệu trong ly"></div>
+ <div class="cp177-workbench" aria-label="Bàn pha chế">
+  <div class="cp177-backbar-art" aria-hidden="true"></div>
+  <div class="cp178-size-slot" aria-label="Chọn cỡ ly"></div>
+  <button type="button" id="cp177-pour-object" class="cp177-pour-object" aria-label="Chạm bình để rót hoặc dừng trà">
+   <img src="${prefix}tea_dispenser.webp" alt="" draggable="false"/><span class="cp177-pour-tag">Rót</span>
+  </button>
+  <div class="cp177-cup-place"></div>
+  <div class="cp177-active-items" aria-label="Nguyên liệu đã chọn"></div>
  </div>
- <div class="cp177-ingredients"><div class="cp177-ingredient-title">🍡 Chọn nguyên liệu trực tiếp trên khay</div><div class="cp177-pantry-slot"></div></div>
- <div class="cp177-options"><div class="cp177-meters-slot"></div><div class="cp177-progress-hint"></div></div>
+ <div class="cp177-options"><div class="cp177-meters-slot"></div><div class="cp178-meter-slot"></div><span class="cp177-progress-hint" hidden></span></div>
+ <div class="cp177-ingredients"><div class="cp177-pantry-slot"></div></div>
  <footer class="cp177-actions"><div class="cp177-actions-slot"></div></footer>
- <div class="cp177-empty" hidden><img src="${prefix}tea_dispenser.webp" alt=""/><div><strong>Góc pha chế đã sẵn sàng</strong><p>Mở quán để đón khách, hoặc luyện tập không tốn nguyên liệu.</p><button type="button" class="cp177-practice">🎓 Tập chế biến</button></div></div>
+ <div class="cp177-empty" hidden><span>Chưa mở bán · Có thể tập pha chế</span><button type="button" class="cp177-practice">🎓 Luyện tập</button></div>
  `;
 scene.append(shell);
 const moves=[
@@ -39,6 +38,9 @@ const moves=[
  ['.cs20-price','.cp177-order-slot'],
  // Meter is inside stage in the original native DOM: move it FIRST.
  ['#cs26-meters','.cp177-meters-slot'],
+ // Nested controls must leave the native stage BEFORE the stage is moved.
+ ['#cs27-containers','.cp178-size-slot'],
+ ['.cs20-field','.cp178-meter-slot'],
  ['.cs20-stage','.cp177-cup-place'],
  ['.cs20-pantry','.cp177-pantry-slot'],
  ['.cs20-actions','.cp177-actions-slot']
@@ -83,7 +85,7 @@ function updateItems(s){
   else {const v=document.createElement('span');v.textContent='🍡';chip.append(v);}
   const title=document.createElement('span');title.textContent=part.name+' ×'+part.qty;chip.append(title);holder.append(chip);
  }
- if(!parts.length){const none=document.createElement('span');none.className='cp177-no-toppings';none.textContent='Chọn hũ topping bên dưới để thêm vào ly';holder.append(none);}
+ // Empty glass needs no extra instructional banner covering the workbench.
 }
 function cloneFinishedCup(){
  const svg=$('cs20-visual')?.querySelector('svg');if(!svg)return null;
@@ -96,7 +98,7 @@ function cloneFinishedCup(){
  copy.removeAttribute('tabindex');copy.setAttribute('aria-hidden','true');return copy;
 }
 function updatePreview(s,status){
- const d=s.dish||{},ready=!!d.isShaken||(status.practice&&status.stage==='done');
+ const d=s.dish||{},ready=(!!s.customer&&!!d.isShaken)||(status.practice&&status.stage==='done');
  const stamp=JSON.stringify([s.customer?.key,s.practice,ready,status.stage,d.base,d.container,d.ice,d.toppings,d.toppingPortions]);
  if(stamp===lastPreviewStamp)return;
  lastPreviewStamp=stamp;
@@ -106,7 +108,7 @@ function updatePreview(s,status){
   const cup=cloneFinishedCup();if(cup){holder.replaceChildren(cup);desc.textContent=(s.label?.[d.base]||'Trà sữa')+' · '+included(s).map(x=>x.name+' ×'+x.qty).join(', ');}
  }else{
   holder.replaceChildren();const img=document.createElement('img');img.src=prefix+(String(d.base||'').includes('matcha')?'cup_matcha.webp':String(d.base||'').includes('strawberry')?'cup_strawberry.webp':'cup_empty_M.webp');img.alt='Ly trống';img.style.opacity='.45';holder.append(img);
-  desc.textContent=s.customer?'Đang pha · thành phẩm hiện sau khi dập nắp':'Đang chờ khách';
+  desc.textContent='';
  }
 }
 function refresh(){
@@ -117,17 +119,20 @@ function refresh(){
  shell.dataset.state=state.practice?'practice':s.customer?'order':'idle';
  shell.dataset.stage=state.stage||'choose';
  shell.classList.toggle('cp177-pouring',state.stage==='pour');
- shell.querySelector('.cp177-day-status').textContent=state.practice?'🎓 Luyện tập':s.phase==='open'?'🟢 Đang mở':'🌿 Nghỉ ca';
+ shell.querySelector('.cp177-day-status').textContent=state.practice?'Luyện tập':s.phase==='open'?'Đang bán':'Nghỉ ca';
  const actuator=$('cp177-pour-object'),primary=$('cs20-primary'),topUp=$('cs20-top-up');
  const mainAct=primary?.dataset.act||'';
  // The tea dispenser IS the pour control: never draw a second visible pour button.
  const canPour=!!primary&&!primary.disabled&&!s.pause&&(mainAct==='pour'||(mainAct==='cap-start'&&!topUp?.disabled));
  actuator.disabled=!canPour;
  actuator.setAttribute('aria-label',state.stage==='pour'?'Dừng rót trà':'Rót trà từ bình vào ly');
- actuator.querySelector('.cp177-pour-tag').textContent=state.stage==='pour'?'⏹ Dừng rót':mainAct==='cap-start'&&canPour?'↻ Rót thêm':'Chạm để rót';
+ actuator.querySelector('.cp177-pour-tag').textContent=state.stage==='pour'?'Dừng':mainAct==='cap-start'&&canPour?'Rót thêm':'Rót';
  const progress=shell.querySelector('.cp177-progress-hint');
- const amount=Math.round(Number(state.pour||0));
- progress.textContent=state.stage==='pour'||state.stage==='mix'?`Lượng trà ${amount}% · mục tiêu khoảng 72%`:state.stage==='capping'? 'Canh kim vào vùng Good/Perfect rồi dập nắp':s.customer||state.practice?'Chọn món → rót → dập nắp':'Quầy đã sẵn sàng';
+ const timing=state.stage==='capping'||state.stage==='timing';
+ progress.hidden=!timing;
+ progress.textContent=timing?'Vàng = Perfect':'';
+ const isDone=(!!s.customer&&!!s.dish?.isShaken)||(state.practice&&state.stage==='done');
+ shell.dataset.finished=String(isDone);
  shell.querySelector('.cp177-empty').hidden=!!s.customer||!!state.practice;
  shell.classList.toggle('cp177-idle-mode',!s.customer&&!state.practice);
  if(!state.practice)updateItems(s);else {const holder=shell.querySelector('.cp177-active-items'); if(!holder.dataset.practice){holder.textContent='🎓 Luyện tập · topping theo lựa chọn';holder.dataset.practice='1';}}
@@ -142,7 +147,7 @@ dispenser.addEventListener('click',()=>{
  else if(action==='cap-start'&&!$('cs20-top-up')?.disabled)$('cs20-top-up')?.click();
  refresh();
 });
-shell.querySelector('.cp177-practice').addEventListener('click',()=>$('cp176-start-practice')?.click());
+shell.querySelector('.cp177-practice').addEventListener('click',()=>{if(w.BPVQCookingStation.startPractice()){w.BPVQUnifiedShop?.update?.();refresh();}});
 // Mouse/keyboard/click all use the original action handlers; no second settlement path.
 const obs=new MutationObserver(()=>refresh());
 obs.observe(station,{attributes:true,attributeFilter:['data-career','data-state','data-pantry-open']});
