@@ -46,7 +46,7 @@ exitKitchen.addEventListener('click',()=>setKitchenView(false,true));
 // Outdoor artwork doubles as a large hit target, but must not hijack controls.
 frame.addEventListener('click',e=>{
  if(e.target.closest('button,a,summary,input,select,textarea,[role="button"]'))return;
- if(scene.classList.contains('us21-serving'))setKitchenView(true,true);
+ // The yard art remains a safe place to admire decor; entry uses the clear button.
 });
 setKitchenView(false);
 const toggle=document.getElementById('btn-toggle-shop');if(toggle)controls.append(toggle);
@@ -68,17 +68,18 @@ const practiceNote=document.createElement('div');practiceNote.className='us21-tr
 practiceNote.textContent='👩‍🍳 Đang luyện tay nghề · Không trừ nguyên liệu, không cộng Xu';
 controls.append(practiceStart,practiceExit);frame.append(practiceNote);
 practiceStart.addEventListener('click',()=>{if(w.BPVQCookingStation?.startPractice?.())setKitchenView(true,true);update();});
-practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();setKitchenView(false);update();});
+const practiceInside=document.getElementById('cp176-start-practice');
+practiceInside?.addEventListener('click',()=>{if(!practiceStart.hidden)practiceStart.click();});
+practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();update();});
 function safeSnapshot(){try{return bridge.snapshot()}catch(e){return null;}}
 let lastKey='',lastPhase='',lastCareer='';
 function update(){
  const s=safeSnapshot(); if(!s)return;
  const career=s.career||'boba',hasOrder=!!s.customer,phase=s.phase||'preparing';
  const practice=!!w.BPVQCookingStation?.status?.()?.practice;
- // An ended order returns the player to the calm outdoor yard automatically.
- // Do not reset the cooking station or its native dish state.
- if(lastKey&&!hasOrder&&kitchenView&&!practice)setKitchenView(false,true);
- enterKitchen.hidden=!(hasOrder||practice);
+ // Remain at the cooking station after a cancellation, timeout or delivery.
+ // The explicit Back button alone changes this view, so no bounce after an order.
+ enterKitchen.hidden=!s.started;
  enterKitchen.textContent=practice?'🧑‍🍳 Vào bếp luyện tập':'🧋 Vào quầy pha chế';
  exitKitchen.hidden=!kitchenView;
 
