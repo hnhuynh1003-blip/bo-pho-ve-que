@@ -11,7 +11,7 @@ const groups={
  noodle:[['base','Nước cốt'],['topping','Topping'],['flavor','Cấp cay']],
  streetfood:[['skewer','Chọn xiên'],['sauce','Nước sốt']]
 };
-let ui={key:'',career:'',group:'',page:0,stage:'choose',pour:0,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'',lastTick:0,started:0,painted:'',active:false,delivering:false};
+let ui={key:'',career:'',group:'',page:0,stage:'choose',pour:0,poured:false,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'',lastTick:0,started:0,painted:'',active:false,delivering:false};
 let current=null;
 // Training is ephemeral and never calls native inventory / payment / save mutators.
 let practiceDish=null,practiceNumber=0;
@@ -52,7 +52,7 @@ function setNotice(s){ui.notice=s;textField('cs20-feedback',s);}
 function touchMotion(el,frames,duration=180){if(!el||w.matchMedia('(prefers-reduced-motion: reduce)').matches)return;el.getAnimations().forEach(a=>a.cancel());el.animate(frames,{duration,easing:'ease-out'});}
 function reset(key,career){
  const sameCareer=career===ui.career,group=sameCareer?ui.group:career==='boba'?'topping':groups[career]?.[0][0]||'size',page=sameCareer?ui.page:0;
- ui={key,career,group,page,stage:'choose',pour:0,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'Chọn nguyên liệu rồi thao tác trực tiếp với món nhé!',lastTick:performance.now(),started:0,painted:'',active:false,delivering:false};
+ ui={key,career,group,page,stage:'choose',pour:0,poured:false,heat:0,hold:0,flip:false,sauce:false,stir:0,craft:0,notice:'Chọn nguyên liệu rồi thao tác trực tiếp với món nhé!',lastTick:performance.now(),started:0,painted:'',active:false,delivering:false};
  lastPortionKey='';
  setNotice(career==='boba'?'Chọn nguyên liệu → rót trà → dập nắp.':career==='noodle'?'Chọn nguyên liệu rồi canh lửa nấu mì.':'Chọn xiên rồi lật, quét sốt và canh độ chín.');
  renderGroups();
@@ -92,10 +92,23 @@ function emitSelection(x,delta){
  if(x.group==='topping' && delta>0)lastPortionKey=x.id;
  if(practiceDish){if(!x.unlocked)return;practiceSelect(x.group,x.id,delta);}else{if(!bridge.choose(x.group,x.id,delta))return;}
  ui.page=Math.max(0,ui.page||0);
- ui.stage='choose';ui.active=false;ui.pour=0;ui.hold=0;ui.heat=0;ui.flip=false;ui.sauce=false;ui.stir=0;ui.craft=0;
- setNotice('Đã đổi thành phần. Chế biến lại để món đạt chuẩn.');
+ afterIngredientEdit();
  touchMotion($('cs20-visual').querySelector('svg'),[{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}]);
  refresh(true);
+}
+function afterIngredientEdit(){
+ if(ui.career==='boba'){
+  // Edits invalidate the native lid/tip, but never empty a cup already poured.
+  // A running pour keeps running; stopped pours return directly to capping.
+  const running=ui.active&&ui.stage==='pour';
+  ui.stage=running?'pour':ui.poured?'mix':'choose';
+  ui.active=running;ui.capElapsed=0;ui.capPosition=0;
+  ui.craft=ui.poured ? .55*clamp(1-Math.abs(ui.pour-72)/50,0,1):0;
+  setNotice(ui.poured?'Đã giữ lượng trà. Canh dập nắp lại để giao món.':running?'Đã thêm nguyên liệu, trà vẫn đang rót.':'Đã chọn nguyên liệu. Rót trà khi sẵn sàng.');
+ }else{
+  ui.stage='choose';ui.active=false;ui.pour=0;ui.hold=0;ui.heat=0;ui.flip=false;ui.sauce=false;ui.stir=0;ui.craft=0;
+  setNotice('Đã đổi thành phần. Chế biến lại để món đạt chuẩn.');
+ }
 }
 // Existing asset mapping only; no newly minted item IDs or repainted source art.
 const INGREDIENT_ART=Object.fromEntries(Object.keys({tea_black:1,tea_green:1,tea_oolong:1,tea_jasmine:1,tea_honey:1,tea_strawberry:1,tea_taro:1,topping_boba:1,topping_white_boba:1,topping_pudding:1,topping_jelly:1,topping_cheese_foam:1,topping_lychee:1,topping_cookie:1,topping_aloe:1,topping_grass_jelly:1,topping_redbean:1,topping_crystal:1,topping_mochi:1}).map(id=>[id,{
@@ -127,7 +140,7 @@ const meterViews=[],containerViews=[];
 let containerStamp='',shelfStamp='',shelfViews=[];
 function chooseFlavor(kind,n){
  if(practiceDish)practiceSelect(kind,n,1);else if(!bridge.choose(kind,n))return;
- ui.stage='choose';ui.active=false;ui.heat=0;ui.pour=0;ui.hold=0;ui.stir=0;ui.craft=0;refresh(true);
+ afterIngredientEdit();refresh(true);
 }
 function renderMiniMeters(){
  hide(cs26Meters,ui.career!=='boba');
@@ -324,7 +337,7 @@ function renderAction(){
 }
 function endPour(){
  if(!ui.active)return;
- ui.active=false;ui.stage='mix';ui.craft=.55*clamp(1-Math.abs(ui.pour-72)/50,0,1);
+ ui.active=false;ui.poured=true;ui.stage='mix';ui.craft=.55*clamp(1-Math.abs(ui.pour-72)/50,0,1);
  setNotice('Đã rót trà. Bấm canh nhịp, rồi dập nắp khi kim vào vùng giữa.');
  renderDish();renderAction();
 }
@@ -457,6 +470,6 @@ w.BPVQCookingStation=Object.freeze({
   return true;
  },
  stopPractice:()=>{if(!practiceDish)return false;practiceDish=null;refresh(true);return true;},
- status:()=>({career:ui.career,stage:ui.stage,key:ui.key,craft:ui.craft,capPosition:ui.capPosition,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
+ status:()=>({career:ui.career,stage:ui.stage,key:ui.key,craft:ui.craft,pour:ui.pour,poured:!!ui.poured,capPosition:ui.capPosition,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
 });
 })(window);

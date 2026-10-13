@@ -1,4 +1,4 @@
-/* v88.16.6: one warm timber counter, matching the courtyard canopy. */
+/* v88.16.7: one warm timber counter, matching the courtyard canopy. */
 .main-stage>#tab-shop.us21-enabled{gap:3px!important;margin-top:-6px!important}
 #tab-shop.us21-enabled>*{margin-top:0!important;margin-bottom:0!important}
 @media(min-width:768px){.main-stage>#tab-shop.us21-enabled{margin-top:-10px!important}}
@@ -8,14 +8,14 @@
 #v88-live-scene.us21-unified .cs27-shop-controls .us21-status{color:#57735b;font-size:9px}
 #v88-live-scene.us21-unified .cs27-shop-controls .us21-train-start,#v88-live-scene.us21-unified .cs27-shop-controls .us21-train-exit{background:#e9ecd9;border-color:#b9c2a6;color:#557056}
 #v88-live-scene.us21-unified #cs20-station,#v88-live-scene.us21-unified #cs20-station[data-state="idle"]{--cs30-ink:#65503c;--cs30-leaf:#6d8c6b;gap:3px!important;padding:6px!important;border-top:3px solid #8e6744!important;background:repeating-linear-gradient(178deg,transparent 0 34px,#9e795712 35px 36px),linear-gradient(105deg,#d8b992,#efe3ce 47%,#d6b68c)!important;box-shadow:inset 0 2px 0 #f9f3e5!important}
-#v88-live-scene.us21-unified #cs20-station .cs20-stage,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-stage{height:164px;min-height:164px!important;max-height:164px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:3px 4px!important}
-#v88-live-scene.us21-unified #cs20-station .cs20-stage figcaption{height:152px;grid-template-rows:14px 36px 22px 23px 12px 33px;gap:2px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-stage{height:140px;min-height:140px!important;max-height:140px;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;padding:3px 4px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage figcaption{height:132px;grid-template-rows:14px 32px 18px 21px 10px 27px;gap:2px!important}
 #v88-live-scene.us21-unified #cs20-station #cs20-dish-name{color:#604a35;font-size:11px}
-#v88-live-scene.us21-unified #cs20-station #cs20-dish-detail{height:22px;color:#85735b;font-size:9px;line-height:11px}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-detail{height:18px;color:#85735b;font-size:9px;line-height:11px}
 #v88-live-scene.us21-unified #cs20-station #cs20-craft{display:none!important}
-#v88-live-scene.us21-unified #cs20-station .cs20-feedback{height:33px;min-height:33px!important;max-height:33px;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;line-height:11px;font-size:9px;color:#4f7455;font-weight:750;overflow-y:auto;overscroll-behavior:contain}
+#v88-live-scene.us21-unified #cs20-station .cs20-feedback{height:27px;min-height:27px!important;max-height:27px;padding:0!important;background:transparent!important;border:0!important;border-radius:0!important;line-height:11px;font-size:9px;color:#4f7455;font-weight:750;overflow-y:auto;overscroll-behavior:contain}
 #v88-live-scene.us21-unified #cs20-station #cs20-valuation{color:#876e50;font-size:9px}
-#cs27-containers .cs27-container{min-height:36px;height:36px;background:#f7f3e7;border-color:#b9a585;border-radius:8px;box-shadow:inset 0 -2px 0 #d2b79433;color:#78634b}
+#cs27-containers .cs27-container{min-height:32px;height:32px;background:#f7f3e7;border-color:#b9a585;border-radius:8px;box-shadow:inset 0 -2px 0 #d2b79433;color:#78634b}
 #cs27-containers .cs27-container.picked{background:#e8eddc;border-color:#718d6b;color:#4b6b4e;box-shadow:inset 0 -2px 0 #92ac8322}
 #cs26-meters .cs26-meter{background:#f9f6ed;border-color:#baa98a;box-shadow:0 1px 2px #75604022;border-radius:12px;color:#77684e}
 #cs26-meters .cs26-meter.ice{background:#edf3ed}
@@ -49,3 +49,9 @@
 #v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs26-jar-image{width:min(100%,58px);max-width:100%;height:54px;min-height:54px}
 #v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-layout="flavor"]{grid-template-columns:minmax(0,1fr)!important;grid-template-rows:160px!important;grid-auto-flow:row;grid-auto-columns:auto}
 #v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-layout="flavor"] .cs20-flavor{grid-column:1;grid-row:1;width:100%;min-width:0;justify-self:stretch}
+
+#v88-live-scene.us21-unified #cs20-station #cs20-visual{height:130px;min-height:130px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{height:125px!important}
+#cs26-meters{top:14px}
+#cs26-meters .cs26-meter{height:110px}
+#cs26-meters .cs26-range{height:68px;min-height:60px}

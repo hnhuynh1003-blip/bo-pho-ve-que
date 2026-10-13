@@ -106,6 +106,7 @@ jobs:
           node tests/test_compact_counter_v88.mjs
           node tests/test_steady_counter_v88.mjs
           node tests/test_yard_cap_v88.mjs
+          node tests/test_pour_retention_v88.mjs
           node tests/test_shop_paint_browser_v88.mjs
           node tests/test_phone_visual_v88.mjs
       - name: Upload viewport screenshots and geometry

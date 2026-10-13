@@ -56,6 +56,7 @@ try{
   assert.equal(new Set(items.filter(x=>x.visible).map(x=>x.top)).size,2,'visible ingredients occupy two rows');
   assert.ok(items.every(x=>x.width>=44),'compact ingredient targets stay touchable');
   assert.ok(await page.locator('.cs20-stage #cs20-feedback').count()===1,'status is inside preparation, not a blank block');
+  const prep=await page.locator('.cs20-stage').boundingBox();assert.equal(prep.height,140,'preparation surface is shorter');
   const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=520,'counter is compact for every career');
   const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
   const size=page.locator('#cs27-containers button:enabled').first();await size.click();
