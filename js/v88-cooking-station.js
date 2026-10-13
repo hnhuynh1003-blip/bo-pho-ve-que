@@ -385,7 +385,7 @@ function renderAction(){
  }
  textField('cs20-primary',label);disable(primary,disabled||!!current?.pause);attr(primary,'data-act',secondary);
  const playing=['heating','simmer','grilling'].includes(ui.stage),held=ui.stage==='held',paused=!!current?.pause;
- hide($('cs20-fire'),ui.career==='boba');hide($('cs20-flip'),ui.career==='boba');hide($('cs20-sauce'),ui.career!=='streetfood');
+ hide($('cs20-fire'),ui.career==='boba');hide($('cs20-flip'),ui.career!=='streetfood');hide($('cs20-sauce'),ui.career!=='streetfood');
  textField('cs20-fire','Lửa: '+['','nhỏ','vừa','lớn'][current?.kitchen?.flame||2]);
  textField('cs20-flip',ui.career==='noodle'?'↻ Khuấy nồi':'↻ Lật xiên');
  hide($('cs20-lift'),ui.career==='boba');textField('cs20-lift',ui.career==='noodle'?(current?.kitchen?.offHeat?'Đã nhấc':'Nhấc nồi'):(current?.kitchen?.offHeat?'Trên khay':'Gắp ra'));

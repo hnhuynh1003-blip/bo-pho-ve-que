@@ -1,4 +1,4 @@
-/* v88.16.11: real elapsed-time kitchen sessions. No money, inventory or save writes.
+/* v88.16.12: real elapsed-time kitchen sessions. No money, inventory or save writes.
    Native and practice use the same rules; native completion stays in the core closure. */
 (function(w){
 'use strict';
@@ -41,7 +41,7 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
  }
  function canFinish(){
   if(!s)return false;
-  if(s.career==='noodle')return (s.stage==='simmer'||s.stage==='held'&&s.restStage==='simmer')&&s.elapsed>=6*s.size&&s.cook>=88&&s.cook<=118&&s.stirs>0&&s.stable>=1&&s.overflow<65;
+  if(s.career==='noodle')return (s.stage==='simmer'||s.stage==='held'&&s.restStage==='simmer')&&s.elapsed>=6*s.size&&s.cook>=88&&s.cook<=118&&s.stable>=1&&s.overflow<65;
   return ['grilling','held'].includes(s.stage)&&s.elapsed>=7&&Math.min(s.a,s.b)>=65&&Math.max(s.a,s.b)<=105&&s.sauced&&s.setTime>=.5&&s.glaze<55;
  }
  function hint(){
@@ -49,12 +49,13 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
   const held=s.stage==='held';
   if(canFinish())return held?'Món đã ngoài bếp và đủ bước. Bấm hoàn thiện để giao.':s.career==='noodle'?'Mì đã đạt! Nhấc nồi ngay để giữ độ chín.':'Xiên đã đạt! Gắp ra đĩa/mẹt để giữ độ chín.';
   if(s.career==='noodle'){
+   if(!held&&s.flame===3)return 'Nước đã sôi! Hạ lửa vừa để mì chín đều, tránh trào.';
+   if(!held&&s.flame===1&&s.heat<62&&s.cook<88)return 'Lửa quá nhỏ, mì chín chậm. Tăng về lửa vừa để nấu tiếp.';
    if(s.cook>118)return 'Mì đã quá mềm. Làm lại để đạt đúng độ chín.';
    if(s.cook<88)return held?'Mì còn sống. Đặt lại bếp để nấu tiếp.':'Mì đang chín. Có thể nhấc nồi để dừng nhiệt bất cứ lúc nào.';
-   if(s.stirs<1)return 'Mì đã chín, còn thiếu khuấy nồi. Nhấc xuống rồi khuấy nhé!';
    if(s.stable<1)return held?'Đặt lại bếp, hạ lửa vừa và giữ sôi nhẹ 1 giây.':'Hạ lửa vừa, giữ sôi nhẹ 1 giây rồi nhấc nồi.';
    if(s.elapsed<6*s.size)return held?'Thố chưa đủ thời gian. Đặt lại bếp ở lửa vừa.':'Thố cần thêm một chút thời gian ở lửa vừa.';
-   if(s.overflow>=65)return 'Nhấc nồi và khuấy để giảm nguy cơ trào.';
+   if(s.overflow>=65)return 'Nhấc nồi để dừng nhiệt, rồi đặt lại ở lửa vừa để hạ nguy cơ trào.';
   }else{
    if(Math.max(s.a,s.b)>105)return 'Một mặt đã quá lửa. Làm lại mẻ để đạt chuẩn.';
    if(Math.min(s.a,s.b)<65)return (held?'Đặt lại vỉ, ':'')+'canh mặt '+(s.a<s.b?'A':'B')+' chín; lật để đổi mặt nhận nhiệt.';
@@ -108,7 +109,7 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
   }
   if(kind==='drop'&&s.career==='noodle'){
    if(!snapshotValue(c).canDrop){s.notice='Nước dùng chưa sôi. Đợi đủ nhiệt trước khi thả mì.';return false;}
-   s.stage='simmer';s.notice='Đã thả mì và topping. Hạ về lửa vừa, khuấy và canh chín.';return true;
+   s.stage='simmer';s.notice='Đã thả mì và topping. Hạ về lửa vừa và canh chín. Không cần khuấy nồi.';return true;
   }
   if(kind==='stir'&&s.career==='noodle'&&(s.stage==='simmer'||s.stage==='held'&&s.restStage==='simmer')){
    if(now()-s.stirTick<700)return false;
@@ -125,7 +126,7 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
    s.notice=s.sauceEarly?'Phủ sốt hơi sớm. Hạ lửa để sốt không khét.':'Đã phủ sốt. Canh thêm một chút cho sốt bám đều.';return true;
   }
   if(kind==='finish'){
-   if(!canFinish()){s.notice=s.career==='noodle'?'Mì chưa đạt: cần chín, khuấy và giữ sôi nhẹ.':'Chưa đạt: hai mặt phải chín, sốt bám đều rồi lấy xuống.';return false;}
+   if(!canFinish()){s.notice=s.career==='noodle'?'Mì chưa đạt: cần đủ độ chín, thời gian và giữ sôi nhẹ.':'Chưa đạt: hai mặt phải chín, sốt bám đều rồi lấy xuống.';return false;}
    return finish(c);
   }
   return false;

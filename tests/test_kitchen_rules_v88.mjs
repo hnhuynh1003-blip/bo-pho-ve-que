@@ -24,9 +24,9 @@ for(const career of ['noodle','streetfood']){
 for(const container of ['bowl_m','bowl_l','bowl_xl']){
  const {c,api,advance,commits}=session('noodle');c.dish.container=container;api.action('begin');
  assert.equal(api.action('drop'),false);while(!api.snapshot().canDrop)advance(.05);
- assert.equal(api.action('drop'),true);api.action('flame',2);api.action('stir');
+ assert.equal(api.action('drop'),true);api.action('flame',2);
  while(api.snapshot().cook<100||!api.snapshot().canFinish){assert.notEqual(api.snapshot().stage,'failed');advance(.05);}
- assert.equal(api.snapshot().canFinish,true);assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');
+ assert.equal(api.snapshot().stirs,0);assert.equal(api.snapshot().canFinish,true);assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');
  assert.ok(commits[0][1]>=6&&commits[0][1]<=9,'noodle takes real6–9sec');
  assert.equal(api.action('finish'),false);assert.equal(commits.length,1,'completion one-shot');
  c.dish.toppingPortions.ntop_beef=3;assert.equal(api.ready(),false,'ingredient changes invalidate completed dish');
@@ -34,6 +34,12 @@ for(const container of ['bowl_m','bowl_l','bowl_xl']){
 {
  const {api,advance}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);api.action('drop');advance(5);
  assert.equal(api.snapshot().stage,'failed');assert.equal(api.ready(),false,'unattended high fire overflows');
+}
+{
+ const {api,advance}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);api.action('drop');
+ assert.match(api.snapshot().hint,/Hạ lửa vừa/,'post-drop guidance must expose the high-fire hazard');
+ api.action('flame',2);advance(1);const before=api.snapshot();api.action('stir');
+ assert.equal(api.snapshot().stage,'simmer','legacy stir action never resets a healthy pot');assert.equal(api.snapshot().cook,before.cook);
 }
 {
  const {api,advance,commits}=session('streetfood');api.action('begin');advance(3.9);api.action('flip');advance(2.9);api.action('sauce');advance(1);
@@ -65,14 +71,13 @@ for(const career of ['noodle','streetfood']){
  const {api,advance,commits}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);
  api.action('drop');api.action('flame');assert.equal(api.snapshot().flame,2,'one tap lowers high fire to medium');
  while(api.snapshot().cook<100||api.snapshot().elapsed<6)advance(.05);
- assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'held','missing stir may finish off heat');
- assert.equal(api.action('stir'),true);assert.equal(api.action('stir'),false);assert.equal(api.snapshot().canFinish,true);
- assert.equal(api.action('finish'),true);assert.equal(api.ready(),true);assert.equal(commits.length,1);
+ assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'done','no stir required to lift a ready noodle pot');
+ assert.equal(api.snapshot().stirs,0);assert.equal(api.action('finish'),false);assert.equal(api.ready(),true);assert.equal(commits.length,1);
  assert.equal(api.action('lift'),false);assert.equal(api.action('return'),false);
 }
 {
  const {api,advance,commits}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);
- api.action('drop');api.action('flame',2);api.action('stir');while(!api.snapshot().canFinish||api.snapshot().cook<99)advance(.05);
+ api.action('drop');api.action('flame',2);while(!api.snapshot().canFinish||api.snapshot().cook<99)advance(.05);
  assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'done','ready food finishes on lifting');assert.equal(api.snapshot().grade,'perfect');
  const frozen=api.snapshot();advance(10);assert.equal(api.snapshot().cook,frozen.cook);assert.equal(commits.length,1);
 }
@@ -84,4 +89,4 @@ for(const career of ['noodle','streetfood']){
  assert.equal(api.snapshot().a,frozen.a);assert.equal(api.snapshot().b,frozen.b);assert.equal(api.snapshot().glaze,0,'sauce cannot scorch on plate');
  assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');assert.equal(commits.length,1);
 }
-console.log('PASS kitchen rules: timed cooking, off-heat preservation/return, stir and sauce off heat, readiness gates, pause/edit and one-shot completion');
+console.log('PASS kitchen rules: timed cooking, off-heat preservation/return, no mandatory stir and sauce off heat, readiness gates, pause/edit and one-shot completion');

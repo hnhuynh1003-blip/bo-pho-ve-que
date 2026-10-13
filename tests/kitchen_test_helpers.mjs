@@ -8,8 +8,8 @@ export async function cookKitchen(page,career){
   await page.waitForFunction(()=>window.BPVQCookingStation.status().kitchen.canDrop);
   await page.locator('#cs20-primary').click();
   while(await page.evaluate(()=>window.BPVQCookingStation.status().kitchen.flame!==2))await page.locator('#cs20-fire').click();
-  await page.locator('#cs20-flip').click();
-  await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.canFinish&&k.cook>=99;});
+  if(await page.locator('#cs20-flip').isVisible())throw new Error('Noodle stirring must not be required or visible');
+  await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.canFinish&&k.cook>=99&&k.stirs===0;});
  }else{
   await page.waitForFunction(()=>window.BPVQCookingStation.status().kitchen.a>=77);
   await page.locator('#cs20-flip').click();

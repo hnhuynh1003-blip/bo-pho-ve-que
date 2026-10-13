@@ -71,7 +71,7 @@ try{
   if(career!=='boba'){
    assert.equal(await page.locator('#cs20-lift').isVisible(),true,'off-heat action occupies the installed row even while idle');
    const row=await page.locator('.cs20-grill-actions').boundingBox();
-   for(const id of career==='noodle'?['cs20-fire','cs20-flip','cs20-lift']:['cs20-fire','cs20-flip','cs20-sauce','cs20-lift']){
+   for(const id of career==='noodle'?['cs20-fire','cs20-lift']:['cs20-fire','cs20-flip','cs20-sauce','cs20-lift']){
     const r=await page.locator('#'+id).boundingBox();assert.ok(r.width>=44&&r.height>=44,id+' keeps a touch-sized target');
     assert.ok(r.x>=row.x-1&&r.x+r.width<=row.x+row.width+1,id+' fits its installed row');
    }
