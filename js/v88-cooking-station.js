@@ -51,6 +51,20 @@ function practiceSelect(group,key,delta){
 }
 
 const tabs=$('cs20-groups'),shelf=$('cs20-shelf'),stage=root.querySelector('.cs20-stage'),primary=$('cs20-primary');
+const pantryToggle=$('cp173-pantry-toggle');
+let bobaDrawerOpen=true;
+function syncBobaDrawer(forceCareer){
+ const career=forceCareer||ui.career;
+ const isBoba=career==='boba';
+ if(pantryToggle){
+  pantryToggle.hidden=!isBoba;
+  pantryToggle.setAttribute('aria-expanded', String(!!bobaDrawerOpen));
+  pantryToggle.textContent=(bobaDrawerOpen?'▾ ':'▴ ')+'🧋 Hộc topping';
+  pantryToggle.title=bobaDrawerOpen?'Thu hộc topping':'Mở hộc topping';
+ }
+ attr(root,'data-pantry-open', !isBoba || bobaDrawerOpen ? 'true':'false');
+}
+if(pantryToggle){pantryToggle.addEventListener('click',()=>{ if(ui.career!=='boba')return; bobaDrawerOpen=!bobaDrawerOpen; syncBobaDrawer('boba'); updateRail(); });}
 // Hai popover không chồng nhau khi người chơi xem đơn và hướng dẫn.
 const orderDetails=root.querySelector('.cs33-order-ticket'),helpDetails=root.querySelector('.cs33-help');
 orderDetails?.addEventListener('toggle',()=>{if(orderDetails.open&&helpDetails)helpDetails.open=false;});
@@ -131,7 +145,7 @@ function afterIngredientEdit(){
 }
 // Existing asset mapping only; no newly minted item IDs or repainted source art.
 const INGREDIENT_ART=Object.fromEntries(Object.keys({tea_black:1,tea_green:1,tea_oolong:1,tea_jasmine:1,tea_honey:1,tea_strawberry:1,tea_taro:1,topping_boba:1,topping_white_boba:1,topping_pudding:1,topping_jelly:1,topping_cheese_foam:1,topping_lychee:1,topping_cookie:1,topping_aloe:1,topping_grass_jelly:1,topping_redbean:1,topping_crystal:1,topping_mochi:1}).map(id=>[id,{
-tea_black:'057_tea-black_8c43c9fdf1.webp',tea_green:'058_tea-green_c593521943.webp',tea_oolong:'059_tea-oolong_76378ca6ec.webp',tea_jasmine:'060_tea-jasmine_6eb0f1a20e.webp',tea_honey:'062_tea-honey_c540b7e03e.webp',tea_strawberry:'063_tea-strawberry_e9002fe325.webp',tea_taro:'064_tea-taro_f92cdc8eba.webp',topping_boba:'065_topping-boba_50721c0e58.webp',topping_white_boba:'066_topping-white-boba_665b19cd9f.webp',topping_pudding:'067_topping-pudding_33e17cfd13.webp',topping_jelly:'068_topping-jelly_61dbd58c82.webp',topping_cheese_foam:'069_topping-cheese-foam_0190b7ff02.webp',topping_lychee:'070_topping-lychee_b30470ed21.webp',topping_cookie:'071_topping-cookie_9b347a4826.webp',topping_aloe:'072_topping-aloe_a17bf92f08.webp',topping_grass_jelly:'073_topping-grass-jelly_d917e5f37f.webp',topping_redbean:'074_topping-redbean_416456d0bc.webp',topping_crystal:'075_topping-crystal_e2ce5320db.webp',topping_mochi:'076_topping-mochi_5c7b9aa32e.webp'
+tea_black:'v88/cute-premium/tea-black-clean.svg',tea_green:'058_tea-green_c593521943.webp',tea_oolong:'059_tea-oolong_76378ca6ec.webp',tea_jasmine:'060_tea-jasmine_6eb0f1a20e.webp',tea_honey:'062_tea-honey_c540b7e03e.webp',tea_strawberry:'063_tea-strawberry_e9002fe325.webp',tea_taro:'064_tea-taro_f92cdc8eba.webp',topping_boba:'065_topping-boba_50721c0e58.webp',topping_white_boba:'066_topping-white-boba_665b19cd9f.webp',topping_pudding:'067_topping-pudding_33e17cfd13.webp',topping_jelly:'068_topping-jelly_61dbd58c82.webp',topping_cheese_foam:'069_topping-cheese-foam_0190b7ff02.webp',topping_lychee:'070_topping-lychee_b30470ed21.webp',topping_cookie:'071_topping-cookie_9b347a4826.webp',topping_aloe:'072_topping-aloe_a17bf92f08.webp',topping_grass_jelly:'073_topping-grass-jelly_d917e5f37f.webp',topping_redbean:'074_topping-redbean_416456d0bc.webp',topping_crystal:'075_topping-crystal_e2ce5320db.webp',topping_mochi:'076_topping-mochi_5c7b9aa32e.webp'
 }[id]]));
 const cs26Pager=document.createElement('nav');cs26Pager.id='cs26-pager';cs26Pager.setAttribute('aria-label','Trang nguyên liệu');shelf.after(cs26Pager);
 const cs27Containers=document.createElement('div');cs27Containers.id='cs27-containers';cs27Containers.setAttribute('role','group');
@@ -269,7 +283,15 @@ function buildVisual(s){
   <path d="M52 35 Q100 29 148 35 L138 156 Q100 170 62 156 Z" fill="url(#cs28-glass)" stroke="#8f684b" stroke-width="2.8"/>
   <g clip-path="url(#cs20-cup-clip)"><rect data-tea x="47" y="148" width="107" height="170" fill="#bc9463"/><path data-wave d="M52 150 Q80 146 110 151 T148 150" stroke="#fff8df" opacity=".55" stroke-width="3" fill="none"/>${pearls}${ice}<path d="M65 44 Q57 96 72 148" stroke="#fff" stroke-width="6" opacity=".46" fill="none" stroke-linecap="round"/></g>
   <path d="M132 37 L146 12" stroke="#86a57d" stroke-width="7" stroke-linecap="round"/><ellipse data-lid cx="100" cy="35" rx="49" ry="6" fill="#fff2d6" stroke="#936c4a" stroke-width="2.5" opacity=".65"/>
-  <ellipse cx="101" cy="102" rx="24" ry="19" fill="#fff6df" fill-opacity=".78" stroke="#bca078" stroke-width="1"/><path d="M93 111 Q86 89 108 91 Q113 108 93 111 M96 107 L105 96" stroke="#729875" stroke-width="2.5" fill="#b5c99a" stroke-linecap="round"/>`;
+  <ellipse cx="101" cy="102" rx="24" ry="19" fill="#fff6df" fill-opacity=".88" stroke="#bca078" stroke-width="1.4"/><path d="M93 111 Q86 89 108 91 Q113 108 93 111 M96 107 L105 96" stroke="#729875" stroke-width="2.5" fill="#b5c99a" stroke-linecap="round"/>
+  <!-- Cat mascot decal lives on the dynamic cup, not a separate payout/recipe system. -->
+  <path d="M85 96L89 88L96 94Q102 92 107 94L114 87L118 98Q123 116 104 120Q82 122 82 104Z" fill="#fff0d8" stroke="#a87969" stroke-width="1.6"/>
+  <path d="M89 91L94 95L88 98Z M112 90L112 99L106 95Z" fill="#eaa5ad"/>
+  <circle cx="94" cy="105" r="2.4" fill="#614438"/><circle cx="109" cy="105" r="2.4" fill="#614438"/>
+  <circle cx="90" cy="110" r="4.1" fill="#e69da5" opacity=".68"/><circle cx="113" cy="110" r="4.1" fill="#e69da5" opacity=".68"/>
+  <path d="M99 111L103 111L101 113Z M101 113Q98 116 96 113M101 113Q104 116 106 113" fill="#ba6f72" stroke="#a46c60" stroke-width=".6" stroke-linejoin="round"/>
+  <path d="M49 41Q54 29 65 32 M121 35Q138 26 146 43" stroke="#fffdf4" stroke-width="3" fill="none" opacity=".6" stroke-linecap="round"/>
+  <path d="M48 61L43 66M48 72L39 73M147 54L157 50" stroke="#fff5cc" stroke-width="2.5" opacity=".68" stroke-linecap="round"/>`;
  }else if(s.career==='noodle'){
   const tokens=Array.from({length:24},()=>`<g data-food-slot opacity="0"><title></title><path data-food-shape d="M-8-6H8V6H-8Z" stroke="#805d3d" stroke-width=".8"/><path d="M-5-2L3-3" stroke="#fff5da" stroke-width="1.2" opacity=".6"/><text data-food-count x="7" y="9" font-size="11" font-weight="800" fill="#61442f" stroke="#fff2d8" stroke-width=".6" paint-order="stroke"></text></g>`).join('');
   content=`<g data-pot><ellipse cx="101" cy="164" rx="70" ry="8" fill="#a76f45" opacity=".15"/><path d="M38 67 Q100 43 162 67 L149 145 Q101 173 50 145 Z" fill="#b17d61" stroke="#80513f" stroke-width="3"/><ellipse cx="100" cy="75" rx="65" ry="25" fill="#603b2d" stroke="#b87a4d" stroke-width="4"/><ellipse data-soup cx="100" cy="76" rx="55" ry="18" fill="#dd9c59"/>
@@ -460,7 +482,8 @@ $('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)re
 function refresh(force=false){
  const s=view();current=s;
  const key=s.customer?.key||`idle:${s.phase}:${s.career}`;
- if(key!==ui.key||s.career!==ui.career){reset(key,s.career);if(s.presentation&&s.career==='boba'){ui.pour=Number(s.presentation.pour)||0;ui.poured=!!s.presentation.poured;}force=true;}
+ if(key!==ui.key||s.career!==ui.career){reset(key,s.career);if(s.presentation&&s.career==='boba'){ui.pour=Number(s.presentation.pour)||0;ui.poured=!!s.presentation.poured;}if(s.career!=='boba')bobaDrawerOpen=true;force=true;}
+ syncBobaDrawer(s.career);
  if(s.career!=='boba'||s.kitchen.stage!=='choose'){ui.kitchen=s.kitchen;ui.stage=s.kitchen.stage;const note=s.kitchen.hint||s.kitchen.notice;if(note&&ui.notice!==note)setNotice(note);}
  const hasOrder=!!s.customer;
  attr(root,'data-state',s.practice?'practice':hasOrder?'order':'idle');attr(root,'data-career',s.career);root.closest('#tab-shop')?.classList.toggle('cs20-active-order',hasOrder&&!s.practice);const courtyard=document.getElementById('v88-live-scene');if(courtyard)attr(courtyard,'data-cs20-compact',hasOrder?'true':'false');
@@ -533,7 +556,7 @@ function animate(t){
  if(t-lastVisualFrame>=33){lastVisualFrame=t;renderDish();renderAction();}
  if(needsMotion()&&!animationId)animationId=w.requestAnimationFrame(animate);
 }
-root.hidden=false;root.closest('#tab-shop')?.classList.add('cs20-enabled');setNotice(ui.notice);refresh(true);
+root.hidden=false;root.closest('#tab-shop')?.classList.add('cs20-enabled');syncBobaDrawer(ui.career);setNotice(ui.notice);refresh(true);
 w.setInterval(()=>refresh(false),550);
 w.addEventListener('resize',()=>{if(current){renderShelf();updateRail();}},{passive:true});
 w.BPVQCookingStation=Object.freeze({
