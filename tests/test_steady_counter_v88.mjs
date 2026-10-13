@@ -1,5 +1,6 @@
 // Real UI regression: customer transitions must not reflow or recreate the counter.
 import assert from 'node:assert/strict';
+import {cookKitchen} from './kitchen_test_helpers.mjs';
 import {chromium} from 'playwright';
 import {mkdirSync,writeFileSync} from 'node:fs';
 const args={headless:true,args:['--no-sandbox','--disable-gpu']};
@@ -78,13 +79,7 @@ try{
     await page.locator('#cs20-primary').click();
     await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});
     await page.evaluate(()=>document.getElementById('cs20-primary').click());
-   }else if(career==='noodle'){
-    for(let i=0;i<3;i++)await page.locator('#cs20-primary').click();
-   }else{
-    await page.locator('#cs20-shelf button:enabled').first().click();await page.locator('#cs20-primary').click();
-    await page.locator('#cs20-flip').click();await page.locator('#cs20-sauce').click();
-    await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='pull');await page.locator('#cs20-primary').click();
-   }
+   }else await cookKitchen(page,career);
    await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
    const vessel=await page.evaluate(()=>window.__counterRefs.svg===document.querySelector('#cs20-visual svg'));assert.ok(vessel,'cooking animation retains the vessel');
    await page.locator('#cs20-primary').click();

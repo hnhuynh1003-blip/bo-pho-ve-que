@@ -5197,6 +5197,7 @@ function v8752BuyFestival(id){
       const recipe = pool.find(r => r.id === recipeId);
       if (!recipe) return;
       if(!getUnlockedRecipes(career).some(r=>r.id===recipeId))return showToast('Công thức chưa mở. Hãy học trong Soppi → Sổ Công Thức!', '🔒');
+      window.BPVQCookingBridge?.invalidateCap?.();
       gameState.currentCareer = career;
       workbenchDish.career = career;
       workbenchDish.isShaken = false;
@@ -6248,6 +6249,7 @@ function v8752BuyFestival(id){
     }
 
     function startCookNoodleProcess() {
+      if(window.BPVQCookingStation?.isActive?.()&&window.BPVQCookingBridge?.kitchenAction)return window.BPVQCookingBridge.kitchenAction('begin');
       const btn = document.getElementById('btn-cook-noodle');
       const statusTxt = document.getElementById('noodle-cook-status');
       if (btn) btn.disabled = true;
@@ -6384,6 +6386,7 @@ function v8752BuyFestival(id){
     }
 
     function startFryProcess() {
+      if(window.BPVQCookingStation?.isActive?.()&&window.BPVQCookingBridge?.kitchenAction)return window.BPVQCookingBridge.kitchenAction('begin');
       const bStart = document.getElementById('btn-start-fry');
       const bPull = document.getElementById('btn-pull-fry');
       const fTxt = document.getElementById('fry-status-txt');
@@ -6419,6 +6422,7 @@ function v8752BuyFestival(id){
     }
 
     function pullFryProcess() {
+      if(window.BPVQCookingStation?.isActive?.()&&window.BPVQCookingBridge?.kitchenAction)return window.BPVQCookingBridge.kitchenAction('finish');
       clearInterval(fryInterval);
       const bStart = document.getElementById('btn-start-fry');
       const bPull = document.getElementById('btn-pull-fry');
@@ -6549,7 +6553,7 @@ function v8752BuyFestival(id){
         .map(([key, qty]) => `${qty} ${itemLabel(key)}`)
         .join(' + ');
       const tray = ({plate:'đĩa giấy',basket:'mẹt tre',box:'hộp mang đi'}[order.tray]) || 'đĩa giấy';
-      return `${order.recipeName ? `📖 ${order.recipeName}: ` : ''}${skewers}, đựng ${tray}, sốt ${itemLabel(order.sauce)}. Chiên vàng giòn đúng độ nhé! Tối đa ${order.maxPrice} Xu.`;
+      return `${order.recipeName ? `📖 ${order.recipeName}: ` : ''}${skewers}, đựng ${tray}, sốt ${itemLabel(order.sauce)}. Nướng đều hai mặt, phủ sốt đúng lúc nhé! Tối đa ${order.maxPrice} Xu.`;
     }
 
     function sameStringSet(a = [], b = []) {
@@ -7378,6 +7382,8 @@ function v8752BuyFestival(id){
       if (!currentCustomer || gameState.phase !== 'open') {
         return showToast("Hiện tại không có khách nào ở quầy!", "⚠️");
       }
+
+      if(['noodle','streetfood'].includes(gameState.currentCareer)&&window.BPVQCookingStation?.isActive?.()&&!window.BPVQCookingBridge?.kitchenReady?.())return showToast('Món chưa hoàn thiện minigame chế biến.','🍲');
 
       // Kiểm tra đủ nguyên liệu trước. Thiếu hàng thì tuyệt đối chưa trừ kho.
       const requirements = getDishRequirements();
@@ -13191,6 +13197,8 @@ function v8752BuyFestival(id){
     }
 
     window.onload = function () {
+      // A profile chosen while new ingredient art loads must not be reset by load.
+      if(!activeProfileId){
       sessionGameActive = false;
       activeProfileId = null;
       resetGameStateToDefault();
@@ -13201,6 +13209,8 @@ function v8752BuyFestival(id){
       if (introScreen) introScreen.classList.add('hidden');
 
       renderAccountScreen();
+
+      }
 
       setInterval(masterGameLoop, 1000);
       setInterval(() => {
@@ -13299,6 +13309,22 @@ function v8752BuyFestival(id){
   // or a transfer of village relationship/unlock state to counter customers.
   const guestLooks={ba_sau:'baTu',ong_bay:'bacTam',khai_si:'anhKhai',loan_cho:'coSau',tu_tho:'chuNam',lan_doctor:'yTaLinh',nam_farmer:'bacBinh',thao_mom:'chiHa',ngoc_idol:'chiNgoc',chi_bep:'coLua',chef_quang:'anhPho'};
   const guestArt=p=>VILLAGE_NPC_ART[p.npcId]||VILLAGE_NPC_ART[guestLooks[p.npcId]]||getPlayerChibiSource(['👩','📷','⚖️','💐'].includes(p.avatar)?'female':'male');
+  const kitchen=window.BPVQKitchenPlay?.create({
+    context:()=>({career:gameState.currentCareer,person:currentCustomer,dish:workbenchDish,phase:gameState.phase,
+      patience:Number(currentCustomer?.patience||0),paused:!!phonePauseActive,hidden:document.visibilityState==='hidden'}),
+    onBegin(){clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;},
+    onFinish(grade,play){
+      if(gameState.currentCareer==='noodle')workbenchDish.isCooked=grade!=='burnt';
+      else {workbenchDish.fryState=grade==='burnt'?'burnt':'perfect';workbenchDish.fryProgress=Math.min(100,(play.a+play.b)/2);}
+      updateWorkbenchPreview();
+    }
+  });
+  function kitchenReady(){
+    const assisted=isShopFastAssistantUnlocked()&&!!gameState.automation?.shopFastEnabled;
+    return !!kitchen?.ready()||(assisted&&(gameState.currentCareer==='noodle'?workbenchDish.isCooked:workbenchDish.fryState==='perfect'));
+  }
+  function kitchenAction(kind,value){if(!permitted()||!['noodle','streetfood'].includes(gameState.currentCareer))return false;return !!kitchen?.action(kind,value);}
+  document.addEventListener('visibilitychange',()=>kitchen?.snapshot());
   let capSession=null,capAward=null;
   const capSignature=d=>JSON.stringify([d.container,d.base,d.sugar,d.ice,dishToppingCounts(d),d.listedPrice]);
   const validCap=s=>s&&s.person===currentCustomer&&s.dish===workbenchDish&&s.signature===capSignature(workbenchDish)&&permitted()&&gameState.currentCareer==='boba'&&gameState.phase==='open'&&currentCustomer.patience>0;
@@ -13325,6 +13351,8 @@ function v8752BuyFestival(id){
     return exact&&person===currentCustomer&&dish===workbenchDish&&validCap(earned)&&earned.result==='perfect'&&dish.isShaken?Math.min(8,Math.max(0,Math.round(Number(dish.listedPrice)*.1))):0;
   }
   function snapshot(){
+    const play=kitchen?.snapshot();
+    if(gameState.currentCareer==='streetfood'&&play?.stage!=='choose')workbenchDish.fryProgress=Math.min(100,(play.a+play.b)/2);
     const career=gameState.currentCareer||'boba',d=copy(workbenchDish),i=gameState.inventory||{};
     let customer=null;
     if(gameState.phase==='open'&&currentCustomer){
@@ -13337,12 +13365,12 @@ function v8752BuyFestival(id){
       const def=ITEM_DICTIONARY[id]||{};label[id]=String(def.name||id);
       catalog.push({id,group,name:label[id],icon:def.icon||'',stock:Number(i[id]||0),unlocked:!!isItemStoryUnlocked(id,career)});
     }));
-    return {career,phase:gameState.phase,started:!!gameState.hasStarted,customer,dish:d,catalog,label,cost:calculateDishCost(),stockStamp:catalog.map(x=>x.stock).join(','),pause:!!phonePauseActive};
+    return {career,phase:gameState.phase,started:!!gameState.hasStarted,customer,dish:d,catalog,label,kitchen:play,cost:calculateDishCost(),stockStamp:catalog.map(x=>x.stock).join(','),pause:!!phonePauseActive};
   }
   function choose(group,key,delta=1){
     if(!permitted())return false;
     const career=gameState.currentCareer;
-    const resetFinish=()=>{capSession=null;capAward=null;clearTimeout(shakeTimer);clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;};
+    const resetFinish=()=>{kitchen?.reset();capSession=null;capAward=null;clearTimeout(shakeTimer);clearTimeout(noodleCookTimer);clearInterval(fryInterval);workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';workbenchDish.fryProgress=0;};
     if(group==='sugar'&&career==='boba'&&[30,70,100].includes(Number(key))){resetFinish();setBobaSugar(Number(key));return true;}
     if(group==='ice'&&career==='boba'&&[0,50,100].includes(Number(key))){resetFinish();setBobaIce(Number(key));return true;}
     if(group==='spice'&&career==='noodle'&&Number.isInteger(Number(key))&&Number(key)>=0&&Number(key)<=7){resetFinish();setNoodleSpicyLevel(Number(key));return true;}
@@ -13392,10 +13420,11 @@ function v8752BuyFestival(id){
     const missing=getMissingDishIngredients(getDishRequirements());
     if(missing.length){showToast('Thiếu nguyên liệu, chưa giao món.','📦');return false;}
     const person=currentCustomer;
+    if(['noodle','streetfood'].includes(gameState.currentCareer)&&!kitchenReady()){showToast('Món chưa hoàn thiện minigame chế biến.','🍲');return false;}
     if((gameState.currentCareer==='boba'&&!workbenchDish.isShaken)||(gameState.currentCareer==='noodle'&&!workbenchDish.isCooked)||(gameState.currentCareer==='streetfood'&&workbenchDish.fryState==='unfried')){showToast('Chưa hoàn thiện công đoạn chế biến.','🍲');return false;}
     lastServed=person;serveDishToCustomer();return true;
   }
-  window.BPVQCookingBridge=Object.freeze({snapshot,choose,complete,deliver,beginCap,capPosition,hitCap,consumeCapTip,invalidateCap(){capAward=null;capSession=null;},adjustPrice(delta){if(!permitted())return false;capAward=null;capSession=null;adjustDishPrice(Number(delta)||0);return true;},reset(){capAward=null;capSession=null;cleanWorkbenchDish();renderWorkbenchControls();updateWorkbenchPreview();return true;}});
+  window.BPVQCookingBridge=Object.freeze({snapshot,choose,complete,deliver,kitchenAction,kitchenReady,kitchenStatus:()=>kitchen?.snapshot(),isPaused:()=>!!phonePauseActive,beginCap,capPosition,hitCap,consumeCapTip,invalidateCap(){kitchen?.reset();capAward=null;capSession=null;},adjustPrice(delta){if(!permitted())return false;capAward=null;capSession=null;adjustDishPrice(Number(delta)||0);return true;},reset(){kitchen?.reset();capAward=null;capSession=null;cleanWorkbenchDish();renderWorkbenchControls();updateWorkbenchPreview();return true;}});
 })();
 
 /* ==== V73 art override ==== */

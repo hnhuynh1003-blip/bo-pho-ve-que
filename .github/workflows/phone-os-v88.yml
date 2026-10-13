@@ -57,6 +57,9 @@ jobs:
           node --check js/v88-cooking-station.js
           node tests/test_cooking_station_v88.mjs
           node tests/test_ingredient_playground_v88.mjs
+          node --check js/v88-kitchen-play.js
+          node --check js/v88-food-art.js
+          node tests/test_kitchen_rules_v88.mjs
           node --check js/v88-unified-shop.js
           node tests/test_unified_shop_v88.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest
@@ -107,6 +110,7 @@ jobs:
           node tests/test_steady_counter_v88.mjs
           node tests/test_yard_cap_v88.mjs
           node tests/test_pour_retention_v88.mjs
+          node tests/test_kitchen_browser_v88.mjs
           node tests/test_shop_paint_browser_v88.mjs
           node tests/test_phone_visual_v88.mjs
       - name: Upload viewport screenshots and geometry
@@ -134,3 +138,4 @@ jobs:
           python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-v88-webkit-http.log 2>&1 &
           sleep 2
           node tests/test_phone_webkit_v88.mjs
+          BPVQ_KITCHEN_ENGINE=webkit node tests/test_kitchen_browser_v88.mjs

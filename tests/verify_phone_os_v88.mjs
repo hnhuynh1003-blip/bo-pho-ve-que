@@ -20,10 +20,11 @@ assert.ok(js.includes("BPVQPhoneLifecycle.on('open',sync)"),'admin test open lis
 assert.ok(js.includes("BPVQPhoneLifecycle.on('home',sync)"),'weather/home listener');
 assert.ok(js.includes("BPVQPhoneLifecycle.on('open',queueIcons)"),'premium icon listener');
 assert.ok(js.includes("BPVQPhoneLifecycle.on('setting',applyTheme)"),'theme listener');
-const gameAt=html.indexOf('src="js/game.js"');
+const gameAt=html.search(/src="js\/game\.js(?:\?[^\"]*)?"/);
 const phoneAt=html.indexOf('src="js/phone-os-v88.js?');
 const ledgerAt=html.indexOf('src="js/v8780-source-ledger.js?');
 assert.ok(gameAt!==-1&&phoneAt>gameAt&&ledgerAt>phoneAt,'invalid script order');
+assert.ok(html.indexOf('src="js/v88-kitchen-play.js?')<gameAt,'kitchen rules load before the native bridge');
 assert.ok(game.includes('phonePauseActive = true')&&game.includes('phonePauseActive = false'),'native pause logic');
 assert.ok(html.includes('id="modal-smartphone"')&&html.includes('id="phone-app-container"'),'phone shell');
 console.log('Phone OS v88 structural checks: PASS');
