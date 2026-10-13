@@ -35,7 +35,7 @@ for(const coins of [0,4,10,50,250])for(const opCosts of [0,20,100])for(const int
   const r=D3.settlement({coins,opCosts,interest,wages:Math.min(30,opCosts)});
   assert.equal(r.paid+r.coinsAfter,coins);
   assert.equal(r.paid+r.unpaidWages+r.unpaidOperating+(interest-r.paidInterest),opCosts+interest);
-  assert.equal(r.interestCapitalized,interest);
+  assert.equal(r.interestCapitalized,interest-r.paidInterest);
   assert.ok(r.unpaidWages<=Math.min(30,opCosts));
 }
 console.log('PASS D3: 3 careers x 9 stages finite slots; reload/day migration, idempotent slot outcomes, price sensitivity, 225 settlement cases');
