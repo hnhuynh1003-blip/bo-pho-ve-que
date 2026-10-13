@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v88.17.1.2 — Quầy trà sữa minh họa (playtest)</title>
+  <title>Bỏ Phố Về Quê v88.17.1.5 — Sân quán & khu pha chế riêng (playtest)</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -48,6 +48,7 @@
   <link rel="stylesheet" href="css/v88-order-slip-v88.css?v=88.16.13.3" />
   <link rel="stylesheet" href="css/v88-day-phone.css?v=88.16.13.4">
   <link rel="stylesheet" href="css/v88-17-cute-premium-boba.css?v=88.17.1.2">
+  <link rel="stylesheet" href="css/v88-17-1-5-yard-kitchen.css?v=88.17.1.5">
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -375,11 +376,11 @@
         <section id="cs20-station" hidden aria-label="Bếp có hồn, trạm chế biến tương tác">
           <div class="cs20-head"><div><h2>🍃 Bếp Có Hồn</h2><div class="cs20-sub">Dấu Ấn Chế Biến · Mobile Cooking 2.0</div></div><span class="cs20-brand">TRẠM NẤU</span></div>
           <!-- v88.17.1.2: Purely decorative layered backdrop, no settlement or order ownership -->
-          <div class="cp171-backbar" aria-hidden="true"><img src="assets/images/v88/cute-premium/boba-backbar.svg" alt="" loading="eager"><div class="cp171-stamp"><span>✿ GÓC TRÀ SỮA</span><small>Đồ uống nhà làm · Cute Premium</small></div></div>
+          <!-- Outdoor scene is its own view; no duplicate shop backdrop here. -->
           <div class="cs20-ticket" aria-live="off"><div class="cs20-ticket-head"><span id="cs20-customer-name">Đang chờ khách</span><span id="cs20-order-time">—</span></div><div id="cs20-order-text" tabindex="0" aria-label="Chi tiết đơn khách">Chưa có đơn.</div></div>
-          <div class="cs20-stage"><figcaption><strong id="cs20-dish-name">Món đang làm</strong><small id="cs20-dish-detail"></small><div class="cs20-field"><span id="cs20-gauge-label">Tiến độ</span><div class="cs20-meter"><span id="cs20-gauge"></span></div></div><small id="cs20-craft">✨ Dấu ấn món</small></figcaption><div id="cs20-visual"></div></div>
+          <div class="cs20-stage"><div class="cp175-props" aria-hidden="true"><img class="cp175-tea-machine" src="assets/images/v88/cute-premium/tea_dispenser.webp" alt="" decoding="async"><img class="cp175-cup-stand" src="assets/images/v88/cute-premium/cup_platform.webp" alt="" decoding="async"></div><figcaption><strong id="cs20-dish-name">Món đang làm</strong><small id="cs20-dish-detail"></small><div class="cs20-field"><span id="cs20-gauge-label">Tiến độ</span><div class="cs20-meter"><span id="cs20-gauge"></span></div></div><small id="cs20-craft">✨ Dấu ấn món</small></figcaption><div id="cs20-visual"></div></div>
           <div class="cs20-price cs33-order-bar"><details class="cs33-order-ticket"><summary aria-label="Xem chi tiết đơn khách"><b>🧾 <span id="cs33-order-title">Đơn khách</span></b><span class="cs33-expand-hint">▾</span><small id="cs33-order-summary">Đang chờ khách</small></summary><div id="cs33-order-detail" class="cs33-order-detail" aria-live="off"></div></details><div class="cs20-stepper"><strong id="cs20-sale-price" title="Giá đơn khách đã chốt">45 Xu</strong><details class="cs33-help"><summary aria-label="Hướng dẫn pha chế" title="Hướng dẫn thao tác">?</summary><div class="cs33-help-detail"><b>Hướng dẫn pha chế</b><p id="cs33-help-body"></p></div></details><button type="button" id="cs20-menu-info" onclick="openSmartPhoneModal();VillageOS.open('menu')" aria-label="Mở menu và giá bán trên điện thoại" title="Quản lý menu">ⓘ</button></div></div>
-          <div class="cs20-pantry"><div id="cs20-groups" aria-label="Chọn nhóm nguyên liệu"></div><div id="cs20-shelf" aria-label="Khay nguyên liệu cuộn ngang"></div></div>
+          <div class="cs20-pantry"><div class="cp173-drawer-handle"><button type="button" id="cp173-pantry-toggle" aria-expanded="true" aria-controls="cs20-shelf">🧋 Hộc topping</button><small>Kéo lên để chọn cốt trà, topping và siro</small></div><div id="cs20-groups" aria-label="Chọn nhóm nguyên liệu"></div><div id="cs20-shelf" aria-label="Khay nguyên liệu cuộn ngang"></div></div>
           <div class="cs20-feedback" id="cs20-feedback" role="status" aria-live="polite"></div>
           <div class="cs20-grill-actions"><button type="button" id="cs20-fire" hidden aria-label="Đổi mức lửa">Lửa: vừa</button><button type="button" id="cs20-flip" hidden>↻ Lật xiên</button><button type="button" id="cs20-sauce" hidden>✦ Quét sốt</button><button type="button" id="cs20-lift" hidden>Nhấc nồi</button></div>
           <div class="cs20-actions"><button class="cs20-button" type="button" id="cs20-undo">↺ Làm lại</button><button class="cs20-button" type="button" id="cs20-top-up" aria-label="Rót thêm trà vào ly" hidden>🫖 Rót thêm</button><button class="cs20-button" type="button" id="cs20-primary">Bắt đầu</button></div>
