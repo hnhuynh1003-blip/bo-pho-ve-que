@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFileSync,existsSync} from 'node:fs';
+const html=readFileSync('index.html','utf8');
+const css=readFileSync('css/v88-17-cute-premium-boba.css','utf8');
+const cooking=readFileSync('js/v88-cooking-station.js','utf8');
+assert.match(html,/css\\/v88-17-cute-premium-boba\\.css\\?v=88\\.17\\.1/);
+assert.ok(html.indexOf('v88-17-cute-premium-boba.css')>html.indexOf('v88-day-phone.css'));
+assert.ok(css.includes('#cs20-station[data-career="boba"]'));
+assert.ok(!css.includes('#cs20-station[data-career="noodle"]'));
+assert.ok(!css.includes('#cs20-station[data-career="streetfood"]'));
+for(const id of ['cs20-shelf','cs20-primary','cs20-visual','cs20-order-text','cs33-order-summary'])assert.ok(html.includes('id="'+id+'"'),id);
+for(const cl of ['cs20-ticket','cs20-stage','cs20-pantry'])assert.ok(html.includes('class="'+cl),cl);
+for(const s of ['idle','order'])assert.ok(cooking.includes(s));
+assert.match(css,/prefers-reduced-motion/);
+assert.match(css,/focus-visible/);
+assert.match(css,/min-height:44px/);
+for(const path of ['css/v88-order-slip-v88.css','js/v88-cooking-station.js','js/v88-day-phone.js'])assert.ok(existsSync(path));
+console.log('PASS v88.17.1 additive boba-only kitchen art skin and untouched native DOM ids');
