@@ -215,6 +215,16 @@ function renderContainers(){
   const label=x.name+(x.unlocked?' · Kho '+x.stock:' · Chưa mở khóa');if(v.b.title!==label)v.b.title=label;attr(v.b,'aria-label',label);attr(v.b,'aria-pressed',selected(current,x));
  }
 }
+const CP176_AI_TOPPING_ART=Object.freeze({
+ topping_boba:'v88/cute-premium/topping_boba-ai-tray.webp',
+ topping_white_boba:'v88/cute-premium/topping_white_boba-ai-tray.webp',
+ topping_peach:'v88/cute-premium/topping_peach-ai-tray.webp',
+ topping_jelly:'v88/cute-premium/topping_jelly-ai-tray.webp',
+ topping_pudding:'v88/cute-premium/topping_pudding-ai-tray.webp',
+ topping_crystal:'v88/cute-premium/topping_crystal-ai-tray.webp',
+ topping_grass_jelly:'v88/cute-premium/topping_grass_jelly-ai-tray.webp',
+ topping_aloe:'v88/cute-premium/topping_aloe-ai-tray.webp'
+});
 function renderShelf(){
  if(!current)return;
  attr(shelf,'data-layout',ui.group==='flavor'?'flavor':'ingredients');
@@ -235,12 +245,15 @@ function renderShelf(){
  for(const x of visible){
   const b=document.createElement('button');b.type='button';b.className='cs20-item cs26-jar';b.dataset.item=x.id;
   const art=document.createElement('span');art.className='cs26-jar-image';
-  const src=INGREDIENT_ART[x.id]||food.images[x.id]||({'tea_matcha':'v8761_tea_matcha.svg','topping_peach':'v8761_topping_peach.svg','topping_brown_boba':'v8761_topping_brown_boba.svg','topping_salted_cream':'v8761_topping_salted_cream.svg','syrup_rainbow':'v8761_syrup_rainbow.svg'}[x.id]);
+  const src=(ui.career==='boba'?CP176_AI_TOPPING_ART[x.id]:null)||INGREDIENT_ART[x.id]||food.images[x.id]||({'tea_matcha':'v8761_tea_matcha.svg','topping_peach':'v8761_topping_peach.svg','topping_brown_boba':'v8761_topping_brown_boba.svg','topping_salted_cream':'v8761_topping_salted_cream.svg','syrup_rainbow':'v8761_syrup_rainbow.svg'}[x.id]);
   if(ui.career==='boba'&&x.group==='base'){
    art.classList.add('cs28-dispenser');
    const jar=document.createElement('img');jar.src='assets/images/v88/counter/tea-dispenser.webp';jar.alt='';jar.className='cs28-jar-shell';
    const tea=document.createElement('span');tea.className='cs28-tea-fill';tea.style.background=teaColors[x.id]||'#c59b68';art.append(jar,tea);
    if(src){const tag=document.createElement('img');tag.src='assets/images/'+src;tag.alt='';tag.className='cs28-jar-tag';art.append(tag);}
+  }else if(ui.career==='boba'&&x.group==='topping'&&CP176_AI_TOPPING_ART[x.id]){
+   art.classList.add('cp176-ai-tray');
+   const im=document.createElement('img');im.src='assets/images/'+CP176_AI_TOPPING_ART[x.id];im.alt='';im.className='cp176-ai-tray-img';art.append(im);
   }else if(ui.career==='boba'&&x.group==='topping'){
    art.classList.add('cs28-tray');const food=document.createElement('span');food.className='cs28-tray-food';
    if(src){const im=document.createElement('img');im.src='assets/images/'+src;im.alt='';food.append(im);}else food.textContent=x.icon||'✨';
