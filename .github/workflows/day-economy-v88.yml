@@ -1,0 +1,35 @@
+name: Stage 3 v88 economic regression
+on:
+  push:
+    branches:
+      - fix/v88-16-13-5-interest-settlement
+  pull_request:
+    paths:
+      - js/game.js
+      - js/v88-day-rules.js
+      - tests/test_day_*.mjs
+  workflow_dispatch:
+jobs:
+  settlement:
+    runs-on: ubuntu-latest
+    timeout-minutes: 8
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Check JavaScript syntax
+        run: |
+          node --check js/game.js
+          node --check js/v88-day-rules.js
+          node --check js/v88-day-phone.js
+      - name: Verify daily quotas and loan accounting
+        run: |
+          node tests/test_day_rules_v88.mjs
+          node tests/test_day_interest_v88.mjs
+          node tests/test_day_integration_v88.mjs
+      - name: Protect earlier counter and menu features
+        run: |
+          node tests/test_counter_settlement_v88.mjs
+          node tests/test_menu_dot2_v88.mjs
+          node tests/test_visible_timing_zones_v88.mjs
