@@ -33,7 +33,7 @@ Bản nền v88.16.13.3, tích hợp lịch khách và ship hữu hạn, lưu tr
 ## Giới hạn đã biết / cần xác minh
 
 - Đơn ship đóng gói thủ công giữ cơ chế chi phí nguyên liệu legacy v88.16.13.3; không tự sửa luật kinh tế không có trong duyệt Đợt 3.
-- Lãi vay tiếp tục cách hạch toán legacy: hệ thống có thể cộng lãi vào dư nợ ngay cả khi đã trừ Xu. Sổ mới chỉ tách công nợ vận hành và không nhân đôi khoản lãi vốn đã vốn hóa; cần nghiệm thu một phương án quy tắc lãi vay thống nhất trước khi đóng v88 chính thức.
+- Bản sửa v88.16.13.5: lãi được trả bằng Xu trước, chỉ phần chưa thanh toán mới cộng vào dư nợ. Cần kiểm thử hồi quy cả đóng ca, trả nợ và sang ngày trên game thực tế trước khi chốt v88.
 - Migration save cũ giữa ngày chỉ ước tính lượt đã phát từ số đơn thành công; số khách đã từng walkout trong save cũ không có dữ liệu để biết chính xác.
 - Nếu browser không ghi save được trong lúc giao ship, sẽ không xác nhận tiền mới; sau khi giải phóng bộ nhớ, cần tải lại để xử lý giao dịch đang chờ.
 - Ship/khách còn cần thử thật khi ẩn tab, reload đúng thời điểm giao và trong lúc đóng ca.
