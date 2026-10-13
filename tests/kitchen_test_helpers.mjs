@@ -21,6 +21,8 @@ export async function cookKitchen(page,career){
   const resting=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
   if(resting.a!==held.a||resting.b!==held.b)throw new Error('Plated skewers kept cooking');
   await page.waitForFunction(()=>document.querySelector('#cs20-visual svg').dataset.offHeat==='true'&&document.querySelector('[data-plated-tray]').getAttribute('opacity')==='1');
+  if(!(await page.locator('#cs20-dish-name').textContent()).startsWith('Xiên trên '))throw new Error('Plated food is still labeled as grilling');
+  if(await page.locator('#cs20-primary').getAttribute('data-act')!=='kitchen-sauce')throw new Error('Plated cooked skewers must offer sauce');
   await page.locator('#cs20-sauce').click();
   await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.canFinish&&k.b>=77;});
  }

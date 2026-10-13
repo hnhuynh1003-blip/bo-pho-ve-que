@@ -333,7 +333,7 @@ function paintVessel(s){
 function renderDish(){
  if(!current)return;
  const s=current,d=s.dish;
- textField('cs20-dish-name',s.career==='boba'?'Ly trà đang pha':s.career==='noodle'?'Thố mì đang nấu':'Vỉ xiên đang nướng');
+ textField('cs20-dish-name',s.career==='boba'?'Ly trà đang pha':s.career==='noodle'?(s.kitchen.offHeat?'Nồi mì đã nhấc khỏi bếp':'Thố mì đang nấu'):(s.kitchen.offHeat?'Xiên trên '+({plate:'đĩa',basket:'mẹt tre',box:'hộp mang đi'}[d.tray]||'đĩa'):'Vỉ xiên đang nướng'));
  const mat=s.career==='streetfood'?Object.values(d.skewerCounts).reduce((a,b)=>a+Number(b||0),0)+' xiên · '+(s.label[d.sauce]||'Sốt'):(s.label[d.base]||'Nước cốt')+' · '+Object.values(Object.fromEntries(d.toppings.map(k=>[k,portionCount(d,k)]))).reduce((a,b)=>a+b,0)+' phần topping';
  textField('cs20-dish-detail',mat);paintVessel(s);
  textField('cs20-valuation',s.practice?'Luyện tập · Kho/Xu giữ nguyên':`Vốn ${s.cost} Xu`);
@@ -377,6 +377,10 @@ function renderAction(){
    label=current.kitchen.canFinish?'🥢 Gắp ra đĩa/mẹt':'Canh hai mặt chín…';secondary='kitchen-lift';disabled=!current.kitchen.canFinish;
   }else if(ui.stage==='held'){
    label=current.kitchen.canFinish?'Hoàn thiện mẻ xiên':'Đặt lại vỉ';secondary=current.kitchen.canFinish?'kitchen-finish':'kitchen-return';
+   const play=current.kitchen;
+   if(!play.canFinish&&play.elapsed>=7&&Math.min(play.a,play.b)>=65&&Math.max(play.a,play.b)<=105){
+    label=play.sauced?'Chờ sốt bám…':'Quét sốt trên khay';secondary='kitchen-sauce';disabled=play.sauced;
+   }
   }else{label='↺ Làm lại mẻ';secondary='kitchen-redo';}
  }
  textField('cs20-primary',label);disable(primary,disabled||!!current?.pause);attr(primary,'data-act',secondary);

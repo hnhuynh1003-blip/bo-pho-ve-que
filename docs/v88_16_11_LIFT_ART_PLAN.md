@@ -6,7 +6,7 @@ Trước đây nút lấy món xuống phụ thuộc toàn bộ điều kiện h
 
 Hàng thao tác có nút Nhấc nồi / Gắp ra từ khi bắt đầu nấu. Nút này dừng nhiệt ngay, kể cả khi món chưa đạt. Ngoài bếp, thời gian nấu, nhiệt, độ chín hai mặt và nguy cơ cháy/trào giữ nguyên; không tính thời gian nghỉ vào yêu cầu nấu tối thiểu. Món chưa đạt có thể Đặt lại bếp / Đặt lại vỉ để tiếp tục cùng mẻ, không bắt chọn nguyên liệu từ đầu. Mì có thể khuấy khi đã nhấc; xiên có thể quét sốt trên đĩa/mẹt/hộp, chờ 0,5 giây sốt bám rồi hoàn thiện. Lật xiên chỉ dùng trên vỉ.
 
-Món đã đủ điều kiện được hoàn thiện khi nhấc/gắp, sau đó người chơi vẫn bấm Giao để thanh toán. Món chưa đủ bước ở trạng thái held, nút chính đặt lại bếp hoặc hoàn thiện khi đã đạt. Hướng dẫn nói rõ còn thiếu độ chín, khuấy, giữ sôi nhẹ, thời gian hay sốt. Một lần bấm lửa mì từ lớn chuyển về vừa. SVG cập nhật tại chỗ: nồi nhấc cao khỏi lửa; vỉ đổi thành đúng đĩa, mẹt tre hoặc hộp đã chọn. Không sinh thêm thẻ hay dựng lại SVG theo frame.
+Món đã đủ điều kiện được hoàn thiện khi nhấc/gắp, sau đó người chơi vẫn bấm Giao để thanh toán. Món chưa đủ bước ở trạng thái held, nút chính đặt lại bếp nếu còn sống, gợi ý quét sốt khi xiên đã chín, hoặc hoàn thiện khi đã đủ bước. Hướng dẫn nói rõ còn thiếu độ chín, khuấy, giữ sôi nhẹ, thời gian hay sốt. Một lần bấm lửa mì từ lớn chuyển về vừa. SVG cập nhật tại chỗ: nồi nhấc cao khỏi lửa; vỉ đổi thành đúng đĩa, mẹt tre hoặc hộp đã chọn. Không sinh thêm thẻ hay dựng lại SVG theo frame.
 
 Giữ điều kiện chín, thời gian tối thiểu, Perfect/Good, quyền thanh toán của lõi, pause/ẩn tab và hủy chứng nhận khi đổi món/khách. Không sửa game.js trong bản này. Không đổi ID, công thức, giá, tip, kho, save, nghề, ngày/ca hoặc quyền nhân viên. Trà sữa giữ nguyên cơ chế rót/cap.
 
