@@ -1,4 +1,4 @@
-/* v88.16.10: real elapsed-time kitchen sessions. No money, inventory or save writes.
+/* v88.16.11: real elapsed-time kitchen sessions. No money, inventory or save writes.
    Native and practice use the same rules; native completion stays in the core closure. */
 (function(w){
 'use strict';
@@ -16,6 +16,11 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
   if(!valid(c)){reset();return c;}
   if(blocked(c)){suspended=true;return c;}
   const dt=suspended?0:gap;suspended=false;
+  if(s.stage==='held'){
+   // Food is off the heat. Only sauce settling may continue, never doneness.
+   if(s.career==='streetfood'&&s.sauced)s.setTime+=dt;
+   return c;
+  }
   if(!['heating','simmer','grilling'].includes(s.stage))return c;
   s.elapsed+=dt;
   if(s.career==='noodle'){
@@ -36,14 +41,39 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
  }
  function canFinish(){
   if(!s)return false;
-  if(s.career==='noodle')return s.stage==='simmer'&&s.elapsed>=6*s.size&&s.cook>=88&&s.cook<=118&&s.stirs>0&&s.stable>=1&&s.overflow<65;
-  return s.stage==='grilling'&&s.elapsed>=7&&Math.min(s.a,s.b)>=65&&Math.max(s.a,s.b)<=105&&s.sauced&&s.setTime>=.5&&s.glaze<55;
+  if(s.career==='noodle')return (s.stage==='simmer'||s.stage==='held'&&s.restStage==='simmer')&&s.elapsed>=6*s.size&&s.cook>=88&&s.cook<=118&&s.stirs>0&&s.stable>=1&&s.overflow<65;
+  return ['grilling','held'].includes(s.stage)&&s.elapsed>=7&&Math.min(s.a,s.b)>=65&&Math.max(s.a,s.b)<=105&&s.sauced&&s.setTime>=.5&&s.glaze<55;
+ }
+ function hint(){
+  if(!s||['choose','done','failed','heating'].includes(s.stage))return '';
+  const held=s.stage==='held';
+  if(canFinish())return held?'Món đã ngoài bếp và đủ bước. Bấm hoàn thiện để giao.':s.career==='noodle'?'Mì đã đạt! Nhấc nồi ngay để giữ độ chín.':'Xiên đã đạt! Gắp ra đĩa/mẹt để giữ độ chín.';
+  if(s.career==='noodle'){
+   if(s.cook>118)return 'Mì đã quá mềm. Làm lại để đạt đúng độ chín.';
+   if(s.cook<88)return held?'Mì còn sống. Đặt lại bếp để nấu tiếp.':'Mì đang chín. Có thể nhấc nồi để dừng nhiệt bất cứ lúc nào.';
+   if(s.stirs<1)return 'Mì đã chín, còn thiếu khuấy nồi. Nhấc xuống rồi khuấy nhé!';
+   if(s.stable<1)return held?'Đặt lại bếp, hạ lửa vừa và giữ sôi nhẹ 1 giây.':'Hạ lửa vừa, giữ sôi nhẹ 1 giây rồi nhấc nồi.';
+   if(s.elapsed<6*s.size)return held?'Thố chưa đủ thời gian. Đặt lại bếp ở lửa vừa.':'Thố cần thêm một chút thời gian ở lửa vừa.';
+   if(s.overflow>=65)return 'Nhấc nồi và khuấy để giảm nguy cơ trào.';
+  }else{
+   if(Math.max(s.a,s.b)>105)return 'Một mặt đã quá lửa. Làm lại mẻ để đạt chuẩn.';
+   if(Math.min(s.a,s.b)<65)return (held?'Đặt lại vỉ, ':'')+'canh mặt '+(s.a<s.b?'A':'B')+' chín; lật để đổi mặt nhận nhiệt.';
+   if(s.elapsed<7)return held?'Mẻ chưa đủ thời gian. Đặt lại vỉ ở lửa nhỏ.':'Hạ lửa nhỏ, canh thêm một chút rồi gắp ra.';
+   if(!s.sauced)return 'Hai mặt đã chín! Gắp ra rồi quét sốt trên đĩa/mẹt.';
+   if(s.setTime<.5)return 'Đã quét sốt. Chờ một nhịp để sốt bám, không cần nướng thêm.';
+  }
+  return held?'Món đã ngoài bếp. Hoàn thiện các bước còn thiếu.':s.notice;
+ }
+ function finish(c){
+  const perfect=s.career==='noodle'?s.cook>=95&&s.cook<=106&&s.heat>=66&&s.heat<=82&&!s.spilled:
+   Math.min(s.a,s.b)>=74&&Math.max(s.a,s.b)<=94&&Math.abs(s.a-s.b)<=12&&s.flipErrors===0&&!s.sauceEarly&&s.glaze<=15;
+  s.stage='done';s.grade=perfect?'perfect':'good';s.notice=perfect?'Perfect! Món vừa chín, đã đưa khỏi bếp.':'Món đã đạt, đã đưa khỏi bếp. Sẵn sàng giao!';onFinish(s.grade,snapshotValue(c));return true;
  }
  function snapshotValue(c){
   if(!s)return Object.freeze({stage:'choose',ready:false,canDrop:false,canFinish:false,flame:2,heat:20,cook:0,overflow:0,a:0,b:0,side:'a',sauced:false,elapsed:0,grade:'',notice:''});
   return Object.freeze({career:s.career,stage:s.stage,flame:s.flame,heat:s.heat,cook:s.cook,overflow:s.overflow,
    a:s.a,b:s.b,side:s.side,sauced:s.sauced,sauceEarly:s.sauceEarly,glaze:s.glaze,stirs:s.stirs,stable:s.stable,
-   elapsed:s.elapsed,grade:s.grade,notice:s.notice,
+   elapsed:s.elapsed,grade:s.grade,notice:s.notice,hint:hint(),restStage:s.restStage,setTime:s.setTime,offHeat:['held','done'].includes(s.stage),
    canDrop:s.stage==='heating'&&s.heat>=84&&s.elapsed>=1.6,
    canFinish:canFinish()&&!blocked(c),ready:s.stage==='done'&&!blocked(c)});
  }
@@ -55,16 +85,24 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
   s={person:c.person,dish:c.dish,signature:signature(c),career:c.career,stage:c.career==='noodle'?'heating':'grilling',
    elapsed:0,flame:c.career==='noodle'?3:2,heat:20,cook:0,stable:0,overflow:0,spilled:false,
    size:c.dish.container==='bowl_xl'?1.18:c.dish.container==='bowl_l'?1.09:1,
-   stirs:0,lastStir:-10,a:0,b:0,side:'a',flips:0,lastFlip:-10,flipErrors:0,
+   stirs:0,stirTick:-10000,a:0,b:0,side:'a',flips:0,lastFlip:-10,flipErrors:0,
    sauced:false,sauceEarly:false,glaze:0,setTime:0,grade:'',
    notice:c.career==='noodle'?'Đun nước dùng. Khi sôi, thả mì và topping rồi hạ lửa.':'Nướng mặt A. Canh vàng rồi trở mặt; phủ sốt gần cuối.'};
   lastTick=now();suspended=false;onBegin(c);return true;
  }
  function action(kind,value){
   if(kind==='begin')return begin();
-  const c=tick();if(!valid(c)||blocked(c)||!['heating','simmer','grilling'].includes(s.stage))return false;
+  const c=tick();if(!valid(c)||blocked(c)||!['heating','simmer','grilling','held'].includes(s.stage))return false;
+  if(kind==='lift'&&s.stage!=='held'){
+   s.restStage=s.stage;s.stage='held';
+   s.notice=s.career==='noodle'?'Đã nhấc nồi khỏi lửa. Độ chín được giữ nguyên.':'Đã gắp xiên ra khay. Có thể quét sốt ngoài vỉ.';
+   return canFinish()?finish(c):true;
+  }
+  if(kind==='return'&&s.stage==='held'){
+   s.stage=s.restStage;lastTick=now();s.notice='Đã đặt lại bếp. Tiếp tục canh lửa nhé!';return true;
+  }
   if(kind==='flame'){
-   const level=value===undefined?s.flame%3+1:Number(value);
+   const level=value===undefined?(s.career==='noodle'?(s.flame===3?2:s.flame===2?1:3):s.flame%3+1):Number(value);
    if(![1,2,3].includes(level))return false;
    s.flame=level;s.notice='Lửa '+['','nhỏ','vừa','lớn'][level]+(s.career==='noodle'?' · giữ sôi nhẹ sau khi thả mì.':' · nhiệt cao chín nhanh, sốt dễ khét.');return true;
   }
@@ -72,12 +110,12 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
    if(!snapshotValue(c).canDrop){s.notice='Nước dùng chưa sôi. Đợi đủ nhiệt trước khi thả mì.';return false;}
    s.stage='simmer';s.notice='Đã thả mì và topping. Hạ về lửa vừa, khuấy và canh chín.';return true;
   }
-  if(kind==='stir'&&s.career==='noodle'&&s.stage==='simmer'){
-   if(s.elapsed-s.lastStir<.7)return false;
-   s.lastStir=s.elapsed;s.stirs++;s.heat=Math.max(45,s.heat-8);s.overflow=Math.max(0,s.overflow-30);
+  if(kind==='stir'&&s.career==='noodle'&&(s.stage==='simmer'||s.stage==='held'&&s.restStage==='simmer')){
+   if(now()-s.stirTick<700)return false;
+   s.stirTick=now();s.stirs++;s.heat=Math.max(45,s.heat-8);s.overflow=Math.max(0,s.overflow-30);
    s.notice='Đã khuấy nồi, giảm nguy cơ trào. Khuấy không làm mì chín ngay.';return true;
   }
-  if(kind==='flip'&&s.career==='streetfood'){
+  if(kind==='flip'&&s.career==='streetfood'&&s.stage==='grilling'){
    if(s.elapsed-s.lastFlip<.7)return false;
    if(s[s.side]<65||s[s.side]>95)s.flipErrors++;
    s.lastFlip=s.elapsed;s.flips++;s.side=s.side==='a'?'b':'a';s.notice='Đang nướng mặt '+s.side.toUpperCase()+'. Hai mặt đều chín mới lấy xuống.';return true;
@@ -88,9 +126,7 @@ function create({context,now=()=>performance.now(),onBegin=()=>{},onFinish=()=>{
   }
   if(kind==='finish'){
    if(!canFinish()){s.notice=s.career==='noodle'?'Mì chưa đạt: cần chín, khuấy và giữ sôi nhẹ.':'Chưa đạt: hai mặt phải chín, sốt bám đều rồi lấy xuống.';return false;}
-   const perfect=s.career==='noodle'?s.cook>=95&&s.cook<=106&&s.heat>=66&&s.heat<=82&&!s.spilled:
-    Math.min(s.a,s.b)>=74&&Math.max(s.a,s.b)<=94&&Math.abs(s.a-s.b)<=12&&s.flipErrors===0&&!s.sauceEarly&&s.glaze<=15;
-   s.stage='done';s.grade=perfect?'perfect':'good';s.notice=perfect?'Perfect! Món vừa chín, thao tác chuẩn.':'Món đã đạt. Sẵn sàng giao khách!';onFinish(s.grade,snapshotValue(c));return true;
+   return finish(c);
   }
   return false;
  }

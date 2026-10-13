@@ -68,6 +68,14 @@ try{
   assert.ok(items.every(x=>x.width>=44),'compact ingredient targets stay touchable');
   assert.ok(await page.locator('.cs20-stage #cs20-feedback').count()===1,'status is inside preparation, not a blank block');
   const prep=await page.locator('.cs20-stage').boundingBox();assert.equal(prep.height,140,'preparation surface is shorter');
+  if(career!=='boba'){
+   assert.equal(await page.locator('#cs20-lift').isVisible(),true,'off-heat action occupies the installed row even while idle');
+   const row=await page.locator('.cs20-grill-actions').boundingBox();
+   for(const id of career==='noodle'?['cs20-fire','cs20-flip','cs20-lift']:['cs20-fire','cs20-flip','cs20-sauce','cs20-lift']){
+    const r=await page.locator('#'+id).boundingBox();assert.ok(r.width>=44&&r.height>=44,id+' keeps a touch-sized target');
+    assert.ok(r.x>=row.x-1&&r.x+r.width<=row.x+row.width+1,id+' fits its installed row');
+   }
+  }
   const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=520,'counter is compact for every career');
   const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
   const size=page.locator('#cs27-containers button:enabled').first();await size.click();

@@ -59,6 +59,15 @@ try{
   // A genuine UI begin, followed by immediate finish spam, cannot complete.
   await page.locator('#cs20-primary').click();
   if(!practice)assert.equal(await page.evaluate(()=>{for(let n=0;n<50;n++)window.BPVQCookingBridge.kitchenAction('finish');return window.BPVQCookingBridge.kitchenReady();}),false);
+  await page.locator('#cs20-lift').click();
+  const heldEarly=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
+  assert.equal(heldEarly.stage,'held');assert.equal(heldEarly.ready,false);
+  await page.waitForTimeout(1200);
+  const heldAfter=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
+  for(const key of ['elapsed','heat','cook','a','b'])assert.equal(heldAfter[key],heldEarly[key],'early lift freezes '+key);
+  assert.equal(await page.locator('#cs20-visual svg').getAttribute('data-off-heat'),'true');
+  await page.locator('#cs20-primary').click();
+  assert.notEqual(await page.evaluate(()=>window.BPVQCookingStation.status().kitchen.stage),'held','UI return resumes cooking');
   await page.waitForTimeout(300);await page.evaluate(()=>openSmartPhoneModal());
   const frozen=await page.evaluate(()=>window.BPVQCookingStation.status().practice?window.BPVQCookingStation.status().kitchen:window.BPVQCookingBridge.kitchenStatus());
   await page.waitForTimeout(1200);

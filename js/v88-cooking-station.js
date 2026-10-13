@@ -23,7 +23,7 @@ const practiceKitchen=w.BPVQKitchenPlay.create({
  onFinish(grade,play){if(current.career==='noodle')practiceDish.isCooked=grade!=='burnt';else{practiceDish.fryState=grade==='burnt'?'burnt':'perfect';practiceDish.fryProgress=Math.min(100,(play.a+play.b)/2);}}
 });
 function kitchenView(){return practiceDish?practiceKitchen.snapshot():bridge.kitchenStatus();}
-function kitchenAction(kind,value){const ok=practiceDish?practiceKitchen.action(kind,value):bridge.kitchenAction(kind,value);const play=kitchenView();ui.kitchen=play;ui.stage=play.stage;if(play.notice)setNotice(play.notice);refresh(true);return ok;}
+function kitchenAction(kind,value){const ok=practiceDish?practiceKitchen.action(kind,value):bridge.kitchenAction(kind,value);const play=kitchenView();ui.kitchen=play;ui.stage=play.stage;if(play.hint||play.notice)setNotice(play.hint||play.notice);refresh(true);return ok;}
 function view(){
  const live=bridge.snapshot();
  if(practiceDish && (live.customer || live.phase==='open'))practiceDish=null;
@@ -262,13 +262,13 @@ function buildVisual(s){
   <ellipse cx="101" cy="102" rx="24" ry="19" fill="#fff6df" fill-opacity=".78" stroke="#bca078" stroke-width="1"/><path d="M93 111 Q86 89 108 91 Q113 108 93 111 M96 107 L105 96" stroke="#729875" stroke-width="2.5" fill="#b5c99a" stroke-linecap="round"/>`;
  }else if(s.career==='noodle'){
   const tokens=Array.from({length:24},()=>`<g data-food-slot opacity="0"><title></title><path data-food-shape d="M-8-6H8V6H-8Z" stroke="#805d3d" stroke-width=".8"/><path d="M-5-2L3-3" stroke="#fff5da" stroke-width="1.2" opacity=".6"/><text data-food-count x="7" y="9" font-size="11" font-weight="800" fill="#61442f" stroke="#fff2d8" stroke-width=".6" paint-order="stroke"></text></g>`).join('');
-  content=`<ellipse cx="101" cy="164" rx="70" ry="8" fill="#a76f45" opacity=".15"/><path d="M38 67 Q100 43 162 67 L149 145 Q101 173 50 145 Z" fill="#b17d61" stroke="#80513f" stroke-width="3"/><ellipse cx="100" cy="75" rx="65" ry="25" fill="#603b2d" stroke="#b87a4d" stroke-width="4"/><ellipse data-soup cx="100" cy="76" rx="55" ry="18" fill="#dd9c59"/>
+  content=`<g data-pot><ellipse cx="101" cy="164" rx="70" ry="8" fill="#a76f45" opacity=".15"/><path d="M38 67 Q100 43 162 67 L149 145 Q101 173 50 145 Z" fill="#b17d61" stroke="#80513f" stroke-width="3"/><ellipse cx="100" cy="75" rx="65" ry="25" fill="#603b2d" stroke="#b87a4d" stroke-width="4"/><ellipse data-soup cx="100" cy="76" rx="55" ry="18" fill="#dd9c59"/>
   <path data-noodle-strands d="M62 71Q78 58 91 72T119 72T141 72M58 81Q73 69 89 81T118 81T140 81" stroke="#f2d690" stroke-width="3" fill="none" opacity=".2"/>
   <g data-noodle-food>${tokens}</g><path data-steam d="M58 45 Q44 27 57 14 M102 41 Q87 24 102 11 M145 43 Q131 25 145 13" stroke="#aebbb5" stroke-width="4" opacity=".15" fill="none" stroke-linecap="round"/><path data-flame d="M55 161 L71 172 L128 172 L145 161" stroke="#e79743" stroke-width="5" stroke-linecap="round" opacity="0"/>
-  <path data-overflow d="M43 78Q30 92 45 115M155 77Q169 96 151 116" stroke="#d89355" stroke-width="6" fill="none" opacity="0"/>`;
+  <path data-overflow d="M43 78Q30 92 45 115M155 77Q169 96 151 116" stroke="#d89355" stroke-width="6" fill="none" opacity="0"/></g>`;
  }else{
   const skewers=Array.from({length:24},()=>`<g data-skewer-slot opacity="0"><title></title><line x1="0" y1="0" x2="130" y2="0" stroke="#c9a66a" stroke-width="3" stroke-linecap="round"/>${Array.from({length:4},(_,j)=>`<path data-skewer-piece transform="translate(${19+j*28} 0)" d="M-8-6H8V6H-8Z" fill="#d7a26e" stroke="#805437" stroke-width="1"/>`).join('')}<path data-sauce-stroke d="M13-3Q24 4 36-3T62-3T89-3T115-3" stroke-width="3" fill="none" opacity="0"/><text data-skewer-count x="126" y="5" font-size="12" font-weight="900" fill="#fff2cd" stroke="#573c2a" stroke-width="1" paint-order="stroke"></text></g>`).join('');
-  content=`<rect x="19" y="40" width="162" height="116" rx="15" fill="#8b8071" stroke="#51473e" stroke-width="5"/><rect x="29" y="49" width="142" height="97" rx="8" fill="#493d36"/>${Array.from({length:7},(_,i)=>`<line x1="${36+i*21}" y1="50" x2="${36+i*21}" y2="147" stroke="#99897a" stroke-width="2"/>`).join('')}<path data-grill-fire d="M35 145 Q52 132 67 143 T105 143 T145 143" stroke="#f49d52" stroke-width="5" fill="none" opacity=".2"/>${skewers}
+  content=`<g data-plated-tray opacity="0"><ellipse data-plate cx="100" cy="99" rx="87" ry="57" fill="#fff3d7" stroke="#b39368" stroke-width="4"/><g data-basket><rect x="15" y="42" width="170" height="111" rx="28" fill="#ddba76" stroke="#9c7544" stroke-width="4"/>${Array.from({length:9},(_,i)=>`<path d="M${26+i*18} 48v99" stroke="#ba935b" stroke-width="2"/>`).join('')}<path d="M21 65h158M17 85h166M17 105h166M21 125h158" stroke="#efd49d" stroke-width="3"/></g><rect data-box x="16" y="42" width="168" height="111" rx="9" fill="#ead5b3" stroke="#ac8658" stroke-width="4"/></g><g data-grill-base><rect x="19" y="40" width="162" height="116" rx="15" fill="#8b8071" stroke="#51473e" stroke-width="5"/><rect x="29" y="49" width="142" height="97" rx="8" fill="#493d36"/>${Array.from({length:7},(_,i)=>`<line x1="${36+i*21}" y1="50" x2="${36+i*21}" y2="147" stroke="#99897a" stroke-width="2"/>`).join('')}<path data-grill-fire d="M35 145 Q52 132 67 143 T105 143 T145 143" stroke="#f49d52" stroke-width="5" fill="none" opacity=".2"/></g>${skewers}
   <text x="29" y="174" font-size="11" fill="#5b4030">A</text><rect x="41" y="166" width="57" height="6" rx="3" fill="#c9b895"/><rect data-side-a x="41" y="166" width="0" height="6" rx="3" fill="#bd9a51"/>
   <text x="107" y="174" font-size="11" fill="#5b4030">B</text><rect x="119" y="166" width="57" height="6" rx="3" fill="#c9b895"/><rect data-side-b x="119" y="166" width="0" height="6" rx="3" fill="#bd9a51"/>`;
  }
@@ -280,9 +280,11 @@ function paintVessel(s){
  if(visualCareer!==s.career){
   visualCareer=s.career;visual.innerHTML=buildVisual(s);
   const one=q=>visual.querySelector(q),all=q=>[...visual.querySelectorAll(q)];
-  visualRefs={stream:one('[data-pour-stream]'),tea:one('[data-tea]'),wave:one('[data-wave]'),lid:one('[data-lid]'),pearls:all('[data-pearl]'),ice:all('[data-ice]'),food:all('[data-food-slot]').map(g=>({g,shape:g.querySelector('[data-food-shape]'),count:g.querySelector('[data-food-count]'),name:g.querySelector('title')})),strands:one('[data-noodle-strands]'),overflow:one('[data-overflow]'),soup:one('[data-soup]'),steam:one('[data-steam]'),flame:one('[data-flame]'),rows:all('[data-skewer-slot]').map(g=>({g,pieces:[...g.querySelectorAll('[data-skewer-piece]')],sauce:g.querySelector('[data-sauce-stroke]'),count:g.querySelector('[data-skewer-count]'),name:g.querySelector('title')})),fire:one('[data-grill-fire]'),sideA:one('[data-side-a]'),sideB:one('[data-side-b]')};
+  visualRefs={svg:one('svg'),pot:one('[data-pot]'),grill:one('[data-grill-base]'),tray:one('[data-plated-tray]'),plate:one('[data-plate]'),basket:one('[data-basket]'),box:one('[data-box]'),stream:one('[data-pour-stream]'),tea:one('[data-tea]'),wave:one('[data-wave]'),lid:one('[data-lid]'),pearls:all('[data-pearl]'),ice:all('[data-ice]'),food:all('[data-food-slot]').map(g=>({g,shape:g.querySelector('[data-food-shape]'),count:g.querySelector('[data-food-count]'),name:g.querySelector('title')})),strands:one('[data-noodle-strands]'),overflow:one('[data-overflow]'),soup:one('[data-soup]'),steam:one('[data-steam]'),flame:one('[data-flame]'),rows:all('[data-skewer-slot]').map(g=>({g,pieces:[...g.querySelectorAll('[data-skewer-piece]')],sauce:g.querySelector('[data-sauce-stroke]'),count:g.querySelector('[data-skewer-count]'),name:g.querySelector('title')})),fire:one('[data-grill-fire]'),sideA:one('[data-side-a]'),sideB:one('[data-side-b]')};
  }
  const v=visualRefs;
+ attr(v.svg,'data-off-heat',!!s.kitchen?.offHeat);
+ if(s.career!=='boba')attr(v.svg,'aria-label',s.career==='noodle'?(s.kitchen.offHeat?'Nồi mì đã nhấc khỏi bếp':'Nồi mì đang trên bếp'):(s.kitchen.offHeat?'Xiên đã gắp ra '+({plate:'đĩa',basket:'mẹt tre',box:'hộp mang đi'}[d.tray]||'đĩa'):'Xiên đang trên vỉ nướng'));
  if(s.career==='boba'){
   attr(v.stream,'opacity',ui.active?'.75':'0');
   const fill=ui.pour>0?Math.max(3,Math.round(ui.pour)):d.isShaken?78:8,y=153-fill*1.1;
@@ -292,9 +294,10 @@ function paintVessel(s){
   v.pearls.forEach((el,i)=>{const key=dots[i];attr(el,'opacity',key?'1':'0');if(key){attr(el,'fill',key.includes('boba')?'#49312c':key.includes('jelly')?'#b3d79a':key.includes('redbean')?'#965b49':key.includes('peach')?'#e5a785':'#f8dca5');attr(el,'r',key.includes('boba')?4.5:4);}});
   const iceCount=Number(d.ice)===100?8:Number(d.ice)===50?4:0;v.ice.forEach((el,i)=>attr(el,'opacity',i<iceCount&&fill>25?'1':'0'));
  }else if(s.career==='noodle'){
+  attr(v.pot,'transform',s.kitchen.offHeat?'translate(0 -7)':'translate(0 0)');
   const play=s.kitchen,selected=(d.toppings||[]).filter(id=>portionCount(d,id)>0),columns=selected.length<=6?3:5;
   v.food.forEach((node,i)=>{
-   const id=selected[i];attr(node.g,'opacity',id?(play.stage==='heating'?'0':play.stage==='choose'?'.75':'1'):'0');
+   const id=selected[i];attr(node.g,'opacity',id?((play.stage==='heating'||play.stage==='held'&&play.restStage==='heating')?'0':play.stage==='choose'?'.75':'1'):'0');
    if(!id)return;const style=food.styles[id]||{shape:'round',color:'#d7c596'},qty=portionCount(d,id);
    attr(node.g,'data-ingredient',id);attr(node.g,'data-quantity',qty);attr(node.g,'transform',`translate(${columns===3?72+(i%3)*28:59+(i%5)*20} ${selected.length<=6?68+Math.floor(i/3)*17:61+Math.floor(i/5)*10})`);
    attr(node.shape,'d',food.shapes[style.shape]);attr(node.shape,'fill',style.color);attr(node.shape,'data-color',style.color);
@@ -302,9 +305,10 @@ function paintVessel(s){
    const label=(s.label[id]||id)+' ×'+qty;if(node.name.textContent!==label)node.name.textContent=label;
   });
   const color=food.broths[d.base]||'#c7a471';attr(v.soup,'fill',color);attr(v.overflow,'stroke',color);attr(v.overflow,'opacity',Math.min(.9,(play.overflow||0)/100));
-  attr(v.strands,'opacity',['simmer','done','failed'].includes(play.stage)?'1':'.2');
+  attr(v.strands,'opacity',(['simmer','done','failed'].includes(play.stage)||play.stage==='held'&&play.restStage==='simmer')?'1':'.2');
   attr(v.steam,'opacity',Math.max(.08,Math.min(.8,(play.heat||20)/130)));attr(v.flame,'opacity',['heating','simmer'].includes(play.stage)?String(play.flame/3):'0');
  }else{
+  const off=s.kitchen.offHeat;attr(v.grill,'opacity',off?'0':'1');attr(v.tray,'opacity',off?'1':'0');attr(v.plate,'opacity',d.tray==='plate'?'1':'0');attr(v.basket,'opacity',d.tray==='basket'?'1':'0');attr(v.box,'opacity',d.tray==='box'?'1':'0');
   const play=s.kitchen,entries=Object.entries(d.skewerCounts||{}).filter(x=>x[1]>0),total=entries.reduce((n,x)=>n+Number(x[1]),0);
   const tokens=total<=24?entries.flatMap(([id,qty])=>Array.from({length:Number(qty)},()=>({id,qty:1}))):entries.map(([id,qty])=>({id,qty}));
   const cols=tokens.length<=5?1:2,rows=Math.ceil(tokens.length/cols),step=Math.min(18,84/Math.max(1,rows));
@@ -364,21 +368,26 @@ function renderAction(){
   const play=current.kitchen;
   if(ui.stage==='choose'){label='🔥 Đun nước dùng';secondary='kitchen-begin';}
   else if(ui.stage==='heating'){label=play.canDrop?'🍜 Thả mì & topping':'Đang đun nước dùng…';secondary='kitchen-drop';disabled=!play.canDrop;}
-  else if(ui.stage==='simmer'){label=play.canFinish?'🍲 Bưng thố mì':'Canh mì chín…';secondary='kitchen-finish';disabled=!play.canFinish;}
+  else if(ui.stage==='simmer'){label=play.canFinish?'🍲 Nhấc nồi xuống':'Canh mì chín…';secondary='kitchen-lift';disabled=!play.canFinish;}
+  else if(ui.stage==='held'){label=play.canFinish?'Hoàn thiện thố mì':'Đặt lại bếp';secondary=play.canFinish?'kitchen-finish':'kitchen-return';}
   else{label='↺ Làm lại món';secondary='kitchen-redo';}
  }else{
   if(ui.stage==='choose'){label='🔥 Đặt xiên lên vỉ';secondary='kitchen-begin';}
   else if(ui.stage==='grilling'){
-   label=current.kitchen.canFinish?'🥢 Lấy xiên xuống':'Canh hai mặt chín…';secondary='kitchen-finish';disabled=!current.kitchen.canFinish;
+   label=current.kitchen.canFinish?'🥢 Gắp ra đĩa/mẹt':'Canh hai mặt chín…';secondary='kitchen-lift';disabled=!current.kitchen.canFinish;
+  }else if(ui.stage==='held'){
+   label=current.kitchen.canFinish?'Hoàn thiện mẻ xiên':'Đặt lại vỉ';secondary=current.kitchen.canFinish?'kitchen-finish':'kitchen-return';
   }else{label='↺ Làm lại mẻ';secondary='kitchen-redo';}
  }
  textField('cs20-primary',label);disable(primary,disabled||!!current?.pause);attr(primary,'data-act',secondary);
- const playing=['heating','simmer','grilling'].includes(ui.stage),paused=!!current?.pause;
+ const playing=['heating','simmer','grilling'].includes(ui.stage),held=ui.stage==='held',paused=!!current?.pause;
  hide($('cs20-fire'),ui.career==='boba');hide($('cs20-flip'),ui.career==='boba');hide($('cs20-sauce'),ui.career!=='streetfood');
  textField('cs20-fire','Lửa: '+['','nhỏ','vừa','lớn'][current?.kitchen?.flame||2]);
  textField('cs20-flip',ui.career==='noodle'?'↻ Khuấy nồi':'↻ Lật xiên');
- disable($('cs20-fire'),!playing||paused);disable($('cs20-flip'),!(ui.career==='noodle'?ui.stage==='simmer':ui.stage==='grilling')||paused);
- disable($('cs20-sauce'),ui.stage!=='grilling'||!!current?.kitchen?.sauced||paused);
+ hide($('cs20-lift'),ui.career==='boba');textField('cs20-lift',ui.career==='noodle'?(current?.kitchen?.offHeat?'Đã nhấc':'Nhấc nồi'):(current?.kitchen?.offHeat?'Trên khay':'Gắp ra'));
+ disable($('cs20-lift'),!playing||paused||ui.delivering);
+ disable($('cs20-fire'),(!playing&&!held)||paused);disable($('cs20-flip'),!(ui.career==='noodle'?(ui.stage==='simmer'||held&&current?.kitchen?.restStage==='simmer'):ui.stage==='grilling')||paused);
+ disable($('cs20-sauce'),(!['grilling','held'].includes(ui.stage))||!!current?.kitchen?.sauced||paused);
  disable($('cs20-undo'),!current?.customer||ui.delivering||!!current?.pause);
  hide($('cs20-top-up'),ui.career!=='boba');
  disable($('cs20-top-up'),!current?.customer||!ui.poured||ui.stage!=='mix'||ui.active||ui.pour>=100||ready||ui.delivering||!!current?.pause);
@@ -402,7 +411,7 @@ function primaryAction(){
  const a=primary.dataset.act;
  if(a==='send'){
   if(practiceDish){practiceDish=null;practiceKitchen.reset();ui.delivering=false;refresh(true);return;}
-  // Native settlement is single source of truth; this session never changes economy directly.
+ // Native settlement is single source of truth; this session never changes economy directly.
   if(ui.delivering)return;ui.delivering=true;
   const ok=bridge.deliver(); if(!ok){ui.delivering=false;setNotice('Vui lòng kiểm tra tồn kho và đúng trạng thái đơn trước khi giao.');}
   else {setNotice('Đã giao món — đang chờ khách tiếp theo.');}
@@ -447,6 +456,7 @@ primary.addEventListener('pointerup',()=>{if(!holdTimer)return;const t=performan
 $('cs20-fire').addEventListener('click',()=>{if(!$('cs20-fire').disabled)kitchenAction('flame');});
 $('cs20-flip').addEventListener('click',()=>{if(!$('cs20-flip').disabled)kitchenAction(ui.career==='noodle'?'stir':'flip');});
 $('cs20-sauce').addEventListener('click',()=>{if(!$('cs20-sauce').disabled)kitchenAction('sauce');});
+$('cs20-lift').addEventListener('click',()=>{if(!$('cs20-lift').disabled)kitchenAction('lift');});
 $('cs20-price-down').addEventListener('click',()=>{if(!practiceDish)bridge.adjustPrice(-5);refresh(true);});
 $('cs20-price-up').addEventListener('click',()=>{if(!practiceDish)bridge.adjustPrice(5);refresh(true);});
 $('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)return;if(practiceDish){practiceKitchen.reset();practiceDish=clone(bridge.snapshot().dish);practiceDish.isCooked=false;practiceDish.fryState='unfried';}else bridge.reset();reset(ui.key,ui.career);refresh(true);});
@@ -454,7 +464,7 @@ function refresh(force=false){
  const s=view();current=s;
  const key=s.customer?.key||`idle:${s.phase}:${s.career}`;
  if(key!==ui.key||s.career!==ui.career){reset(key,s.career);force=true;}
- if(s.career!=='boba'){ui.kitchen=s.kitchen;ui.stage=s.kitchen.stage;if(s.kitchen.notice&&ui.notice!==s.kitchen.notice)setNotice(s.kitchen.notice);}
+ if(s.career!=='boba'){ui.kitchen=s.kitchen;ui.stage=s.kitchen.stage;const note=s.kitchen.hint||s.kitchen.notice;if(note&&ui.notice!==note)setNotice(note);}
  const hasOrder=!!s.customer;
  attr(root,'data-state',s.practice?'practice':hasOrder?'order':'idle');attr(root,'data-career',s.career);root.closest('#tab-shop')?.classList.toggle('cs20-active-order',hasOrder&&!s.practice);const courtyard=document.getElementById('v88-live-scene');if(courtyard)attr(courtyard,'data-cs20-compact',hasOrder?'true':'false');
  textField('cs20-customer-name',hasOrder?s.customer.name:s.phase==='open'?'Đang đợi khách ghé quán':'Quán đang nghỉ ca');
@@ -470,7 +480,7 @@ function refresh(force=false){
  renderDish();renderAction();ensureAnimation();
 }
 let animationId=0,lastVisualFrame=0;
-function needsMotion(){return !!current&&!current.pause&&document.visibilityState!=='hidden'&&current.phase==='open'&&!!current.customer&&current.customer.patience>0&&(ui.active||ui.stage==='capping'||['heating','simmer','grilling'].includes(ui.stage));}
+function needsMotion(){return !!current&&!current.pause&&document.visibilityState!=='hidden'&&current.phase==='open'&&!!current.customer&&current.customer.patience>0&&(ui.active||ui.stage==='capping'||['heating','simmer','grilling'].includes(ui.stage)||ui.stage==='held'&&ui.kitchen?.sauced&&ui.kitchen?.setTime<.5);}
 function ensureAnimation(){
  if(!needsMotion()){if(animationId)w.cancelAnimationFrame(animationId);animationId=0;return;}
  if(!animationId){ui.lastTick=performance.now();animationId=w.requestAnimationFrame(animate);}
@@ -481,7 +491,7 @@ function animate(t){
  if(!needsMotion())return;
  if(ui.career!=='boba'){
   const play=kitchenView();ui.kitchen=play;ui.stage=play.stage;current.kitchen=play;
-  if(play.notice&&play.notice!==ui.notice)setNotice(play.notice);
+  const note=play.hint||play.notice;if(note&&note!==ui.notice)setNotice(note);
   if(t-lastVisualFrame>=33){lastVisualFrame=t;renderDish();renderAction();}
   if(needsMotion())animationId=w.requestAnimationFrame(animate);
   return;
