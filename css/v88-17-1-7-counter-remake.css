@@ -252,3 +252,6 @@
 #cp177-workshop .cp177-order-slot{padding-top:44px!important}
 #cp177-workshop .cp177-order .cs20-stepper{margin-top:8px!important}
 @media(max-width:355px){#cp177-workshop .cp177-order-slot{padding-top:38px!important}}
+/* On narrow screens, leave a clear place for the live price next to the art title. */
+#cp177-workshop .cp177-order::before{width:155px;height:41px}
+@media(max-width:355px){#cp177-workshop .cp177-order::before{width:132px;height:36px}}
