@@ -3,7 +3,7 @@ import {readFileSync,existsSync} from 'node:fs';
 const html=readFileSync('index.html','utf8');
 const css=readFileSync('css/v88-17-cute-premium-boba.css','utf8');
 const cooking=readFileSync('js/v88-cooking-station.js','utf8');
-assert.match(html,/css\\/v88-17-cute-premium-boba\\.css\\?v=88\\.17\\.1/);
+assert.ok(html.includes('css/v88-17-cute-premium-boba.css?v=88.17.1'));
 assert.ok(html.indexOf('v88-17-cute-premium-boba.css')>html.indexOf('v88-day-phone.css'));
 assert.ok(css.includes('#cs20-station[data-career="boba"]'));
 assert.ok(!css.includes('#cs20-station[data-career="noodle"]'));
