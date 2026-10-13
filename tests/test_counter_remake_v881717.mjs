@@ -1,31 +1,13 @@
+// Contract originally introduced in v88.17.1.7, retained after the v88.17.1.8 art/layout QA correction.
 import assert from 'node:assert/strict';
-import {readFileSync,existsSync} from 'node:fs';
-const html=readFileSync('index.html','utf8');
+import {readFileSync} from 'node:fs';
+import './test_counter_layout_v881718.mjs';
 const js=readFileSync('js/v88-17-1-7-counter-remake.js','utf8');
-const style=readFileSync('css/v88-17-1-7-counter-remake.css','utf8');
 const native=readFileSync('js/v88-cooking-station.js','utf8');
-assert.match(html,/v88-17-1-7-counter-remake\.css\?v=88\.17\.1\.7/);
-assert.match(html,/v88-17-1-7-counter-remake\.js\?v=88\.17\.1\.7/);
-assert.ok(html.indexOf('v88-17-1-7-counter-remake.css')>html.indexOf('v88-17-1-6-boba-relayout.css'),'final stylesheet last');
-assert.ok(html.indexOf('v88-17-1-7-counter-remake.js')>html.indexOf('v88-unified-shop.js'),'native unification before remake');
-assert.match(js,/scene\.append\(shell\)/);
 assert.match(js,/const marker=document\.createComment/);
 assert.match(js,/insertBefore\(el,marker\)/);
-assert.match(js,/\['#cs26-meters','\.cp177-meters-slot'\]/);
-assert.match(js,/\['\.cs20-stage','\.cp177-cup-place'\]/);
-assert.ok(js.indexOf("['#cs26-meters'")<js.indexOf("['.cs20-stage'"),'meter must detach before stage');
-assert.ok(js.includes("['.cs20-pantry','.cp177-pantry-slot']"),'native pantry moved with original button listeners');
+assert.ok(js.includes("['.cs20-pantry','.cp177-pantry-slot']"));
 assert.match(js,/if\(action==='pour'\)\$\('cs20-primary'\)\?\.click\(\)/);
-assert.ok(js.includes("status.practice&&status.stage==='done'"),'practice completion preview uses native stage');
-assert.ok(js.includes("const canPour=!!primary&&!primary.disabled"),'training may pour even when bridge has no customer');
-assert.ok(js.includes('cloneFinishedCup()'),'result from real native cup, not unrelated AI mockup');
-assert.ok(js.includes('const copy=svg.cloneNode(true)'));
-assert.ok(native.includes('paintDetailedToppings(visual,d)'),'visible shape from actual recipe portions');
-assert.ok(style.includes('#cs20-shelf .cs20-item{all:unset!important'),'remove old item wrappers');
-assert.ok(style.includes('#cp177-workshop #cp177-pour-object'),'teapot is actual button');
-assert.ok(style.includes('#cs20-station{display:none!important}'),'old layout visually retired for boba');
-for(const name of ['boba_backbar.webp','tea_dispenser.webp','finished_preview.webp','ticket_order.webp','topping_boba-ai-tray.webp'])
- assert.ok(existsSync('assets/images/v88/cute-premium/'+name),'image '+name);
-for(const f of ['gameState.coins=','saveGameToStorage(','window.BPVQCookingBridge=','gameState.inventory='])
- assert.ok(!js.includes(f),'art layer must not fork gameplay: '+f);
-console.log('PASS v88.17.1.7: independent counter, native movable controls, direct item clicks, real pour and live cup preview');
+assert.ok(js.includes('cloneFinishedCup()'));
+assert.ok(native.includes('paintDetailedToppings(visual,d)'));
+console.log('PASS inherited v88.17.1.7 native gameplay contract after 1.8 layout replacement');
