@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-  <title>Bỏ Phố Về Quê v88.16.3 — Quầy Cute Cố Định BETA</title>
+  <title>Bỏ Phố Về Quê v88.16.13.1 — Vá thanh canh nhịp</title>
   <!-- v87.4.2.1: bundled utility CSS for offline play; no CDN needed -->
   <link rel="stylesheet" href="css/tailwind-offline.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/tone/14.8.49/Tone.js"></script>
@@ -31,6 +31,7 @@
   <link rel="stylesheet" href="css/v877-warehouse-mika.css?v=87.7.2" />
   <link rel="stylesheet" href="css/v8771-onboarding.css?v=87.7.2" />
   <link rel="stylesheet" href="css/phone-os-v88.css?v=88.0.0-preview" />
+  <link rel="stylesheet" href="css/v88-menu-phone.css?v=88.16.13.3" />
   <link rel="stylesheet" href="css/v88-live-scene-qa.css?v=88.12.1-test" />
   <link rel="stylesheet" href="css/v8780-source-ledger.css?v=87.8.0" />
   <link rel="stylesheet" href="css/v87801-farm-balance.css?v=87.8.0.1" />
@@ -42,7 +43,10 @@
   <link rel="stylesheet" href="css/v88-yard-dialogue.css?v=88.16.12" />
   <link rel="stylesheet" href="css/v88-premium-counter.css?v=88.16.12" />
   <link rel="stylesheet" href="css/v88-cafe-counter.css?v=88.16.12" />
-  <link rel="stylesheet" href="css/v88-kitchen-play.css?v=88.16.12" />
+  <link rel="stylesheet" href="css/v88-timing-meter-visibility.css?v=88.16.13.1" />
+  <link rel="stylesheet" href="css/v88-kitchen-play.css?v=88.16.13" />
+  <link rel="stylesheet" href="css/v88-order-slip-v88.css?v=88.16.13.3" />
+  <link rel="stylesheet" href="css/v88-day-phone.css?v=88.16.13.4">
 </head>
 <body class="bg-amber-50 text-slate-800 antialiased min-h-screen flex justify-center selection:bg-amber-200">
   <div class="app-shell w-full max-w-md bg-white min-h-screen shadow-2xl relative flex flex-col pb-24 overflow-x-hidden">
@@ -370,8 +374,8 @@
         <section id="cs20-station" hidden aria-label="Bếp có hồn, trạm chế biến tương tác">
           <div class="cs20-head"><div><h2>🍃 Bếp Có Hồn</h2><div class="cs20-sub">Dấu Ấn Chế Biến · Mobile Cooking 2.0</div></div><span class="cs20-brand">TRẠM NẤU</span></div>
           <div class="cs20-ticket" aria-live="off"><div class="cs20-ticket-head"><span id="cs20-customer-name">Đang chờ khách</span><span id="cs20-order-time">—</span></div><div id="cs20-order-text" tabindex="0" aria-label="Chi tiết đơn khách">Chưa có đơn.</div></div>
-          <div class="cs20-stage"><figcaption><strong id="cs20-dish-name">Món đang làm</strong><small id="cs20-dish-detail"></small><div class="cs20-field"><span id="cs20-gauge-label">Tiến độ</span><div class="cs20-meter"><span id="cs20-gauge"></span></div></div><small id="cs20-valuation">Vốn / Giá</small><small id="cs20-craft">✨ Dấu ấn món</small></figcaption><div id="cs20-visual"></div></div>
-          <div class="cs20-price"><span id="cs20-profit">Lãi dự kiến</span><div class="cs20-stepper"><button id="cs20-price-down" type="button" aria-label="Giảm giá bán 5 Xu">−</button><strong id="cs20-sale-price">45 Xu</strong><button id="cs20-price-up" type="button" aria-label="Tăng giá bán 5 Xu">+</button></div></div>
+          <div class="cs20-stage"><figcaption><strong id="cs20-dish-name">Món đang làm</strong><small id="cs20-dish-detail"></small><div class="cs20-field"><span id="cs20-gauge-label">Tiến độ</span><div class="cs20-meter"><span id="cs20-gauge"></span></div></div><small id="cs20-craft">✨ Dấu ấn món</small></figcaption><div id="cs20-visual"></div></div>
+          <div class="cs20-price cs33-order-bar"><details class="cs33-order-ticket"><summary aria-label="Xem chi tiết đơn khách"><b>🧾 <span id="cs33-order-title">Đơn khách</span></b><span class="cs33-expand-hint">▾</span><small id="cs33-order-summary">Đang chờ khách</small></summary><div id="cs33-order-detail" class="cs33-order-detail" aria-live="off"></div></details><div class="cs20-stepper"><strong id="cs20-sale-price" title="Giá đơn khách đã chốt">45 Xu</strong><details class="cs33-help"><summary aria-label="Hướng dẫn pha chế" title="Hướng dẫn thao tác">?</summary><div class="cs33-help-detail"><b>Hướng dẫn pha chế</b><p id="cs33-help-body"></p></div></details><button type="button" id="cs20-menu-info" onclick="openSmartPhoneModal();VillageOS.open('menu')" aria-label="Mở menu và giá bán trên điện thoại" title="Quản lý menu">ⓘ</button></div></div>
           <div class="cs20-pantry"><div id="cs20-groups" aria-label="Chọn nhóm nguyên liệu"></div><div id="cs20-shelf" aria-label="Khay nguyên liệu cuộn ngang"></div></div>
           <div class="cs20-feedback" id="cs20-feedback" role="status" aria-live="polite"></div>
           <div class="cs20-grill-actions"><button type="button" id="cs20-fire" hidden aria-label="Đổi mức lửa">Lửa: vừa</button><button type="button" id="cs20-flip" hidden>↻ Lật xiên</button><button type="button" id="cs20-sauce" hidden>✦ Quét sốt</button><button type="button" id="cs20-lift" hidden>Nhấc nồi</button></div>
@@ -409,9 +413,8 @@
                 Vốn: <span id="dish-cost-val" class="text-amber-400 font-bold">11 Xu</span>
               </div>
               <div class="flex items-center gap-1 mt-0.5">
-                <button onclick="adjustDishPrice(-5)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-xs font-black tap-scale flex items-center justify-center">-</button>
                 <b id="dish-price-val" class="text-xs text-emerald-400 font-black min-w-[38px] text-center">45 Xu</b>
-                <button onclick="adjustDishPrice(5)" class="w-5 h-5 bg-slate-700 hover:bg-slate-600 rounded text-xs font-black tap-scale flex items-center justify-center">+</button>
+                <button type="button" onclick="openSmartPhoneModal();VillageOS.open('menu')" class="v88-menu-info" aria-label="Giá theo menu; mở điện thoại quản lý menu" title="Xem giá/Menu trong điện thoại">ⓘ</button>
               </div>
               <div class="text-[8px] text-emerald-300/80 font-semibold" id="dish-profit-val">Lãi: +34 Xu</div>
             </div>
@@ -1619,8 +1622,9 @@
 
   </div>
 
-  <script src="js/v88-kitchen-play.js?v=88.16.12"></script>
-  <script src="js/game.js?v=88.16.12"></script>
+  <script src="js/v88-kitchen-play.js?v=88.16.13"></script>
+  <script src="js/v88-day-rules.js?v=88.16.13.4"></script>
+  <script src="js/game.js?v=88.16.13.4"></script>
 
   <div id="modal-shop-stage-quick" class="v72-stage-overlay hidden" role="dialog" aria-modal="true" aria-label="Nâng bậc quán" onclick="if(event.target===this) closeShopStageQuickModal()">
     <div class="v72-stage-dialog">
@@ -1659,12 +1663,14 @@
   <script src="js/v8771-onboarding.js?v=87.7.2"></script>
   <script src="js/v8772-releases.js?v=87.7.2"></script>
   <script src="js/phone-os-v88.js?v=88.0.0-preview"></script>
+  <script src="js/v88-menu-phone.js?v=88.16.13.3"></script>
+  <script src="js/v88-day-phone.js?v=88.16.13.4"></script>
   <script src="js/v88-shop-scenes.js?v=88.0.1-preview"></script>
   <script src="js/v88-shop-sign.js?v=88.0.1-preview"></script>
   <script src="js/v88-shop-paint.js?v=88.0.1-preview"></script>
   <script src="js/v88-live-scene-qa.js?v=88.12.1-test"></script>
   <script src="js/v88-food-art.js?v=88.16.12"></script>
-  <script src="js/v88-cooking-station.js?v=88.16.12"></script>
+  <script src="js/v88-cooking-station.js?v=88.16.13"></script>
 <script src="js/v88-unified-shop.js?v=88.16.12"></script>
   <script src="js/v8780-source-ledger.js?v=87.8.0"></script>
 </body>

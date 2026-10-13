@@ -13,7 +13,7 @@
 .cs29-yard-tools{position:absolute;right:7px;bottom:7px;display:flex;gap:5px;z-index:13}
 .cs29-yard-tools button{width:44px;height:44px;min-height:44px;padding:4px;border:1px solid #bd9c70;border-radius:13px;background:#fff8e9ee;box-shadow:0 2px 3px #6d553336;display:grid;place-items:center}
 .cs29-yard-tools img{width:34px;height:34px;object-fit:contain}
-#cs20-station .cs20-meter.cs29-cap-meter{position:relative;overflow:visible;background:linear-gradient(90deg,#ecd2bd 0 32%,#8dbb8d 32% 44%,#f5d16d 44% 56%,#8dbb8d 56% 68%,#ecd2bd 68%);height:12px;border:1px solid #9d805a}
+#cs20-station .cs20-meter.cs29-cap-meter{position:relative;overflow:visible;background:linear-gradient(90deg,#ecd2bd 0 28%,#8dbb8d 28% 44%,#f5d16d 44% 56%,#8dbb8d 56% 72%,#ecd2bd 72%);height:12px;border:1px solid #9d805a}
 #cs20-station .cs29-cap-meter #cs20-gauge{display:none}
 #cs20-station .cs29-cap-meter:after{content:'';position:absolute;left:var(--cap-position,0%);top:-4px;width:3px;height:18px;border-radius:2px;background:#49372d;transform:translateX(-50%);box-shadow:0 0 0 1px #fff7e7}
 @media(prefers-reduced-motion:reduce){#cs29-guest{animation:none!important}}

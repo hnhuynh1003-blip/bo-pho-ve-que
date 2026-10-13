@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+const read = f => fs.readFileSync(new URL('../' + f, import.meta.url),'utf8');
+const html=read('index.html'), js=read('js/v88-cooking-station.js');
+const css=read('css/v88-timing-meter-visibility.css');
+assert.match(html, /v88-cafe-counter\.css[\s\S]*v88-timing-meter-visibility\.css/,'override must load last');
+assert.match(css, /#v88-live-scene\.us21-unified #cs20-station \.cs20-meter\.cs29-cap-meter/);
+assert.match(css, /#78b181 28%,#78b181 44%/,'Good zone');
+assert.match(css, /#f6d04b 44%,#f6d04b 56%/,'Perfect zone');
+assert.match(css, /background:[\s\S]*!important/,'win over wooden background');
+assert.match(css, /#cs20-station\.cs29-timing-active #cs20-craft/,'visible instruction');
+assert.match(css,/display:block!important/);
+assert.match(js, /root\.classList\.toggle\('cs29-timing-active',capping\)/);
+assert.match(js, /aria-label.*Thanh nhịp/,'screen-reader guidance');
+for(const career of ['boba','noodle','streetfood']) assert.ok(js.includes(career));
+console.log('TIMING METER HOTFIX: static override + score region alignment PASS');

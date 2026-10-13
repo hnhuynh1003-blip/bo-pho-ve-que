@@ -5,13 +5,13 @@ const core=read('js/game.js'),station=read('js/v88-cooking-station.js'),css=read
 assert.match(core,/function dishToppingCounts\(dish\)/,'legacy topping arrays compatible with optional quantity map');
 assert.match(core,/function adjustDishToppingPortion\(key, delta=1\)/,'quantity adjustment in native game owner');
 assert.match(core,/Object\.entries\(dishToppingCounts\(workbenchDish\)\)\.forEach\(\(\[topKey,qty\]\)/,'quantities multiply costs');
-assert.equal((core.match(/Object\.entries\(dishToppingCounts\(workbenchDish\)\)\.forEach\(\(\[k,n\]\)/g)||[]).length,2,'two careers consume proportional amounts');
+assert.match(core,/return v87532Req\(workbenchDish,gameState.currentCareer\)/,'manual and staff use common proportional requirements');
 assert.equal((core.match(/sameCountMap\(dishToppingCounts\(dish\),dishToppingCounts\(order\)\)/g)||[]).length,2,'two careers validate proportions');
 assert.match(core,/if\(group==='topping'&&career!=='streetfood'\)\{/,'topping adjustment bridge handles both adding and removal');
 assert.match(core,/const currentPortions=dishToppingCounts\(workbenchDish\)\[key\]\|\|0/,'check topping count before touching finished dish');
 assert.match(core,/if\(changed\)resetFinish\(\)/,'successful topping edit invalidates finished dish');
 assert.match(core,/if\(nextPortions===currentPortions\)return false/,'no-op quantity edit does not invalidate completion');
-assert.match(core,/lastServed=person;serveDishToCustomer\(\)/,'one-shot native settlement guard unchanged');
+assert.match(core,/function settleManual\(action\)/,'one native settlement owner');
 assert.match(station,/cs26-jar-portion/,'quantity chip on reusable toppings');
 assert.match(station,/const visible=data/,'all native ingredients share scroll shelf');
 assert.match(station,/shelf\.scrollBy/,'native horizontal scrolling');

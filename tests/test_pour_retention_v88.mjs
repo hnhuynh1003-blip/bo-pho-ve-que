@@ -35,9 +35,9 @@ try{
   await page.locator('#cs20-primary').click();stopped.pour=(await status()).pour;await same();
 
   const cap=async()=>{await page.locator('#cs20-primary').click();await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});await page.evaluate(()=>document.getElementById('cs20-primary').click());await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');};
-  await cap();await page.getByRole('button',{name:'Topping & siro',exact:true}).click();await page.locator('[data-item="topping_boba"]').click();await same();
-  if(!practice)assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.isShaken),false,'editing after cap invalidates native lid');
-  await cap();assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),economy,'editing and recapping never settle money/stock');
+  await cap();const cooked=await status();await page.getByRole('button',{name:'Topping & siro',exact:true}).click();await page.locator('[data-item="topping_boba"]').click();assert.equal((await status()).stage,'done','sealed paid batch cannot be silently edited');assert.equal((await status()).pour,cooked.pour);
+  if(practice)assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),economy,'practice no economy');
+  else assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.isShaken),true,'locked cap preserves completion');
   assert.equal(await page.locator('#cs20-top-up').isDisabled(),true,'sealed cup cannot silently resume pouring');
   await page.locator('#cs20-undo').click();assert.equal((await status()).pour,0);assert.equal((await status()).poured,false);assert.equal(await page.locator('#cs20-primary').getAttribute('data-act'),'pour');
   await page.locator('#cs20-primary').click();await page.waitForTimeout(400);await page.locator('#cs20-primary').click();assert.ok((await status()).pour>0);

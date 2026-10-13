@@ -27,4 +27,4 @@ const cooking=read('js/v88-cooking-station.js');
 assert.match(cooking,/startPractice:/,'practice session available without order');
 assert.match(cooking,/stopPractice:/,'practice session has a safe exit');
 assert.match(cooking,/if\(practiceDish\)\{practiceDish=null/,'training does not settle a real customer');
-assert.match(cooking,/if\(!practiceDish\)bridge\.adjustPrice/,'training cannot change price in the real save');
+assert.doesNotMatch(cooking,/bridge\.adjustPrice\(/,'counter price editing removed: pricing belongs to Phone Menu');

@@ -1,0 +1,16 @@
+.v88-daybook-app{padding:10px 6px 16px;color:#f6f0e6;font-size:12px;display:grid;gap:10px}
+.v88-daybook-app.hidden{display:none!important}
+.v88-daybook-head{background:linear-gradient(135deg,#295952,#263f5b);border-radius:18px;padding:15px}
+.v88-daybook-head h3{font-size:19px;font-weight:900;margin:5px 0 2px;color:#fff}
+.v88-daybook-head p,.v88-daybook-head small{opacity:.86;font-size:11px}
+.v88-daybook-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+.v88-daybook-grid article{background:#203f43;border:1px solid #59816a;border-radius:13px;padding:10px;min-width:0}
+.v88-daybook-grid span,.v88-daybook-grid small{font-size:10px;display:block;opacity:.85}
+.v88-daybook-grid strong{font-size:23px;display:block;margin:4px 0;color:#f7d58c}
+.v88-daybook-hint{background:#344251;border:1px solid #56687b;border-radius:11px;padding:10px;line-height:1.5}
+.v88-daybook-finance{background:#233c43;border-radius:14px;padding:11px;display:grid;gap:6px}
+.v88-daybook-finance h4{font-weight:850;font-size:14px;margin:0 0 4px}
+.v88-daybook-finance div{display:flex;align-items:center;justify-content:space-between;gap:7px;border-bottom:1px solid #ffffff1a;padding-bottom:5px}
+.v88-daybook-finance span{min-width:0;flex:1}.v88-daybook-finance b{text-align:right;white-space:nowrap;font-size:11px}
+.v88-daybook-app button{padding:10px;border-radius:12px;color:#2d281f;background:#f2d08f;font-weight:800;min-height:40px}
+.v88-daybook-history{background:#263b47;padding:11px;border-radius:12px}.v88-daybook-history summary{cursor:pointer;font-weight:800}.v88-daybook-history div{padding-top:8px;font-size:11px}

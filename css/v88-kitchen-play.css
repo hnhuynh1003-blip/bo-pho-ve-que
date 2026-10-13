@@ -9,3 +9,6 @@
 #v88-live-scene.us21-unified #cs20-station #cs20-visual svg{overflow:visible}
 #v88-live-scene.us21-unified #cs20-station:not([data-career="boba"]) .cs26-jar-image img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1px 1px #69441a22)}
 #v88-live-scene.us21-unified #cs20-station:not([data-career="boba"]) #cs20-dish-detail{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+/* One visible timing action lives in the primary row; noodles have no empty extra row. */
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] .cs20-grill-actions{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-grill-actions button[hidden]{display:none!important}

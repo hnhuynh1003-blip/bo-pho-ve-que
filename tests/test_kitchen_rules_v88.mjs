@@ -2,91 +2,22 @@ import assert from 'node:assert/strict';
 import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const env={window:{}};vm.runInNewContext(readFileSync('js/v88-kitchen-play.js','utf8'),env);
-function session(career){
- let clock=0;const commits=[];
- const c={career,person:{id:1},dish:career==='noodle'?{container:'bowl_m',base:'broth_kimchi',spicyLevel:2,toppings:['ntop_beef'],toppingPortions:{ntop_beef:2}}:{tray:'plate',sauce:'sauce_sweet_chili',skewerCounts:{skewer_fish:2}},phase:'open',patience:180,paused:false,hidden:false};
- const api=env.window.BPVQKitchenPlay.create({context:()=>c,now:()=>clock,onFinish:(g,s)=>commits.push([g,s.elapsed])});
- const advance=seconds=>{for(let n=0;n<Math.round(seconds*20);n++){clock+=50;api.snapshot();}return api.snapshot();};
- return {c,api,advance,commits};
+function session(career){let clock=0;const commits=[];const c={career,person:{id:1},dish:{container:'bowl_m',base:'broth_kimchi',sugar:70,ice:50,toppings:['ntop_beef'],toppingPortions:{ntop_beef:2},tray:'plate',sauce:'sauce_sweet_chili',skewerCounts:{skewer_fish:2}},phase:'open',patience:180,paused:false,hidden:false};
+const api=env.window.BPVQKitchenPlay.create({context:()=>c,now:()=>clock,onFinish:g=>commits.push(g)});
+const advance=n=>{for(let i=0;i<Math.round(n*100);i++){clock+=10;api.snapshot();}};
+const play=grade=>{let guard=0;while(api.snapshot().stage==='warming'){assert.ok(++guard<1000);advance(.01);}if(grade==='timeout'){advance(10.1);return;}const p=grade==='perfect'?50:grade==='good'?36:5;while(api.snapshot().position<p){assert.ok(++guard<2000);advance(.01);}assert.equal(api.action('hit'),true);};return {c,api,advance,play,commits};}
+for(const career of ['boba','noodle','streetfood'])for(const grade of ['perfect','good','bad','timeout']){
+ const {c,api,advance,play,commits}=session(career);assert.equal(api.action('begin'),true);assert.equal(api.action('begin'),false);assert.equal(api.action('finish'),false);
+ play(grade);if(career==='streetfood'){assert.equal(api.snapshot().stage,'warming');assert.equal(api.action('flip'),false);play(grade);assert.equal(api.snapshot().stage,'plating');api.action('sauce');api.action('lift');}
+ assert.equal(api.ready(),true,`${career}/${grade} can finish`);assert.equal(api.snapshot().grade,grade==='timeout'?'bad':grade);assert.equal(commits.length,1);
+ const done=JSON.stringify(api.snapshot());advance(20);assert.equal(JSON.stringify(api.snapshot()),done,'finished result freezes');assert.equal(api.action('hit'),false);assert.equal(api.action('begin'),false);
+ const saved=api.exportState();api.reset();assert.equal(api.restore(saved),true);assert.equal(api.snapshot().grade,grade==='timeout'?'bad':grade);assert.equal(commits.length,1,'restore does not award again');
+ c.dish.base='different';assert.equal(api.ready(),false,'changed contents invalidate proof');
 }
-for(const career of ['noodle','streetfood']){
- const {c,api,advance,commits}=session(career);
- assert.equal(api.action('begin'),true);
- for(let n=0;n<100;n++){api.action('begin');api.action('finish');api.action(career==='noodle'?'stir':'flip');}
- assert.equal(api.snapshot().elapsed,0);assert.equal(api.ready(),false);assert.equal(commits.length,0,'click spam cannot cook or finish');
- advance(.6);const before=api.snapshot();c.paused=true;advance(8);
- assert.equal(api.snapshot().elapsed,before.elapsed);assert.equal(api.action('flame'),false,'paused actions rejected');
- c.paused=false;advance(.05);assert.equal(api.snapshot().elapsed,before.elapsed,'resume cannot catch up hidden time');
- c.hidden=true;advance(8);assert.equal(api.snapshot().elapsed,before.elapsed);c.hidden=false;advance(.05);
- c.dish=JSON.parse(JSON.stringify(c.dish));assert.equal(api.snapshot().stage,'choose','new dish object invalidates proof');
- assert.equal(api.ready(),false);
+for(const a of ['perfect','good','bad'])for(const b of ['perfect','good','bad']){const {api,play}=session('streetfood');api.action('begin');play(a);const saved=api.exportState();api.reset();assert.equal(api.restore(saved),true);play(b);api.action('sauce');api.action('lift');assert.equal(api.snapshot().grade,[a,b].includes('bad')?'bad':a===b&&a==='perfect'?'perfect':'good');}
+for(const career of ['boba','noodle','streetfood']){
+ const {c,api,advance}=session(career);api.action('begin');advance(.5);const before=api.snapshot();c.paused=true;advance(20);assert.equal(api.snapshot().elapsed,before.elapsed);assert.equal(api.action('hit'),false);c.paused=false;advance(.01);assert.equal(api.snapshot().elapsed,before.elapsed);c.hidden=true;advance(20);assert.equal(api.snapshot().elapsed,before.elapsed);c.hidden=false;advance(.01);
+ const saved=api.exportState();api.reset();c.person={id:2};assert.equal(api.restore(saved),true);const restored=api.snapshot().elapsed;advance(.01);assert.ok(api.snapshot().elapsed-restored<.02,'no offline catch-up');c.person={id:3};assert.equal(api.ready(),false);assert.equal(api.snapshot().stage,'choose');
 }
-for(const container of ['bowl_m','bowl_l','bowl_xl']){
- const {c,api,advance,commits}=session('noodle');c.dish.container=container;api.action('begin');
- assert.equal(api.action('drop'),false);while(!api.snapshot().canDrop)advance(.05);
- assert.equal(api.action('drop'),true);api.action('flame',2);
- while(api.snapshot().cook<100||!api.snapshot().canFinish){assert.notEqual(api.snapshot().stage,'failed');advance(.05);}
- assert.equal(api.snapshot().stirs,0);assert.equal(api.snapshot().canFinish,true);assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');
- assert.ok(commits[0][1]>=6&&commits[0][1]<=9,'noodle takes real6–9sec');
- assert.equal(api.action('finish'),false);assert.equal(commits.length,1,'completion one-shot');
- c.dish.toppingPortions.ntop_beef=3;assert.equal(api.ready(),false,'ingredient changes invalidate completed dish');
-}
-{
- const {api,advance}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);api.action('drop');advance(5);
- assert.equal(api.snapshot().stage,'failed');assert.equal(api.ready(),false,'unattended high fire overflows');
-}
-{
- const {api,advance}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);api.action('drop');
- assert.match(api.snapshot().hint,/Hạ lửa vừa/,'post-drop guidance must expose the high-fire hazard');
- api.action('flame',2);advance(1);const before=api.snapshot();api.action('stir');
- assert.equal(api.snapshot().stage,'simmer','legacy stir action never resets a healthy pot');assert.equal(api.snapshot().cook,before.cook);
-}
-{
- const {api,advance,commits}=session('streetfood');api.action('begin');advance(3.9);api.action('flip');advance(2.9);api.action('sauce');advance(1);
- assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');assert.equal(commits[0][0],'perfect');assert.ok(commits[0][1]>=7&&commits[0][1]<=10);
-}
-{
- const {api,advance}=session('streetfood');api.action('begin');api.action('flip');advance(3.9);api.action('flip');advance(2.9);api.action('sauce');advance(1);
- assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'good','early flipping loses Perfect but can recover');
-}
-{
- const {api,advance}=session('streetfood');api.action('begin');api.action('sauce');api.action('flame',3);advance(5);
- assert.equal(api.snapshot().stage,'failed');assert.equal(api.ready(),false,'early glaze at high heat burns');
-}
-{
- const low=session('streetfood'),high=session('streetfood');low.api.action('begin');high.api.action('begin');low.api.action('flame',1);high.api.action('flame',3);low.advance(1);high.advance(1);
- assert.ok(high.api.snapshot().a>low.api.snapshot().a*2,'fire affects actual doneness');
-}
-for(const career of ['noodle','streetfood']){
- const {c,api,advance,commits}=session(career);api.action('begin');advance(.6);
- assert.equal(api.action('lift'),true,'may stop before ready');
- const frozen=api.snapshot();advance(10);
- for(const key of ['elapsed','cook','heat','a','b','overflow','glaze'])assert.equal(api.snapshot()[key],frozen[key],key+' stays fixed off heat');
- assert.equal(api.action('finish'),false,'lifting raw food never authorizes serving');assert.equal(commits.length,0);
- assert.equal(api.action('return'),true);advance(.5);assert.ok(api.snapshot().elapsed>frozen.elapsed,'return continues same session');
- c.paused=true;assert.equal(api.action('lift'),false);c.paused=false;c.hidden=true;assert.equal(api.action('lift'),false);c.hidden=false;
- api.action('lift');c.person={id:2};assert.equal(api.snapshot().stage,'choose','customer change invalidates held food');
-}
-{
- const {api,advance,commits}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);
- api.action('drop');api.action('flame');assert.equal(api.snapshot().flame,2,'one tap lowers high fire to medium');
- while(api.snapshot().cook<100||api.snapshot().elapsed<6)advance(.05);
- assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'done','no stir required to lift a ready noodle pot');
- assert.equal(api.snapshot().stirs,0);assert.equal(api.action('finish'),false);assert.equal(api.ready(),true);assert.equal(commits.length,1);
- assert.equal(api.action('lift'),false);assert.equal(api.action('return'),false);
-}
-{
- const {api,advance,commits}=session('noodle');api.action('begin');while(!api.snapshot().canDrop)advance(.05);
- api.action('drop');api.action('flame',2);while(!api.snapshot().canFinish||api.snapshot().cook<99)advance(.05);
- assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'done','ready food finishes on lifting');assert.equal(api.snapshot().grade,'perfect');
- const frozen=api.snapshot();advance(10);assert.equal(api.snapshot().cook,frozen.cook);assert.equal(commits.length,1);
-}
-{
- const {api,advance,commits}=session('streetfood');api.action('begin');advance(3.9);api.action('flip');advance(3.9);
- assert.equal(api.action('lift'),true);assert.equal(api.snapshot().stage,'held');const frozen=api.snapshot();advance(10);
- assert.equal(api.snapshot().b,frozen.b);assert.equal(api.action('flip'),false,'plate cannot receive grill heat or flip');
- assert.equal(api.action('sauce'),true);assert.equal(api.action('finish'),false,'sauce must settle');advance(.6);
- assert.equal(api.snapshot().a,frozen.a);assert.equal(api.snapshot().b,frozen.b);assert.equal(api.snapshot().glaze,0,'sauce cannot scorch on plate');
- assert.equal(api.action('finish'),true);assert.equal(api.snapshot().grade,'perfect');assert.equal(commits.length,1);
-}
-console.log('PASS kitchen rules: timed cooking, off-heat preservation/return, no mandatory stir and sauce off heat, readiness gates, pause/edit and one-shot completion');
+{const {api,play}=session('streetfood');api.action('begin');play('perfect');play('perfect');api.action('lift');assert.equal(api.ready(),true,'missing sauce still handable');assert.equal(api.snapshot().grade,'good','missing sauce cannot get Perfect');}
+console.log('PASS 3 careers × 4 outcomes, 9 face combinations, frozen completion, serialization, pause/hidden and invalidation');

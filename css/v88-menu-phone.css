@@ -1,0 +1,51 @@
+/* Đợt 2 — không làm cao thêm quầy, chỉ mở chi tiết trong điện thoại */
+.v88-menu-info{width:36px;height:36px;min-width:36px;display:inline-flex;align-items:center;justify-content:center;border-radius:9px;background:#334155;color:#fef3c7;font-size:15px;font-weight:900;cursor:pointer}
+.v88-menu-info:focus-visible{outline:2px solid #facc15;outline-offset:2px}
+.v88-menu-app{color:#f8fafc;padding:8px 4px 18px;min-height:100%}
+.v88-menu-head{padding:13px 13px 11px;border-radius:16px;background:linear-gradient(125deg,#205750,#274a67);border:1px solid #78b69a70}
+.v88-menu-head span{font-size:9px;letter-spacing:.1em;color:#d1fae5;font-weight:800}
+.v88-menu-head h3{font-size:17px;font-weight:900;margin:2px 0 5px}
+.v88-menu-head p{font-size:11px;line-height:1.5;color:#e1eefa}
+.v88-menu-status{display:flex;justify-content:space-between;align-items:start;gap:6px;padding:10px 8px;color:#f6e9b9;font-size:11px}
+.v88-menu-status span{text-align:right;font-size:10px}
+.v88-menu-filter{display:flex;gap:5px;margin:4px 0 11px}
+.v88-menu-filter button{flex:1;background:#334155;padding:8px 2px;font-size:11px;font-weight:800;border-radius:12px}
+.v88-menu-filter button[aria-pressed="true"]{background:#047857;color:#fff}
+.v88-menu-list{display:grid;gap:8px}
+.v88-menu-item{background:#182c3a;border:1px solid #526778;border-radius:14px;padding:11px;box-shadow:0 3px 8px #07131b40}
+.v88-menu-item.is-locked{opacity:.72}
+.v88-menu-item-top{display:flex;align-items:start;justify-content:space-between;gap:8px}
+.v88-menu-item-top b{font-size:12px;display:block;line-height:1.4}
+.v88-menu-item-top small{font-size:10px;display:block;color:#b9c9d6;margin-top:3px}
+.v88-menu-chip{white-space:nowrap;border-radius:30px;background:#475569;padding:4px 7px;font-size:9px;font-weight:800}
+.v88-menu-chip.on{background:#065f46;color:#bff6d5}
+.v88-menu-numbers{display:flex;gap:12px;margin:9px 0;font-size:10px;color:#a9c1cf}
+.v88-menu-numbers b{color:#fcd34d}
+.v88-menu-controls{display:flex;align-items:end;gap:5px;flex-wrap:wrap}
+.v88-menu-controls label{flex:1;min-width:74px;font-size:10px;color:#fef3c7}
+.v88-menu-controls input{display:block;width:100%;min-height:36px;margin-top:3px;padding:0 7px;background:#ecfdf5;border:1px solid #99f6e4;color:#14352b;border-radius:9px;font-size:13px;font-weight:900}
+.v88-menu-controls button{min-height:36px;padding:5px 9px;border:1px solid #3b7a69;border-radius:9px;font-size:10px;font-weight:800;background:#065f46;color:#fff}
+.v88-menu-controls button[data-toggle]{background:#334155;border-color:#64748b}
+.v88-menu-range{display:block;margin-top:5px;font-size:9px;color:#a7c6ce}
+.v88-menu-future{color:#fcd34d;font-size:10px;margin-top:6px}
+.v88-menu-muted{font-size:10px;color:#94a3b8;margin-top:6px}
+.v88-menu-help{margin:10px 2px;color:#bac8dd;font-size:10px;line-height:1.5}
+
+#cs20-station .cs20-stepper #cs20-price-down,#cs20-station .cs20-stepper #cs20-price-up{display:none!important}
+#cs20-station .cs20-stepper #cs20-menu-info{display:inline-flex!important;width:36px;height:36px;align-items:center;justify-content:center;color:#14532d;font-size:17px;background:#d1fae5;border-radius:9px}
+#cs20-station .cs20-stepper #cs20-menu-info:focus-visible{outline:2px solid #065f46;outline-offset:2px}
+
+/* v88.16.13.3 — bổ sung đơn giá topping/xiên theo hợp đồng Menu */
+.v88-menu-numbers{flex-wrap:wrap;column-gap:9px;row-gap:3px}
+.v88-extra-section{margin-top:12px;border:1px solid #496c70;border-radius:14px;background:#183840;padding:9px}
+.v88-extra-section>summary{font-size:12px;font-weight:850;color:#ffe8ad;cursor:pointer;display:flex;justify-content:space-between;gap:8px;list-style:none}
+.v88-extra-section>summary::-webkit-details-marker{display:none}
+.v88-extra-list{margin-top:8px;display:grid;gap:6px}
+.v88-extra-row{display:grid;grid-template-columns:minmax(0,1fr) auto auto;align-items:center;gap:6px;padding:6px;background:#203341;border:1px solid #47616b;border-radius:10px}
+.v88-extra-label{min-width:0}.v88-extra-label b{font-size:10px;line-height:1.2;display:block}.v88-extra-label small{display:block;color:#b5c6c9;font-size:8px}
+.v88-extra-prices{min-width:55px;text-align:right}.v88-extra-prices b{color:#fcd34d;font-size:11px}.v88-extra-prices small{display:block;font-size:8px;color:#fef08a}
+.v88-extra-edit{display:flex;gap:3px;align-items:center}.v88-extra-edit input{width:54px;min-height:34px;padding:2px 4px;border-radius:7px;background:#ecfdf5;color:#163d30;font-weight:800;font-size:11px}
+.v88-extra-edit button{min-height:34px;padding:4px 7px;border-radius:7px;background:#047857;color:white;font-size:10px;font-weight:800}
+@media(max-width:350px){.v88-extra-row{grid-template-columns:minmax(0,1fr) auto;row-gap:4px}.v88-extra-edit{grid-column:2}.v88-extra-prices{grid-column:2;grid-row:1}}
+
+.v88-menu-included{display:block;font-size:10px;color:#cbd5e1;line-height:1.45;margin-bottom:8px}

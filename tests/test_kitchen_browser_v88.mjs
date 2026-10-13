@@ -14,7 +14,7 @@ async function setup(page,career,practice){
   gameState.automation={...(gameState.automation||{}),shopFastEnabled:false};
   for(const ids of Object.values(CAREER_WORKBENCH_KEYS[career]))for(const id of ids)gameState.inventory[id]=50;
   cleanWorkbenchDish();
-  const order=career==='noodle'?{career,container:'bowl_m',base:'broth_kimchi',spicyLevel:2,toppings:['ntop_beef','ntop_fishcake'],toppingPortions:{ntop_beef:2,ntop_fishcake:1},requiresCooked:true,maxPrice:120}:
+  const order=career==='boba'?{career,container:'cup_m',base:'tea_black',sugar:70,ice:50,toppings:['topping_boba'],toppingPortions:{topping_boba:2},requiresShaken:true,maxPrice:120}:career==='noodle'?{career,container:'bowl_m',base:'broth_kimchi',spicyLevel:2,toppings:['ntop_beef','ntop_fishcake'],toppingPortions:{ntop_beef:2,ntop_fishcake:1},requiresCooked:true,maxPrice:120}:
    {career,tray:'plate',sauce:'sauce_sweet_chili',skewerCounts:{skewer_fish:2,skewer_beef:1},requiredFryState:'perfect',maxPrice:120};
   window.__testOrder=order;
   currentCustomer=practice?null:{npcId:'kitchen_test',name:'Khách bếp',avatar:'🐰',budget:120,strict:'very_strict',patience:180,maxPatience:180,order,quote:formatCustomerOrder(order)};
@@ -24,75 +24,40 @@ async function setup(page,career,practice){
  if(practice){await page.getByRole('button',{name:'Luyện nấu ăn không mất nguyên liệu khi nghỉ ca'}).click();}
  await page.evaluate(c=>{
   const b=window.BPVQCookingBridge;
-  if(c==='noodle'){if(!window.BPVQCookingStation.status().practice){b.choose('base','broth_kimchi');b.choose('spice',2);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_fishcake',1);}}
+  if(c==='boba'){if(!window.BPVQCookingStation.status().practice){b.choose('topping','topping_boba',1);b.choose('topping','topping_boba',1);}}
+  else if(c==='noodle'){if(!window.BPVQCookingStation.status().practice){b.choose('base','broth_kimchi');b.choose('spice',2);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_fishcake',1);}}
   else if(!window.BPVQCookingStation.status().practice){b.choose('topping','skewer_fish',1);b.choose('topping','skewer_fish',1);b.choose('topping','skewer_beef',1);}
  },career);
  if(practice){
-  await page.locator('#cs20-groups').getByRole('button',{name:career==='noodle'?'Topping':'Chọn xiên',exact:true}).click();
-  for(const [key,n]of career==='noodle'?[['ntop_beef',2],['ntop_fishcake',1]]:[['skewer_fish',2],['skewer_beef',1]])for(let i=0;i<n;i++)await page.locator(`[data-item="${key}"]`).click();
+  await page.locator('#cs20-groups').getByRole('button',{name:career==='streetfood'?'Chọn xiên':'Topping',exact:true}).click();
+  for(const [key,n]of career==='boba'?[['topping_boba',2]]:career==='noodle'?[['ntop_beef',2],['ntop_fishcake',1]]:[['skewer_fish',2],['skewer_beef',1]])for(let i=0;i<n;i++)await page.locator(`[data-item="${key}"]`).click();
  }
  await page.waitForTimeout(650);
 }
 try{
- for(const career of ['noodle','streetfood'])for(const practice of [false,true]){
-  const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));await setup(page,career,practice);
-  const balance=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
-  await page.locator('#cs20-groups').getByRole('button',{name:career==='noodle'?'Topping':'Chọn xiên',exact:true}).click();
-  await page.waitForFunction(()=>[...document.querySelectorAll('#cs20-shelf .cs26-jar-image img')].every(im=>im.complete&&im.naturalWidth>0));
-  const visible=await page.evaluate(c=>{
-   const selector=c==='noodle'?'[data-food-slot]':'[data-skewer-slot]';
-   return [...document.querySelectorAll(selector)].filter(g=>g.getAttribute('opacity')!=='0').map(g=>({id:g.dataset.ingredient,qty:Number(g.dataset.quantity),color:g.querySelector('[data-color]').dataset.color}));
-  },career);
-  assert.equal(new Set(visible.map(x=>x.color)).size,2,'ingredient colors stay distinct');
-  assert.equal(visible.filter(x=>x.id===(career==='noodle'?'ntop_beef':'skewer_fish')).reduce((n,x)=>n+x.qty,0),2,'actual two portions/que visible');
-  assert.equal(visible.reduce((n,x)=>n+x.qty,0),3,'all actual ingredients represented');
-  await page.screenshot({path:`artifacts/v88-kitchen/${career}-${practice?'practice':'live'}-ingredients.png`});
-  if(!practice){
-   const bypass=await page.evaluate(c=>{
-    const before=JSON.stringify([gameState.coins,gameState.inventory]);
-    if(c==='noodle'){workbenchDish.isCooked=true;}else{workbenchDish.fryState='perfect';workbenchDish.fryProgress=80;}
-    const result=window.BPVQCookingBridge.deliver();serveDishToCustomer();
-    return {result,same:before===JSON.stringify([gameState.coins,gameState.inventory]),customer:!!currentCustomer};
-   },career);assert.deepEqual(bypass,{result:false,same:true,customer:true},'forged ready flags cannot skip the kitchen');
-   await page.evaluate(()=>{workbenchDish.isCooked=false;workbenchDish.fryState='unfried';});
+ for(const career of ['boba','noodle','streetfood'])for(const grade of ['perfect','good','bad','timeout']){
+  const page=await browser.newPage({viewport:{width:390,height:844}}),errors=[];page.on('pageerror',e=>errors.push(String(e)));await setup(page,career,false);
+  const initial=await page.evaluate(()=>({coins:gameState.coins,inventory:JSON.parse(JSON.stringify(gameState.inventory)),reviews:gameState.reviews.length}));
+  assert.equal(await page.evaluate(()=>{workbenchDish.isShaken=true;workbenchDish.isCooked=true;workbenchDish.fryState='perfect';return window.BPVQCookingBridge.deliver();}),false,'flags cannot forge completion');
+  await page.evaluate(()=>{workbenchDish.isShaken=false;workbenchDish.isCooked=false;workbenchDish.fryState='unfried';});
+  await cookKitchen(page,career,grade);
+  const key=career==='boba'?'topping_boba':career==='noodle'?'ntop_beef':'skewer_fish';
+  const ready=await page.evaluate(key=>({grade:window.BPVQCookingBridge.kitchenStatus().grade,stock:gameState.inventory[key],profile:activeProfileId}),key);
+  assert.equal(ready.grade,grade==='timeout'?'bad':grade);assert.equal(ready.stock,initial.inventory[key]-2);
+  if(grade==='perfect'){
+   const profile=ready.profile;await page.evaluate(()=>saveGameToStorage(false));await page.reload({waitUntil:'load'});await page.evaluate(profile=>continueLocalAccount(profile),profile);await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
+   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.kitchenStatus().grade),'perfect','actual reload retains outcome');
   }
-  // A genuine UI begin, followed by immediate finish spam, cannot complete.
+  const frozen=await page.evaluate(()=>JSON.stringify(window.BPVQCookingBridge.kitchenStatus()));await page.waitForTimeout(650);assert.equal(await page.evaluate(()=>JSON.stringify(window.BPVQCookingBridge.kitchenStatus())),frozen);
+  await page.screenshot({path:`artifacts/v88-kitchen/${career}-${grade}.png`});
+  const before=await page.evaluate(()=>({coins:gameState.coins,inventory:JSON.stringify(gameState.inventory),reviews:gameState.reviews.length}));
   await page.locator('#cs20-primary').click();
-  if(!practice)assert.equal(await page.evaluate(()=>{for(let n=0;n<50;n++)window.BPVQCookingBridge.kitchenAction('finish');return window.BPVQCookingBridge.kitchenReady();}),false);
-  await page.locator('#cs20-lift').click();
-  const heldEarly=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
-  assert.equal(heldEarly.stage,'held');assert.equal(heldEarly.ready,false);
-  await page.waitForTimeout(1200);
-  const heldAfter=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
-  for(const key of ['elapsed','heat','cook','a','b'])assert.equal(heldAfter[key],heldEarly[key],'early lift freezes '+key);
-  assert.equal(await page.locator('#cs20-visual svg').getAttribute('data-off-heat'),'true');
-  await page.locator('#cs20-primary').click();
-  assert.notEqual(await page.evaluate(()=>window.BPVQCookingStation.status().kitchen.stage),'held','UI return resumes cooking');
-  await page.waitForTimeout(300);await page.evaluate(()=>openSmartPhoneModal());
-  const frozen=await page.evaluate(()=>window.BPVQCookingStation.status().practice?window.BPVQCookingStation.status().kitchen:window.BPVQCookingBridge.kitchenStatus());
-  await page.waitForTimeout(1200);
-  const after=await page.evaluate(()=>window.BPVQCookingStation.status().practice?window.BPVQCookingStation.status().kitchen:window.BPVQCookingBridge.kitchenStatus());
-  assert.equal(after.elapsed,frozen.elapsed,'phone freezes kitchen clock');
-  await page.evaluate(()=>closeSmartPhoneModal());await page.waitForTimeout(650);
-  if(!practice){
-   await page.evaluate(c=>{applyRecipePreset(RECIPE_BOOK[c][0].id,c);},career);
-   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.kitchenStatus().stage),'choose','preset starts a fresh preparation');
-  }
-  await page.locator('#cs20-undo').click();
-  // Rebuild the selected real recipe after native reset, then actually play.
-  if(!practice)await page.evaluate(c=>{const b=window.BPVQCookingBridge;if(c==='noodle'){b.choose('base','broth_kimchi');b.choose('spice',2);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_beef',1);b.choose('topping','ntop_fishcake',1);}else{b.choose('topping','skewer_fish',1);b.choose('topping','skewer_fish',1);b.choose('topping','skewer_beef',1);}},career);
-  else{await page.locator('#cs20-groups').getByRole('button',{name:career==='noodle'?'Topping':'Chọn xiên',exact:true}).click();for(const [id,n]of career==='noodle'?[['ntop_beef',2],['ntop_fishcake',1]]:[['skewer_fish',2],['skewer_beef',1]])for(let i=0;i<n;i++)await page.locator(`[data-item="${id}"]`).click();}
-  await page.waitForTimeout(650);await cookKitchen(page,career);
-  const cooked=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);assert.equal(cooked.grade,'perfect');assert.ok(cooked.elapsed>=6,'real minimum cooking time');
-  assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),balance,'cooking cannot consume stock or pay');
-  await page.screenshot({path:`artifacts/v88-kitchen/${career}-${practice?'practice':'live'}-perfect.png`});
-  await page.locator('#cs20-primary').click();
-  if(practice)assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),balance,'practice never settles');
-  else{
-   const delivery=await page.evaluate(()=>({paid:gameState.coins>500,beef:gameState.inventory.ntop_beef,fish:gameState.inventory.skewer_fish,counter:gameState.dailyStats.counterServed}));
-   assert.equal(delivery.paid,true,'exact cooked order paid by native validation');assert.equal(career==='noodle'?delivery.beef:delivery.fish,48);assert.equal(delivery.counter,1);
-   const once=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));await page.evaluate(()=>window.BPVQCookingBridge.deliver());assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),once,'one delivery only');
-  }
-  assert.deepEqual(errors,[]);console.log(`PASS kitchen browser ${career}/${practice?'practice':'live'}: real assets/colors/quantities, anti-spam/forged flags, Phone pause, Perfect, native single settlement`);await page.close();
+  const after=await page.evaluate(()=>({customer:!!currentCustomer,coins:gameState.coins,inventory:JSON.stringify(gameState.inventory),reviews:gameState.reviews.length,stars:gameState.reviews[0].stars}));
+  assert.equal(after.customer,false);assert.equal(after.inventory,before.inventory);assert.equal(after.reviews,before.reviews+1);assert.equal(after.stars,grade==='perfect'?5:grade==='good'?4:2);
+  assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.deliver()),false);assert.equal(await page.evaluate(()=>gameState.coins),after.coins);assert.deepEqual(errors,[]);await page.close();
+  console.log(`PASS actual browser ${career}/${grade}: native stock once, completion, grade, review, save/reload`);
+ }
+ for(const career of ['boba','noodle','streetfood']){
+  const page=await browser.newPage({viewport:{width:390,height:844}});await setup(page,career,true);const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory,gameState.reviews]));await cookKitchen(page,career);await page.locator('#cs20-primary').click();assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory,gameState.reviews])),before,'practice has no economy');await page.close();
  }
 }finally{await browser.close();}

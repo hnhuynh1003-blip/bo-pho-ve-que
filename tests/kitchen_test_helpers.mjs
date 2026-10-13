@@ -1,31 +1,15 @@
-export async function cookKitchen(page,career){
- if(career==='streetfood'&&await page.locator('[data-skewer-slot][opacity="1"]').count()===0){
-  await page.locator('#cs20-groups').getByRole('button',{name:'Chọn xiên',exact:true}).click();
-  await page.locator('#cs20-shelf button:enabled').first().click();
- }
+export async function hitTiming(page,grade='perfect'){
+ const target=grade==='perfect'?48:grade==='good'?34:3;
+ await page.waitForFunction(()=>['timing','capping'].includes(window.BPVQCookingStation.status().stage));
+ if(grade==='timeout'){await page.waitForFunction(()=>!['timing','capping'].includes(window.BPVQCookingStation.status().stage),{},{timeout:16000});return;}
+ // One in-page animation callback reads the native clock and clicks the actual UI.
+ await page.evaluate(target=>new Promise((resolve,reject)=>{const started=performance.now();function step(){const k=window.BPVQCookingBridge.kitchenStatus(),s=window.BPVQCookingStation.status();const p=s.practice?s.kitchen?.position:k.position;if(p>=target&&p<=target+4){document.getElementById('cs20-primary').click();resolve();}else if(performance.now()-started>10000)reject(Error('timing window not reached'));else requestAnimationFrame(step);}requestAnimationFrame(step);}),target);
+}
+export async function cookKitchen(page,career,grade='perfect'){
+ if(career==='streetfood'&&await page.locator('[data-skewer-slot][opacity="1"]').count()===0){await page.locator('#cs20-groups').getByRole('button',{name:'Chọn xiên',exact:true}).click();await page.locator('#cs20-shelf button:enabled').first().click();}
+ if(career==='boba'){await page.locator('#cs20-primary').click();await page.waitForTimeout(500);await page.locator('#cs20-primary').click();}
  await page.locator('#cs20-primary').click();
- if(career==='noodle'){
-  await page.waitForFunction(()=>window.BPVQCookingStation.status().kitchen.canDrop);
-  await page.locator('#cs20-primary').click();
-  while(await page.evaluate(()=>window.BPVQCookingStation.status().kitchen.flame!==2))await page.locator('#cs20-fire').click();
-  if(await page.locator('#cs20-flip').isVisible())throw new Error('Noodle stirring must not be required or visible');
-  await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.canFinish&&k.cook>=99&&k.stirs===0;});
- }else{
-  await page.waitForFunction(()=>window.BPVQCookingStation.status().kitchen.a>=77);
-  await page.locator('#cs20-flip').click();
-  await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.b>=77&&k.elapsed>=7;});
-  await page.locator('#cs20-lift').click();
-  await page.waitForFunction(()=>window.BPVQCookingStation.status().kitchen.stage==='held');
-  const held=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
-  await page.waitForTimeout(1200);
-  const resting=await page.evaluate(()=>window.BPVQCookingStation.status().kitchen);
-  if(resting.a!==held.a||resting.b!==held.b)throw new Error('Plated skewers kept cooking');
-  await page.waitForFunction(()=>document.querySelector('#cs20-visual svg').dataset.offHeat==='true'&&document.querySelector('[data-plated-tray]').getAttribute('opacity')==='1');
-  if(!(await page.locator('#cs20-dish-name').textContent()).startsWith('Xiên trên '))throw new Error('Plated food is still labeled as grilling');
-  if(await page.locator('#cs20-primary').getAttribute('data-act')!=='kitchen-sauce')throw new Error('Plated cooked skewers must offer sauce');
-  await page.locator('#cs20-sauce').click();
-  await page.waitForFunction(()=>{const k=window.BPVQCookingStation.status().kitchen;return k.canFinish&&k.b>=77;});
- }
- await page.locator('#cs20-primary').click();
+ await hitTiming(page,grade);
+ if(career==='streetfood'){await hitTiming(page,grade);await page.waitForFunction(()=>window.BPVQCookingStation.status().stage==='plating');await page.locator('#cs20-sauce').click();await page.locator('#cs20-primary').click();}
  await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
 }

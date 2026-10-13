@@ -3,7 +3,7 @@ on:
   push:
     branches: [feat/v88-phone-os-core]
   pull_request:
-    paths: [index.html, 'js/phone-os-v88.js', 'js/v88-shop-paint.js', 'js/v88-shop-sign.js', 'css/phone-os-v88.css', 'tests/**', 'scripts/**', 'docs/v88_*.md']
+    paths: [index.html, 'js/phone-os-v88.js', 'js/v88-menu-phone.js', 'js/game.js', 'css/v88-menu-phone.css', 'js/v88-shop-paint.js', 'js/v88-shop-sign.js', 'css/phone-os-v88.css', 'tests/**', 'scripts/**', 'docs/v88_*.md']
   workflow_dispatch:
 jobs:
   phone-os:
@@ -19,6 +19,10 @@ jobs:
         run: node --check js/phone-os-v88.js
       - name: Structural compatibility checks
         run: node tests/verify_phone_os_v88.mjs
+      - name: Đợt 2 Menu quotes and safe day-change
+        run: |
+          node --check js/v88-menu-phone.js
+          node tests/test_menu_dot2_v88.mjs
       - name: Decor inventory, slots and save regression
         run: node tests/test_decor_v88.mjs
       - name: Paint presets and safe save migration
@@ -60,6 +64,7 @@ jobs:
           node --check js/v88-kitchen-play.js
           node --check js/v88-food-art.js
           node tests/test_kitchen_rules_v88.mjs
+          node tests/test_counter_settlement_v88.mjs
           node --check js/v88-unified-shop.js
           node tests/test_unified_shop_v88.mjs
       - name: Bundle complete v88 gameplay for manual draft playtest

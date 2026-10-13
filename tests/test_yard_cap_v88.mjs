@@ -47,60 +47,7 @@ try{
   await page.getByRole('button',{name:'Mở điện thoại',exact:true}).click();
   await page.waitForFunction(()=>phonePauseActive);await page.evaluate(()=>closeSmartPhoneModal());
   await page.getByRole('button',{name:'Mở Mika hướng dẫn',exact:true}).click();assert.ok(await page.locator('#v877-mika-panel').isVisible());await page.evaluate(()=>v877MikaClose());
-  if(width===390){
-   const coinStock=()=>page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
-   const original=await coinStock();
-   await page.locator('#cs20-primary').click();await page.waitForTimeout(900);await page.locator('#cs20-primary').click();await page.locator('#cs20-primary').click();
-   assert.equal(await page.locator('#cs20-primary').getAttribute('data-act'),'cap-hit');
-   await page.evaluate(()=>document.getElementById('cs20-primary').click());assert.equal(await page.locator('#cs20-primary').getAttribute('data-act'),'cap-start','miss permits retry');assert.equal(await coinStock(),original);
-   const score=async target=>{
-    assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.beginCap()),true);
-    return page.evaluate(async target=>{const b=window.BPVQCookingBridge;return new Promise(resolve=>{function tick(){const p=b.capPosition();if(p>=target&&p<=target+3)resolve(b.hitCap());else requestAnimationFrame(tick)}requestAnimationFrame(tick)});},target);
-   };
-   const baselineTip=async price=>page.evaluate(price=>{
-    const saved=JSON.parse(JSON.stringify(gameState));window.__newCapOrder(price);workbenchDish.isShaken=true;const before=gameState.dailyStats.tipsRev||0;window.BPVQCookingBridge.deliver();const tip=gameState.dailyStats.tipsRev-before;gameState=saved;window.__newCapOrder(price);return tip;
-   },price);
-   const standardTip=await baselineTip(45);
-   assert.equal(await score(48),'perfect');assert.equal(await coinStock(),original,'Perfect does not pay or consume until delivery');
-   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.beginCap()),false,'successful cap is locked');
-   await page.evaluate(()=>{
-    const s={coins:gameState.coins,tips:gameState.dailyStats.tipsRev||0,rev:gameState.dailyStats.counterRev||0};window.__beforeCap=s;
-   });
-   const paid=await page.evaluate(()=>{
-    const b=window.BPVQCookingBridge,s=window.__beforeCap;
-    const first=b.deliver(),second=b.deliver();
-    return {first,second,delta:gameState.coins-s.coins,tip:(gameState.dailyStats.tipsRev||0)-s.tips,rev:(gameState.dailyStats.counterRev||0)-s.rev};
-   });
-   assert.equal(paid.first,true);assert.equal(paid.second,false);assert.equal(paid.delta,paid.tip+paid.rev);
-   assert.equal(paid.tip,standardTip+5,'price45 Perfect pays exactly5 extra');
-   // Same native settlement without Perfect for comparison, then cap8 at high price.
-   for(const [price,target,expected] of [[45,35,0],[200,48,8]]){
-    const standard=await baselineTip(price);assert.equal(await score(target),target===35?'good':'perfect');
-    const report=await page.evaluate(()=>{const tips=gameState.dailyStats.tipsRev||0,rev=gameState.dailyStats.counterRev||0;const ok=window.BPVQCookingBridge.deliver();return {ok,tip:gameState.dailyStats.tipsRev-tips,rev:gameState.dailyStats.counterRev-rev};});
-    assert.equal(report.ok,true);assert.equal(report.tip,standard+expected);
-   }
-   // Signature guards direct legacy edits, bridge edits, reset, replacement orders.
-   await page.evaluate(()=>window.__newCapOrder());await score(48);
-   assert.equal(await page.evaluate(()=>{workbenchDish.sugar=30;return window.BPVQCookingBridge.consumeCapTip(currentCustomer,workbenchDish,true)}),0,'dish edit invalidates award');
-   await page.evaluate(()=>window.__newCapOrder());await score(48);
-   assert.equal(await page.evaluate(()=>{window.BPVQCookingBridge.choose('ice',0);return window.BPVQCookingBridge.consumeCapTip(currentCustomer,workbenchDish,true)}),0);
-   await page.evaluate(()=>window.__newCapOrder());await score(48);
-   assert.equal(await page.evaluate(()=>{window.__newCapOrder();return window.BPVQCookingBridge.consumeCapTip(currentCustomer,workbenchDish,true)}),0,'replacement customer cannot inherit tip');
-   await page.evaluate(()=>window.__newCapOrder());await score(48);
-   assert.equal(await page.evaluate(()=>{cleanWorkbenchDish();workbenchDish.isShaken=true;return window.BPVQCookingBridge.consumeCapTip(currentCustomer,workbenchDish,true)}),0,'legacy reset invalidates award');
-   await page.evaluate(()=>window.__newCapOrder());await score(48);
-   const rejected=await page.evaluate(()=>{const money=gameState.coins,tips=gameState.dailyStats.tipsRev;currentCustomer.strict='very_strict';currentCustomer.order.base='tea_green';const ok=window.BPVQCookingBridge.deliver();return {ok,delta:gameState.coins-money,tip:gameState.dailyStats.tipsRev-tips};});
-   assert.equal(rejected.ok,true);assert.equal(rejected.delta,0);assert.equal(rejected.tip,0,'Perfect cannot pay a refused wrong recipe');
-   await page.evaluate(()=>window.__newCapOrder());
-   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.beginCap()),true);
-   await page.evaluate(()=>window.BPVQCookingBridge.capPosition());
-   await page.getByRole('button',{name:'Mở điện thoại',exact:true}).click();await page.waitForTimeout(600);
-   const paused=await page.evaluate(()=>window.BPVQCookingBridge.capPosition());await page.waitForTimeout(650);
-   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.capPosition()),paused,'phone freezes timing');
-   assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.hitCap()),null,'cannot score through phone');await page.evaluate(()=>closeSmartPhoneModal());
-   await page.evaluate(()=>window.BPVQCookingBridge.reset());
-  }
   await page.evaluate(()=>window.scrollTo(0,0));mkdirSync('artifacts/v88-yard-cap',{recursive:true});await page.screenshot({path:`artifacts/v88-yard-cap/${width}-yard.png`});
-  assert.deepEqual(errors,[]);console.log(`PASS yard/cap ${width}px: existing NPC, one bubble, fixed counter, Phone/Mika${width===390?', native tips + guards + pause':''}`);await page.close();
+  assert.deepEqual(errors,[]);console.log(`PASS yard/cap ${width}px: existing NPC, one bubble, fixed counter, Phone/Mika`);await page.close();
  }
 }finally{await browser.close()}

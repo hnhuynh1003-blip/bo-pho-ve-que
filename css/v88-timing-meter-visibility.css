@@ -1,0 +1,30 @@
+/* v88.16.13.1: Good/Perfect zones win over the wooden-counter decorative meter.
+   Do not change scoring thresholds; only make the matching target visible. */
+#v88-live-scene.us21-unified #cs20-station .cs20-meter.cs29-cap-meter{
+  background:linear-gradient(90deg,
+    #ecd2bd 0%,#ecd2bd 28%,
+    #78b181 28%,#78b181 44%,
+    #f6d04b 44%,#f6d04b 56%,
+    #78b181 56%,#78b181 72%,
+    #ecd2bd 72%,#ecd2bd 100%)!important;
+  border:1px solid #65533b!important;
+  box-shadow:inset 0 1px 2px #0002,0 0 0 1px #fff7e7!important;
+  height:12px;
+  overflow:visible;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-meter.cs29-cap-meter:after{
+  z-index:2;
+  background:#302920;
+  box-shadow:0 0 0 1px #fff,0 0 3px #0005;
+}
+/* Reuse the existing 10px figcaption row. Do not add a new card or move the controls. */
+#v88-live-scene.us21-unified #cs20-station.cs29-timing-active #cs20-craft{
+  display:block!important;
+  color:#365d36!important;
+  font-size:9px!important;
+  line-height:10px!important;
+  font-weight:900;
+  white-space:nowrap;
+  overflow:hidden;
+  text-overflow:ellipsis;
+}
