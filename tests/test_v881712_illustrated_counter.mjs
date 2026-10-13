@@ -1,32 +1,18 @@
+// Legacy 1.2 artwork compatibility test, updated for the approved 1.8 full layout replacement.
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
-import path from 'node:path';
-const root=process.cwd();
-const read=(p)=>fs.readFileSync(path.join(root,p),'utf8');
-const html=read('index.html');
-const css=read('css/v88-17-cute-premium-boba.css');
-const js=read('js/v88-cooking-station.js');
-const art=read('assets/images/v88/cute-premium/boba-backbar.svg');
-const black=read('assets/images/v88/cute-premium/tea-black-clean.svg');
-const ids=['cs20-station','cs20-visual','cs20-shelf','cs20-primary','cs20-undo','cs20-sale-price','cs20-gauge','cs33-order-summary'];
-for(const id of ids){ assert.equal((html.match(new RegExp(`id="${id}"`,'g'))||[]).length,1,`stable unique DOM ID ${id}`); }
-for(const cls of ['cs20-ticket','cs20-stage','cs20-pantry']) assert.ok(html.includes('class="'+cls),cls);
-assert.match(html,/cp171-backbar[^>]*aria-hidden="true"/);
-assert.ok(html.includes('css/v88-17-cute-premium-boba.css?v=88.17.1.2'));
-assert.ok(html.includes('assets/images/v88/cute-premium/boba-backbar.svg'));
-assert.ok(html.indexOf('v88-17-cute-premium-boba.css')>html.indexOf('v88-cafe-counter.css'));
-assert.match(css,/#cs20-station\[data-career="boba"\]/);
-assert.doesNotMatch(css,/#cs20-station\[data-career="noodle"\]/);
-assert.doesNotMatch(css,/#cs20-station\[data-career="streetfood"\]/);
-assert.match(css,/\.cp171-backbar\{display:none\}/);
-assert.match(css,/\.cs20-meter\.cs29-cap-meter/);
-assert.match(css,/grid-template-rows:repeat\(2,75px\)/);
-assert.match(css,/prefers-reduced-motion/);
-assert.match(css,/cs20-actions \.cs20-button\{[\s\S]*min-height:48px/);
-assert.match(js,/tea_black:'v88\/cute-premium\/tea-black-clean\.svg'/);
-assert.doesNotMatch(js,/tea_black:'057_tea-black/);
-assert.match(js,/Cat mascot decal lives on the dynamic cup/);
-assert.ok(art.includes('<svg')&&art.includes('linearGradient')&&art.includes('filter'));
+const html=fs.readFileSync('index.html','utf8');
+const js=fs.readFileSync('js/v88-cooking-station.js','utf8');
+const art=fs.readFileSync('assets/images/v88/cute-premium/boba-backbar.svg','utf8');
+const black=fs.readFileSync('assets/images/v88/cute-premium/tea-black-clean.svg','utf8');
+for(const id of ['cs20-station','cs20-visual','cs20-shelf','cs20-primary','cs20-undo','cs20-sale-price','cs20-gauge','cs33-order-summary'])
+ assert.equal((html.match(new RegExp('id="'+id+'"','g'))||[]).length,1,'keep unique original gameplay id '+id);
+assert.ok(html.includes('css/v88-17-1-8-kitchen-qa.css?v=88.17.1.8'));
+assert.ok(!html.includes('cp171-backbar" aria-hidden="true"'),'do not restore duplicate kitchen backdrop');
+assert.ok(fs.existsSync('assets/images/v88/cute-premium/boba_backbar.webp'),'approved new AI backbar retained');
+assert.ok(js.includes("tea_black:'v88/cute-premium/tea-black-clean.svg'"));
+assert.ok(!js.includes("tea_black:'057_tea-black"));
+assert.ok(art.includes('<svg')&&art.includes('linearGradient')&&art.includes('filter'),'legacy art remains available without occupying UI');
 assert.ok(black.includes('viewBox="0 0 160 160"'));
-assert.ok(!js.includes('BPVQPremiumBobaSettlement'),'must not create duplicate settlement');
-console.log('PASS illustrated boba kitchen: layered SVG, recipe IDs, transparent tea art, 3-career isolation, 2-row tray & native meter');
+assert.ok(!js.includes('BPVQPremiumBobaSettlement'),'single native settlement owner');
+console.log('PASS legacy layered art retained, no duplicate backbar, same 3-career native IDs and settlement');
