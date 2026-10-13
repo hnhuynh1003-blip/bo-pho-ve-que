@@ -16,6 +16,39 @@ const others=document.getElementById('v88-live-other-career');
 if(others)frame.append(others);
 const controls=document.createElement('div');controls.className='cs27-shop-controls';scene.prepend(controls);
 const status=document.createElement('div');status.className='us21-status';status.setAttribute('aria-live','off');controls.append(status);
+// v88.17.1.5: real yard ⇄ kitchen views. DOM, customer and settlement stay shared.
+// The buttons are part of gameplay UI; the background image never contains fake buttons.
+let kitchenView=false;
+const enterKitchen=document.createElement('button');
+enterKitchen.type='button';enterKitchen.id='us21-enter-kitchen';
+enterKitchen.textContent='🧋 Vào quầy pha chế';
+enterKitchen.setAttribute('aria-label','Mở khu pha chế của quán');
+frame.append(enterKitchen);
+const exitKitchen=document.createElement('button');
+exitKitchen.type='button';exitKitchen.id='us21-exit-kitchen';
+exitKitchen.textContent='← Trở về sân quán';
+exitKitchen.setAttribute('aria-label','Trở về sân quán, giữ nguyên món đang pha');
+cook.prepend(exitKitchen);
+function setKitchenView(next,fromUser=false){
+ kitchenView=!!next;
+ scene.classList.toggle('us21-kitchen-view',kitchenView);
+ scene.dataset.view=kitchenView?'kitchen':'yard';
+ enterKitchen.setAttribute('aria-expanded',String(kitchenView));
+ exitKitchen.hidden=!kitchenView;
+ if(fromUser){
+  const reduced=w.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
+  // Both views scroll to the start of their own functional surface.
+  (kitchenView?cook:scene).scrollIntoView?.({block:'start',behavior:reduced?'auto':'smooth'});
+ }
+}
+enterKitchen.addEventListener('click',()=>setKitchenView(true,true));
+exitKitchen.addEventListener('click',()=>setKitchenView(false,true));
+// Outdoor artwork doubles as a large hit target, but must not hijack controls.
+frame.addEventListener('click',e=>{
+ if(e.target.closest('button,a,summary,input,select,textarea,[role="button"]'))return;
+ if(scene.classList.contains('us21-serving'))setKitchenView(true,true);
+});
+setKitchenView(false);
 const toggle=document.getElementById('btn-toggle-shop');if(toggle)controls.append(toggle);
 // One visible order ticket, with native customer metadata; no duplicate name/quote.
 const ticket=cook.querySelector('.cs20-ticket'),head=cook.querySelector('.cs20-ticket-head');
@@ -34,14 +67,21 @@ practiceExit.className='us21-train-exit';practiceExit.type='button';practiceExit
 const practiceNote=document.createElement('div');practiceNote.className='us21-train-note';practiceNote.hidden=true;
 practiceNote.textContent='👩‍🍳 Đang luyện tay nghề · Không trừ nguyên liệu, không cộng Xu';
 controls.append(practiceStart,practiceExit);frame.append(practiceNote);
-practiceStart.addEventListener('click',()=>{w.BPVQCookingStation?.startPractice?.();update();});
-practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();update();});
+practiceStart.addEventListener('click',()=>{if(w.BPVQCookingStation?.startPractice?.())setKitchenView(true,true);update();});
+practiceExit.addEventListener('click',()=>{w.BPVQCookingStation?.stopPractice?.();setKitchenView(false);update();});
 function safeSnapshot(){try{return bridge.snapshot()}catch(e){return null;}}
 let lastKey='',lastPhase='',lastCareer='';
 function update(){
  const s=safeSnapshot(); if(!s)return;
  const career=s.career||'boba',hasOrder=!!s.customer,phase=s.phase||'preparing';
  const practice=!!w.BPVQCookingStation?.status?.()?.practice;
+ // An ended order returns the player to the calm outdoor yard automatically.
+ // Do not reset the cooking station or its native dish state.
+ if(lastKey&&!hasOrder&&kitchenView&&!practice)setKitchenView(false,true);
+ enterKitchen.hidden=!(hasOrder||practice);
+ enterKitchen.textContent=practice?'🧑‍🍳 Vào bếp luyện tập':'🧋 Vào quầy pha chế';
+ exitKitchen.hidden=!kitchenView;
+
  if(ticket)ticket.hidden=!hasOrder;
  guest.hidden=!hasOrder;
  if(hasOrder&&lastKey!==s.customer.key){
@@ -63,14 +103,10 @@ function update(){
  const label=practice?'🎓 Luyện tập':phase==='open'?'🟢 Đang mở':'🌿 Nghỉ ca';
  if(status.textContent!==label)status.textContent=label;
  if(lastCareer!==career){lastCareer=career;}
- w.document.body.classList.toggle('us21-has-sign',artReadyForPreview&&career==='boba');
+ w.document.body.classList.toggle('us21-has-sign',false);
  const supported=document.getElementById('v88-live-supported');if(supported)supported.hidden=false;
  if(others)others.hidden=artReadyForPreview;
- if(artReadyForPreview&&career==='boba'){
-   const head=window.document.getElementById('v88-live-shop-sign');if(head)head.hidden=false;
- }else{
-   const head=window.document.getElementById('v88-live-shop-sign');if(head)head.hidden=true;
- }
+ const sign=w.document.getElementById('v88-live-shop-sign');if(sign)sign.hidden=true;
  // No synthetic customers: the original game updates actual #cust-* and order quote.
  // Cooking controls are provided only on active orders, never a disconnected idle card.
  lastKey=s.customer?.key||''; lastPhase=phase;
