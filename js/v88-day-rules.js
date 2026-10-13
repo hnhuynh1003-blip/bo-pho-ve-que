@@ -60,12 +60,13 @@
     const cash=Math.max(0,Math.floor(Number(coins)||0)),ops=Math.max(0,Math.round(Number(opCosts)||0));
     const interestDue=Math.max(0,Math.floor(Number(interest)||0));
     const dueWages=clamp(Math.round(Number(wages)||0),0,ops);
+    // Only unpaid interest is added to principal; cash-paid interest is never capitalized.
     // Retains legacy order: interest + non-wage operating fees first; wage arrears last.
     const paidInterest=Math.min(cash,interestDue),afterInterest=cash-paidInterest;
     const paidOther=Math.min(afterInterest,ops-dueWages),afterOther=afterInterest-paidOther;
     const paidWages=Math.min(afterOther,dueWages);
     return {paidInterest,paidOther,paidWages,unpaidWages:dueWages-paidWages,
-      unpaidOperating:ops-dueWages-paidOther,interestCapitalized:interestDue,coinsAfter:cash-paidInterest-paidOther-paidWages,
+      unpaidOperating:ops-dueWages-paidOther,interestCapitalized:interestDue-paidInterest,coinsAfter:cash-paidInterest-paidOther-paidWages,
       due:ops+interestDue,paid:paidInterest+paidOther+paidWages};
   }
   return Object.freeze({COUNTER,DELIVERY,create,issue,finish,remaining,roll,seedFor,demand,settlement});
