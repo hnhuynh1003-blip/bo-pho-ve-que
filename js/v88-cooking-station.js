@@ -319,6 +319,42 @@ function buildVisual(s){
  }
  return `<svg viewBox="0 0 200 180" role="img" aria-label="Món ${s.career==='boba'?'trà sữa':s.career==='noodle'?'mì cay':'xiên que'} đang chế biến">${content}</svg>`;
 }
+// v88.17.1.7: art-only ingredient-specific shapes shared by the live cup and
+// the finished cup (the finished preview clones this exact dynamic SVG).
+// No recipe/inventory/rating logic is implemented here.
+let cp177ToppingStamp='';
+function paintDetailedToppings(visual,d){
+ const cup=visual.querySelector('svg g[clip-path]');
+ if(!cup)return;
+ let layer=cup.querySelector('[data-cp177-topping-layer]');
+ if(!layer){layer=document.createElementNS('http://www.w3.org/2000/svg','g');layer.setAttribute('data-cp177-topping-layer','');cup.append(layer);cp177ToppingStamp='';}
+ const portions=d.toppingPortions||{};
+ const entries=[...new Set([...(d.toppings||[]),...Object.keys(portions)])].map(id=>({id,n:Math.max(0,Number(Object.prototype.hasOwnProperty.call(portions,id)?portions[id]:1))})).filter(x=>x.n>0);
+ const stamp=JSON.stringify(entries);
+ if(stamp===cp177ToppingStamp)return;
+ cp177ToppingStamp=stamp;layer.replaceChildren();
+ const ns='http://www.w3.org/2000/svg';
+ function shape(kind,attrs){const n=document.createElementNS(ns,kind);for(const [k,v] of Object.entries(attrs))n.setAttribute(k,String(v));layer.append(n);return n;}
+ const tokens=entries.flatMap(({id,n})=>Array.from({length:Math.min(n*4,14)},()=>id)).slice(0,36);
+ const style={
+  topping_boba:{kind:'circle',color:'#473024',line:'#251812'},topping_brown_boba:{kind:'circle',color:'#6e3725',line:'#352018'},
+  topping_white_boba:{kind:'circle',color:'#f9e8d9',line:'#b59d83'},topping_pudding:{kind:'rect',color:'#f7c55c',line:'#c48e2e'},
+  topping_peach:{kind:'rect',color:'#ffae73',line:'#dc6d50'},topping_jelly:{kind:'rect',color:'#e5a84d',line:'#aa723e'},
+  topping_crystal:{kind:'rect',color:'#c7e5f6',line:'#81b4cb'},topping_grass_jelly:{kind:'rect',color:'#302b2c',line:'#17191a'},
+  topping_aloe:{kind:'rect',color:'#a4d6a8',line:'#669f72'},topping_redbean:{kind:'ellipse',color:'#9e3b44',line:'#65232b'},
+  topping_cheese_foam:{kind:'circle',color:'#fff8e5',line:'#e0c7a6'},topping_salted_cream:{kind:'circle',color:'#fff8e5',line:'#e0c7a6'},
+  topping_lychee:{kind:'circle',color:'#f8e0d5',line:'#d6afa3'},topping_cookie:{kind:'rect',color:'#654332',line:'#34251f'},
+  topping_mochi:{kind:'circle',color:'#f0d0e7',line:'#c391b2'},topping_boba_black:{kind:'circle',color:'#493127',line:'#24160d'}
+ };
+ tokens.forEach((id,i)=>{
+  const cfg=style[id]||{kind:'circle',color:'#f5bb92',line:'#c98b61'};
+  const x=67+(i%7)*11+(Math.floor(i/7)%2?3:0),y=148-Math.floor(i/7)*11;
+  const common={stroke:cfg.line,'stroke-width':'.85','data-ingredient':id,opacity:'.97'};
+  if(cfg.kind==='rect')shape('rect',{x:x-5,y:y-4,width:9,height:8,rx:1.8,transform:`rotate(${i%2?12:-9} ${x} ${y})`,fill:cfg.color,...common});
+  else if(cfg.kind==='ellipse')shape('ellipse',{cx:x,cy:y,rx:5.4,ry:3.6,fill:cfg.color,...common});
+  else shape('circle',{cx:x,cy:y,r:4.8,fill:cfg.color,...common});
+ });
+}
 function mixColor(a,b,t){const rgb=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));const x=rgb(a),y=rgb(b);return '#'+x.map((v,i)=>Math.round(v+(y[i]-v)*t).toString(16).padStart(2,'0')).join('');}
 function paintVessel(s){
  const visual=$('cs20-visual'),d=s.dish;
@@ -338,6 +374,8 @@ function paintVessel(s){
   const dots=(d.toppings||[]).flatMap(key=>Array.from({length:Math.min(3,portionCount(d,key))*4},()=>key)).slice(0,36);
   v.pearls.forEach((el,i)=>{const key=dots[i];attr(el,'opacity',key?'1':'0');if(key){attr(el,'fill',key.includes('boba')?'#49312c':key.includes('jelly')?'#b3d79a':key.includes('redbean')?'#965b49':key.includes('peach')?'#e5a785':'#f8dca5');attr(el,'r',key.includes('boba')?4.5:4);}});
   const iceCount=Number(d.ice)===100?8:Number(d.ice)===50?4:0;v.ice.forEach((el,i)=>attr(el,'opacity',i<iceCount&&fill>25?'1':'0'));
+  // Each topping is visibly distinct (pearls, pudding cubes, jelly, foam...).
+  v.pearls.forEach(el=>attr(el,'opacity','0'));paintDetailedToppings(visual,d);
  }else if(s.career==='noodle'){
   attr(v.pot,'transform',s.kitchen.offHeat?'translate(0 -7)':'translate(0 0)');
   const play=s.kitchen,selected=(d.toppings||[]).filter(id=>portionCount(d,id)>0),columns=selected.length<=6?3:5;
