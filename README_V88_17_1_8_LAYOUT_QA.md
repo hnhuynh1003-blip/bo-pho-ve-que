@@ -23,7 +23,7 @@
 
 ## Kiểm tra đã chạy
 
-- 13 nhóm Node regression PASS, bao gồm day/interest, menu, tiền/kho, cooking, yard/kitchen, cấu trúc layout.
+- 17 nhóm Node regression PASS, bao gồm day/interest, menu, tiền/kho, cooking, yard/kitchen, cấu trúc layout.
 - Chromium **fixture độc lập** (không phải toàn bộ trò chơi) ở 320 / 360 / 390 / 430 / 760px: không tràn ngang; đo vùng đơn, bàn, kích thước khay, bộ size, thanh tiến độ và hàng nút không chồng nhau. Nút khay native/bình rót PASS, mở phiếu chi tiết trong giới hạn, đổi nghề boba → noodle → boba hoàn trả cùng các node DOM.
 - Chromium **fixture single-entry**: nghỉ ca → nhấn Vào quầy 1 lần → chuyển bếp; nhấn Trở về sân → sân: PASS.
 - **Chưa** kiểm thử được full game trên Chromium/WebKit tại localhost trong môi trường này (`ERR_BLOCKED_BY_ADMINISTRATOR`). Test mô phỏng không thay thế kiểm thử chơi thật, mất khách, timed gameplay, hay save cũ.
