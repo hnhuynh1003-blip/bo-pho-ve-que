@@ -36,9 +36,14 @@ function setKitchenView(next,fromUser=false){
  enterKitchen.setAttribute('aria-expanded',String(kitchenView));
  exitKitchen.hidden=!kitchenView;
  if(fromUser){
+  // The boba cooking surface is a NEW SIBLING of the native station. Scrolling
+  // to the hidden native #cs20-station made the first entry feel like a no-op.
+  update();
+  w.BPVQCounterRemake177?.refresh?.();
+  const target=kitchenView&&scene.dataset.career==='boba'
+   ?document.getElementById('cp177-workshop'):(kitchenView?cook:scene);
   const reduced=w.matchMedia?.('(prefers-reduced-motion: reduce)')?.matches;
-  // Both views scroll to the start of their own functional surface.
-  (kitchenView?cook:scene).scrollIntoView?.({block:'start',behavior:reduced?'auto':'smooth'});
+  w.requestAnimationFrame(()=>target?.scrollIntoView?.({block:'start',behavior:reduced?'auto':'smooth'}));
  }
 }
 enterKitchen.addEventListener('click',()=>setKitchenView(true,true));
