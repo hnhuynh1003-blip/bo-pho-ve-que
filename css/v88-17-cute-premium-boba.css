@@ -1,0 +1,247 @@
+/* BPVQ v88.17.1 — Cute Premium Kitchen, Trà Sữa.
+ * Art-lock v88.17.0. Visual-only skin over the native v88 Cooking Station:
+ * no new runtime logic, ingredients, costs, save keys or settlement owners.
+ * Career gate is deliberate: noodle/streetfood stay on their existing skins.
+ * This stylesheet MUST be loaded after v88-order-slip-v88.css.
+ */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] {
+  --cp17-cream:#fff3df;
+  --cp17-rose:#e7a5ac;
+  --cp17-rose-dark:#b97583;
+  --cp17-milk:#cfa479;
+  --cp17-sage:#86aa8a;
+  --cp17-ink:#594033;
+  --cp17-wood:#ad784c;
+  --cp17-outline:#b98b68;
+  --cp17-glass:#fffdf6;
+  position:relative;
+  isolation:isolate;
+  box-sizing:border-box;
+  border:2px solid #96683f!important;
+  border-top:5px solid #c37d78!important;
+  border-radius:13px!important;
+  padding:4px!important;
+  gap:2px!important;
+  color:var(--cp17-ink);
+  background:
+    radial-gradient(ellipse 35% 27% at 11% 18%,#ffe3d6bb,transparent 85%),
+    radial-gradient(ellipse 55% 32% at 96% 4%,#f9e7c4a6,transparent 85%),
+    repeating-linear-gradient(90deg,transparent 0 33px,#a86c3520 34px 35px,transparent 36px 70px),
+    linear-gradient(112deg,#d9b18a 0%,#f6dbb5 38%,#f7dfbf 59%,#d6a578 100%)!important;
+  box-shadow:inset 0 2px 0 #fff0d4, inset 2px 0 #fff2df70,inset -2px 0 #77513025,0 2px 0 #7b4c2e55!important;
+}
+/* Decorative milk-tea ribbon. Pseudo layers never consume a click target. */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"]::before {
+  content:"";
+  pointer-events:none;
+  position:absolute;z-index:0;
+  top:0;left:5%;right:5%;height:5px;
+  border-radius:0 0 90% 90%;
+  background:linear-gradient(90deg,#ffe4bf, #e89bab 24%,#fdf0cf 50%,#e89bab 76%,#ffe4bf);
+  box-shadow:0 1px 0 #a86c5666;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"]::after {
+  content:"";
+  pointer-events:none;
+  position:absolute;z-index:0;
+  left:4px;right:4px;bottom:1px;height:3px;
+  border-radius:100%;
+  background:linear-gradient(90deg,#b87b55,#f7dba9 32%,#f2c58a 65%,#b87b55);
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] > * {position:relative;z-index:1;min-width:0;}
+/* Customer's short speech: small pin-up card, full requirements live in order ticket. */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-ticket,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"][data-state="idle"] .cs20-ticket {
+  display:grid!important;
+  grid-template-rows:19px minmax(0,1fr)!important;
+  height:54px!important;min-height:54px!important;max-height:54px!important;
+  padding:4px 9px!important;gap:1px!important;
+  border:1px solid #b88569!important;border-radius:11px 11px 14px 14px!important;
+  background:linear-gradient(138deg,#fffbeb 0%,#fff6e4 58%,#fae2d9 100%)!important;
+  box-shadow:inset 0 1px 0 #fff,0 2px 0 #b7815640,0 2px 5px #6239191a!important;
+  overflow:hidden;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-ticket-head {height:19px!important;min-height:19px!important;line-height:18px;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-customer-name {color:#a25f64!important;font-size:11px;font-weight:900;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-customer-name::before {content:"♥ ";color:#dc8796;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-order-time {color:#9b6f48!important;font-size:10px;font-weight:800;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-order-text {font-size:10px!important;line-height:12px!important;max-height:25px!important;color:#664c44!important;}
+/* The vessel sits on a ceramic coaster, recipe slip is warm parchment (not flat white). */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stage,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"][data-state="idle"] .cs20-stage {
+  height:140px!important;min-height:140px!important;max-height:140px!important;
+  padding:4px 5px!important;
+  border:1px solid #be8969!important;
+  border-bottom:3px solid #a8714a!important;
+  border-radius:12px!important;
+  background:
+    radial-gradient(ellipse 42% 78% at 72% 51%,#ffeacbcb,transparent 85%),
+    repeating-linear-gradient(0deg,transparent 0 23px,#b87d4930 24px,transparent 25px 48px),
+    linear-gradient(110deg,#ecc39e,#fbe7c9 45%,#e6b58b)!important;
+  box-shadow:inset 0 2px 0 #fff6e5,0 2px 3px #6e463024!important;
+  overflow:visible!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stage::after {
+  left:3px!important;top:4px!important;bottom:4px!important;width:46%!important;
+  border:1px solid #c3a47b!important;border-radius:9px 4px 11px 5px!important;
+  background:linear-gradient(165deg,#fff9e9,#f5e7d4 63%,#f5d9c9)!important;
+  box-shadow:inset 0 1px #fffefa,2px 2px 2px #78513725!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stage::before {
+  right:16%!important;bottom:7px!important;width:35%!important;height:20px!important;
+  border:2px solid #cfaa73!important;
+  background:radial-gradient(ellipse at 50% 30%,#fffce9,#e6c89e 75%,#b98b58)!important;
+  box-shadow:0 3px 0 #a8794b66,0 3px 4px #7d4a2c33!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stage figcaption {z-index:1;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-dish-name {color:#8d525b!important;font-size:11px!important;text-shadow:0 1px #fff!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-dish-detail {color:#795f54!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-visual svg {filter:drop-shadow(0 5px 3px #81553c40) drop-shadow(0 1px 0 #fff4e9)!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs26-meters .cs26-meter,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs26-meters .cs26-meter.ice {
+  border:1px solid #c7a078!important;
+  border-radius:12px 12px 18px 18px!important;
+  background:linear-gradient(90deg,#fff9eae8,#ffe9dab5 58%,#fff9e9d9)!important;
+  box-shadow:inset 2px 0 #fffdf5,0 2px 0 #9b724050!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs26-meters .cs26-meter.ice {background:linear-gradient(90deg,#fffaf5,#d7f2e8 58%,#fffdf5)!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs27-containers .cs27-container {
+  background:linear-gradient(145deg,#fffcf0,#f6e6d0 85%)!important;
+  border:1px solid #c69c78!important;
+  border-radius:8px 8px 12px 12px!important;
+  box-shadow:inset 1px 2px 0 #fffdfa,0 2px 0 #a27c5833!important;
+  color:#795647;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs27-containers .cs27-container.picked {
+  border-color:#aa6973!important;
+  background:linear-gradient(145deg,#fff4df,#f8dce0)!important;
+  box-shadow:inset 0 1px #fff9f6,0 0 0 1px #eab4b9!important;
+  color:#9a5264!important;
+}
+/* Recipe/price row now resembles a soft ticket with no profit estimates. */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-price,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"][data-state="idle"] .cs20-price,
+#v88-live-scene.us21-unified.us21-practicing #cs20-station[data-career="boba"] .cs20-price {
+  height:50px!important;min-height:50px!important;max-height:50px!important;
+  padding:2px 4px!important;
+  background:linear-gradient(120deg,#fff9e8,#f9e2d7 100%)!important;
+  border:1px solid #bd8f75!important;
+  border-radius:12px!important;
+  box-shadow:inset 0 1px #fffdfa,0 2px 0 #a46d5240!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-order-ticket {color:#6c4839!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-order-ticket summary{grid-template-rows:16px 25px!important;gap:0!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-order-ticket summary b{font-size:10px;color:#9f5869;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs33-order-summary {color:#6c5547!important;font-size:9px!important;line-height:12px!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-order-detail {background:linear-gradient(#fff9e8,#f9ecdf)!important;border-color:#c69a7c!important;border-radius:14px!important;box-shadow:0 9px 22px #663d3550!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stepper {background:linear-gradient(#fffcf0,#f6e6d0)!important;border:1px solid #be9878!important;border-radius:9px!important;box-shadow:inset 0 1px #fffdfa,0 1px 1px #7f563c30!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-stepper strong {color:#92536a!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-help>summary,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-menu-info {background:linear-gradient(#fff0d8,#f4d6b9)!important;border:1px solid #c39a7c!important;color:#815d4b!important;border-radius:9px!important;}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs33-help-detail {background:#fff8e6!important;border:1px solid #b79070!important;border-radius:14px!important;}
+/* Little topping jars displayed on a two-level milkwood shelf. Keep original art and two rows. */
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-pantry,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"][data-state="idle"] .cs20-pantry {
+  box-sizing:border-box!important;
+  height:206px!important;min-height:206px!important;max-height:206px!important;
+  padding:4px!important;gap:4px!important;
+  border:1px solid #a6784e!important;
+  border-radius:12px!important;
+  background:
+    linear-gradient(0deg,#b47f50 0 3px,transparent 3px 50%,#b47f50 50% calc(50% + 3px),transparent calc(50% + 3px)),
+    repeating-linear-gradient(90deg,transparent 0 70px,#b6865d22 71px 73px,transparent 74px 142px),
+    linear-gradient(120deg,#edc5a0,#f9e6c8 48%,#e6bd95)!important;
+  box-shadow:inset 0 1px #fff9ed,0 2px 2px #6940232b!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-group {
+  background:linear-gradient(#fff6e8,#eed8c1)!important;
+  border:1px solid #bc9784!important;
+  color:#7a514c!important;
+  border-radius:10px!important;
+  box-shadow:inset 0 1px #fffaf1,0 2px #a9795c30!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-group.selected {
+  background:linear-gradient(#d78391,#ae6775)!important;
+  border-color:#ad6770!important;color:#fffaf0!important;
+  box-shadow:inset 0 1px #ffe0e0,0 2px #915867!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs20-item {
+  position:relative;
+  border:1px solid #bd9474!important;
+  border-bottom:3px solid #ab7b59!important;
+  border-radius:10px 10px 12px 12px!important;
+  background:
+    radial-gradient(circle at 50% 28%,#fff9e8b8,transparent 74%),
+    linear-gradient(152deg,#fff4df,#efdbbc 70%,#eacda8)!important;
+  box-shadow:inset 0 1px #fffcf1,0 1px 2px #81582d2f!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs20-item.picked {
+  border-color:#b66775!important;
+  border-bottom-color:#a15e71!important;
+  outline:1px solid #eaa9b5!important;
+  outline-offset:-2px;
+  background:linear-gradient(#fff5e4,#f8dbe0)!important;
+  box-shadow:inset 0 1px #fff,0 2px 0 #a2696d50!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-image {
+  height:53px!important;min-height:53px!important;
+  filter:drop-shadow(0 2px 1px #a4795559);
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-image img {
+  filter:drop-shadow(0 2px 2px #72483945) saturate(1.1)!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs20-item-name {
+  background:#fff8e9cf!important;
+  border:1px solid #d4b69e55!important;
+  color:#68483e!important;
+  border-radius:5px!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-portion {
+  background:#c47787!important;color:#fffdf7!important;
+  box-shadow:0 1px 0 #99515e;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs26-pager button {
+  background:linear-gradient(#fff6e7,#edcfb9)!important;
+  color:#8e5e56!important;border-color:#bd9181!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-actions,
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"][data-state="idle"] .cs20-actions {
+  height:44px!important;min-height:44px!important;max-height:44px!important;
+  margin:0!important;padding:0!important;gap:4px!important;background:transparent!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-actions .cs20-button {
+  min-height:44px!important;height:44px!important;
+  border-radius:12px!important;
+  border:1px solid #ae8061!important;
+  font-weight:900!important;
+  box-shadow:inset 0 1px #fff8e9,0 2px 0 #90634355!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-undo {
+  background:linear-gradient(#fff8e9,#ecd4bb)!important;
+  color:#79534a!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-top-up {
+  background:linear-gradient(#ecf7dd,#c7dfc1)!important;
+  color:#55765a!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs20-primary {
+  border:1px solid #9b5165!important;
+  background:linear-gradient(155deg,#f2aab2,#d17e93 52%,#ad6475)!important;
+  color:#fffef8!important;
+  font-size:11px!important;
+  text-shadow:0 1px #874d5e!important;
+  box-shadow:inset 0 1px #ffe5df,0 2px 0 #924d5d!important;
+}
+#v88-live-scene.us21-unified #cs20-station[data-career="boba"] :is(button,summary,input):focus-visible {
+  outline:2px solid #a7587e!important;outline-offset:1px;
+}
+@media(max-width:350px){
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"]{padding:4px!important;gap:2px!important;}
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"] .cs20-price{padding:2px!important;}
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"] #cs33-order-summary{font-size:8.5px!important;}
+}
+@media(prefers-reduced-motion:reduce){
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"] *,
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"] *::before,
+  #v88-live-scene.us21-unified #cs20-station[data-career="boba"] *::after{animation:none!important;transition:none!important;}
+}
