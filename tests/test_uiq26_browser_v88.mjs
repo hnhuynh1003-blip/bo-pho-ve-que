@@ -33,17 +33,21 @@ try {
         const three=bridge.choose('topping','topping_boba',1);
         const after=bridge.snapshot();
         const cashBefore=gameState.coins,stockBefore=gameState.inventory.topping_boba;
-        bridge.complete('boba');await new Promise(r=>setTimeout(r,1750));
+        // v88 timing: complete('boba') begins the cap minigame, it does not finish it.
+        // Reject any payout/stock consumption while the native cooking step is pending.
+        bridge.complete('boba');
         const served=bridge.deliver(),twice=bridge.deliver();
         return {one,two,three,servings:after.dish.toppingPortions.topping_boba,
           cashBefore,cashAfter:gameState.coins,stockBefore,stockAfter:gameState.inventory.topping_boba,
           served,twice,costBefore:before.cost,costAfter:after.cost};
       });
       assert.deepEqual([result.one,result.two,result.three],[true,true,true]);
-      assert.equal(result.servings,2);assert.equal(result.stockBefore-result.stockAfter,2);
+      assert.equal(result.servings,2);
       assert.equal(result.costAfter-result.costBefore,5,'each extra pearl portion costs 5 Xu');
-      assert.equal(result.served,true);assert.equal(result.twice,false);
-      assert.ok(result.cashAfter>result.cashBefore,'one native settlement pays once');
+      assert.equal(result.served,false,'cannot deliver before real timing completion');
+      assert.equal(result.twice,false,'repeated delivery attempt must stay rejected');
+      assert.equal(result.stockBefore,result.stockAfter,'preview/capping cannot charge ingredients');
+      assert.equal(result.cashAfter,result.cashBefore,'preview/capping cannot award Xu');
     }
     assert.deepEqual(errors,[],`${width}px browser errors`);
     await page.close();
