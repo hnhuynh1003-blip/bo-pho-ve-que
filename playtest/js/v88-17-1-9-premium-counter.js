@@ -17,6 +17,8 @@ shell.insertBefore(hero,upper);hero.append(upper,bench);
 const brand=document.createElement('div');brand.className='cp179-brand';
 brand.innerHTML='<span class="cp179-brand-mascot" aria-hidden="true">🐱</span><span><b>Tiệm trà sữa</b><small>Pha bằng cả trái tim ♡</small></span>';
 top.prepend(brand);
+// The only training control stays in the header, not as a separate full-width card.
+const train=$('.cp177-empty');if(train)top.append(train);
 const ticket=$('.cp177-order');
 const ticketHead=document.createElement('div');ticketHead.className='cp179-ticket-head';
 ticketHead.innerHTML='<span>🧾 Đơn hàng</span><span class="cp179-guest-name"></span>';
