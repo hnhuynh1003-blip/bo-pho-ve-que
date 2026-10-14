@@ -38,8 +38,15 @@ station.select_one('#cs33-order-title').string='Trà sữa trân châu'
 station.select_one('#cs33-order-summary').string='Ly L · Trà đen · Trân châu ×2 · Pudding ×1 · Đường 70% · Đá 50%'
 station.select_one('#cs20-dish-name').string='Trà sữa trân châu'
 scene=soup.new_tag('section',id='v88-live-scene',attrs={'class':'us21-unified us21-kitchen-view','data-career':'boba'})
+legacy=soup.new_tag('div',id='v88-live-supported')
+legacy_frame=soup.new_tag('div',id='v88-live-frame',attrs={'class':'v88-live-frame'})
+legacy_frame.string='Old yard image (must disappear only in kitchen)'
+legacy.append(legacy_frame)
+scene.append(legacy)
+old_head=soup.new_tag('div',attrs={'class':'v88-live-head'});old_head.string='Old yard heading'
+scene.append(old_head)
 scene.append(station)
-html='<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><style>body{margin:0;padding:0;background:#e8d3b9;font-family:Arial,sans-serif}#v88-live-scene{margin:0 auto;max-width:900px;padding:5px}</style><style>'+(root/'css/v88-17-1-8-kitchen-qa.css').read_text()+'</style></head><body>'+str(scene)+'</body></html>'
+html='<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width, initial-scale=1"/><style>body{margin:0;padding:0;background:#e8d3b9;font-family:Arial,sans-serif}#v88-live-scene{margin:0 auto;max-width:900px;padding:5px}</style><style>'+(root/'css/v88-unified-shop.css').read_text()+'</style><style>'+(root/'css/v88-17-1-5-yard-kitchen.css').read_text()+'</style><style>'+(root/'css/v88-17-1-8-kitchen-qa.css').read_text()+'</style></head><body><div id="tab-shop" class="us21-enabled">'+str(scene)+'</div></body></html>'
 assets=root/'assets/images/v88/cute-premium'
 for f in assets.glob('*.webp'):
  url='assets/images/v88/cute-premium/'+f.name
@@ -61,7 +68,7 @@ polish_js=(root/'js/v88-17-1-9-premium-counter.js').read_text(encoding='utf-8')
 with sync_playwright() as pw:
  browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
  errors=[]
- for width in [320,390,430,768,1024]:
+ for width in [320,390,430,768,880,1024,1366]:
   page=browser.new_page(viewport={'width':width,'height':900},device_scale_factor=1)
   page.on('pageerror',lambda e:errors.append(str(e)))
   page.set_content(html,wait_until='domcontentloaded')
@@ -81,6 +88,9 @@ with sync_playwright() as pw:
     const b=box('#cp177-workshop .cp177-workbench');
     const top=box('#cp177-workshop .cp177-top');
     return {viewport:document.documentElement.clientWidth,scroll:document.documentElement.scrollWidth,
+      oldYard:box('#v88-live-supported'),
+      oldYardDisplay:getComputedStyle(document.querySelector('#v88-live-supported')).display,
+      wrapper:box('#tab-shop'),
       workshop:box('#cp177-workshop'),top,hero:box('#cp177-workshop .cp179-hero'),
       order:box('#cp177-workshop .cp177-order'),bench:b,
       dispenser:box('#cp177-pour-object'),cup:box('#cp177-workshop .cp177-cup-place'),
@@ -106,6 +116,10 @@ with sync_playwright() as pw:
   for section in ['workshop','top','order','bench','pantry','options','actions','dispenser','cup']:
    assert sizes[section] and sizes[section]['w']>30 and sizes[section]['h']>25,('missing visual',width,section,sizes)
   assert sizes['scroll']<=sizes['viewport']+2,('horizontal overflow',width,sizes)
+  assert sizes['oldYardDisplay']=='none' and sizes['oldYard']['h']==0,('blank yard card visible above kitchen',width,sizes)
+  assert sizes['workshop']['right']<=sizes['viewport']+1,('workshop wider than laptop viewport',width,sizes)
+  assert sizes['hero']['right']<=sizes['workshop']['right']+1,('hero pushes past workshop',width,sizes)
+
   assert sizes['order']['h']<210,('oversized empty order card',width,sizes['order'])
   assert sizes['lastItem'],('topping second row missing',width,sizes)
   assert sizes['lastItem']['nameBottom']<=sizes['lastItem']['shelfBottom']+1,('ingredient name cut off',width,sizes['lastItem'])
@@ -134,4 +148,4 @@ with sync_playwright() as pw:
   page.screenshot(path=f'visual_qa_counter_{width}.png',full_page=True)
   page.close()
  browser.close()
-print('PASS premium visual QA: cup centered on tray, compact stage, controls not overlapping, 320/390/430/768/1024px')
+print('PASS premium visual QA: cup centered on tray, compact stage, controls not overlapping, 320/390/430/768/880/1024/1366px')
