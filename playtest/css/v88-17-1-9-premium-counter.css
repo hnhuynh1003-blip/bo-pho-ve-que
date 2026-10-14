@@ -332,7 +332,7 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
   height:192px!important;min-height:192px!important;max-height:192px!important;
  }
  #cp177-workshop[data-premium="1"] #cs20-visual{
-  height:187px!important;min-height:187px!important;max-height:187px!important;
+  height:192px!important;min-height:192px!important;max-height:192px!important;
  }
  #cp177-workshop[data-premium="1"] #cs20-visual svg {
   height:178px!important;max-height:178px!important;
@@ -771,7 +771,7 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
  #cp177-workshop[data-premium="1"] #cs20-shelf,
  #cp177-workshop[data-premium="1"] #cs20-shelf[data-rows="1"]{
    grid-template-rows:repeat(2,82px)!important;
-   height:173px!important;min-height:173px!important;max-height:173px!important;
+   height:178px!important;min-height:178px!important;max-height:178px!important;
    grid-auto-columns:calc((100% - 10px)/3)!important;
    column-gap:5px!important;row-gap:4px!important;
  }
