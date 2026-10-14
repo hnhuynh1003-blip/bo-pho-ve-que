@@ -20,6 +20,18 @@ jobs:
           ref: feat/v88-17-1-9-cup-handoff
           path: source
           persist-credentials: false
+      - name: Validate premium counter before publishing
+        shell: bash
+        working-directory: source
+        run: |
+          set -euo pipefail
+          node --check js/v88-17-1-9-premium-counter.js
+          node --check js/v88-17-1-7-counter-remake.js
+          node --check js/v88-cooking-station.js
+          node tests/test_premium_counter_v881719.mjs
+          node tests/test_counter_settlement_v88.mjs
+          node tests/test_cooking_station_v88.mjs
+          node tests/test_counter_layout_v881718.mjs
       - name: Checkout published main
         uses: actions/checkout@v4
         with:
