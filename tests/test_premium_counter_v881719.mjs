@@ -23,6 +23,7 @@ for(const term of [
 ]){
  assert(css.includes(term),'missing responsive/visibility contract '+term);
 }
+assert(view.includes('shell.insertBefore(originalOptions, nativeActions)'),'sugar/ice and timing must follow topping');
 assert(!/cp179-taste|cp179-categories|cp179-result-head/.test(view),'removed duplicate interface was recreated');
 assert(!/bridge\.deliver\(|saveGame\(|getProfileStorageKey|localStorage\.setItem|bridge\.choose\(/.test(view),'layout cannot mutate core game');
 assert(/handoffHeld/.test(game)&&/if\(a==='take'\)/.test(game)&&/if\(a==='send'\)/.test(game));
