@@ -442,7 +442,7 @@ function renderAction(){
  const d=current?.dish||{};
  let label='',secondary='',disabled=false;
  if(!current?.customer){label=current?.phase==='open'?'Đang chờ khách…':'Mở quán để đón khách';disabled=true;}
- else if(ready){label=safe(current?.practice?'✨ Hoàn thành bài luyện':'✨ Giao món cho khách');secondary='send';}
+ else if(ready){if(ui.career==='boba'&&!current?.practice&&!ui.handoffHeld){label='🥤 Cầm ly thành phẩm';secondary='take';}else{label=safe(current?.practice?'✨ Hoàn thành bài luyện':'✨ Giao ly cho khách');secondary='send';}}
  else if(ui.career==='boba'){
   if(ui.stage==='choose'||ui.stage==='pour'){label=ui.active?'⏹ Dừng rót':'🫖 Rót trà vào ly';secondary='pour';}
   else if(ui.stage==='mix'){label='🥤 Canh nhịp dập nắp';secondary='cap-start';}
@@ -482,7 +482,12 @@ function pour(){
 function primaryAction(){
  if(!current?.customer||ui.delivering)return;
  const a=primary.dataset.act;
+ if(a==='take'){
+  if(ui.career!=='boba'||practiceDish||!current?.dish?.isShaken||current?.pause)return;
+  ui.handoffHeld=true;setNotice('Đã cầm ly. Bấm Giao ly cho khách để phục vụ.');renderAction();return;
+ }
  if(a==='send'){
+  if(ui.career==='boba'&&!practiceDish&&!ui.handoffHeld)return;
   if(practiceDish){practiceDish=null;practiceKitchen.reset();ui.delivering=false;refresh(true);return;}
   // Native settlement is single source of truth; this session never changes economy directly.
   if(ui.delivering)return;ui.delivering=true;
@@ -529,13 +534,14 @@ $('cs20-fire').addEventListener('click',()=>{if(!$('cs20-fire').disabled)kitchen
 $('cs20-flip').addEventListener('click',()=>{if(!$('cs20-flip').disabled)kitchenAction(ui.career==='noodle'?'stir':'flip');});
 $('cs20-sauce').addEventListener('click',()=>{if(!$('cs20-sauce').disabled)kitchenAction('sauce');});
 $('cs20-lift').addEventListener('click',()=>{if(!$('cs20-lift').disabled)kitchenAction('lift');});
-$('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)return;if(practiceDish){practiceKitchen.reset();practiceDish.isShaken=false;practiceDish.isCooked=false;practiceDish.fryState='unfried';}else bridge.reset();reset(ui.key,ui.career);refresh(true);});
+$('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)return;ui.handoffHeld=false;if(practiceDish){practiceKitchen.reset();practiceDish.isShaken=false;practiceDish.isCooked=false;practiceDish.fryState='unfried';}else bridge.reset();reset(ui.key,ui.career);refresh(true);});
 function refresh(force=false){
  const s=view();current=s;
  const key=s.customer?.key||`idle:${s.phase}:${s.career}`;
- if(key!==ui.key||s.career!==ui.career){reset(key,s.career);if(s.presentation&&s.career==='boba'){ui.pour=Number(s.presentation.pour)||0;ui.poured=!!s.presentation.poured;}if(s.career!=='boba')bobaDrawerOpen=true;force=true;}
+ if(key!==ui.key||s.career!==ui.career){reset(key,s.career);ui.handoffHeld=false;if(s.presentation&&s.career==='boba'){ui.pour=Number(s.presentation.pour)||0;ui.poured=!!s.presentation.poured;}if(s.career!=='boba')bobaDrawerOpen=true;force=true;}
  syncBobaDrawer(s.career);
  if(s.career!=='boba'||s.kitchen.stage!=='choose'){ui.kitchen=s.kitchen;ui.stage=s.kitchen.stage;const note=s.kitchen.hint||s.kitchen.notice;if(note&&ui.notice!==note)setNotice(note);}
+ if(!s.dish?.isShaken)ui.handoffHeld=false;
  const hasOrder=!!s.customer;
  attr(root,'data-state',s.practice?'practice':hasOrder?'order':'idle');attr(root,'data-career',s.career);root.closest('#tab-shop')?.classList.toggle('cs20-active-order',hasOrder&&!s.practice);const courtyard=document.getElementById('v88-live-scene');if(courtyard)attr(courtyard,'data-cs20-compact',hasOrder?'true':'false');
  textField('cs20-customer-name',hasOrder?s.customer.name:s.phase==='open'?'Đang đợi khách ghé quán':'Quán đang nghỉ ca');
@@ -621,6 +627,6 @@ w.BPVQCookingStation=Object.freeze({
   return true;
  },
  stopPractice:()=>{if(!practiceDish)return false;practiceDish=null;practiceKitchen.reset();refresh(true);return true;},
- status:()=>({career:ui.career,stage:ui.stage,key:ui.key,craft:ui.craft,pour:ui.pour,poured:!!ui.poured,capPosition:ui.capPosition,kitchen:ui.kitchen,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
+ status:()=>({career:ui.career,stage:ui.stage,key:ui.key,handoffHeld:!!ui.handoffHeld,craft:ui.craft,pour:ui.pour,poured:!!ui.poured,capPosition:ui.capPosition,kitchen:ui.kitchen,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
 });
 })(window);
