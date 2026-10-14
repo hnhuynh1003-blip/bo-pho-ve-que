@@ -84,6 +84,7 @@ with sync_playwright() as pw:
       workshop:box('#cp177-workshop'),top,hero:box('#cp177-workshop .cp179-hero'),
       order:box('#cp177-workshop .cp177-order'),bench:b,
       dispenser:box('#cp177-pour-object'),cup:box('#cp177-workshop .cp177-cup-place'),
+      liveCup:box('#cp177-workshop #cs20-visual svg'),
       pantry:box('#cp177-workshop .cp177-ingredients'),options:box('#cp177-workshop .cp177-options'),
       actions:box('#cp177-workshop .cp177-actions'),
       background:getComputedStyle(document.querySelector('#cp177-workshop .cp177-workbench')).backgroundImage};
@@ -104,7 +105,17 @@ with sync_playwright() as pw:
   assert sizes['background']!='none',('workbench art absent',width,sizes)
   assert sizes['dispenser']['right']>sizes['bench']['x'] and sizes['dispenser']['x']<sizes['bench']['right']
   assert sizes['cup']['right']>sizes['bench']['x'] and sizes['cup']['x']<sizes['bench']['right']
+
+  # Tea backdrop has one central wooden board. A centered live SVG must align with it.
+  assert sizes['liveCup'] and sizes['liveCup']['h']>=100,('live cup not visible',width,sizes)
+  cup_mid=(sizes['liveCup']['x']+sizes['liveCup']['right'])/2
+  bench_mid=(sizes['bench']['x']+sizes['bench']['right'])/2
+  assert abs(cup_mid-bench_mid)<=sizes['bench']['w']*.08,('cup misses center tray',width,cup_mid,bench_mid)
+  assert sizes['liveCup']['bottom']>=sizes['bench']['bottom']-50,('cup floats above tray',width,sizes)
+  assert sizes['liveCup']['bottom']<=sizes['bench']['bottom']+3,('cup falls below tray',width,sizes)
+  assert sizes['bench']['h'] <= (220 if width<=425 else 231 if width<=800 else 310),('counter not compact',width,sizes['bench'])
+
   page.screenshot(path=f'visual_qa_counter_{width}.png',full_page=True)
   page.close()
  browser.close()
-print('PASS premium visual QA: cup + dispenser visible, no overlap, 320/390/430/768/1024px')
+print('PASS premium visual QA: cup centered on tray, compact stage, controls not overlapping, 320/390/430/768/1024px')
