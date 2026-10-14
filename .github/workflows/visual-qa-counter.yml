@@ -1,0 +1,30 @@
+name: Visual QA boba counter
+on:
+  push:
+    branches:
+      - feat/v88-17-1-9-cup-handoff
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  visual:
+    runs-on: ubuntu-latest
+    timeout-minutes: 12
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Install browser dependencies
+        run: |
+          python -m pip install --disable-pip-version-check playwright beautifulsoup4
+          python -m playwright install --with-deps chromium
+      - name: Check real mobile and desktop layout
+        run: python tests/_visual_premium179.py
+      - name: Keep QA screenshots even on failure
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boba-counter-visual-qa
+          path: visual_qa_counter_*.png
+          if-no-files-found: ignore
