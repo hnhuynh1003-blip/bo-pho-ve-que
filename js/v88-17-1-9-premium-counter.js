@@ -19,6 +19,10 @@ stage.className = 'cp179-hero';
 stage.setAttribute('aria-label', 'Phiếu đơn và bàn pha chế trà sữa');
 shell.insertBefore(stage, upper);
 stage.append(upper, bench);
+// Topping is the physical work drawer; flavor/ice and timing controls follow it.
+const originalOptions = $('.cp177-options');
+const nativeActions = $('.cp177-actions');
+if (originalOptions && nativeActions) shell.insertBefore(originalOptions, nativeActions);
 
 const brand = document.createElement('div');
 brand.className = 'cp179-brand';
