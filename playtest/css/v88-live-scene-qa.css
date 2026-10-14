@@ -1,0 +1,27 @@
+/* Bỏ Phố Về Quê v88.12.1 QA — read-only B1 scene on the main Quán tab. */
+#v88-live-scene{overflow:hidden;border:2px solid #8dc9ab;border-radius:17px;background:linear-gradient(145deg,#f4fff5,#fff8e7);box-shadow:0 4px 14px #54795720;color:#345144;font-family:inherit}
+#v88-live-scene .v88-live-head{padding:9px 11px 7px;display:flex;align-items:center;justify-content:space-between;gap:6px}
+#v88-live-scene .v88-live-head strong{display:block;color:#245a3d;font-size:13px;line-height:1.25;font-weight:900}
+#v88-live-scene .v88-live-head small{display:block;font-size:10px;color:#65806d;margin-top:2px}
+#v88-live-scene .v88-live-qa-badge{font-size:9px;font-weight:900;white-space:nowrap;background:#fff2d5;border:1px solid #ebb65f;padding:4px 6px;color:#8e5713;border-radius:8px}
+#v88-live-scene .v88-live-frame{position:relative;width:100%;aspect-ratio:4 / 3;background:#e1eae1;overflow:hidden;isolation:isolate}
+#v88-live-scene .v88-live-frame>img{display:block;width:100%;height:100%;object-fit:contain}
+#v88-live-scene .v88-live-shop-sign{position:absolute;z-index:3;left:50.5%;top:37.3%;transform:translate(-50%,-50%);max-width:39%;min-width:20%;padding:3px 5px;text-align:center;font-size:clamp(8px,2.5vw,12px);font-weight:900;line-height:1.15;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;border-radius:5px;border:1px solid #efdb9a;background:#8c512bdd;color:#fff6d7;text-shadow:0 1px #472b1b;box-shadow:0 2px 6px #0004;pointer-events:none}
+#v88-live-scene .v88-live-markers{position:absolute;inset:0;pointer-events:none;z-index:4}
+#v88-live-scene .v88-live-marker{position:absolute;transform:translate(-50%,-50%);font-weight:900;font-size:9px;white-space:nowrap;min-width:26px;min-height:24px;line-height:21px;text-align:center;padding:0 3px;color:white;border:1px solid #defbd4;background:#186a43dd;border-radius:99px;box-shadow:0 1px 3px #193d3a77}
+#v88-live-scene .v88-live-marker.v88-filled{background:#a75b14ed;border-color:#ffe4ab}
+#v88-live-scene .v88-live-controls{display:flex;align-items:center;gap:5px;padding:8px 8px 3px;font-size:10px;font-weight:900;white-space:nowrap}
+#v88-live-scene #v88-live-palette{display:flex;align-items:center;justify-content:space-between;flex:1;gap:2px;min-width:0}
+#v88-live-scene #v88-live-palette button{min-width:0;flex:1;min-height:32px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;padding:2px 0;border-radius:8px;border:1px solid transparent;font-size:8px;line-height:1;font-weight:800;color:#5d6b5d;background:#ffffffb0}
+#v88-live-scene #v88-live-palette button[aria-pressed="true"]{border-color:#24a36c;background:#daf7df;color:#14633f;box-shadow:0 0 0 1px #56c396}
+#v88-live-scene .v88-live-dot{display:block;width:12px;height:12px;border-radius:50%;border:1px solid #86695e;box-shadow:inset 0 0 1px #0003}
+#v88-live-scene .v88-live-actions{display:flex;justify-content:space-between;gap:5px;padding:5px 9px 4px}
+#v88-live-scene .v88-live-actions button{flex:1;padding:7px 4px;border:1px solid #bad5be;border-radius:9px;background:#fff;color:#2a6949;font-size:10px;line-height:1.2;font-weight:900}
+#v88-live-scene .v88-live-actions button:focus-visible,#v88-live-scene #v88-live-palette button:focus-visible{outline:2px solid #158d69;outline-offset:2px}
+#v88-live-scene .v88-live-note{font-size:9px;line-height:1.4;color:#6c756c;padding:0 10px 8px;margin:0}
+#v88-live-scene .v88-live-other-career{font-size:12px;padding:16px;text-align:center;color:#68766f}
+#v88-live-scene.v88-compact #v88-live-frame,#v88-live-scene.v88-compact .v88-live-controls{display:none}
+#v88-live-scene.v88-compact .v88-live-actions #v88-live-toggle-slots,#v88-live-scene.v88-compact .v88-live-actions #v88-live-go-decor{display:none}
+#v88-live-scene.v88-compact .v88-live-actions #v88-live-hide{max-width:100%;font-size:11px}
+#v88-live-scene[hidden],#v88-live-scene [hidden]{display:none!important}
+@media (max-width:350px){#v88-live-scene .v88-live-controls>span{font-size:9px}#v88-live-scene #v88-live-palette button{font-size:7px}#v88-live-scene .v88-live-head{padding:7px}#v88-live-scene .v88-live-actions button{font-size:9px}}

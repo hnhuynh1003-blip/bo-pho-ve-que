@@ -1,0 +1,146 @@
+name: Phone OS v88 check
+on:
+  push:
+    branches: [feat/v88-phone-os-core]
+  pull_request:
+    paths: [index.html, 'js/phone-os-v88.js', 'js/v88-menu-phone.js', 'js/game.js', 'css/v88-menu-phone.css', 'js/v88-shop-paint.js', 'js/v88-shop-sign.js', 'css/phone-os-v88.css', 'tests/**', 'scripts/**', 'docs/v88_*.md']
+  workflow_dispatch:
+jobs:
+  phone-os:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Parse gameplay JS
+        run: node --check js/game.js
+      - name: Parse merged Phone OS JS
+        run: node --check js/phone-os-v88.js
+      - name: Structural compatibility checks
+        run: node tests/verify_phone_os_v88.mjs
+      - name: Đợt 2 Menu quotes and safe day-change
+        run: |
+          node --check js/v88-menu-phone.js
+          node tests/test_menu_dot2_v88.mjs
+      - name: Decor inventory, slots and save regression
+        run: node tests/test_decor_v88.mjs
+      - name: Paint presets and safe save migration
+        run: |
+          node --check js/v88-shop-paint.js
+          node tests/test_shop_paint_v88.mjs
+      - name: 27 architecture concepts and immutable game state
+        run: node tests/test_shop_architecture_v88.mjs
+      - name: Reviewed scene manifest and real-art gates
+        run: |
+          node --check js/v88-shop-scenes.js
+          node tests/test_shop_scenes_v88.mjs
+      - name: B1 art-review masks remain draft until approved clean-pass
+        run: node tests/test_b1_mask_draft_v88.mjs
+      - name: Art batch production inventory and review-only gate
+        run: |
+          node --check scripts/v88-batch-art.mjs
+          node tests/test_art_batch_v88.mjs
+      - name: Batch A distinct careers, B1–B3 architecture and paint/slot contracts
+        run: node tests/test_art_batch_a_v88.mjs
+      - name: Batch A reference-image provenance and no-premature-approval gate
+        run: node tests/test_batch_a_review_rev2_v88.mjs
+      - name: Physical shell masks anchors and owner approval release gate
+        run: |
+          node --check scripts/v88-art-release-gate.mjs
+          node tests/test_art_release_gate_v88.mjs
+          node scripts/v88-art-release-gate.mjs
+      - name: Dynamic S1 shop-name label and scene coordinate correctness
+        run: |
+          node --check js/v88-shop-sign.js
+          node tests/test_shop_sign_v88.mjs
+      - name: Main Quán B1 QA scene and save-safety regression
+        run: |
+          node --check js/v88-live-scene-qa.js
+          node tests/test_v88_live_scene_qa.mjs
+          node --check js/v88-cooking-station.js
+          node tests/test_cooking_station_v88.mjs
+          node tests/test_ingredient_playground_v88.mjs
+          node --check js/v88-kitchen-play.js
+          node --check js/v88-food-art.js
+          node tests/test_kitchen_rules_v88.mjs
+          node tests/test_counter_settlement_v88.mjs
+          node --check js/v88-unified-shop.js
+          node tests/test_unified_shop_v88.mjs
+      - name: Bundle complete v88 gameplay for manual draft playtest
+        run: |
+          mkdir -p v88-game-playtest
+          cp index.html asset-manifest.json chuyen-save.html v88-game-playtest/
+          cp -R css js assets v88-game-playtest/
+          cat > v88-game-playtest/README_PLAYTEST.txt <<'EOF'
+          BO PHO VE QUE v88 - GAME PLAYTEST (DRAFT - NOT A RELEASE)
+          1. Download the GitHub Actions artifact BPVQ_v88_GAME_TEST_DRAFT and extract it.
+          2. Open index.html with Chrome or Edge. Keep css, js and assets together.
+          3. Create a NEW TEST PROFILE; do not overwrite or remove your real game save.
+          4. If your browser blocks some file:// features, use a local HTTP server instead.
+          5. This build contains current v88 Phone OS, Kho Noi That, Son Mau, 27 blueprints.
+          6. B1 Draft5 review art is NOT integrated; 0/27 production shop shells are approved.
+          7. Do NOT merge main based only on a successful CI run. Back up your real saves.
+          EOF
+      - name: Upload complete v88 draft game test (14-day artifact)
+        uses: actions/upload-artifact@v4
+        with:
+          name: BPVQ_v88_GAME_TEST_DRAFT
+          path: v88-game-playtest/
+          retention-days: 14
+          if-no-files-found: error
+  browser-smoke:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser runner
+        run: npm install --no-save playwright@1.56.1
+      - name: Install Chromium dependencies
+        run: npx playwright install --with-deps chromium
+      - name: Run browser against local game HTTP server
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-v88-http.log 2>&1 &
+          sleep 2
+          node tests/test_phone_browser_v88.mjs
+          node tests/test_phone_profile_v88.mjs
+          node tests/test_save_upgrade_v88.mjs
+          node tests/test_all_shop_stages_v88.mjs
+          node tests/test_phone_live_shift_v88.mjs
+          node tests/test_uiq26_browser_v88.mjs
+          node tests/test_compact_counter_v88.mjs
+          node tests/test_steady_counter_v88.mjs
+          node tests/test_yard_cap_v88.mjs
+          node tests/test_pour_retention_v88.mjs
+          node tests/test_kitchen_browser_v88.mjs
+          node tests/test_shop_paint_browser_v88.mjs
+          node tests/test_phone_visual_v88.mjs
+      - name: Upload viewport screenshots and geometry
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: v88-phone-visual-qa
+          path: artifacts/v88-layout/
+          if-no-files-found: warn
+          retention-days: 14
+  webkit-mobile:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Playwright
+        run: npm install --no-save playwright@1.56.1
+      - name: Install WebKit engine and Linux dependencies
+        run: npx playwright install --with-deps webkit
+      - name: Exercise phone in Safari-compatible engine
+        run: |
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-v88-webkit-http.log 2>&1 &
+          sleep 2
+          node tests/test_phone_webkit_v88.mjs
+          BPVQ_KITCHEN_ENGINE=webkit node tests/test_kitchen_browser_v88.mjs

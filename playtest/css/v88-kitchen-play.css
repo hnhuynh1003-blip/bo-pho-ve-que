@@ -1,0 +1,14 @@
+/* Cooking controls occupy the same installed row, never a popup or new card. */
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] .cs20-grill-actions,
+#v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions{display:flex!important;height:44px;min-height:44px;max-height:44px;gap:4px}
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] .cs20-grill-actions button,
+#v88-live-scene.us21-unified #cs20-station[data-career="streetfood"] .cs20-grill-actions button{display:block!important;visibility:visible!important;height:44px;min-height:44px;min-width:44px;flex:1;padding:2px;font-size:10px;white-space:nowrap;background:linear-gradient(#fff7df,#eddbb9);border-color:var(--cafe-edge);box-shadow:inset 0 1px #fffef0,0 1px 0 #976f4044}
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] #cs20-sauce,
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] #cs20-flip{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-grill-actions button:disabled{opacity:.52;cursor:default}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{overflow:visible}
+#v88-live-scene.us21-unified #cs20-station:not([data-career="boba"]) .cs26-jar-image img{width:100%;height:100%;object-fit:contain;filter:drop-shadow(0 1px 1px #69441a22)}
+#v88-live-scene.us21-unified #cs20-station:not([data-career="boba"]) #cs20-dish-detail{white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+/* One visible timing action lives in the primary row; noodles have no empty extra row. */
+#v88-live-scene.us21-unified #cs20-station[data-career="noodle"] .cs20-grill-actions{display:none!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-grill-actions button[hidden]{display:none!important}

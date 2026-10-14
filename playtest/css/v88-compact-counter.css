@@ -1,0 +1,77 @@
+/* v88.16.2: one order ticket, local container controls and a bottom area dock. */
+:root{--bpvq-header-height:54px;--bpvq-tabs-height:54px;--bpvq-bottom-dock:calc(54px + env(safe-area-inset-bottom,0px))}
+.app-shell{padding-bottom:0!important}
+.compact-header.v8774-header{width:min(100%,448px)!important;height:54px!important;padding:3px 7px 2px!important;gap:0!important}
+.v8774-header .v8774-topline{height:33px;min-height:33px;gap:6px}
+.v8774-header .shop-icon-button.v8774-avatar,.v8774-header .v30-header-mascot{width:30px!important;height:30px!important;border-radius:10px}
+.v8774-header #header-career-icon{width:13px;height:13px;font-size:8px!important}
+.v8774-header .v8774-identity{flex-direction:row;align-items:center;justify-content:flex-start;gap:5px}
+.compact-header.v8774-header #header-shop-name{display:block!important;font-size:11px!important;line-height:15px;max-width:135px}
+.v8774-header .v8774-pencil{display:none}
+.v8774-header .v8774-day{align-self:center;flex:none;font-size:8px!important;line-height:14px;padding:0 4px}
+.v8774-header .v8774-icon-button{width:32px;height:32px;min-width:32px;min-height:32px;border-radius:10px;font-size:15px}
+.v8774-header #v8774-menu-btn{font-size:25px;padding-bottom:8px}
+.v8774-header .v8774-actions{gap:4px}
+.v8774-header .v8774-statline{height:16px;min-height:16px;gap:3px}
+.v8774-header .v8774-chip{height:16px;max-height:16px;line-height:16px;padding:0 4px}
+.compact-nav[data-dock="bottom"]{position:fixed!important;top:auto!important;bottom:0!important;left:50%!important;transform:translateX(-50%)!important;width:min(100%,448px)!important;height:var(--bpvq-bottom-dock)!important;min-height:var(--bpvq-bottom-dock)!important;padding:3px 5px calc(3px + env(safe-area-inset-bottom,0px))!important;border:1px solid #e8d5b2!important;border-bottom:0!important;border-radius:14px 14px 0 0!important;z-index:45!important;box-shadow:0 -3px 12px #75532c18!important}
+.compact-nav[data-dock="bottom"] .compact-nav-grid{height:47px;grid-template-columns:repeat(6,minmax(0,1fr))!important;gap:3px!important}
+.compact-nav[data-dock="bottom"] .compact-nav-btn{height:47px!important;min-height:44px!important;padding:2px 1px!important;gap:1px!important}
+.compact-nav[data-dock="bottom"] .nav-art-img{width:26px!important;height:26px!important;border-radius:8px!important}
+.compact-nav[data-dock="bottom"] .nav-txt{font-size:8px!important;line-height:12px!important}
+.main-stage{padding-top:calc(var(--v75-header-h,56px) + 6px)!important;padding-bottom:calc(var(--bpvq-bottom-dock) + 16px)!important}
+.app-shell>div.fixed.bottom-3.right-3{bottom:calc(var(--bpvq-bottom-dock) + 8px)!important}
+#v877-mika-launch{bottom:calc(var(--bpvq-bottom-dock) + 8px)!important}
+#v877-mika-nudge{bottom:calc(var(--bpvq-bottom-dock) + 69px)!important}
+#cs20-station{scroll-margin-top:calc(var(--v75-header-h,56px) + 8px)}
+/* Keep a single ticket above the dish. Native hidden fields still receive updates. */
+#v88-live-scene.us21-unified #customer-booth-card{display:none!important}
+#v88-live-scene.us21-unified .cs27-shop-controls{display:flex;align-items:center;gap:6px;padding:4px 7px;background:#fff8e9;border-bottom:1px solid #d9cfb4;min-height:38px}
+#v88-live-scene.us21-unified .cs27-shop-controls .us21-status{position:static;flex:1;min-width:0;padding:0;border:0;border-radius:0;box-shadow:none;background:transparent;max-width:none;font-size:10px;backdrop-filter:none}
+#v88-live-scene.us21-unified .cs27-shop-controls #btn-toggle-shop{min-height:30px!important;min-width:72px;padding:5px 8px!important;font-size:10px!important}
+#v88-live-scene.us21-unified .cs27-shop-controls .us21-train-start,#v88-live-scene.us21-unified .cs27-shop-controls .us21-train-exit{position:static;transform:none;min-height:30px;padding:4px 7px;margin:0;font-size:10px;box-shadow:none;width:auto}
+#v88-live-scene.us21-unified .cs27-shop-controls [hidden]{display:none!important}
+#v88-live-scene.us21-unified #cs20-station{gap:4px!important;padding:6px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-ticket{padding:5px 7px!important;gap:2px;border-style:solid;border-radius:10px}
+#v88-live-scene.us21-unified #cs20-station .cs20-ticket-head{display:flex;gap:5px;font-size:11px}
+#v88-live-scene.us21-unified #cs20-station #cust-avatar{display:grid;place-items:center;flex:none;width:26px!important;height:26px!important;min-width:26px!important;min-height:26px!important;font-size:20px;border-radius:8px;background:#f5eddc;overflow:hidden}
+#v88-live-scene.us21-unified #cs20-station #cust-avatar img{width:100%;height:100%;object-fit:contain}
+#v88-live-scene.us21-unified #cs20-station #cs20-customer-name{flex:1;min-width:0;overflow-wrap:anywhere;line-height:1.2}
+#v88-live-scene.us21-unified #cs20-station .cs27-customer-meta{display:flex;align-items:center;gap:8px;font-size:9px;line-height:12px;color:#827352}
+#v88-live-scene.us21-unified #cs20-station #cust-strict-badge{position:static!important;border-radius:4px;font-size:8px!important;padding:0 4px}
+#v88-live-scene.us21-unified #cs20-station #cust-budget{font-size:9px!important}
+#v88-live-scene.us21-unified #cs20-station[data-state="practice"] .cs27-customer-meta,#v88-live-scene.us21-unified #cs20-station[data-state="practice"] #cust-avatar{display:none}
+#v88-live-scene.us21-unified #cs20-station #cs20-order-text{font-size:10px;line-height:1.35;max-height:none;overflow:visible;overflow-wrap:anywhere}
+/* Container choice is next to the dish. Tea selection lives only in the pantry. */
+#v88-live-scene.us21-unified #cs20-station .cs20-stage{grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);min-height:140px!important;padding:4px 5px!important}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage figcaption{gap:4px}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-name{font-size:11px}
+#cs27-containers{display:flex;gap:3px;width:100%;min-width:0}
+#cs27-containers .cs27-container{flex:1;min-width:0;min-height:32px;padding:3px 2px;border:1px solid #cbb995;border-radius:8px;background:#fff9e9;color:#7c634a;font-size:10px;font-weight:900}
+#cs27-containers .cs27-container.picked{color:#fff;background:#4b9270;border-color:#3d825e}
+#cs27-containers .cs27-container:disabled{opacity:.45}
+#cs27-containers .cs27-container:focus-visible{outline:2px solid #bc852e;outline-offset:1px}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual{min-height:130px!important;padding-right:65px}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{height:130px!important;max-width:135px}
+#v88-live-scene.us21-unified #cs20-station:not([data-career="boba"]) #cs20-visual{padding-right:0}
+#cs26-meters{width:65px;right:3px;top:12px;gap:2px}
+#cs26-meters .cs26-meter{width:31px;height:111px;font-size:8px}
+#cs26-meters .cs26-range{width:28px;height:72px;min-height:66px}
+/* Two compact rows keep names, stock and chosen portions visible. */
+#v88-live-scene.us21-unified #cs20-station .cs20-pantry{padding:4px;gap:4px;border-radius:11px}
+#v88-live-scene.us21-unified #cs20-station .cs20-group{min-height:32px!important;padding:3px 5px!important;border-radius:9px!important;font-size:11px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf{grid-template-rows:repeat(2,62px);height:128px;min-height:128px!important;gap:4px}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf[data-rows="1"]{grid-template-rows:62px;height:62px;min-height:62px!important}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-flavor{grid-column:1/-1;min-width:0;gap:3px;padding:3px}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-pill{min-height:32px;min-width:32px}
+#v88-live-scene.us21-unified #cs20-station #cs20-shelf .cs20-item{height:62px!important;padding:2px!important;border-radius:9px!important}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-image{width:28px;height:28px;font-size:20px}
+#v88-live-scene.us21-unified #cs20-station .cs20-item-name{font-size:9px!important;line-height:10px!important;min-height:20px;max-height:20px}
+#v88-live-scene.us21-unified #cs20-station .cs26-jar-stock{font-size:8px;line-height:10px}
+#v88-live-scene.us21-unified #cs20-station .cs20-price{padding:0 2px;font-size:10px}
+#v88-live-scene.us21-unified #cs20-station .cs20-stepper button{width:32px;height:32px}
+#v88-live-scene.us21-unified #cs20-station .cs20-feedback{min-height:20px!important;padding:3px 6px!important;font-size:10px}
+#v88-live-scene.us21-unified #cs20-station .cs20-actions{position:static;bottom:auto;padding:3px 0;gap:5px}
+#v88-live-scene.us21-unified #cs20-station .cs20-button{min-height:38px;font-size:11px;padding:5px;border-radius:9px}
+#v88-live-scene.us21-unified #cs20-station #cs20-primary{font-size:12px}
+@media(max-width:350px){.v8774-header #header-shop-name{max-width:104px;font-size:10px!important}.v8774-header .v8774-identity{gap:3px}.v8774-header .v8774-chip{padding:0 3px}.v8774-header .v8774-rating{font-size:7px}.v8774-header .v8774-actions{gap:3px}}

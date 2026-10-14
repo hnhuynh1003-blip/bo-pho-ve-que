@@ -1,0 +1,21 @@
+{
+  "version": "87.7.7.2",
+  "base": "87.7.7.1",
+  "scope": "Phone wallpaper, dock alignment, poetic daily weather card only",
+  "changed_files": [
+    "index.html",
+    "css/v87772-phone-weather-wallpaper.css",
+    "docs/v87772_BAN_GIAO_VA_KIEM_THU.md",
+    "js/v87772-phone-weather-wallpaper.js"
+  ],
+  "included_wallpaper_assets": [
+    "assets/images/phone/wallpapers/festival.webp",
+    "assets/images/phone/wallpapers/gradient.webp",
+    "assets/images/phone/wallpapers/market.webp",
+    "assets/images/phone/wallpapers/night.webp",
+    "assets/images/phone/wallpapers/rice.webp",
+    "assets/images/phone/wallpapers/village.webp"
+  ],
+  "save_changed": false,
+  "status": "tested in UI fixture; pending live GitHub Pages acceptance"
+}

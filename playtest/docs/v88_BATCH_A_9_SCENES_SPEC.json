@@ -1,0 +1,640 @@
+{
+  "schema": 1,
+  "project": "Bỏ Phố Về Quê v88",
+  "batch": "A",
+  "name": "B1–B3 x 3 nghề",
+  "summary": {
+    "total": 9,
+    "recoveredIndividualConcepts": 3,
+    "otherCareersStandaloneScenes": 0,
+    "compositeReferenceOnly": 6,
+    "gameReady": 0
+  },
+  "artDirection": "2D anime chibi làng quê Việt, chi tiết rõ, hình 4:3, nhìn hơi từ trên xuống 3/4, ánh sáng ngày dịu. Không dùng mockup UI hay infographic làm ảnh game.",
+  "productionContract": {
+    "stageArtDirectory": "assets/images/v88/shops",
+    "minResolution": {
+      "width": 1200,
+      "height": 900
+    },
+    "aspectRatio": "4:3",
+    "sourcePacks": [
+      "DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1(1).zip"
+    ],
+    "doNotMerge": true,
+    "approvalRequired": true
+  },
+  "stageDefinitions": [
+    {
+      "tier": 1,
+      "label": "Quầy Khởi Nghiệp",
+      "geometry": "Xe gỗ hai bánh có mái dù/vải kem, quầy mở, không dựng nhà hay hiên xây",
+      "minArea": "xe đẩy nhỏ",
+      "environment": "cảnh làng ven đường, một mặt tiền, lối đi quanh xe",
+      "slots": [
+        "S1",
+        "S5",
+        "S6",
+        "S8",
+        "S11",
+        "S14"
+      ],
+      "paint": [
+        "canopy",
+        "sign"
+      ]
+    },
+    {
+      "tier": 2,
+      "label": "Quầy Cố Định",
+      "geometry": "Quầy hàng cố định có mái đơn giản, không còn bánh xe; không là nhà hàng hai tầng",
+      "minArea": "quầy cố định rộng hơn xe B1",
+      "environment": "lối chờ khách và khoảnh sân nhỏ, góc máy nhất quán B1",
+      "slots": [
+        "S1",
+        "S2",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14"
+      ],
+      "paint": [
+        "canopy",
+        "sign"
+      ]
+    },
+    {
+      "tier": 3,
+      "label": "Tiệm Gỗ Nhỏ",
+      "geometry": "Tiệm gỗ mặt tiền một tầng với vách, mái nhà rõ; khác hẳn quầy B2",
+      "minArea": "mặt tiền mở rộng, lối vào thực",
+      "environment": "lối vào rõ ràng, sân/hiên nhỏ chứ không phải nhà hai tầng",
+      "slots": [
+        "S1",
+        "S2",
+        "S3",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14",
+        "S15"
+      ],
+      "paint": [
+        "roof",
+        "wall",
+        "sign"
+      ]
+    }
+  ],
+  "careers": [
+    {
+      "id": "boba",
+      "name": "Trà Sữa",
+      "sign": "TRÀ SỮA",
+      "palette": "kem, xanh ô-liu, gỗ tự nhiên",
+      "equipment": [
+        "bình ủ trà",
+        "cốc đựng",
+        "hũ trân châu và topping cơ bản",
+        "khay pha trà"
+      ],
+      "distinct": "Quầy pha trà và topping, không đổi thành bếp nóng"
+    },
+    {
+      "id": "noodle",
+      "name": "Mì Cay",
+      "sign": "MÌ CAY",
+      "palette": "kem, đất nung và đỏ ớt vừa phải",
+      "equipment": [
+        "nồi nước cốt mì cay",
+        "khay rau nấm và topping",
+        "bếp nấu an toàn",
+        "muôi và bát"
+      ],
+      "distinct": "Trạm nước cốt, bếp mì và topping rõ ràng, không có đồ trà sữa"
+    },
+    {
+      "id": "streetfood",
+      "name": "Xiên Que",
+      "sign": "XIÊN QUE",
+      "palette": "kem, xanh lá và gỗ đậm",
+      "equipment": [
+        "vỉ nướng xiên",
+        "khay xiên thịt/rau",
+        "bếp than có tấm chắn",
+        "quầy nước chấm"
+      ],
+      "distinct": "Vỉ nướng và quầy xiên, không sử dụng bình trà hay nồi mì"
+    }
+  ],
+  "scenes": [
+    {
+      "id": "boba-b1",
+      "career": "boba",
+      "careerName": "Trà Sữa",
+      "tier": 1,
+      "batch": "A",
+      "stageName": "Quầy Khởi Nghiệp",
+      "approvedGeometry": "Xe gỗ hai bánh có mái dù/vải kem, quầy mở, không dựng nhà hay hiên xây",
+      "footprint": "xe đẩy nhỏ",
+      "environment": "cảnh làng ven đường, một mặt tiền, lối đi quanh xe",
+      "artDirection": "Quầy pha trà và topping, không đổi thành bếp nóng",
+      "essentialEquipment": [
+        "bình ủ trà",
+        "cốc đựng",
+        "hũ trân châu và topping cơ bản",
+        "khay pha trà"
+      ],
+      "signText": "TRÀ SỮA",
+      "basePalette": "kem, xanh ô-liu, gỗ tự nhiên",
+      "slotIds": [
+        "S1",
+        "S5",
+        "S6",
+        "S8",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": "TRA_SUA_B01_PREVIEW.webp",
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "recovered-boba-concept",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Có B1 clean-pass kỹ thuật DRAFT3; giữ ảnh gốc, cần sửa mép cột và hàng rào, sáu anchor chưa chốt.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "boba-b2",
+      "career": "boba",
+      "careerName": "Trà Sữa",
+      "tier": 2,
+      "batch": "A",
+      "stageName": "Quầy Cố Định",
+      "approvedGeometry": "Quầy hàng cố định có mái đơn giản, không còn bánh xe; không là nhà hàng hai tầng",
+      "footprint": "quầy cố định rộng hơn xe B1",
+      "environment": "lối chờ khách và khoảnh sân nhỏ, góc máy nhất quán B1",
+      "artDirection": "Quầy pha trà và topping, không đổi thành bếp nóng",
+      "essentialEquipment": [
+        "bình ủ trà",
+        "cốc đựng",
+        "hũ trân châu và topping cơ bản",
+        "khay pha trà"
+      ],
+      "signText": "TRÀ SỮA",
+      "basePalette": "kem, xanh ô-liu, gỗ tự nhiên",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": "TRA_SUA_B02_PREVIEW.webp",
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "recovered-boba-concept",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Ảnh concept cũ B2 đang có bánh xe; phải sửa thành QUẦY CỐ ĐỊNH, không tái sử dụng xe B1.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "boba-b3",
+      "career": "boba",
+      "careerName": "Trà Sữa",
+      "tier": 3,
+      "batch": "A",
+      "stageName": "Tiệm Gỗ Nhỏ",
+      "approvedGeometry": "Tiệm gỗ mặt tiền một tầng với vách, mái nhà rõ; khác hẳn quầy B2",
+      "footprint": "mặt tiền mở rộng, lối vào thực",
+      "environment": "lối vào rõ ràng, sân/hiên nhỏ chứ không phải nhà hai tầng",
+      "artDirection": "Quầy pha trà và topping, không đổi thành bếp nóng",
+      "essentialEquipment": [
+        "bình ủ trà",
+        "cốc đựng",
+        "hũ trân châu và topping cơ bản",
+        "khay pha trà"
+      ],
+      "signText": "TRÀ SỮA",
+      "basePalette": "kem, xanh ô-liu, gỗ tự nhiên",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S3",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14",
+        "S15"
+      ],
+      "paintZones": [
+        "roof",
+        "wall",
+        "sign"
+      ],
+      "previewSource": "TRA_SUA_B03_PREVIEW.webp",
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "recovered-boba-concept",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Giữ tiệm gỗ một tầng, loại bỏ những món decor phải mua đang baked.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "noodle-b1",
+      "career": "noodle",
+      "careerName": "Mì Cay",
+      "tier": 1,
+      "batch": "A",
+      "stageName": "Quầy Khởi Nghiệp",
+      "approvedGeometry": "Xe gỗ hai bánh có mái dù/vải kem, quầy mở, không dựng nhà hay hiên xây",
+      "footprint": "xe đẩy nhỏ",
+      "environment": "cảnh làng ven đường, một mặt tiền, lối đi quanh xe",
+      "artDirection": "Trạm nước cốt, bếp mì và topping rõ ràng, không có đồ trà sữa",
+      "essentialEquipment": [
+        "nồi nước cốt mì cay",
+        "khay rau nấm và topping",
+        "bếp nấu an toàn",
+        "muôi và bát"
+      ],
+      "signText": "MÌ CAY",
+      "basePalette": "kem, đất nung và đỏ ớt vừa phải",
+      "slotIds": [
+        "S1",
+        "S5",
+        "S6",
+        "S8",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "noodle-b2",
+      "career": "noodle",
+      "careerName": "Mì Cay",
+      "tier": 2,
+      "batch": "A",
+      "stageName": "Quầy Cố Định",
+      "approvedGeometry": "Quầy hàng cố định có mái đơn giản, không còn bánh xe; không là nhà hàng hai tầng",
+      "footprint": "quầy cố định rộng hơn xe B1",
+      "environment": "lối chờ khách và khoảnh sân nhỏ, góc máy nhất quán B1",
+      "artDirection": "Trạm nước cốt, bếp mì và topping rõ ràng, không có đồ trà sữa",
+      "essentialEquipment": [
+        "nồi nước cốt mì cay",
+        "khay rau nấm và topping",
+        "bếp nấu an toàn",
+        "muôi và bát"
+      ],
+      "signText": "MÌ CAY",
+      "basePalette": "kem, đất nung và đỏ ớt vừa phải",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "noodle-b3",
+      "career": "noodle",
+      "careerName": "Mì Cay",
+      "tier": 3,
+      "batch": "A",
+      "stageName": "Tiệm Gỗ Nhỏ",
+      "approvedGeometry": "Tiệm gỗ mặt tiền một tầng với vách, mái nhà rõ; khác hẳn quầy B2",
+      "footprint": "mặt tiền mở rộng, lối vào thực",
+      "environment": "lối vào rõ ràng, sân/hiên nhỏ chứ không phải nhà hai tầng",
+      "artDirection": "Trạm nước cốt, bếp mì và topping rõ ràng, không có đồ trà sữa",
+      "essentialEquipment": [
+        "nồi nước cốt mì cay",
+        "khay rau nấm và topping",
+        "bếp nấu an toàn",
+        "muôi và bát"
+      ],
+      "signText": "MÌ CAY",
+      "basePalette": "kem, đất nung và đỏ ớt vừa phải",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S3",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14",
+        "S15"
+      ],
+      "paintZones": [
+        "roof",
+        "wall",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "streetfood-b1",
+      "career": "streetfood",
+      "careerName": "Xiên Que",
+      "tier": 1,
+      "batch": "A",
+      "stageName": "Quầy Khởi Nghiệp",
+      "approvedGeometry": "Xe gỗ hai bánh có mái dù/vải kem, quầy mở, không dựng nhà hay hiên xây",
+      "footprint": "xe đẩy nhỏ",
+      "environment": "cảnh làng ven đường, một mặt tiền, lối đi quanh xe",
+      "artDirection": "Vỉ nướng và quầy xiên, không sử dụng bình trà hay nồi mì",
+      "essentialEquipment": [
+        "vỉ nướng xiên",
+        "khay xiên thịt/rau",
+        "bếp than có tấm chắn",
+        "quầy nước chấm"
+      ],
+      "signText": "XIÊN QUE",
+      "basePalette": "kem, xanh lá và gỗ đậm",
+      "slotIds": [
+        "S1",
+        "S5",
+        "S6",
+        "S8",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "streetfood-b2",
+      "career": "streetfood",
+      "careerName": "Xiên Que",
+      "tier": 2,
+      "batch": "A",
+      "stageName": "Quầy Cố Định",
+      "approvedGeometry": "Quầy hàng cố định có mái đơn giản, không còn bánh xe; không là nhà hàng hai tầng",
+      "footprint": "quầy cố định rộng hơn xe B1",
+      "environment": "lối chờ khách và khoảnh sân nhỏ, góc máy nhất quán B1",
+      "artDirection": "Vỉ nướng và quầy xiên, không sử dụng bình trà hay nồi mì",
+      "essentialEquipment": [
+        "vỉ nướng xiên",
+        "khay xiên thịt/rau",
+        "bếp than có tấm chắn",
+        "quầy nước chấm"
+      ],
+      "signText": "XIÊN QUE",
+      "basePalette": "kem, xanh lá và gỗ đậm",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14"
+      ],
+      "paintZones": [
+        "canopy",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    },
+    {
+      "id": "streetfood-b3",
+      "career": "streetfood",
+      "careerName": "Xiên Que",
+      "tier": 3,
+      "batch": "A",
+      "stageName": "Tiệm Gỗ Nhỏ",
+      "approvedGeometry": "Tiệm gỗ mặt tiền một tầng với vách, mái nhà rõ; khác hẳn quầy B2",
+      "footprint": "mặt tiền mở rộng, lối vào thực",
+      "environment": "lối vào rõ ràng, sân/hiên nhỏ chứ không phải nhà hai tầng",
+      "artDirection": "Vỉ nướng và quầy xiên, không sử dụng bình trà hay nồi mì",
+      "essentialEquipment": [
+        "vỉ nướng xiên",
+        "khay xiên thịt/rau",
+        "bếp than có tấm chắn",
+        "quầy nước chấm"
+      ],
+      "signText": "XIÊN QUE",
+      "basePalette": "kem, xanh lá và gỗ đậm",
+      "slotIds": [
+        "S1",
+        "S2",
+        "S3",
+        "S5",
+        "S6",
+        "S7",
+        "S8",
+        "S9",
+        "S11",
+        "S14",
+        "S15"
+      ],
+      "paintZones": [
+        "roof",
+        "wall",
+        "sign"
+      ],
+      "previewSource": null,
+      "referenceBoard": "a_large_colorful_infographic_style_concept_sheet.png",
+      "sourceStatus": "composite-moodboard-only",
+      "approvedProductionAsset": null,
+      "maskAssets": [],
+      "approvedAnchorMap": null,
+      "reviewStatus": "pending",
+      "ready": false,
+      "specialNotes": "Chỉ có hình minh họa trong contact sheet lô A, chưa có ảnh scene riêng của nghề này.",
+      "qualityGates": [
+        "one clean scene, no lettering except approved permanent road signs",
+        "4:3 landscape art with scene fully visible",
+        "no baked paid decor, moving NPC or custom shop name",
+        "same overall 3/4 perspective and game art style",
+        "unique vocational equipment and correctly differentiated building stage",
+        "all unlocked slot anchors measured on clean approved scene",
+        "painting mask limited to approved zones and excludes surroundings",
+        "standalone WebP approved by user, then responsive and save UAT"
+      ]
+    }
+  ],
+  "designDecision": {
+    "status": "approved-art-direction-only",
+    "approvedDate": "2026-10-11",
+    "approvedBy": "project-owner",
+    "scope": "9 architectural outlines for B1-B3 across boba, noodle, streetfood, including independent vocational equipment, stage silhouettes, compatible slots and paint unlocks, and review by batch",
+    "doesNotApprove": [
+      "infographic panels or cropped images as production scene art",
+      "any B1 clean-pass draft without retouch",
+      "unfinished paid decor separation",
+      "unmeasured placement anchors",
+      "unfinished paint masks",
+      "publishing or merging into main"
+    ],
+    "productionScenesApproved": 0,
+    "nextProductionGate": "Submit nine independent, clean, correctly staged, decoration-free scene images together for art QA, then measured anchors and paint masks."
+  }
+}

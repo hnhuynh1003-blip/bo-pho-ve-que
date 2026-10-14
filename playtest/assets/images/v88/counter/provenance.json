@@ -1,0 +1,31 @@
+{
+  "version": "88.16.3",
+  "generator": "built-in ImageGen",
+  "reference_role": "style reference only; no copied game UI or branding",
+  "assets": [
+    {
+      "file": "assets/images/v88/counter/tea-dispenser.webp",
+      "format": "webp",
+      "bytes": 33608,
+      "sha256": "9293a04f374477decceb55097c82e6071f301b98d8c0ec299758ad6e78bfd684",
+      "dimensions": [
+        362,
+        384
+      ],
+      "source": "exec-90eb83e7-5eb8-4252-92c1-a90e4bb71c2c.png",
+      "use": "shared counter prop; native ingredient images remain unchanged"
+    },
+    {
+      "file": "assets/images/v88/counter/topping-tray.webp",
+      "format": "webp",
+      "bytes": 16946,
+      "sha256": "d3bb86f82d14f19dd13e2cb62d8163b124ac2cd824c3fddbdfccecdc5d62c2a8",
+      "dimensions": [
+        384,
+        384
+      ],
+      "source": "exec-f30c3596-520c-4bf7-acea-f6a7ce3a5a10.png",
+      "use": "shared counter prop; native ingredient images remain unchanged"
+    }
+  ]
+}

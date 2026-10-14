@@ -1,0 +1,338 @@
+/* BPVQ v88.17.1.6 — rebuild the active workstation from spatial zones, not legacy cards.
+   Approved intent: chill yard -> explicit kitchen; readable full-width order, large craft stage,
+   large swipeable ingredients below; original recipes, quote, rating, saves untouched.
+   NOTE: style scoped to Boba; other careers retain previous source layouts until reviewed. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-areas:"back" "price" "stage" "pantry" "actions"!important;
+  grid-template-rows:auto auto auto auto auto!important;
+  align-items:stretch!important;
+  gap:12px!important;
+  padding:10px 10px 18px!important;
+  min-width:0!important;max-width:100%!important;width:100%!important;
+  min-height:0!important;height:auto!important;max-height:none!important;
+  overflow:visible!important;
+  border:0!important;border-radius:20px!important;
+  background:linear-gradient(180deg,#fff0db 0%,#f4d9b6 70%,#e4bc91 100%)!important;
+  box-shadow:inset 0 3px #fffbef,0 8px 24px #754c3022!important;
+}
+/* The exit button remains accessible even before the shop is opened. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] > #us21-exit-kitchen{
+  grid-area:back!important;min-height:48px!important;padding:10px 16px!important;
+  font-size:13px!important;justify-self:start;white-space:nowrap;
+}
+/* The order occupies an entire horizontal row; user may expand details in-place. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] > .cs20-price{
+  grid-area:price!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr) auto!important;
+  column-gap:10px!important;align-items:start!important;
+  min-width:0!important;max-width:100%!important;
+  height:auto!important;min-height:88px!important;max-height:none!important;
+  padding:12px 12px 10px!important;
+  box-sizing:border-box!important;
+  background:#fff6e6!important;border:2px solid #d6ae87!important;
+  border-radius:18px!important;box-shadow:0 5px 10px #8752341b!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket{
+  display:block!important;min-width:0!important;width:100%!important;max-width:100%!important;
+  overflow:visible!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket summary{
+  display:flex!important;flex-direction:column!important;align-items:flex-start!important;gap:4px!important;
+  min-width:0!important;width:100%!important;max-width:100%!important;
+  font-size:13px!important;line-height:1.3!important;white-space:normal!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs33-order-summary{
+  display:block!important;min-width:0!important;max-width:100%!important;
+  font-size:12px!important;line-height:1.45!important;
+  overflow-wrap:break-word!important;word-break:normal!important;white-space:normal!important;
+  text-overflow:clip!important;max-height:none!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-expand-hint{
+  display:none!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stepper{
+  justify-self:end!important;align-self:start!important;display:flex!important;
+  flex:0 0 auto!important;min-width:0!important;white-space:nowrap!important;
+  padding:4px!important;gap:3px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-sale-price{
+  font-size:13px!important;white-space:nowrap!important;min-width:43px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-detail{
+  position:static!important;inset:auto!important;transform:none!important;
+  display:none!important;width:100%!important;max-width:100%!important;min-width:0!important;
+  box-sizing:border-box!important;overflow-wrap:break-word!important;white-space:pre-line!important;
+  word-break:normal!important;line-height:1.5!important;font-size:12px!important;
+  max-height:260px!important;overflow-y:auto!important;margin-top:8px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs33-order-ticket[open] .cs33-order-detail{display:block!important}
+/* One real craft surface: drink, utensils and machines are large assets, never
+   scattered tiny images in a legacy two-column figcaption. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{
+  grid-area:stage!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:280px auto!important;
+  align-items:stretch!important;gap:8px!important;
+  position:relative!important;isolation:isolate!important;
+  min-width:0!important;max-width:100%!important;width:100%!important;
+  height:auto!important;min-height:420px!important;max-height:none!important;
+  padding:12px 12px 14px!important;
+  overflow:hidden!important;box-sizing:border-box!important;
+  border:2px solid #c99668!important;border-radius:22px!important;
+  background:linear-gradient(180deg,#fff9ed 0%,#f6ddba 62%,#da9d6f 62%,#aa6e43 71%,#f1d2ad 72%,#f4dec0 100%)!important;
+  box-shadow:inset 0 4px #fffdf3,0 10px 20px #8b573124!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage::before,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage::after{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-props{
+  grid-row:1!important;position:absolute!important;inset:0!important;z-index:1!important;
+  display:block!important;pointer-events:none!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-tea-machine{
+  position:absolute!important;left:3%!important;top:22px!important;
+  width:clamp(76px,27%,126px)!important;height:auto!important;
+  max-width:126px!important;max-height:184px!important;object-fit:contain!important;opacity:1!important;
+  filter:drop-shadow(0 5px 7px #4f2c2b40)!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-milk-pitcher{
+  position:absolute!important;left:8%!important;top:183px!important;
+  width:clamp(40px,16%,64px)!important;max-height:79px!important;
+  object-fit:contain!important;filter:drop-shadow(0 4px 3px #61402935)!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-cup-stand{
+  position:absolute!important;right:17%!important;bottom:auto!important;top:225px!important;
+  width:clamp(150px,58%,246px)!important;max-height:66px!important;height:auto!important;
+  object-fit:contain!important;opacity:1!important;z-index:2!important;
+  filter:drop-shadow(0 6px 5px #62422633)!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual{
+  grid-row:1!important;grid-column:1!important;
+  position:relative!important;justify-self:center!important;align-self:start!important;
+  margin-left:11%!important;
+  width:min(64%,255px)!important;max-width:255px!important;min-width:140px!important;
+  height:270px!important;min-height:270px!important;max-height:270px!important;
+  display:flex!important;align-items:center!important;justify-content:center!important;
+  z-index:4!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual svg{
+  width:100%!important;max-width:250px!important;height:268px!important;min-height:0!important;
+  filter:drop-shadow(0 9px 8px #8f55334d)!important;
+}
+/* Meters are next to the dynamic cup and do not replace native input values. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs26-meters{
+  position:absolute!important;top:72px!important;right:5px!important;left:auto!important;
+  display:flex!important;z-index:7!important;max-width:72px!important;max-height:190px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage figcaption{
+  grid-row:2!important;grid-column:1!important;position:relative!important;
+  min-width:0!important;width:100%!important;max-width:100%!important;
+  height:auto!important;max-height:none!important;min-height:110px!important;
+  display:flex!important;flex-wrap:wrap!important;align-items:center!important;align-content:start!important;
+  gap:8px!important;padding:11px!important;margin:0!important;
+  box-sizing:border-box!important;
+  border:1px solid #d2a782!important;border-radius:16px!important;
+  background:#fff7e8ec!important;box-shadow:0 2px 5px #78503319!important;
+  overflow:visible!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage figcaption::after{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-dish-name{
+  flex:1 0 100%!important;font-size:14px!important;line-height:1.35!important;min-width:0!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-dish-detail{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers{
+  flex:1 0 100%!important;display:flex!important;gap:8px!important;min-width:0!important;height:auto!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container{
+  min-width:60px!important;min-height:56px!important;flex:0 1 82px!important;
+  display:flex!important;justify-content:center!important;align-items:center!important;
+  font-size:12px!important;border-radius:12px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-field{
+  flex:1 0 100%!important;min-width:0!important;display:grid!important;grid-template-rows:auto auto!important;
+  height:auto!important;min-height:29px!important;gap:4px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-field .cs20-meter{
+  height:14px!important;min-height:14px!important;border-radius:8px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-craft{
+  display:block!important;flex:1 0 100%!important;min-height:14px!important;height:auto!important;font-size:11px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-feedback{
+  display:block!important;flex:1 0 100%!important;min-height:0!important;max-height:72px!important;
+  height:auto!important;overflow-y:auto!important;line-height:1.35!important;font-size:11px!important;
+}
+/* Full-width real ingredients. 2 columns × 2 rows at 320–390px; horizontal swipe for more. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-pantry{
+  grid-area:pantry!important;display:grid!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto!important;
+  gap:8px!important;
+  min-width:0!important;max-width:100%!important;width:100%!important;
+  min-height:0!important;max-height:none!important;height:auto!important;
+  padding:12px!important;position:relative!important;inset:auto!important;
+  transform:none!important;transition:none!important;
+  box-sizing:border-box!important;overflow:hidden!important;
+  background:linear-gradient(180deg,#b07852 0%,#925a3e 7%,#f6dfbf 8%,#f6dfbf 100%)!important;
+  border:2px solid #ac7956!important;border-radius:21px!important;
+  box-shadow:inset 0 3px #fff4df,0 6px 12px #6b3f3020!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp173-drawer-handle{
+  display:flex!important;align-items:center!important;gap:7px!important;min-height:48px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cp173-pantry-toggle{
+  min-height:46px!important;min-width:130px!important;font-size:14px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp173-drawer-handle small{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs30-pantry-bar{
+  display:flex!important;align-items:center!important;gap:8px!important;
+  width:100%!important;min-width:0!important;
+  min-height:46px!important;height:auto!important;max-height:none!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-groups{
+  display:flex!important;flex:1 1 auto!important;min-width:0!important;
+  min-height:46px!important;height:auto!important;overflow-x:auto!important;gap:8px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-group{
+  display:block!important;flex:0 0 auto!important;white-space:nowrap!important;
+  height:44px!important;min-height:44px!important;font-size:12px!important;padding:8px 12px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs26-pager{
+  flex:0 0 auto!important;max-width:90px!important;min-height:44px!important;align-items:center!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf[data-rows="1"]{
+  display:grid!important;
+  grid-template-columns:none!important;
+  grid-template-rows:repeat(2,138px)!important;
+  grid-auto-flow:column!important;
+  grid-auto-columns:calc((100% - 10px)/2)!important;
+  gap:10px!important;
+  height:286px!important;min-height:286px!important;max-height:286px!important;
+  min-width:0!important;max-width:100%!important;width:100%!important;
+  padding:0 2px 4px!important;
+  box-sizing:border-box!important;
+  overflow-x:auto!important;overflow-y:hidden!important;
+  scroll-snap-type:x mandatory!important;scrollbar-width:thin!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs20-item{
+  position:relative!important;display:flex!important;flex-direction:column!important;
+  align-items:center!important;justify-content:center!important;gap:4px!important;
+  width:100%!important;min-width:0!important;max-width:none!important;
+  height:138px!important;min-height:138px!important;max-height:138px!important;
+  box-sizing:border-box!important;padding:9px 7px!important;
+  overflow:hidden!important;scroll-snap-align:start!important;
+  border-radius:18px!important;border:2px solid #bb8b62!important;
+  background:linear-gradient(#fff9eb,#f4dcc0)!important;
+  box-shadow:inset 0 2px #fffdf7,0 4px #915e3926!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-image{
+  display:flex!important;width:100%!important;max-width:110px!important;
+  height:83px!important;min-height:83px!important;max-height:83px!important;
+  margin:0 auto!important;align-items:center!important;justify-content:center!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-image img{
+  max-width:100%!important;max-height:100%!important;object-fit:contain!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs20-item-name{
+  display:block!important;width:100%!important;max-width:100%!important;
+  min-height:27px!important;max-height:32px!important;
+  font-size:12px!important;line-height:1.15!important;font-weight:900!important;
+  text-align:center!important;white-space:normal!important;overflow:hidden!important;
+  overflow-wrap:break-word!important;word-break:normal!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-stock{font-size:11px!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cs26-jar-portion{font-size:12px!important;z-index:2!important}
+/* Flavor panel does not inherit the two-row sprite grid. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf[data-layout="flavor"]{
+  display:flex!important;height:auto!important;min-height:80px!important;max-height:none!important;
+}
+/* Three large tactile action targets; no miniaturization for forced one-screen fit. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-actions{
+  grid-area:actions!important;position:relative!important;bottom:auto!important;
+  width:100%!important;max-width:100%!important;min-width:0!important;
+  display:grid!important;grid-template-columns:minmax(0,.9fr) minmax(0,.9fr) minmax(0,1.45fr)!important;
+  gap:8px!important;min-height:64px!important;height:auto!important;max-height:none!important;
+  margin:0!important;padding:5px!important;box-sizing:border-box!important;
+  border-radius:16px!important;
+  background:#f6e1c7db!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-actions .cs20-button{
+  min-height:58px!important;max-height:none!important;height:auto!important;
+  min-width:0!important;padding:8px 6px!important;
+  border-radius:14px!important;font-size:12px!important;line-height:1.2!important;
+  white-space:normal!important;word-break:normal!important;
+}
+/* Idle preparation room remains visible when player enters before opening shop. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-state="idle"]{
+  display:grid!important;grid-template-areas:"back" "idle"!important;grid-template-rows:auto auto!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-idle{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-state="idle"] .cp176-idle{
+  grid-area:idle!important;display:flex!important;align-items:center!important;gap:15px!important;
+  padding:22px!important;border:2px solid #d3a37d;border-radius:20px;
+  background:#fff6e7;min-height:225px;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-idle img{width:clamp(95px,29%,160px);height:175px;object-fit:contain}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-idle strong{display:block;color:#71432e;font-size:17px}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-idle p{font-size:13px;line-height:1.5;color:#8c6245;margin:8px 0 12px}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cp176-start-practice{
+  min-height:48px;padding:10px 14px;border-radius:14px;background:#db8794;color:#fff;
+  border:2px solid #b86a78;font-size:13px;font-weight:900;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"][data-state="idle"] > :not(#us21-exit-kitchen):not(.cp176-idle){display:none!important}
+/* Non-mobile can show wider tray (3 and 4 icons per row, never squeezed). */
+@media (min-width:420px){
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf{grid-auto-columns:calc((100% - 20px)/3)!important}
+}
+@media (min-width:700px){
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"]{max-width:870px!important;margin:0 auto!important;padding:16px 20px 24px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{grid-template-rows:316px auto!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual{height:304px!important;min-height:304px!important;max-height:304px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual svg{height:302px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-tea-machine{width:130px!important;max-width:130px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf{grid-auto-columns:calc((100% - 30px)/4)!important}
+}
+@media (max-width:350px){
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stage{grid-template-rows:245px auto!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual{height:238px!important;min-height:238px!important;max-height:238px!important;width:60%!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-visual svg{height:236px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp175-cup-stand{top:197px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cp176-milk-pitcher{top:162px!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-price{grid-template-columns:minmax(0,1fr)!important}
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] .cs20-stepper{justify-self:start!important}
+}
+@media (prefers-reduced-motion:reduce){
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] *,
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] *::before,
+ #v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] *::after{scroll-behavior:auto!important;animation:none!important}
+}
+
+/* Genuine AI tray artwork mapped to 8 matching ingredient IDs; never fake stock/name. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cp176-ai-tray{max-width:100%!important;width:100%!important;height:84px!important;min-height:84px!important;overflow:visible!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs20-shelf .cp176-ai-tray .cp176-ai-tray-img{width:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 2px 2px #70492a22)!important}
+/* Let the player actually enjoy the already-owned outdoor illustration. */
+@media(max-width:699px){
+ #v88-live-scene.us21-unified:not(.us21-kitchen-view) .v88-live-frame,
+ #v88-live-scene.us21-unified.us21-serving:not(.us21-kitchen-view) .v88-live-frame{
+  aspect-ratio:4/3!important;max-height:none!important;min-height:0!important;
+ }
+}
+/* Two approved clear-cup assets make the M/L selection look like real shopware;
+   XL reuses the tall silhouette at a larger scale until its own art is reviewed. */
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container{
+ height:84px!important;min-height:84px!important;flex-direction:column!important;gap:3px!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container .cs28-cup-stack{
+ position:relative!important;display:block!important;width:42px!important;height:46px!important;
+ background-image:url('../assets/images/v88/cute-premium/cup_empty_M.webp')!important;
+ background-position:center!important;background-repeat:no-repeat!important;background-size:contain!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container:nth-child(2) .cs28-cup-stack,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container:nth-child(3) .cs28-cup-stack{
+ background-image:url('../assets/images/v88/cute-premium/cup_empty_L.webp')!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container:nth-child(3) .cs28-cup-stack{transform:scale(1.12)!important}
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container .cs28-cup-stack::before,
+#v88-live-scene.us21-unified.us21-kitchen-view #cs20-station[data-career="boba"] #cs27-containers .cs27-container .cs28-cup-stack::after{display:none!important}

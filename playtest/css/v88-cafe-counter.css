@@ -1,0 +1,121 @@
+/* v88.16.9 — shared compact geometry, materials and tools belonging to each cart.
+   Ingredient art, shelf cards and all native input hit areas remain intact. */
+#v88-live-scene.us21-unified{
+ --cafe-ink:#64462c;--cafe-edge:#9b7042;--cafe-accent:#668454;--cafe-light:#b8cc98;
+ --cafe-wood:#ddb47a;--cafe-paper:#fff5df;--cafe-grain:#81532314;
+ border-color:var(--cafe-edge)!important;box-shadow:0 3px 0 #77502d33,0 5px 10px #65452a15!important;
+}
+#v88-live-scene.us21-unified[data-career="noodle"]{
+ --cafe-ink:#6f3e29;--cafe-edge:#9e603e;--cafe-accent:#b35d48;--cafe-light:#e9b68c;
+ --cafe-wood:#d8a567;--cafe-paper:#fff0da;--cafe-grain:#82422218;
+}
+#v88-live-scene.us21-unified[data-career="streetfood"]{
+ --cafe-ink:#654328;--cafe-edge:#976130;--cafe-accent:#657d43;--cafe-light:#c4d591;
+ --cafe-wood:#d8a35f;--cafe-paper:#fff1d5;--cafe-grain:#7f461d18;
+}
+#v88-live-scene.us21-unified[data-career][data-unavailable="false"] #v88-live-frame>#v88-live-image{display:block!important}
+#v88-live-scene.us21-unified .cs27-shop-controls{
+ background:repeating-linear-gradient(90deg,#ffffff55 0 22px,transparent 22px 44px),linear-gradient(#fffcf1,#e8dcc3);
+ border-bottom:2px solid var(--cafe-edge);box-shadow:inset 0 1px #fffef6;
+}
+#v88-live-scene.us21-unified .cs27-shop-controls #btn-toggle-shop{
+ background:linear-gradient(var(--cafe-accent),color-mix(in srgb,var(--cafe-accent) 80%,#473220))!important;
+ border-color:var(--cafe-edge)!important;box-shadow:inset 0 1px #ffffdf77,0 2px 0 #63432c33;
+}
+#v88-live-scene.us21-unified #cs20-station,#v88-live-scene.us21-unified #cs20-station[data-state="idle"]{
+ position:relative;border-top:5px ridge #af7843!important;
+ background:radial-gradient(ellipse at 53% 0%,#fff8e077,transparent 63%),repeating-linear-gradient(2deg,transparent 0 23px,var(--cafe-grain) 24px 25px,transparent 26px 51px),linear-gradient(95deg,#c79356,var(--cafe-wood) 8%,#efd0a1 48%,var(--cafe-wood) 93%,#bd8647)!important;
+ box-shadow:inset 2px 0 #fff4ce66,inset -2px 0 #74451c22,inset 0 2px #fff4d1!important;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage{
+ position:relative;isolation:isolate;
+ background:radial-gradient(ellipse at 64% 82%,#80532110,transparent 54%)!important;
+}
+/* A recipe slip rests on the table, and the vessel rests on its own coaster. */
+#v88-live-scene.us21-unified #cs20-station .cs20-stage::after{
+ content:"";position:absolute;z-index:-1;pointer-events:none;left:1px;top:3px;bottom:3px;width:47%;
+ background:linear-gradient(110deg,#fffbee,var(--cafe-paper));border:1px solid #b6976555;border-radius:3px 11px 5px 9px;
+ box-shadow:1px 2px 2px #71491c16,inset 0 1px #fffefa;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-stage::before{
+ content:"";position:absolute;z-index:-1;pointer-events:none;right:19%;bottom:8px;width:32%;height:24px;
+ border:2px solid #bfa56d;border-radius:50%;
+ background:repeating-linear-gradient(12deg,#f3e4ba 0 2px,#d8c18e 3px 4px);box-shadow:0 2px 2px #75502126;
+}
+#v88-live-scene.us21-unified[data-career="noodle"] #cs20-station .cs20-stage::before{
+ right:9%;bottom:8px;width:40%;height:28px;border:3px solid #8a735d;
+ background:repeating-radial-gradient(ellipse,#493e35 0 3px,#786251 4px 6px);box-shadow:0 2px 0 #6b4b35,0 3px 4px #56362030;
+}
+#v88-live-scene.us21-unified[data-career="streetfood"] #cs20-station .cs20-stage::before{
+ right:5%;bottom:7px;width:47%;height:27px;border:2px solid #a8824f;border-radius:8px;
+ background:repeating-linear-gradient(90deg,#d9b887 0 7px,#bc9868 8px 9px);box-shadow:0 2px 0 #9a6c3a;
+}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-name{color:var(--cafe-ink);letter-spacing:.15px;text-shadow:0 1px #fffbe8}
+#v88-live-scene.us21-unified #cs20-station #cs20-dish-detail{color:#8a745a}
+#v88-live-scene.us21-unified #cs20-station .cs20-meter{
+ border:1px solid #b79868;background:linear-gradient(#dfd0ab,#f9efd3);box-shadow:inset 0 1px 2px #86603520;
+}
+#v88-live-scene.us21-unified #cs20-station #cs20-gauge{
+ background:repeating-linear-gradient(110deg,#ffffff22 0 5px,transparent 5px 10px),linear-gradient(var(--cafe-light),var(--cafe-accent));
+}
+#v88-live-scene.us21-unified #cs27-containers{gap:4px}
+#v88-live-scene.us21-unified #cs27-containers .cs27-container{
+ border-radius:5px 5px 11px 11px;background:linear-gradient(100deg,#fff9e9,#f0ddbb 68%,#fffaeb);border-color:#c5a376;
+ box-shadow:inset 0 1px #fffef3,inset 0 -2px #cba57744,0 1px 1px #80532216;
+}
+#v88-live-scene.us21-unified #cs27-containers .cs27-container.picked{
+ color:var(--cafe-ink);border-color:var(--cafe-accent);background:linear-gradient(#f2f5df,#dde9bf);
+ box-shadow:inset 0 1px #fffefa,inset 0 -2px #849b4f33,0 1px 1px #80532220;
+}
+#v88-live-scene.us21-unified #cs26-meters .cs26-meter{
+ position:relative;isolation:isolate;border-radius:7px 7px 14px 14px;border:1px solid #b18e5e;
+ background:linear-gradient(90deg,#fffef4cc,#f9e6b455 48%,#fffefaee);box-shadow:inset 2px 0 #fffdf0,0 2px 0 #a7855544;
+}
+#v88-live-scene.us21-unified #cs26-meters .cs26-meter.ice{
+ background:linear-gradient(90deg,#fafffdcc,#cce4dd66 48%,#fffff2ee);border-color:#9cad8d;
+}
+#v88-live-scene.us21-unified #cs26-meters .cs26-meter::before{
+ content:"";position:absolute;z-index:-1;pointer-events:none;top:28px;bottom:26px;right:3px;width:4px;
+ background:repeating-linear-gradient(0deg,#90734c66 0 1px,transparent 1px 10px);
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-price{
+ color:var(--cafe-ink);background:linear-gradient(90deg,transparent,#fff2d644,transparent);text-shadow:0 1px #fff1cd;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-stepper{
+ border-radius:6px 6px 11px 11px;background:linear-gradient(#fff9e6,#eee1be);border-color:#aa8b59;
+ box-shadow:inset 0 1px #fffdf0,0 2px 0 #b0895144;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-stepper strong{color:var(--cafe-ink);font-variant-numeric:tabular-nums}
+#v88-live-scene.us21-unified #cs20-station .cs20-stepper button{background:#fff6df;color:var(--cafe-accent);text-shadow:0 1px #fff}
+#v88-live-scene.us21-unified #cs20-station .cs20-pantry,#v88-live-scene.us21-unified #cs20-station[data-state="idle"] .cs20-pantry{
+ border-top:2px solid #996333;border-bottom:3px ridge #bd874b;
+ background:linear-gradient(90deg,#b4864f33,transparent 25%,#fff4d555 65%,#b4864f33);box-shadow:inset 0 1px #fff1c3;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-group{
+ border-radius:5px 5px 11px 11px!important;background:linear-gradient(#fff7df,#f0dfb8)!important;
+ color:var(--cafe-ink)!important;border-color:#a88956!important;box-shadow:inset 0 1px #fffef3,0 2px 0 #a4794433;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-group.selected{
+ background:linear-gradient(var(--cafe-accent),color-mix(in srgb,var(--cafe-accent) 85%,#453820))!important;
+ color:#fff9e5!important;border-color:var(--cafe-edge)!important;box-shadow:inset 0 1px #fffbcb66,0 2px 0 #80552c44;
+}
+#v88-live-scene.us21-unified #cs26-pager button{
+ border-radius:8px;background:linear-gradient(#fff7dc,#e9cfa0);color:var(--cafe-ink);border-color:#ad864f;
+ box-shadow:inset 0 1px #fffcec,0 2px 0 #986a3633;
+}
+#v88-live-scene.us21-unified #cs20-station #cs20-undo,#v88-live-scene.us21-unified #cs20-station #cs20-top-up{
+ border-radius:6px 6px 12px 12px;border-color:#b18b54;
+ background:linear-gradient(#fff6dd,#ebd4a9);color:var(--cafe-ink);
+ box-shadow:inset 0 1px #fffef0,inset 0 -2px #c7a16d33,0 2px 0 #92632e44;
+}
+#v88-live-scene.us21-unified #cs20-station #cs20-top-up{background:linear-gradient(#f7f9e5,#dfe7c4);color:#5f7544}
+#v88-live-scene.us21-unified #cs20-station #cs20-primary{
+ border-radius:6px 6px 12px 12px;border-color:var(--cafe-edge);
+ background:linear-gradient(var(--cafe-accent),color-mix(in srgb,var(--cafe-accent) 78%,#35291a));
+ box-shadow:inset 0 1px #ffffd288,inset 0 -2px #00000016,0 2px 0 #77532d;
+}
+#v88-live-scene.us21-unified #cs20-station .cs20-actions button:enabled:active,
+#v88-live-scene.us21-unified #cs20-station .cs20-group:enabled:active{transform:translateY(1px);box-shadow:inset 0 1px 2px #67452130}
+#v88-live-scene.us21-unified #cs20-station :is(button,input):focus-visible{outline:2px solid var(--cafe-accent);outline-offset:2px}
+#v88-live-scene.us21-unified #cs20-station #cs20-visual svg{filter:drop-shadow(0 3px 2px #80562722)}
+@media(prefers-reduced-motion:reduce){#v88-live-scene.us21-unified #cs20-station .cs20-actions button:enabled:active,#v88-live-scene.us21-unified #cs20-station .cs20-group:enabled:active{transform:none}}

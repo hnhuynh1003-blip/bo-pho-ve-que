@@ -1,0 +1,178 @@
+{
+  "schema": 1,
+  "project": "Bỏ Phố Về Quê v88",
+  "batch": "A",
+  "stageRange": [
+    1,
+    2,
+    3
+  ],
+  "referenceBoard": "a_colorful_infographic_layout_image_in_a_clean_gam.png",
+  "sourceZip": "DUDU_STUDIO_TRA_SUA_9_BAC_KIEM_DUYET_V1(1).zip",
+  "reviewPackage": "BPVQ_V88_LO_A_REV2_9_HINH_THAM_KHAO_QA.zip",
+  "statement": "9 preview only: 3 preserved originals + 6 infographic excerpts. None is a clean shell approved for game.",
+  "statusCounts": {
+    "standaloneLegacyConcepts": 3,
+    "infographicCrops": 6,
+    "approvedShells": 0
+  },
+  "records": [
+    {
+      "id": "boba-b1",
+      "career": "boba",
+      "tier": 1,
+      "sourceType": "standalone-recovered-concept",
+      "filename": "TRA_SUA_B01_PREVIEW.webp",
+      "qaReferencePath": "tra_sua_concept/boba-b1_NGUON_GOC.webp",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Clean-pass draft3 not art-ready; 6 anchors are provisional"
+      ]
+    },
+    {
+      "id": "boba-b2",
+      "career": "boba",
+      "tier": 2,
+      "sourceType": "standalone-recovered-concept",
+      "filename": "TRA_SUA_B02_PREVIEW.webp",
+      "qaReferencePath": "tra_sua_concept/boba-b2_NGUON_GOC.webp",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Old B2 has cart wheels; stage requires fixed kiosk without wheels"
+      ]
+    },
+    {
+      "id": "boba-b3",
+      "career": "boba",
+      "tier": 3,
+      "sourceType": "standalone-recovered-concept",
+      "filename": "TRA_SUA_B03_PREVIEW.webp",
+      "qaReferencePath": "tra_sua_concept/boba-b3_NGUON_GOC.webp",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Separately strip paid decor; stage requires single-storey wood shop"
+      ]
+    },
+    {
+      "id": "noodle-b1",
+      "career": "noodle",
+      "tier": 1,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/noodle-b1_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell"
+      ]
+    },
+    {
+      "id": "noodle-b2",
+      "career": "noodle",
+      "tier": 2,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/noodle-b2_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell",
+        "Verify permanent non-wheeled kiosk silhouette"
+      ]
+    },
+    {
+      "id": "noodle-b3",
+      "career": "noodle",
+      "tier": 3,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/noodle-b3_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell"
+      ]
+    },
+    {
+      "id": "streetfood-b1",
+      "career": "streetfood",
+      "tier": 1,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/streetfood-b1_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell"
+      ]
+    },
+    {
+      "id": "streetfood-b2",
+      "career": "streetfood",
+      "tier": 2,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/streetfood-b2_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell",
+        "Verify permanent non-wheeled kiosk silhouette"
+      ]
+    },
+    {
+      "id": "streetfood-b3",
+      "career": "streetfood",
+      "tier": 3,
+      "sourceType": "infographic-crop-reference",
+      "filename": null,
+      "qaReferencePath": "tham_khao_info/streetfood-b3_TRICH_BANG_KHONG_DUNG_LAM_SHELL.png",
+      "productionArt": null,
+      "maskReady": false,
+      "measuredAnchorsReady": false,
+      "approved": false,
+      "issues": [
+        "Crop contains title-overlay/banner: reference only",
+        "No separately generated clean shell"
+      ]
+    }
+  ],
+  "productionRules": {
+    "minArtResolution": "1200x900",
+    "userApprovalRequired": true,
+    "copyReferenceToProduction": false,
+    "productionDirectory": "assets/images/v88/shops",
+    "tierShapes": [
+      "two-wheel starter cart with canopy",
+      "fixed roofed kiosk without wheels",
+      "single-storey wooden shop"
+    ],
+    "decorMayNotBeBaked": true,
+    "noPaidDecorOrNPC": true,
+    "saveUnchanged": true
+  }
+}

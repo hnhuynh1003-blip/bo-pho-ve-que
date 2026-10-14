@@ -1,0 +1,73 @@
+/* BPVQ v88 Cooking Station 2.0: portrait first, no extra panel stack. */
+#cs20-station{--cs-paper:#fff7e7;--cs-ink:#3f3329;--cs-green:#387b5c;position:relative;display:grid;gap:8px;padding:10px;border:2px solid #c3d5b3;border-radius:20px;background:linear-gradient(165deg,#fff8e9,#e9f3df);box-shadow:0 7px 20px #3b5b411a;color:var(--cs-ink);isolation:isolate}
+#cs20-station[hidden]{display:none!important}
+#cs20-station .cs20-head{display:flex;align-items:center;justify-content:space-between;gap:6px}
+#cs20-station h2{font-size:15px;line-height:1.3;font-weight:900;margin:0;color:#255941}
+#cs20-station .cs20-sub{color:#698276;font-size:10px;font-weight:700}
+#cs20-station .cs20-brand{background:#256b4a;color:white;padding:4px 7px;border-radius:8px;font-size:9px;font-weight:900;white-space:nowrap}
+#cs20-station .cs20-ticket{padding:8px 10px;border:1px dashed #c9b79c;background:#fffef9;border-radius:12px;display:grid;gap:4px}
+#cs20-station .cs20-ticket-head{display:flex;align-items:center;justify-content:space-between;font-size:12px;gap:5px}
+#cs20-station #cs20-customer-name{font-weight:900;color:#77542f}
+#cs20-station #cs20-order-time{color:#be6339;font-variant-numeric:tabular-nums;font-weight:900;flex-shrink:0}
+#cs20-station #cs20-order-text{font-size:11px;line-height:1.4;color:#5b5447;max-height:59px;overflow:auto;scrollbar-width:thin}
+#cs20-station .cs20-stage{position:relative;border:1px solid #d3c4a4;border-radius:14px;padding:8px 9px 6px;background:radial-gradient(ellipse at 50% 25%,#fffbf2,#f5e5c9);display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.2fr);align-items:center;min-height:180px;overflow:hidden}
+#cs20-station .cs20-stage figcaption{display:grid;gap:6px;min-width:0;align-self:start}
+#cs20-station .cs20-stage strong{font-size:12px;line-height:1.25;color:#684834}
+#cs20-station .cs20-stage small{font-size:10px;color:#775f50;line-height:1.35}
+#cs20-station #cs20-visual{min-height:165px;display:flex;justify-content:center;align-items:center}
+#cs20-station #cs20-visual svg{width:min(100%,195px);height:170px;filter:drop-shadow(0 5px 5px #76583224)}
+#cs20-station .cs20-meter{height:9px;background:#e7d3b5;overflow:hidden;border-radius:99px;box-shadow:inset 0 1px 2px #0002}
+#cs20-station #cs20-gauge{display:block;height:100%;width:0;border-radius:99px;background:linear-gradient(90deg,#edba61,#78b979,#389b71);transition:width .06s linear}
+#cs20-station .cs20-field{display:grid;gap:3px;font-size:10px;color:#786e55}
+#cs20-station #cs20-craft{font-size:10px;color:#3b7f61;font-weight:800}
+#cs20-station .cs20-pantry{display:grid;gap:7px;min-width:0}
+#cs20-station #cs20-groups{display:flex;gap:5px;overflow-x:auto;scrollbar-width:none}
+#cs20-station .cs20-group{white-space:nowrap;flex:1;border:1px solid #d4cbb5;border-radius:9px;background:#fffdf5;color:#6e6958;font-size:11px;font-weight:850;min-height:42px;padding:6px 9px}
+#cs20-station .cs20-group.selected{background:#357756;color:white;border-color:#357756}
+#cs20-station #cs20-shelf{display:flex;gap:7px;overflow-x:auto;overscroll-behavior-x:contain;padding:1px 2px 7px;min-height:104px;scrollbar-width:thin;scroll-snap-type:x proximity}
+#cs20-station .cs20-item{scroll-snap-align:start;flex:0 0 87px;max-width:87px;min-height:91px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px;border:2px solid #eadbc1;border-radius:12px;background:#fffef8;color:#594b3f;padding:5px 4px}
+#cs20-station .cs20-item.picked{border-color:#2f9970;background:#e8f9ed}
+#cs20-station .cs20-item:disabled{opacity:.56;filter:grayscale(.7)}
+#cs20-station .cs20-item-icon{font-size:25px;line-height:1.1}
+#cs20-station .cs20-item-name{font-size:10px;font-weight:800;line-height:1.15;max-width:80px;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;text-align:center}
+#cs20-station .cs20-item-stock{font-size:9px;color:#6d8d70}
+#cs20-station .cs20-qty{min-width:42px;background:#eec9aa;border:1px solid #c9996d;border-radius:10px;color:#623e2e;font-weight:900;font-size:12px}
+#cs20-station .cs20-flavor{display:flex;flex-wrap:wrap;align-items:center;gap:5px;flex:0 0 auto;min-width:100%;background:#fffef8;border-radius:9px;padding:5px;font-size:11px}
+#cs20-station .cs20-flavor>span{flex:0 0 48px;font-weight:850}
+#cs20-station .cs20-pill{min-height:40px;min-width:44px;flex:1;padding:3px 6px;border-radius:8px;background:#f2e9d6;border:1px solid #d3c2a4;font-weight:850}
+#cs20-station .cs20-pill.picked{background:#3d9065;color:white;border-color:#398b66}
+#cs20-station .cs20-feedback{min-height:27px;border-radius:8px;background:#ecf2dc;padding:6px 8px;color:#557354;font-size:10px;font-weight:750;line-height:1.25}
+#cs20-station .cs20-actions{display:grid;grid-template-columns:1fr 2fr;gap:7px}
+#cs20-station .cs20-button{border-radius:12px;min-height:48px;font-weight:900;font-size:12px;padding:7px 5px;background:#e5d8c2;color:#6d553c;border:1px solid #c9b79a}
+#cs20-station #cs20-primary{background:linear-gradient(125deg,#389466,#1b764f);border:2px solid #bee5b5;color:white;font-size:13px;box-shadow:0 2px 4px #38634231}
+#cs20-station .cs20-button:disabled{opacity:.58;cursor:not-allowed}
+#cs20-station .cs20-grill-actions{display:flex;gap:6px}
+#cs20-station .cs20-grill-actions button{flex:1;background:#f4e7c5;border:1px solid #c7aa75;color:#6c4f28;border-radius:9px;padding:8px;min-height:44px;font-size:11px;font-weight:900}
+#cs20-station [hidden]{display:none!important}
+#cs20-station .cs20-item:focus-visible,#cs20-station button:focus-visible{outline:3px solid #daa64a;outline-offset:1px}
+#tab-shop.cs20-enabled .workbench-shell{display:none!important}
+#tab-shop.cs20-enabled>#customer-booth-card{margin-bottom:0!important}
+#tab-shop.cs20-enabled #v8745-contest{order:3}
+#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] #v88-live-supported .v88-live-frame{aspect-ratio:16/6;max-height:116px}
+#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] #v88-live-supported .v88-live-controls,#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] #v88-live-supported .v88-live-actions,#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] .v88-live-note{display:none}
+#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] .v88-live-head{padding:5px 10px}
+@media(max-width:350px){#cs20-station{padding:7px;gap:6px;border-radius:13px}#cs20-station .cs20-stage{min-height:142px;padding:4px;grid-template-columns:1fr 1fr}#cs20-station #cs20-visual{min-height:133px}#cs20-station #cs20-visual svg{height:138px}#cs20-station .cs20-item{flex-basis:79px;max-width:79px}#cs20-station #cs20-shelf{min-height:97px}#cs20-station h2{font-size:13px}}
+@media(prefers-reduced-motion:reduce){#cs20-station *,#cs20-station *::before,#cs20-station *::after{transition:none!important;animation:none!important}}
+
+#tab-shop.cs20-active-order>#customer-booth-card{display:none!important}
+#cs20-station[data-state="idle"] .cs20-stage,#cs20-station[data-state="idle"] .cs20-pantry,#cs20-station[data-state="idle"] .cs20-grill-actions,#cs20-station[data-state="idle"] .cs20-actions{display:none!important}
+/* During active orders, the cooking ticket replaces the old floating order slip. */
+#tab-shop.cs20-active-order #v68-order-dock{display:none!important}
+/* Phone uses the same floating control as the other areas. */
+#cs20-station .cs20-actions{position:sticky;bottom:calc(6px + env(safe-area-inset-bottom,0px));z-index:9;background:#edf3ddf0;border-radius:13px;padding:5px 0}
+
+#cs20-station .cs20-price{display:flex;align-items:center;justify-content:space-between;gap:5px;font-size:11px;font-weight:800;color:#557352;padding:1px 3px}
+#cs20-station .cs20-stepper{display:flex;align-items:center;gap:5px;background:#fffdf6;border:1px solid #c8d7b1;border-radius:10px;padding:2px}
+#cs20-station .cs20-stepper button{width:39px;height:39px;display:grid;place-items:center;border-radius:8px;background:#e2edcf;color:#316d52;font-size:20px;font-weight:900}
+#cs20-station .cs20-stepper strong{font-variant-numeric:tabular-nums;min-width:45px;text-align:center;color:#2c8257;font-size:12px}
+#cs20-station[data-state="idle"] .cs20-price,#cs20-station[data-state="idle"] .cs20-ticket{display:none!important}
+#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] .v88-live-frame>img{object-fit:cover;object-position:center 45%}
+#tab-shop.cs20-enabled #v88-live-scene[data-cs20-compact="true"] #v88-live-shop-sign{display:none}
+/* Sticky header/nav must never cover the cooking station when it is scrolled into view. */
+#cs20-station{scroll-margin-top:calc(var(--v75-header-h,62px) + var(--v75-nav-h,65px) + 12px)}
+/* Mika keeps native onboarding visibility and floating position. */

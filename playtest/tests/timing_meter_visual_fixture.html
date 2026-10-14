@@ -1,0 +1,10 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"/><meta name="viewport" content="width=device-width,initial-scale=1">
+<link rel="stylesheet" href="../css/v88-cooking-station.css"/>
+<link rel="stylesheet" href="../css/v88-yard-dialogue.css"/>
+<link rel="stylesheet" href="../css/v88-premium-counter.css"/>
+<link rel="stylesheet" href="../css/v88-cafe-counter.css"/>
+<link rel="stylesheet" href="../css/v88-timing-meter-visibility.css"/>
+<style>body{background:#eee;padding:16px;font-family:sans-serif;color:#322b25}#v88-live-scene{max-width:390px;background:#f5f1e8;padding:12px}#cs20-station{display:block!important}#cs20-craft{height:10px}.cs20-meter{width:240px}#result{white-space:pre-wrap;font-size:10px}</style></head>
+<body><div id="v88-live-scene" class="us21-unified" data-career="boba"><section id="cs20-station" class="cs29-timing-active"><div class="cs20-stage"><figcaption><div class="cs20-field"><span id="cs20-gauge-label">Canh vùng sáng</span><div class="cs20-meter cs29-cap-meter" style="--cap-position:50%"><span id="cs20-gauge"></span></div></div><small id="cs20-craft">Xanh: đạt · Vàng giữa: Perfect</small></figcaption></div></section></div><pre id="result"></pre>
+<script>const out=[];['boba','noodle','streetfood'].forEach(c=>{document.querySelector('#v88-live-scene').dataset.career=c;const m=getComputedStyle(document.querySelector('.cs20-meter'));const l=getComputedStyle(document.querySelector('#cs20-craft'));out.push({career:c,background:m.backgroundImage,craftDisplay:l.display,craftColor:l.color})});document.getElementById('result').textContent=JSON.stringify(out);</script>
+</body></html>

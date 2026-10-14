@@ -1,0 +1,57 @@
+/* v87.7.6 · Mobile-first sliding OS; overrides v87.7.3–v87.7.5 only in phone. */
+#modal-smartphone.v8776-mobile #v8775-home-notices{display:none!important}
+#modal-smartphone.v8776-mobile .v8772-home{min-height:0!important;height:100%!important;max-height:100%;overflow:hidden!important;display:flex!important;flex-direction:column!important;gap:7px!important;padding:7px 9px 7px!important}
+#modal-smartphone.v8776-mobile .v8772-home.hidden{display:none!important}
+#modal-smartphone.v8776-home-active #phone-app-container{overflow:hidden!important;overscroll-behavior:contain;touch-action:pan-x}
+#modal-smartphone.v8776-mobile .v8773-hero{flex:0 0 auto;min-height:112px!important;height:112px!important;padding:7px 7px 0!important;overflow:hidden}
+#modal-smartphone.v8776-mobile .v8773-hero-mika{height:108px!important;max-width:45%!important}
+#modal-smartphone.v8776-mobile .v8773-hero-time{font-size:28px!important;margin:2px 0!important}
+#modal-smartphone.v8776-mobile .v8773-hero-greeting{font-size:9px!important;line-height:1.3!important;max-width:143px}
+#modal-smartphone.v8776-mobile .v8776-page-title{font-size:11px;font-weight:900;color:#f9e5bc;text-shadow:0 2px 7px #061b20cf;letter-spacing:.02em;padding:1px 5px 0;flex:none;min-height:17px}
+#modal-smartphone.v8776-mobile #v8772-app-launcher{display:flex!important;align-items:stretch;flex:1 1 auto;min-height:0!important;min-width:0;width:100%;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory;scroll-behavior:smooth;scrollbar-width:none;overscroll-behavior-x:contain;touch-action:pan-x;padding:0!important;margin:0!important;background:none!important;border:0!important;box-shadow:none!important;gap:0!important;-webkit-overflow-scrolling:touch}
+#modal-smartphone.v8776-mobile #v8772-app-launcher::-webkit-scrollbar{display:none}
+#modal-smartphone.v8776-mobile .v8776-home-page{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));grid-template-rows:repeat(2,min-content);align-content:center;justify-content:center;gap:6px 5px;flex:0 0 100%;width:100%;min-width:100%;height:100%;min-height:0;scroll-snap-align:start;scroll-snap-stop:always;overflow:hidden;padding:2px 1px}
+#modal-smartphone.v8776-mobile .v8776-home-page .v8772-app{min-height:66px!important;height:69px!important;padding:1px 0!important;gap:3px!important;justify-content:center!important;touch-action:manipulation}
+#modal-smartphone.v8776-mobile .v8776-home-page .phone-app-icon{width:45px!important;height:45px!important;font-size:24px!important;border-radius:15px!important}
+#modal-smartphone.v8776-mobile .v8776-home-page .v8772-app>span:last-child{font-size:9.2px!important;line-height:1.12!important;white-space:nowrap;max-width:100%;overflow:hidden;text-overflow:ellipsis}
+#modal-smartphone.v8776-mobile .v8776-notification-icon .phone-app-icon{background:linear-gradient(145deg,#fbd999,#c7784d)!important;box-shadow:0 4px 11px #5f341a70!important;color:#fff!important}
+#modal-smartphone.v8776-mobile .v8776-page-dots{display:flex;align-items:center;justify-content:center;gap:8px;min-height:19px;flex:none}
+#modal-smartphone.v8776-mobile .v8776-page-dots button{width:8px;height:8px;border-radius:999px;border:1px solid #fff9d89c;background:#fff9d85a;padding:0;min-height:8px;box-shadow:0 1px 4px #050b1670;transition:width .18s ease,background .18s ease;touch-action:manipulation}
+#modal-smartphone.v8776-mobile .v8776-page-dots button.active{width:24px;background:#f9d397;border-color:#ffefc2}
+#modal-smartphone.v8776-mobile .v8773-dock{flex:none;margin:0 0 2px!important;padding:5px!important;min-height:0!important;gap:5px!important;border-radius:21px!important}
+#modal-smartphone.v8776-mobile .v8773-dock .v8772-app{min-height:61px!important;height:62px!important;padding:1px!important}
+#modal-smartphone.v8776-mobile .v8773-dock .phone-app-icon{width:45px!important;height:45px!important}
+#modal-smartphone.v8776-mobile .v8773-dock .v8772-app>span:last-child{font-size:9px!important}
+@media(max-height:680px){#modal-smartphone.v8776-mobile .v8773-hero{height:89px!important;min-height:89px!important}#modal-smartphone.v8776-mobile .v8773-hero-mika{height:87px!important}#modal-smartphone.v8776-mobile .v8773-hero-time{font-size:24px!important}#modal-smartphone.v8776-mobile .v8776-home-page .v8772-app{min-height:57px!important;height:57px!important}#modal-smartphone.v8776-mobile .v8776-home-page .phone-app-icon{width:39px!important;height:39px!important}#modal-smartphone.v8776-mobile .v8773-dock .v8772-app{height:56px!important;min-height:56px!important}#modal-smartphone.v8776-mobile .v8773-dock .phone-app-icon{width:39px!important;height:39px!important}}
+#modal-smartphone.v8776-mobile .v8776-inbox{height:100%;min-height:100%;max-width:100%;padding:9px 8px 10px!important;display:flex!important;flex-direction:column;gap:8px!important;overflow:hidden;color:#5f422a}
+#modal-smartphone.v8776-mobile .v8776-inbox.hidden{display:none!important}
+#modal-smartphone.v8776-mobile .v8776-inbox-top{display:flex;align-items:center;gap:8px;flex:0 0 auto;min-height:61px;border-radius:15px;background:linear-gradient(120deg,#9e734d,#685045);padding:9px 7px;color:#fff2dc;box-shadow:0 3px 12px #40301c33}
+#modal-smartphone.v8776-mobile .v8776-inbox-emblem{font-size:22px;background:#fff3d429;border:1px solid #ffeedb42;border-radius:12px;width:39px;height:39px;display:grid;place-items:center;flex-shrink:0}
+#modal-smartphone.v8776-mobile .v8776-inbox-title{min-width:0;flex:1}
+#modal-smartphone.v8776-mobile .v8776-inbox-title b{font-size:11.5px;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+#modal-smartphone.v8776-mobile .v8776-inbox-title small{font-size:9px;color:#ffead1;display:block;margin-top:3px}
+#modal-smartphone.v8776-mobile .v8776-readall{flex:none;padding:4px 6px;min-height:37px;background:#fff7e9;color:#805a36;border-radius:9px;font-size:9px;font-weight:900}
+#modal-smartphone.v8776-mobile .v8776-readall:disabled{opacity:.55}
+#modal-smartphone.v8776-mobile .v8776-filters{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px;flex:none}
+#modal-smartphone.v8776-mobile .v8776-filters button{min-width:0;padding:4px 1px;border:1px solid #dac09b;background:#f8e4c4;color:#845e39;min-height:40px;border-radius:11px;font-size:9px;font-weight:900;white-space:nowrap}
+#modal-smartphone.v8776-mobile .v8776-filters button[aria-selected="true"]{background:linear-gradient(135deg,#8f6b4b,#aa7e4f);color:#fff4e4;border-color:#a37b54}
+#modal-smartphone.v8776-mobile .v8776-list{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;display:flex;flex-direction:column;gap:7px;padding:2px 2px 7px;scrollbar-width:thin;scrollbar-color:#bf9e73 transparent}
+#modal-smartphone.v8776-mobile .v8776-message{width:100%;display:flex;align-items:flex-start;gap:8px;border-radius:14px;text-align:left;border:1px solid #e6cca6;background:#fffaf0;padding:10px 8px;color:#543b27;flex:0 0 auto;min-height:64px}
+#modal-smartphone.v8776-mobile .v8776-message.is-read{opacity:.76;background:#f3e8d5}
+#modal-smartphone.v8776-mobile .v8776-message-icon{flex:none;font-size:20px;background:#fbe3bb;border-radius:10px;display:grid;place-items:center;width:37px;height:37px}
+#modal-smartphone.v8776-mobile .v8776-message-main{min-width:0;flex:1;display:flex;flex-direction:column;gap:4px}
+#modal-smartphone.v8776-mobile .v8776-message-main b{font-size:11px;line-height:1.3}
+#modal-smartphone.v8776-mobile .v8776-message-main>span{font-size:10px;color:#80634a;line-height:1.4;overflow-wrap:anywhere}
+#modal-smartphone.v8776-mobile .v8776-message-main small{font-size:9px;color:#a0805e}
+#modal-smartphone.v8776-mobile .v8776-message-dot{width:7px;height:7px;border-radius:50%;background:#d47b41;flex:none;margin-top:10px}
+#modal-smartphone.v8776-mobile .v8776-empty{min-height:170px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center;gap:8px;color:#a27e5d;font-size:26px}
+#modal-smartphone.v8776-mobile .v8776-empty b{font-size:12px;color:#78573a}
+#modal-smartphone.v8776-mobile .v8776-empty span{font-size:10px}
+#modal-smartphone.v8776-mobile .v8776-inbox-footnote{flex:none;font-size:9px;color:#927557;line-height:1.4;padding:0 2px}
+#modal-smartphone.v8776-mobile #phone-app-container:has(.v8776-inbox:not(.hidden)){overflow:hidden!important}
+#modal-smartphone.v8776-mobile .v8775-notification-options label:has(input[onchange*="notifyHome"]){display:none!important}
+@media(prefers-reduced-motion:reduce){#modal-smartphone.v8776-mobile *{scroll-behavior:auto!important;transition:none!important}}
+/* Keep the bell accessible on phone Home; prior Anime Signature hid all toolbar controls except close. */
+#modal-smartphone.v8776-mobile.v8773-at-home .v8773-appbar button[onclick="openNotificationsModal()"]{display:flex!important;visibility:visible!important;opacity:1!important;pointer-events:auto!important;width:37px!important;height:37px!important;font-size:16px!important;background:#243d4bbb!important;border:1px solid #e7c89a99!important;box-shadow:0 3px 10px #05182166!important;position:relative!important}
+#modal-smartphone.v8776-mobile.v8773-at-home .v8773-appbar{pointer-events:none!important;right:9px!important}
+#modal-smartphone.v8776-mobile.v8773-at-home .v8773-appbar .v8772-close{pointer-events:auto!important}

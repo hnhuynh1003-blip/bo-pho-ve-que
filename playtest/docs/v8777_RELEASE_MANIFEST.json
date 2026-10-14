@@ -1,0 +1,48 @@
+{
+  "version": "v87.7.7",
+  "base_required_for_patch": "v87.7.6",
+  "assets": {
+    "icons": 16,
+    "wallpapers": 6
+  },
+  "changed_files": [
+    "index.html",
+    "js/v8772-thitran-os.js",
+    "js/v8777-phone-premium.js",
+    "css/v8777-phone-premium.css",
+    "assets/images/phone/icons/admin.webp",
+    "assets/images/phone/icons/auction.webp",
+    "assets/images/phone/icons/bank.webp",
+    "assets/images/phone/icons/character.webp",
+    "assets/images/phone/icons/construction.webp",
+    "assets/images/phone/icons/delivery.webp",
+    "assets/images/phone/icons/effects.webp",
+    "assets/images/phone/icons/games.webp",
+    "assets/images/phone/icons/journal.webp",
+    "assets/images/phone/icons/notifications.webp",
+    "assets/images/phone/icons/progress.webp",
+    "assets/images/phone/icons/settings.webp",
+    "assets/images/phone/icons/social.webp",
+    "assets/images/phone/icons/soppi.webp",
+    "assets/images/phone/icons/staff.webp",
+    "assets/images/phone/icons/utility.webp",
+    "assets/images/phone/wallpapers/festival.webp",
+    "assets/images/phone/wallpapers/gradient.webp",
+    "assets/images/phone/wallpapers/market.webp",
+    "assets/images/phone/wallpapers/night.webp",
+    "assets/images/phone/wallpapers/rice.webp",
+    "assets/images/phone/wallpapers/village.webp",
+    "docs/v8777_BAN_GIAO_VA_KIEM_THU.md",
+    "docs/v8777_RELEASE_MANIFEST.json"
+  ],
+  "javascript_checked": 12,
+  "stylesheet_references": 20,
+  "script_references": 13,
+  "browser_fixture_screens": [
+    320,
+    375,
+    390,
+    430
+  ],
+  "full_game_e2e": "not_run_browser_navigation_blocked"
+}

@@ -1,0 +1,80 @@
+/* v87.7.7.2 — Layer-safe wallpaper, aligned dock, and a small poetic weather card. */
+#modal-smartphone.v87772-home-polish .v8772-home{
+ position:relative!important;isolation:isolate!important;background:#193d42!important;
+}
+/* Previous releases placed their art at z-index:-1, where a solid Home background could mask it. */
+#modal-smartphone.v87772-home-polish .v8772-home::before,
+#modal-smartphone.v87772-home-polish .v8772-home::after{content:none!important;display:none!important}
+#modal-smartphone.v87772-home-polish .v87772-wallpaper-layer{
+ position:absolute;inset:0;z-index:0;pointer-events:none;
+ background:radial-gradient(ellipse at 22% 21%,#668d7a 0%,transparent 44%),linear-gradient(160deg,#385d57,#19383d 62%,#102935);
+ background-position:center;background-size:cover;background-repeat:no-repeat;
+ opacity:1;transition:filter .2s ease;
+}
+#modal-smartphone.v87772-home-polish .v8772-home>.v8773-hero,
+#modal-smartphone.v87772-home-polish .v8772-home>.v8776-page-title,
+#modal-smartphone.v87772-home-polish .v8772-home>.v87772-weather-card,
+#modal-smartphone.v87772-home-polish .v8772-home>#v8772-app-launcher,
+#modal-smartphone.v87772-home-polish .v8772-home>.v8776-page-dots,
+#modal-smartphone.v87772-home-polish .v8772-home>.v8773-dock,
+#modal-smartphone.v87772-home-polish .v8772-home>.v8773-pager{position:relative;z-index:1}
+#modal-smartphone.v87772-home-polish.v8777-effects-off .v87772-wallpaper-layer{transition:none!important;filter:none!important}
+#modal-smartphone.v87772-home-polish.v8773-night .v87772-wallpaper-layer{filter:brightness(.77) saturate(.85)}
+/* Consistent three dock buttons regardless of older Settings/Journal card rules. */
+#modal-smartphone.v87772-home-polish .v8773-dock{
+ display:grid!important;grid-template-columns:repeat(3,minmax(0,1fr))!important;
+ align-items:stretch!important;gap:5px!important;
+ height:87px!important;min-height:87px!important;max-height:87px!important;
+ padding:6px 5px!important;box-sizing:border-box!important;
+}
+#modal-smartphone.v87772-home-polish .v8773-dock .v8772-app,
+#modal-smartphone.v87772-home-polish .v8773-dock #papp-btn-journal{
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:center!important;
+ box-sizing:border-box!important;width:100%!important;height:73px!important;min-height:73px!important;max-height:73px!important;
+ margin:0!important;padding:3px 1px!important;gap:4px!important;
+ transform:none!important;align-self:stretch!important;
+}
+#modal-smartphone.v87772-home-polish .v8773-dock .v8772-app .phone-app-icon{
+ display:flex!important;align-items:center!important;justify-content:center!important;
+ width:46px!important;height:46px!important;min-height:46px!important;max-height:46px!important;
+ flex:0 0 46px!important;margin:0!important;border-radius:14px!important;
+}
+#modal-smartphone.v87772-home-polish .v8773-dock .v8772-app>span:last-child{
+ font-size:10px!important;line-height:14px!important;min-height:14px!important;max-height:14px!important;
+ margin:0!important;padding:0!important;white-space:nowrap!important;
+ color:#fff8e9!important;text-overflow:ellipsis!important;overflow:hidden!important;max-width:100%!important;
+}
+/* Weather is editorial/informational only; no false percentages or buttons. */
+#modal-smartphone.v87772-home-polish .v87772-weather-card{
+ display:flex;flex-direction:column;gap:4px;flex:0 0 auto;
+ min-height:83px;max-height:96px;padding:10px 13px 9px;margin:2px 1px 0;
+ overflow:hidden;border-radius:17px;
+ background:linear-gradient(137deg,rgba(255,254,248,.97),rgba(252,242,221,.94));
+ border:1px solid rgba(235,213,169,.9);color:#654c35;
+ box-shadow:0 6px 17px rgba(13,34,36,.22),inset 0 1px rgba(255,255,255,.87);
+}
+#modal-smartphone.v87772-home-polish .v87772-weather-card.hidden{display:none!important}
+#modal-smartphone.v87772-home-polish .v87772-weather-top{display:flex;align-items:center;gap:8px;min-height:32px}
+#modal-smartphone.v87772-home-polish .v87772-weather-icon{font-size:23px;line-height:1;flex:none;filter:drop-shadow(0 1px 2px #d2b283)}
+#modal-smartphone.v87772-home-polish .v87772-weather-meta{display:flex;flex-direction:column;gap:1px;min-width:0}
+#modal-smartphone.v87772-home-polish .v87772-weather-eyebrow{font-size:8.4px;font-weight:900;letter-spacing:.10em;color:#9c815d}
+#modal-smartphone.v87772-home-polish .v87772-weather-label{font-size:12.5px;line-height:1.16;font-weight:900;color:#6d5338}
+#modal-smartphone.v87772-home-polish .v87772-weather-leaf{margin-left:auto;color:#c79f6e;font-size:20px}
+#modal-smartphone.v87772-home-polish .v87772-weather-verse{font-size:10.5px;line-height:1.4;color:#937153;font-style:italic;letter-spacing:.005em;margin:0;padding-right:10px;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden}
+#modal-smartphone.v87772-home-polish .v87772-weather-sprig{position:absolute;right:10px;bottom:-13px;transform:rotate(-17deg);font-size:36px;opacity:.10;color:#8f9f76;pointer-events:none}
+@media(max-height:680px){
+ #modal-smartphone.v87772-home-polish .v87772-weather-card{min-height:66px;max-height:72px;padding:7px 10px 6px;gap:2px}
+ #modal-smartphone.v87772-home-polish .v87772-weather-icon{font-size:19px}
+ #modal-smartphone.v87772-home-polish .v87772-weather-top{min-height:25px}
+ #modal-smartphone.v87772-home-polish .v87772-weather-label{font-size:11px}
+ #modal-smartphone.v87772-home-polish .v87772-weather-verse{font-size:9.4px;line-height:1.25}
+ #modal-smartphone.v87772-home-polish .v8773-dock{height:76px!important;min-height:76px!important;max-height:76px!important;padding:5px!important}
+ #modal-smartphone.v87772-home-polish .v8773-dock .v8772-app,
+ #modal-smartphone.v87772-home-polish .v8773-dock #papp-btn-journal{height:65px!important;min-height:65px!important;max-height:65px!important;padding:2px 1px!important;gap:2px!important}
+ #modal-smartphone.v87772-home-polish .v8773-dock .v8772-app .phone-app-icon{width:42px!important;height:42px!important;min-height:42px!important;max-height:42px!important;flex-basis:42px!important}
+}
+@media(max-width:350px){
+ #modal-smartphone.v87772-home-polish .v87772-weather-card{padding-left:9px;padding-right:9px}
+ #modal-smartphone.v87772-home-polish .v87772-weather-verse{font-size:9.5px}
+}
+@media(prefers-reduced-motion:reduce){#modal-smartphone.v87772-home-polish .v87772-wallpaper-layer{transition:none!important}}

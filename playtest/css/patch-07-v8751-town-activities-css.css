@@ -1,0 +1,23 @@
+
+/* V87.5.1: compact, venue-bound daily activities: no new full-screen app */
+#v8751-town-card{box-sizing:border-box;max-width:100%;min-width:0;margin:5px 0 4px;border:1px solid #eccd91;
+  border-radius:14px;background:linear-gradient(140deg,#fffdf7,#fff3dd);color:#714627;overflow:hidden;box-shadow:0 2px 7px #6a43100a}
+#v8751-town-card[hidden]{display:none!important}
+#v8751-town-card summary{list-style:none;cursor:pointer;display:flex;align-items:center;gap:7px;padding:8px 9px;font-size:10px;font-weight:900}
+#v8751-town-card summary::-webkit-details-marker{display:none}
+#v8751-town-card summary .v8751-symbol{font-size:18px}
+#v8751-town-card summary .v8751-summary-copy{min-width:0;flex:1}
+#v8751-town-card summary .v8751-sub{font-size:8px;font-weight:600;opacity:.8;display:block;margin-top:2px}
+#v8751-town-card summary .v8751-status{font-size:8px;white-space:nowrap;color:#8d651e;background:#fff7e6;border:1px solid #e7d19f;border-radius:999px;padding:4px 6px}
+#v8751-town-card summary .v8751-arrow{font-size:12px;color:#a47c45}
+#v8751-town-card[open] summary .v8751-arrow{transform:rotate(180deg)}
+#v8751-town-body{padding:0 9px 9px;border-top:1px solid #f0deb9}
+#v8751-town-body .v8751-clue{font-size:9px;line-height:1.5;margin:7px 0;color:#765331}
+#v8751-town-body .v8751-options{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#v8751-town-body .v8751-options button{min-width:0;min-height:43px;border:1px solid #e0bd78;border-radius:10px;background:#fffdf8;color:#68421c;
+  font-size:8px;font-weight:900;line-height:1.4;padding:5px 4px;overflow-wrap:anywhere;cursor:pointer}
+#v8751-town-body .v8751-options button:disabled{opacity:.5;cursor:not-allowed}
+#v8751-town-body .v8751-options button:not(:disabled):active{transform:scale(.98)}
+#v8751-town-body .v8751-footer{font-size:8px;color:#9b7440;line-height:1.5;margin-top:6px}
+#v8751-town-card .v8751-done{font-size:9px;color:#188a57;font-weight:800;padding:8px 0 1px}
+@media(min-width:768px){#v8751-town-card{margin-top:5px}}

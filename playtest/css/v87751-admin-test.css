@@ -1,0 +1,36 @@
+/* v87.7.5.1 Sandbox Admin — contained in smartphone; never increases fixed header height. */
+body.bpvq-admin-test #header-shop-name::after{content:' TEST';display:inline-block;margin-left:4px;font-size:8px;font-weight:900;vertical-align:middle;background:#1f805e;color:white;border-radius:6px;padding:1px 3px}
+#modal-smartphone.v8775-reborn #papp-btn-admin .phone-app-icon{background:linear-gradient(130deg,#c5e3c0,#4d8d70)!important;color:#163c33}
+#modal-smartphone.v8775-reborn #papp-btn-admin.hidden{display:none!important}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry{border:1px solid #dfb886;border-radius:14px;padding:12px;background:#fff5e4;color:#654c32;margin-top:14px}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry h4{font-size:12px;font-weight:900;color:#72512e}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry p,#modal-smartphone.v8775-reborn .bpvq-admin-entry small{font-size:10px;line-height:1.55;display:block;margin-top:6px}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry form{display:grid;gap:7px;margin:10px 0}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry label{font-size:10px;font-weight:800}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry input{min-height:44px;background:#fffdf7;color:#52381f;border:1px solid #ddbf98;border-radius:11px;padding:8px 10px;font-size:14px;width:100%}
+#modal-smartphone.v8775-reborn .bpvq-admin-entry button{background:#498d74;color:#fff;font-weight:900;padding:11px;border-radius:11px;min-height:44px;font-size:11px}
+#modal-smartphone.v8775-reborn .bpvq-admin-error{font-size:10px;color:#a62d36;font-weight:800;margin-top:7px}
+#modal-smartphone.v8775-reborn .bpvq-admin-panel{gap:10px}
+#modal-smartphone.v8775-reborn .bpvq-admin-alert{border:1px solid #93be9e;background:#e5f2e2;border-radius:13px;padding:12px;color:#335b3e;display:grid;gap:5px;font-size:10px;line-height:1.5;overflow-wrap:anywhere}
+#modal-smartphone.v8775-reborn .bpvq-admin-alert b{font-size:12px}
+#modal-smartphone.v8775-reborn .bpvq-admin-stats{display:flex;flex-wrap:wrap;gap:6px}
+#modal-smartphone.v8775-reborn .bpvq-admin-stats span{padding:6px 9px;border-radius:99px;background:#f4dfbd;color:#714726;font-size:10px;font-weight:900}
+#modal-smartphone.v8775-reborn .bpvq-admin-group{border:1px solid #e4c6a0;background:#fff9eb;padding:11px;border-radius:14px;display:grid;gap:9px}
+#modal-smartphone.v8775-reborn .bpvq-admin-group h3{font-size:12px;font-weight:950;color:#68452a}
+#modal-smartphone.v8775-reborn .bpvq-admin-field{display:grid;grid-template-columns:minmax(66px,.85fr) minmax(60px,1fr) auto;align-items:center;gap:5px}
+#modal-smartphone.v8775-reborn .bpvq-admin-field label{font-size:10px;color:#745336;font-weight:800}
+#modal-smartphone.v8775-reborn .bpvq-admin-field :is(input,select){min-width:0;width:100%;background:#fff;border:1px solid #dabe92;border-radius:10px;min-height:43px;padding:5px 7px;color:#604227;font-size:11px}
+#modal-smartphone.v8775-reborn .bpvq-admin-action{min-height:44px;border:1px solid #c9ac81;background:#fbe9c7;border-radius:10px;font-size:10px;font-weight:850;color:#725234;text-align:center;padding:7px 9px;line-height:1.4;touch-action:manipulation}
+#modal-smartphone.v8775-reborn .bpvq-admin-action.selected{background:#d7e9dd;color:#30694c;border-color:#80b69a}
+#modal-smartphone.v8775-reborn .bpvq-admin-action.primary{background:#3c8b6e;color:white;border-color:#3c8b6e}
+#modal-smartphone.v8775-reborn .bpvq-admin-action.danger{background:#fff2ed;border-color:#cb9d90;color:#aa5143}
+#modal-smartphone.v8775-reborn .bpvq-admin-buttons{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:7px}
+#modal-smartphone.v8775-reborn .bpvq-admin-careers{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}
+#modal-smartphone.v8775-reborn .bpvq-admin-toggle{display:flex;align-items:center;gap:9px;background:#fff2d9;border:1px solid #ead2ad;border-radius:11px;padding:9px;min-height:57px}
+#modal-smartphone.v8775-reborn .bpvq-admin-toggle span{flex:1;min-width:0}
+#modal-smartphone.v8775-reborn .bpvq-admin-toggle b{font-size:10px;display:block}
+#modal-smartphone.v8775-reborn .bpvq-admin-toggle small{font-size:9px;color:#8d7254;line-height:1.45;display:block;margin-top:3px}
+#modal-smartphone.v8775-reborn .bpvq-admin-toggle input{width:22px;height:22px;flex:none;accent-color:#468d69}
+#modal-smartphone.v8775-reborn .bpvq-admin-hint{font-size:9.5px;line-height:1.6;color:#876b4f}
+#modal-smartphone.v8775-reborn #bpvq-admin-result{font-size:11px;color:#417052;min-height:10px;line-height:1.5;overflow-wrap:anywhere}
+@media(max-width:340px){#modal-smartphone.v8775-reborn .bpvq-admin-field{grid-template-columns:1fr 1fr}#modal-smartphone.v8775-reborn .bpvq-admin-field label{grid-column:span 2}}

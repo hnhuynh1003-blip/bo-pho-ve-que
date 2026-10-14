@@ -1,0 +1,11 @@
+
+/* V87.4.4.1: Gọn sát — same column width for header, tabs and content. */
+@media (min-width: 768px) {
+  .app-shell { max-width: 430px !important; }
+}
+.compact-header { margin-bottom: 0 !important; }
+.compact-nav { margin-bottom: 0 !important; }
+.main-stage > :is(#tab-shop,#tab-farm,#tab-barn,#tab-village,#tab-warehouse,#tab-reviews) {
+  margin-top: 0 !important;
+  padding-top: 0 !important;
+}

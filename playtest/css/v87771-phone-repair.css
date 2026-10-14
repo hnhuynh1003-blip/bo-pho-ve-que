@@ -1,0 +1,60 @@
+/* Bỏ Phố Về Quê v87.7.7.1 — preserve main game/header and all saved data. */
+/* The background illustrations can fail to load after an incomplete PATCH upload.
+   Render the actual image above a themed emoji fallback rather than setting font-size:0 unconditionally. */
+#modal-smartphone.v87771-fixed .phone-app-icon.v87771-icon{position:relative!important;isolation:isolate;overflow:hidden!important;display:flex!important;align-items:center!important;justify-content:center!important}
+#modal-smartphone.v87771-fixed .phone-app-icon.v87771-icon .v87771-art-image{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;border-radius:inherit;display:block}
+#modal-smartphone.v87771-fixed .phone-app-icon.v87771-icon.v87771-broken,
+#modal-smartphone.v87771-fixed #v8772-app-launcher .phone-app-icon.v87771-icon.v87771-broken,
+#modal-smartphone.v87771-fixed .v8773-dock .phone-app-icon.v87771-icon.v87771-broken{
+ font-size:24px!important;color:#fff7e4!important;
+ background:linear-gradient(140deg,#3e8fa0,#39566f)!important;
+ background-image:linear-gradient(140deg,#3e8fa0,#39566f)!important;
+ text-shadow:0 1px 3px #041725!important;
+}
+#modal-smartphone.v87771-fixed .phone-app-icon.v87771-broken .v87771-art-image{display:none!important}
+#modal-smartphone.v87771-fixed .v8772-home.v87771-no-wallpaper::before{
+ background-image:radial-gradient(circle at 15% 13%,rgba(255,216,155,.18),transparent 35%),linear-gradient(155deg,#314f50 0%,#183f42 46%,#0e2d36 100%)!important;
+}
+/* Make every Home tile visibly contain its illustration AND its name, regardless of v87.7.3 CSS. */
+#modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page{
+ grid-template-rows:repeat(2,84px)!important;align-content:center!important;gap:7px 5px!important;
+}
+#modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page .v8772-app{
+ box-sizing:border-box!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:flex-start!important;min-height:80px!important;
+ height:84px!important;overflow:visible!important;padding:3px 1px!important;gap:5px!important;
+ color:#fff9ee!important;opacity:1!important;visibility:visible!important;
+}
+#modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page .v8772-app .phone-app-icon{
+ width:48px!important;height:48px!important;min-height:48px!important;flex:none!important;
+ margin:0!important;border-radius:14px!important;
+}
+#modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page .v8772-app>span:last-child{
+ display:block!important;position:relative!important;font-size:10px!important;
+ line-height:13px!important;font-weight:850!important;min-height:13px!important;
+ max-width:100%!important;white-space:nowrap!important;text-overflow:ellipsis!important;
+ overflow:hidden!important;opacity:1!important;visibility:visible!important;
+ color:#fff9ee!important;text-shadow:0 2px 4px #05191e!important;
+}
+#modal-smartphone.v87771-fixed .v8773-dock .v8772-app .phone-app-icon{
+ width:48px!important;height:48px!important;min-height:48px!important;flex:none!important;
+ border-radius:14px!important;margin:0!important;
+}
+#modal-smartphone.v87771-fixed .v8773-dock .v8772-app>span:last-child{
+ display:block!important;font-size:10px!important;line-height:14px!important;color:#fff9ee!important;
+ opacity:1!important;visibility:visible!important;
+}
+/* Top-right is reserved for Close; the Notification app on Home is the only phone entry. */
+#modal-smartphone.v87771-fixed.v8776-mobile.v8773-at-home .v8773-appbar button[onclick="openNotificationsModal()"],
+#modal-smartphone.v87771-fixed .v8773-appbar button[onclick="openNotificationsModal()"]{
+ display:none!important;
+}
+#modal-smartphone.v87771-fixed .v8773-appbar{right:8px!important}
+#modal-smartphone.v87771-fixed .v8773-hero-mika{height:104px!important;max-width:35%!important;right:7px!important;bottom:0!important}
+@media(max-width:350px), (max-height:680px){
+ #modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page{grid-template-rows:repeat(2,75px)!important;gap:5px!important}
+ #modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page .v8772-app{height:75px!important;min-height:75px!important}
+ #modal-smartphone.v87771-fixed #v8772-app-launcher .v8776-home-page .v8772-app .phone-app-icon,
+ #modal-smartphone.v87771-fixed .v8773-dock .v8772-app .phone-app-icon{width:42px!important;height:42px!important;min-height:42px!important}
+ #modal-smartphone.v87771-fixed .v8773-hero-mika{height:86px!important;max-width:33%!important}
+}

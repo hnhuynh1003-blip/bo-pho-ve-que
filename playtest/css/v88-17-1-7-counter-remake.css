@@ -1,0 +1,257 @@
+/* v88.17.1.7 — replacement interactive counter, separate DOM surface.
+   Old station kept only as a gameplay controller host. No prior card grid CSS
+   is used to lay out this new surface. Native buttons/IDs are moved, not cloned. */
+#v88-live-scene.us21-unified #cp177-workshop{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cs20-station{display:none!important}
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop{
+ display:grid!important;grid-template-columns:minmax(0,1fr);gap:7px;
+ width:100%;max-width:100%;min-width:0;box-sizing:border-box;
+ margin:2px 0 9px;padding:7px 8px 10px;
+ color:#65402e;background:linear-gradient(180deg,#d6a16c,#b87b50);
+ border:3px solid #8b593b;border-radius:23px;
+ box-shadow:0 12px 20px #4f291f40,inset 0 2px #ffe9be;
+ overflow:hidden;isolation:isolate;
+}
+#cp177-workshop *{box-sizing:border-box}
+#cp177-workshop button,#cp177-workshop summary{touch-action:manipulation;cursor:pointer}
+#cp177-workshop button:focus-visible,#cp177-workshop summary:focus-visible{outline:3px solid #227c70!important;outline-offset:1px}
+#cp177-workshop .cp177-top{display:flex;align-items:center;gap:7px;min-width:0;height:43px}
+#cp177-workshop .cp177-top-left{flex:0 0 auto}
+#cp177-workshop #us21-exit-kitchen{display:inline-flex!important;align-items:center;justify-content:center;
+ min-height:39px!important;height:39px!important;max-height:39px!important;
+ padding:5px 9px!important;border-radius:13px!important;font-size:11px!important;white-space:nowrap;box-shadow:0 3px #916344!important}
+#cp177-workshop .cp177-top-caption{flex:1 1 auto;min-width:0;color:#fff3de;font-size:12px;font-weight:950;letter-spacing:.3px;text-align:center;text-shadow:0 2px #69442f}
+#cp177-workshop .cp177-day-status{flex:0 0 auto;max-width:84px;color:#fff4df;font-size:10px;font-weight:900;text-align:right}
+/* Two physical props matching the source reference, without their baked-in dummy information. */
+#cp177-workshop .cp177-upper{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(86px,.9fr);gap:7px;min-width:0;max-height:111px}
+#cp177-workshop .cp177-order,#cp177-workshop .cp177-result{position:relative;min-width:0;
+ height:110px;min-height:110px;max-height:110px;border-radius:16px;
+ border:2px solid #976445;background:linear-gradient(140deg,#fff6e5,#f2d2a7);
+ box-shadow:inset 0 2px #fffdf0,0 3px 5px #57382022;overflow:visible;z-index:12}
+#cp177-workshop .cp177-result{background:#f8e6c8 url('../assets/images/v88/cute-premium/finished_preview.webp') center/100% 100% no-repeat}
+#cp177-workshop .cp177-panel-label{position:absolute;left:7px;top:3px;padding:2px 8px;border-radius:9px;
+ color:white;background:#b9675b;font-weight:900;font-size:11px;z-index:2;line-height:1.35}
+#cp177-workshop .cp177-result .cp177-panel-label{background:#c58a59}
+/* Move the ORIGINAL bound price/order DOM here, but ditch all box dimensions of the old skin. */
+#cp177-workshop .cp177-order-slot{height:100%;min-width:0;padding:26px 7px 4px}
+#cp177-workshop .cs20-price.cs33-order-bar{all:unset!important;box-sizing:border-box!important;display:flex!important;
+ height:100%!important;width:100%!important;min-width:0!important;max-width:100%!important;
+ flex-direction:row!important;gap:4px!important;align-items:center!important;position:relative!important;
+ overflow:visible!important;background:transparent!important;border:0!important;box-shadow:none!important}
+#cp177-workshop .cs33-order-ticket{display:block!important;flex:1 1 auto!important;min-width:0!important;
+ max-width:100%!important;max-height:80px!important;position:static!important;overflow:visible!important;
+ border:none!important;background:transparent!important;box-shadow:none!important}
+#cp177-workshop .cs33-order-ticket summary{display:flex!important;gap:2px!important;align-items:start!important;flex-direction:column!important;
+ min-width:0!important;max-width:100%!important;white-space:normal!important;line-height:1.1!important;padding:3px!important;
+ background:transparent!important;color:#72472e!important;overflow:hidden!important}
+#cp177-workshop .cs33-order-ticket summary b{font-size:11px!important;line-height:1.2!important;max-width:100%!important;white-space:normal!important;overflow:hidden!important;display:-webkit-box!important;-webkit-line-clamp:2!important;-webkit-box-orient:vertical!important}
+#cp177-workshop .cs33-order-ticket .cs33-expand-hint{display:none!important}
+#cp177-workshop #cs33-order-summary{font-size:10px!important;line-height:1.26!important;color:#634a38!important;
+ display:-webkit-box!important;-webkit-line-clamp:3!important;-webkit-box-orient:vertical!important;overflow:hidden!important;
+ white-space:normal!important;overflow-wrap:normal!important;word-break:normal!important}
+#cp177-workshop .cs20-stepper{display:flex!important;flex:0 0 57px!important;min-width:0!important;
+ width:57px!important;max-width:57px!important;height:auto!important;gap:4px!important;align-items:center!important;justify-content:center!important;
+ flex-wrap:wrap!important;background:transparent!important;border:0!important;padding:0!important;box-shadow:none!important}
+#cp177-workshop #cs20-sale-price{font-size:12px!important;color:#9e3f45!important;font-weight:950!important;white-space:nowrap}
+#cp177-workshop .cs20-stepper button,#cp177-workshop .cs20-stepper summary{min-width:25px!important;min-height:25px!important;max-width:32px!important;max-height:30px!important;
+ background:#f5d49e!important;border:1px solid #bb8d65!important;border-radius:9px!important;padding:3px!important}
+#cp177-workshop .cs33-order-detail,#cp177-workshop .cs33-help-detail{position:absolute!important;z-index:100!important;top:91px!important;
+ left:0!important;right:0!important;min-width:0!important;width:100%!important;max-width:100%!important;
+ max-height:210px!important;overflow-y:auto!important;white-space:pre-line!important;overflow-wrap:anywhere!important;
+ color:#6d4933!important;background:#fff8e9!important;border:2px solid #ae8866!important;border-radius:12px!important;
+ padding:9px!important;font-size:12px!important;line-height:1.42!important;box-shadow:0 8px 20px #59351c55!important}
+#cp177-workshop .cp177-result-image{width:100%;height:74px;padding:17px 8px 0;display:flex;align-items:center;justify-content:center;overflow:hidden}
+#cp177-workshop .cp177-result-image img,#cp177-workshop .cp177-result-image svg{width:auto;max-width:100%;height:60px;max-height:60px;object-fit:contain;filter:drop-shadow(0 2px 2px #6c462c66)}
+#cp177-workshop .cp177-result-desc{padding:0 7px;font-size:9px;line-height:1.23;text-align:center;color:#784d3a;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+/* The painted workbench IS the usable gameplay area: no separate duplicate shop image above it. */
+#cp177-workshop .cp177-workbench{position:relative;min-width:0;height:273px;min-height:273px;max-height:273px;
+ border-radius:17px;border:2px solid #7e4b2e;background:linear-gradient(#d7b58b,#e7c398 72%,#c17f50 72%);
+ isolation:isolate;box-shadow:inset 0 2px #fff2d5,0 5px 8px #6540272a;overflow:hidden}
+#cp177-workshop .cp177-backbar-art{position:absolute;inset:0;background:url('../assets/images/v88/cute-premium/boba_backbar.webp') center center/cover no-repeat;opacity:.95;z-index:0;pointer-events:none}
+#cp177-workshop .cp177-workbench::after{content:"";position:absolute;left:8px;right:8px;bottom:0;height:41px;
+ background:linear-gradient(180deg,#c48c58b0,#8e5339e0);border-radius:9px 9px 13px 13px;pointer-events:none;z-index:1}
+/* A tea dispenser IS a real button. The native rót handler is triggered by clicking this picture. */
+#cp177-workshop #cp177-pour-object{position:absolute;left:1.5%;top:34px;z-index:9;display:flex;align-items:center;justify-content:center;
+ flex-direction:column;width:29%;height:180px;min-height:160px;padding:0;border:0;background:transparent;box-shadow:none;touch-action:manipulation}
+#cp177-workshop #cp177-pour-object img{display:block;width:100%;height:146px;object-fit:contain;filter:drop-shadow(0 3px 5px #63432c70);transform-origin:60% 20%;transition:transform .18s ease}
+#cp177-workshop #cp177-pour-object:not(:disabled):active img,#cp177-workshop.cp177-pouring #cp177-pour-object img{transform:rotate(-12deg)}
+#cp177-workshop #cp177-pour-object .cp177-pour-tag{display:block;margin-top:-5px;border-radius:10px;background:#ffe3b4;color:#855137;
+ font-size:10px;font-weight:950;white-space:nowrap;padding:4px 8px;box-shadow:0 2px 3px #6d3e3544}
+#cp177-workshop #cp177-pour-object:disabled{cursor:default;opacity:.83}
+#cp177-workshop .cp177-cup-place{position:absolute;right:5%;top:26px;width:62%;height:222px;min-width:0;z-index:5}
+#cp177-workshop .cs20-stage{all:unset!important;position:relative!important;display:flex!important;flex-direction:column!important;
+ align-items:center!important;justify-content:center!important;width:100%!important;height:222px!important;
+ min-height:0!important;max-height:222px!important;margin:0!important;padding:0!important;border:0!important;
+ border-radius:0!important;background:transparent!important;overflow:visible!important;box-shadow:none!important}
+#cp177-workshop .cs20-stage::before,#cp177-workshop .cs20-stage::after{display:none!important}
+#cp177-workshop .cp175-props{display:none!important} /* duplicated old decorative machine/stand removed */
+#cp177-workshop #cs20-visual{all:unset!important;display:flex!important;position:relative!important;width:min(100%,210px)!important;
+ height:172px!important;min-height:172px!important;max-height:172px!important;align-items:center!important;justify-content:center!important;
+ margin:0!important;z-index:3!important;cursor:pointer}
+#cp177-workshop #cs20-visual svg{display:block!important;width:auto!important;height:170px!important;max-width:100%!important;min-height:0!important;
+ filter:drop-shadow(0 5px 7px #5c301f70)!important}
+#cp177-workshop .cs20-stage figcaption{all:unset!important;box-sizing:border-box!important;position:relative!important;
+ display:flex!important;flex-direction:column!important;align-items:center!important;justify-content:flex-end!important;
+ width:100%!important;max-width:100%!important;min-width:0!important;height:48px!important;min-height:48px!important;max-height:48px!important;
+ padding:0!important;margin:0!important;overflow:visible!important;color:#fff3df!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;z-index:5!important}
+#cp177-workshop #cs20-dish-name{font-size:11px!important;line-height:1.35!important;font-weight:950!important;color:#fff9e8!important;
+ text-align:center;text-shadow:0 2px #67422f;max-width:100%;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis}
+#cp177-workshop #cs20-dish-detail,#cp177-workshop #cs20-feedback,#cp177-workshop #cs20-craft{display:none!important}
+#cp177-workshop .cs20-stage figcaption::after{display:none!important}
+#cp177-workshop #cs27-containers{display:flex!important;align-items:center!important;justify-content:center!important;gap:4px!important;
+ height:24px!important;min-height:24px!important;max-height:24px!important;width:auto!important;margin:0!important;padding:0!important;
+ border:0!important;background:transparent!important}
+#cp177-workshop #cs27-containers .cs27-container{display:inline-flex!important;min-width:33px!important;min-height:25px!important;max-height:28px!important;
+ width:auto!important;padding:2px 7px!important;font-size:10px!important;border-radius:8px!important;
+ background:#f9e2bd!important;color:#765035!important;border:1px solid #ac754d!important;box-shadow:0 2px #9a6144!important}
+#cp177-workshop #cs27-containers .cs27-container .cs28-cup-stack{display:none!important}
+#cp177-workshop .cs20-field{position:absolute!important;top:-6px!important;left:-3px!important;right:-3px!important;min-height:0!important;height:0!important;
+ overflow:visible!important;display:block!important;background:none!important;border:0!important;padding:0!important;margin:0!important}
+#cp177-workshop #cs20-gauge-label{display:none!important}
+#cp177-workshop .cs20-meter{position:absolute!important;top:0!important;left:0!important;right:0!important;height:12px!important;min-height:12px!important;
+ border:2px solid #9e734a!important;border-radius:9px!important;background:#fff3de!important;overflow:visible!important}
+#cp177-workshop .cs20-meter.cs29-cap-meter{background:linear-gradient(90deg,#da8b78 0 28%,#78b181 28% 44%,#f6d04b 44% 56%,#78b181 56% 72%,#da8b78 72% 100%)!important}
+#cp177-workshop .cs20-meter.cs29-cap-meter::after{content:"";position:absolute;z-index:3;left:var(--cap-position,50%);top:-3px;width:5px;height:17px;border-radius:4px;
+ background:#49372b;border:1px solid #fff5d8;transform:translateX(-50%)}
+#cp177-workshop .cp177-active-items{position:absolute;left:32%;right:3px;bottom:7px;z-index:7;display:flex;align-items:center;gap:3px;
+ height:38px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+#cp177-workshop .cp177-used-item{flex:0 0 auto;display:flex;align-items:center;gap:3px;padding:2px 4px;background:#fff1d9e8;
+ border-radius:9px;border:1px solid #b88e66;max-width:105px;height:32px;box-shadow:0 2px 3px #5a36242a}
+#cp177-workshop .cp177-used-item img{width:27px;height:27px;object-fit:contain}
+#cp177-workshop .cp177-used-item span{font-size:9px;max-width:64px;max-height:27px;line-height:1.1;overflow:hidden;color:#704831;font-weight:900}
+#cp177-workshop .cp177-no-toppings{font-size:10px;color:#fff7e7;font-weight:900;text-shadow:0 2px #553820}
+/* The original single button for each item is the only hit target. Image is
+   rendered IN the button, with no artificial extra bounding "card" around it. */
+#cp177-workshop .cp177-ingredients{min-width:0;position:relative;border-radius:16px;border:2px solid #8d593b;background:linear-gradient(#9c5e3c,#b0784f);
+ padding:7px 6px 7px;box-shadow:inset 0 2px #e9ba84}
+#cp177-workshop .cp177-ingredient-title{font-size:10px;color:#fff5e9;font-weight:950;margin:0 0 4px 5px;white-space:nowrap;text-overflow:ellipsis;overflow:hidden}
+#cp177-workshop .cs20-pantry{all:unset!important;display:flex!important;flex-direction:column!important;min-width:0!important;
+ width:100%!important;height:auto!important;min-height:0!important;max-height:none!important;padding:0!important;margin:0!important;
+ background:transparent!important;border:0!important;box-shadow:none!important;position:static!important;transform:none!important;overflow:hidden!important}
+#cp177-workshop .cp173-drawer-handle{display:none!important} /* no additional drawer-button consuming area */
+#cp177-workshop .cs30-pantry-bar{display:flex!important;position:relative!important;align-items:center!important;gap:3px!important;height:31px!important;
+ min-height:31px!important;max-height:31px!important;width:100%!important;min-width:0!important;padding:0!important;margin:0!important;
+ border:0!important;background:transparent!important;box-shadow:none!important}
+#cp177-workshop #cs20-groups{display:flex!important;flex:1 1 auto!important;gap:4px!important;align-items:center!important;
+ min-width:0!important;width:auto!important;height:30px!important;max-height:30px!important;overflow-x:auto!important;overflow-y:hidden!important;scrollbar-width:none}
+#cp177-workshop .cs20-group{all:unset!important;box-sizing:border-box!important;display:inline-flex!important;flex:0 0 auto!important;align-items:center!important;justify-content:center!important;
+ padding:4px 10px!important;height:28px!important;min-height:28px!important;max-height:28px!important;white-space:nowrap!important;
+ background:#f3dfbe!important;color:#735136!important;border:1px solid #bb865e!important;border-radius:12px!important;font-weight:950!important;font-size:11px!important}
+#cp177-workshop .cs20-group.picked,#cp177-workshop .cs20-group.selected{background:#f392a5!important;color:#fff!important;border-color:#bb586c!important}
+#cp177-workshop #cs26-pager{display:flex!important;flex:0 0 auto!important;min-width:0!important;gap:2px!important;height:29px!important;align-items:center!important}
+#cp177-workshop #cs26-pager[hidden]{display:none!important}
+#cp177-workshop #cs26-pager button{width:28px;height:28px;border-radius:10px;background:#fff0d0;border:1px solid #b27a51;color:#784d2e;font-size:16px}
+#cp177-workshop #cs20-shelf,#cp177-workshop #cs20-shelf[data-rows="1"]{all:unset!important;box-sizing:border-box!important;display:flex!important;
+ gap:5px!important;align-items:flex-start!important;overflow-x:auto!important;overflow-y:hidden!important;scroll-snap-type:x mandatory!important;
+ scroll-behavior:smooth!important;scrollbar-width:thin!important;width:100%!important;max-width:100%!important;min-width:0!important;
+ height:91px!important;min-height:91px!important;max-height:91px!important;padding:1px 2px 3px!important}
+#cp177-workshop #cs20-shelf .cs20-item{all:unset!important;box-sizing:border-box!important;position:relative!important;display:flex!important;
+ flex-direction:column!important;align-items:center!important;justify-content:flex-start!important;flex:0 0 82px!important;
+ width:82px!important;min-width:82px!important;max-width:82px!important;height:85px!important;min-height:85px!important;max-height:85px!important;
+ padding:0!important;margin:0!important;background:transparent!important;border:0!important;box-shadow:none!important;overflow:visible!important;scroll-snap-align:start!important;
+ cursor:pointer!important;touch-action:manipulation}
+#cp177-workshop #cs20-shelf .cs20-item .cs26-jar-image{all:unset!important;box-sizing:border-box!important;position:relative!important;display:flex!important;
+ width:78px!important;min-width:78px!important;max-width:78px!important;height:63px!important;min-height:63px!important;max-height:63px!important;
+ align-items:center!important;justify-content:center!important;margin:0!important;padding:0!important;border:0!important;background:transparent!important;overflow:visible!important}
+#cp177-workshop #cs20-shelf .cs20-item .cs26-jar-image img,#cp177-workshop #cs20-shelf .cp176-ai-tray .cp176-ai-tray-img{width:100%!important;
+ max-width:100%!important;max-height:100%!important;height:100%!important;object-fit:contain!important;filter:drop-shadow(0 2px 1px #5b321a60)!important}
+#cp177-workshop #cs20-shelf .cs20-item .cs20-item-name{all:unset!important;box-sizing:border-box!important;display:block!important;
+ max-width:80px!important;width:80px!important;height:20px!important;min-height:20px!important;max-height:20px!important;
+ padding:2px 4px!important;text-align:center!important;line-height:16px!important;font-size:10px!important;font-weight:950!important;
+ color:#74432e!important;white-space:nowrap!important;overflow:hidden!important;text-overflow:ellipsis!important;
+ border-radius:6px!important;background:linear-gradient(#fff4dd,#e6bd86)!important;border:1px solid #a9784f!important}
+#cp177-workshop #cs20-shelf .cs20-item.picked .cs20-item-name{background:#f4a5b1!important;color:#883e49!important;border-color:#f36b86!important}
+#cp177-workshop #cs20-shelf .cs20-item:disabled{opacity:.48!important;filter:grayscale(.7)}
+#cp177-workshop #cs20-shelf .cs26-jar-stock,#cp177-workshop #cs20-shelf .cs26-jar-portion{position:absolute!important;
+ top:0!important;right:0!important;width:auto!important;height:auto!important;min-width:16px!important;min-height:16px!important;
+ padding:1px 3px!important;border-radius:7px!important;background:#fff4dc!important;color:#915b3d!important;
+ font-size:9px!important;font-weight:950!important;line-height:1.2!important;box-shadow:0 1px 2px #59372266!important;z-index:2!important}
+#cp177-workshop #cs20-shelf .cs26-jar-portion{left:0!important;right:auto!important;top:0!important;background:#f6a4ae!important;color:#6a2c3c!important}
+#cp177-workshop #cs20-shelf .cs26-jar-portion[hidden]{display:none!important}
+/* Sugar and ice retain real native controls, placed as a tiny single row. */
+#cp177-workshop .cp177-options{display:flex;align-items:center;gap:7px;min-width:0;height:54px;padding:5px 7px;
+ border:1px solid #956847;border-radius:14px;background:linear-gradient(#ffeaca,#ecc08a);box-shadow:inset 0 2px #fff6de}
+#cp177-workshop .cp177-meters-slot{min-width:0;flex:1 1 auto}
+#cp177-workshop #cs26-meters{all:unset!important;box-sizing:border-box!important;display:flex!important;position:relative!important;min-width:0!important;
+ width:100%!important;height:auto!important;gap:6px!important;justify-content:space-around!important;background:transparent!important;border:0!important;padding:0!important}
+#cp177-workshop .cs26-meter{all:unset!important;box-sizing:border-box!important;display:flex!important;flex:1 1 0!important;align-items:center!important;
+ justify-content:center!important;gap:4px!important;min-width:0!important;max-width:50%!important;background:transparent!important;border:0!important;box-shadow:none!important;padding:0!important}
+#cp177-workshop .cs26-meter>span,#cp177-workshop .cs26-meter strong{all:unset!important;font-size:10px!important;font-weight:900!important;color:#6a432e!important;white-space:nowrap!important}
+#cp177-workshop .cs26-range{all:unset!important;box-sizing:border-box!important;display:block!important;width:100%!important;min-width:28px!important;
+ max-width:75px!important;height:22px!important;appearance:auto!important;accent-color:#d47886!important;cursor:pointer!important}
+#cp177-workshop .cp177-progress-hint{font-size:9px;font-weight:800;line-height:1.3;color:#754b37;max-width:98px;flex:0 0 98px;min-width:0}
+#cp177-workshop .cp177-actions{min-width:0;min-height:54px;display:flex;align-items:center}
+#cp177-workshop .cp177-actions-slot{width:100%}
+#cp177-workshop .cs20-actions{all:unset!important;box-sizing:border-box!important;display:grid!important;grid-template-columns:minmax(0,.65fr) minmax(0,1.4fr)!important;
+ gap:7px!important;width:100%!important;min-height:52px!important;height:52px!important;max-height:52px!important;
+ background:transparent!important;border:0!important;padding:0!important;margin:0!important;box-shadow:none!important}
+#cp177-workshop .cs20-actions button{all:unset!important;box-sizing:border-box!important;display:flex!important;align-items:center!important;justify-content:center!important;
+ min-width:0!important;width:100%!important;height:51px!important;min-height:51px!important;max-height:51px!important;
+ border-radius:15px!important;border:2px solid #a56a4c!important;background:linear-gradient(#fff8e8,#e9c598)!important;
+ box-shadow:0 3px #86533a!important;color:#815139!important;font-size:12px!important;font-weight:950!important;
+ white-space:normal!important;text-align:center!important;cursor:pointer!important;padding:4px!important}
+#cp177-workshop #cs20-top-up{display:none!important} /* pour again by touching the tea dispenser */
+#cp177-workshop #cs20-primary{background:linear-gradient(#ff9fb6,#d96f8c)!important;color:#fff!important;border-color:#b65a75!important;
+ text-shadow:0 2px #963e58!important;box-shadow:0 3px #9d4b64!important;font-size:13px!important}
+#cp177-workshop #cs20-primary[data-act="pour"]{display:none!important}
+#cp177-workshop .cs20-actions:has(#cs20-primary[data-act="pour"]){grid-template-columns:1fr!important}
+#cp177-workshop .cs20-actions button:disabled{opacity:.58!important;cursor:default!important}
+#cp177-workshop .cp177-empty{position:relative;z-index:16;display:flex;align-items:center;gap:10px;padding:13px 14px;border-radius:15px;
+ background:#fff6df;border:2px solid #be9567;box-shadow:0 4px 12px #6a412b20}
+#cp177-workshop .cp177-empty[hidden]{display:none!important}
+#cp177-workshop .cp177-empty img{height:95px;width:85px;object-fit:contain}
+#cp177-workshop .cp177-empty strong{font-size:13px;color:#6f4335}
+#cp177-workshop .cp177-empty p{font-size:11px;line-height:1.4;margin:4px 0 9px}
+#cp177-workshop .cp177-practice{border:1px solid #a97a50;border-radius:11px;background:#f7cea0;color:#6e4031;
+ padding:8px;font-size:12px;font-weight:900;min-height:39px}
+#cp177-workshop.cp177-idle-mode .cp177-upper,#cp177-workshop.cp177-idle-mode .cp177-workbench,#cp177-workshop.cp177-idle-mode .cp177-ingredients,
+#cp177-workshop.cp177-idle-mode .cp177-options,#cp177-workshop.cp177-idle-mode .cp177-actions{display:none!important}
+@media (min-width:730px){
+ #v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop{grid-template-columns:minmax(170px,.85fr) minmax(280px,1.65fr);grid-template-areas:"top top" "upper bench" "ingredients ingredients" "options actions";gap:8px;padding:10px}
+ #cp177-workshop .cp177-top{grid-area:top}
+ #cp177-workshop .cp177-upper{grid-area:upper;grid-template-columns:1fr;grid-template-rows:1fr 1fr;max-height:280px;gap:8px}
+ #cp177-workshop .cp177-order,#cp177-workshop .cp177-result{height:132px;min-height:132px;max-height:132px}
+ #cp177-workshop .cp177-order-slot{padding-top:26px}
+ #cp177-workshop .cp177-workbench{grid-area:bench;height:280px;min-height:280px;max-height:280px}
+ #cp177-workshop .cp177-ingredients{grid-area:ingredients}
+ #cp177-workshop .cp177-options{grid-area:options;min-height:58px;height:58px}
+ #cp177-workshop .cp177-actions{grid-area:actions;min-height:58px}
+ #cp177-workshop .cp177-actions .cs20-actions{height:56px!important;min-height:56px!important}
+ #cp177-workshop .cp177-actions .cs20-actions button{height:55px!important;min-height:55px!important;max-height:55px!important}
+ #cp177-workshop #cs20-shelf .cs20-item{flex-basis:94px!important;min-width:94px!important;max-width:94px!important;width:94px!important}
+ #cp177-workshop #cs20-shelf .cs20-item .cs26-jar-image{width:88px!important;min-width:88px!important;max-width:88px!important}
+ #cp177-workshop #cs20-shelf .cs20-item .cs20-item-name{width:90px!important;max-width:90px!important}
+ #cp177-workshop .cp177-result-image{height:99px}
+ #cp177-workshop .cp177-result-image img,#cp177-workshop .cp177-result-image svg{height:88px;max-height:88px}
+}
+@media(max-width:355px){
+ #cp177-workshop #us21-exit-kitchen{font-size:10px!important;padding:4px 7px!important}
+ #cp177-workshop .cp177-top-caption{font-size:10px}
+ #cp177-workshop .cp177-day-status{font-size:9px}
+ #cp177-workshop .cp177-upper{grid-template-columns:minmax(0,1.7fr) minmax(70px,.8fr)}
+ #cp177-workshop .cp177-order-slot{padding-left:3px;padding-right:3px}
+ #cp177-workshop .cp177-result-image{padding-left:2px;padding-right:2px}
+ #cp177-workshop .cp177-workbench{height:262px;min-height:262px;max-height:262px}
+ #cp177-workshop .cp177-progress-hint{flex-basis:77px;max-width:77px;font-size:8px}
+}
+@media(prefers-reduced-motion:reduce){#cp177-workshop *{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
+
+/* The illustrated finished-frame already contains its own heading. */
+#cp177-workshop .cp177-result .cp177-panel-label{display:none!important}
+
+/* AI order-header artwork cropped from the approved source sheet; the actual text
+   and customer order still come from native dynamically-updated elements. */
+#cp177-workshop .cp177-order::before{content:"";position:absolute;left:-2px;top:-4px;width:183px;height:49px;
+ background:url('../assets/images/v88/cute-premium/order_header.webp') left top/100% 100% no-repeat;pointer-events:none;z-index:2}
+#cp177-workshop .cp177-order>.cp177-panel-label{display:none!important}
+#cp177-workshop .cp177-order-slot{padding-top:37px!important}
+#cp177-workshop .cp177-order .cs33-order-ticket summary{max-height:64px!important}
+@media(max-width:355px){#cp177-workshop .cp177-order::before{width:150px;height:40px}#cp177-workshop .cp177-order-slot{padding-top:31px!important}}
+/* Keep dynamic order details clear of the baked-in order-board motif. */
+#cp177-workshop .cp177-order-slot{padding-top:44px!important}
+#cp177-workshop .cp177-order .cs20-stepper{margin-top:8px!important}
+@media(max-width:355px){#cp177-workshop .cp177-order-slot{padding-top:38px!important}}
+/* On narrow screens, leave a clear place for the live price next to the art title. */
+#cp177-workshop .cp177-order::before{width:155px;height:41px}
+@media(max-width:355px){#cp177-workshop .cp177-order::before{width:132px;height:36px}}

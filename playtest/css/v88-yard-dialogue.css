@@ -1,0 +1,24 @@
+/* v88.16.4: one courtyard conversation, installed counter, cap timing meter. */
+#v88-live-frame .cs29-speech{position:absolute!important;z-index:12;top:7px;left:8px;width:48%;height:27%;min-height:62px;max-height:90px;box-sizing:border-box;display:grid!important;grid-template-rows:16px 10px minmax(0,1fr);gap:2px;padding:5px 7px;background:#fffdf3f5;border:1px solid #b99666;border-radius:12px;box-shadow:0 2px 4px #624a3726;color:#624e3a}
+#v88-live-frame .cs29-speech[hidden],#cs29-guest[hidden]{display:none!important}
+.cs29-speech:after{content:'';position:absolute;left:12px;bottom:-5px;width:8px;height:8px;background:#fffdf3;border-right:1px solid #b99666;border-bottom:1px solid #b99666;transform:rotate(45deg)}
+#v88-live-frame .cs20-ticket-head{display:flex;height:16px;gap:4px;align-items:center;font-size:10px;line-height:14px;min-width:0}
+#v88-live-frame #cs20-customer-name{flex:1;min-width:0;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font-weight:850}
+#v88-live-frame #cs20-order-time{flex:none;font-size:9px;color:#947947}
+#v88-live-frame #cust-avatar{display:none!important}
+#v88-live-frame .cs27-customer-meta{display:flex;gap:5px;height:10px;font-size:8px;line-height:10px;overflow:hidden}
+#v88-live-frame .cs27-customer-meta>*{position:static!important;font-size:8px!important;line-height:10px!important;white-space:nowrap}
+#v88-live-frame #cs20-order-text{font-size:10px;line-height:13px;min-height:0;overflow-y:auto;overscroll-behavior:contain;scrollbar-width:thin;white-space:normal;color:#624e3a}
+#v88-live-scene.us21-unified #v88-live-frame #cs29-guest{position:absolute!important;left:0!important;top:auto!important;bottom:7%!important;width:23%!important;height:37%!important;object-fit:contain!important;object-position:center bottom!important;z-index:9;filter:drop-shadow(1px 3px 2px #57473540);pointer-events:none}
+.cs29-yard-tools{position:absolute;right:7px;bottom:7px;display:flex;gap:5px;z-index:13}
+.cs29-yard-tools button{width:44px;height:44px;min-height:44px;padding:4px;border:1px solid #bd9c70;border-radius:13px;background:#fff8e9ee;box-shadow:0 2px 3px #6d553336;display:grid;place-items:center}
+.cs29-yard-tools img{width:34px;height:34px;object-fit:contain}
+#cs20-station .cs20-meter.cs29-cap-meter{position:relative;overflow:visible;background:linear-gradient(90deg,#ecd2bd 0 28%,#8dbb8d 28% 44%,#f5d16d 44% 56%,#8dbb8d 56% 72%,#ecd2bd 72%);height:12px;border:1px solid #9d805a}
+#cs20-station .cs29-cap-meter #cs20-gauge{display:none}
+#cs20-station .cs29-cap-meter:after{content:'';position:absolute;left:var(--cap-position,0%);top:-4px;width:3px;height:18px;border-radius:2px;background:#49372d;transform:translateX(-50%);box-shadow:0 0 0 1px #fff7e7}
+@media(prefers-reduced-motion:reduce){#cs29-guest{animation:none!important}}
+#v88-live-scene.us21-unified #v88-live-frame #cs29-guest:not([hidden]){display:block!important}
+.cs29-yard-tools button{display:flex;flex-direction:column;gap:2px;align-items:center;justify-content:center;padding:2px}
+.cs29-yard-tools img{width:25px;height:25px}
+.cs29-yard-tools small{font-size:8px;line-height:9px;font-weight:800;color:#715735;white-space:nowrap}
+.cs29-phone-icon{display:block;width:14px;height:24px;border:2px solid #877554;border-radius:4px;background:linear-gradient(#adc5a0 0 78%,#fff3d5 79%);box-shadow:inset 0 0 0 1px #fff8e3}
