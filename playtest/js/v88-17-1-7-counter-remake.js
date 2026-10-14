@@ -16,7 +16,7 @@ shell.innerHTML=`
  <header class="cp177-top"><div class="cp177-top-left"></div><span class="cp177-top-caption">Quầy trà sữa</span><span class="cp177-day-status"></span></header>
  <div class="cp177-upper">
   <div class="cp177-order"><div class="cp177-order-slot"></div></div>
-  <div class="cp177-result"><div class="cp177-result-image"></div><div class="cp177-result-desc"></div></div>
+  <div class="cp177-result" role="status" aria-live="polite"><div class="cp177-result-image"></div><div class="cp177-result-desc"></div><button type="button" class="cp177-take-cup" hidden>🥤 Cầm ly</button></div>
  </div>
  <div class="cp177-workbench" aria-label="Bàn pha chế">
   <div class="cp177-backbar-art" aria-hidden="true"></div>
@@ -30,7 +30,7 @@ shell.innerHTML=`
  <div class="cp177-options"><div class="cp177-meters-slot"></div><div class="cp178-meter-slot"></div><span class="cp177-progress-hint" hidden></span></div>
  <div class="cp177-ingredients"><div class="cp177-pantry-slot"></div></div>
  <footer class="cp177-actions"><div class="cp177-actions-slot"></div></footer>
- <div class="cp177-empty" hidden><span>Chưa mở bán · Có thể tập pha chế</span><button type="button" class="cp177-practice">🎓 Luyện tập</button></div>
+ <div class="cp177-empty" hidden><span>Chưa có đơn · Quầy sẵn sàng</span><button type="button" class="cp177-practice" title="Tập pha chế" aria-label="Luyện tập pha chế">🎓</button></div>
  `;
 scene.append(shell);
 const moves=[
@@ -132,6 +132,12 @@ function refresh(){
  progress.hidden=!timing;
  progress.textContent=timing?'Vàng = Perfect':'';
  const isDone=(!!s.customer&&!!s.dish?.isShaken)||(state.practice&&state.stage==='done');
+ const held=!!state.handoffHeld;
+ shell.dataset.handoff=held?'held':isDone?'ready':'none';
+ const takeCup=shell.querySelector('.cp177-take-cup');
+ takeCup.hidden=!isDone||held||!!state.practice;
+ takeCup.disabled=!isDone||held||!!state.practice;
+ takeCup.textContent=held?'✓ Đang cầm ly':'🥤 Cầm ly';
  shell.dataset.finished=String(isDone);
  shell.querySelector('.cp177-empty').hidden=!!s.customer||!!state.practice;
  shell.classList.toggle('cp177-idle-mode',!s.customer&&!state.practice);
@@ -148,6 +154,7 @@ dispenser.addEventListener('click',()=>{
  refresh();
 });
 shell.querySelector('.cp177-practice').addEventListener('click',()=>{if(w.BPVQCookingStation.startPractice()){w.BPVQUnifiedShop?.update?.();refresh();}});
+shell.querySelector('.cp177-take-cup').addEventListener('click',()=>{const action=$('cs20-primary');if(action?.dataset.act==='take'&&!action.disabled){action.click();refresh();}});
 // Mouse/keyboard/click all use the original action handlers; no second settlement path.
 const obs=new MutationObserver(()=>refresh());
 obs.observe(station,{attributes:true,attributeFilter:['data-career','data-state','data-pantry-open']});
