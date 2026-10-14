@@ -232,3 +232,34 @@
 /* Ingredient graphics and the live drink already tell the same story on phones;
    hide redundant miniature ingredient captions that covered the cup/bench. */
 @media(max-width:599px){#cp177-workshop .cp177-active-items{display:none!important}}
+/* v88.17.1.9 — compact counter + in-counter handoff; inherited gameplay nodes intact. */
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop{position:relative!important}
+#v88-live-scene.us21-kitchen-view[data-career="boba"] .us21-train-start{display:none!important}
+#cp177-workshop .cp177-upper{gap:4px!important}
+#cp177-workshop .cp177-order{min-height:72px!important}
+#cp177-workshop .cp177-order-slot{min-height:70px!important;padding:28px 8px 5px!important}
+#cp177-workshop .cs20-price.cs33-order-bar{min-height:38px!important}
+#cp177-workshop .cp177-workbench{height:clamp(340px,72vw,425px)!important;min-height:340px!important}
+#cp177-workshop .cp177-empty{position:absolute;right:13px;top:42px;z-index:22;width:auto;max-width:calc(100% - 26px);min-height:32px!important;
+ padding:3px 4px 3px 9px!important;gap:7px!important;border-radius:12px!important;box-shadow:0 2px 6px #67402522}
+#cp177-workshop .cp177-empty span{font-size:10px!important;line-height:1.2!important}
+#cp177-workshop .cp177-practice{min-height:29px!important;width:31px!important;padding:2px!important;line-height:1!important;font-size:16px!important}
+#cp177-workshop .cp177-result{min-height:88px!important;padding:9px 10px 9px 88px!important;
+ background-size:85px 100%!important;align-items:center!important;gap:6px!important;flex-wrap:wrap;
+ animation:cp179-tray-in .24s ease-out}
+#cp177-workshop .cp177-result-image{left:18px!important;top:7px!important;width:58px!important;height:73px!important}
+#cp177-workshop .cp177-result-desc{flex:1 1 110px;min-width:0;max-height:40px!important}
+#cp177-workshop .cp177-take-cup{flex:0 0 auto;min-height:36px;padding:7px 11px;border:1px solid #aa6d58;
+ border-radius:11px;background:#d87590;color:white;font-weight:900;font-size:12px;box-shadow:0 2px 0 #8b4e65}
+#cp177-workshop .cp177-take-cup[hidden]{display:none!important}
+#cp177-workshop[data-handoff="held"] .cp177-result{border-color:#81a368!important;box-shadow:inset 0 1px #fff9e9,0 0 0 2px #b5d89e}
+#cp177-workshop[data-handoff="held"] .cp177-result::after{content:"✓ Đang cầm ly · Giao khách bên dưới";
+ position:absolute;right:8px;bottom:4px;color:#3d764d;font-size:10px;font-weight:800}
+#cp177-workshop .cp177-ingredients{padding:7px 6px!important}
+#cp177-workshop #cs20-shelf .cs20-item{gap:3px!important}
+#cp177-workshop #cs20-shelf .cs20-item-name{line-height:1.2!important}
+@keyframes cp179-tray-in{from{opacity:.2;transform:translateY(10px)}to{opacity:1;transform:translateY(0)}}
+@media(prefers-reduced-motion:reduce){#cp177-workshop .cp177-result{animation:none!important}}
+@media(max-width:390px){#cp177-workshop .cp177-result{padding-left:76px!important}
+ #cp177-workshop .cp177-result-image{left:10px!important}
+ #cp177-workshop .cp177-take-cup{padding:5px 7px;font-size:11px}}
