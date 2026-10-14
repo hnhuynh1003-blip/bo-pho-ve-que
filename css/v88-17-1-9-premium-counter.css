@@ -794,3 +794,71 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
    grid-auto-columns:calc((100% - 5px)/2)!important;
  }
 }
+
+
+/* v88.17.1.9 FINAL FRAME FIX: isolate the actual legacy yard wrapper.
+   The yard frame is nested under #v88-live-supported, NOT a direct child of
+   #v88-live-scene. Preserve the yard screen when kitchen-view is inactive. */
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] > #v88-live-supported,
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] > .v88-live-head,
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] > .v88-live-note,
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] > .v88-live-other-career,
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] > .cs27-shop-controls {
+  display:none!important;
+}
+/* Enforce containing-block width: no global html/body overflow hiding. */
+#tab-shop.us21-enabled,
+#tab-shop.us21-enabled > #v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] {
+  min-width:0!important;max-width:100%!important;
+  width:100%!important;box-sizing:border-box!important;
+}
+#tab-shop.us21-enabled > #v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] {
+  overflow-x:clip!important;
+}
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop[data-premium="1"] {
+  box-sizing:border-box!important;
+  width:100%!important;
+  max-width:min(860px,100%)!important;
+  min-width:0!important;
+  margin-inline:auto!important;
+}
+#cp177-workshop[data-premium="1"] > .cp179-hero {
+  width:100%!important;
+  max-width:100%!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  grid-template-columns:minmax(0,210px) minmax(0,1fr)!important;
+}
+#cp177-workshop[data-premium="1"] .cp177-order,
+#cp177-workshop[data-premium="1"] .cp177-workbench,
+#cp177-workshop[data-premium="1"] .cp177-ingredients,
+#cp177-workshop[data-premium="1"] .cp177-options,
+#cp177-workshop[data-premium="1"] .cp177-actions,
+#cp177-workshop[data-premium="1"] .cp177-pantry-slot,
+#cp177-workshop[data-premium="1"] .cs20-pantry {
+  min-width:0!important;max-width:100%!important;
+  box-sizing:border-box!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-shelf,
+#cp177-workshop[data-premium="1"] #cs20-shelf[data-rows="1"]{
+  width:100%!important;max-width:100%!important;
+  box-sizing:border-box!important;
+  overflow-x:auto!important;
+  overscroll-behavior-x:contain!important;
+}
+@media (max-width:1024px) and (min-width:801px){
+ #cp177-workshop[data-premium="1"] > .cp179-hero {
+   grid-template-columns:minmax(0,190px) minmax(0,1fr)!important;
+ }
+}
+@media (max-width:800px){
+ #cp177-workshop[data-premium="1"] > .cp179-hero {
+   grid-template-columns:minmax(0,1fr)!important;
+   grid-template-rows:auto 231px!important;
+ }
+}
+@media (max-width:425px){
+ #cp177-workshop[data-premium="1"] > .cp179-hero {
+   grid-template-rows:auto 216px!important;
+ }
+}
