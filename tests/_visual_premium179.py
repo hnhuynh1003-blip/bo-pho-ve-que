@@ -86,6 +86,18 @@ with sync_playwright() as pw:
       dispenser:box('#cp177-pour-object'),cup:box('#cp177-workshop .cp177-cup-place'),
       liveCup:box('#cp177-workshop #cs20-visual svg'),
       pantry:box('#cp177-workshop .cp177-ingredients'),options:box('#cp177-workshop .cp177-options'),
+      shelf:box('#cp177-workshop #cs20-shelf'),
+      lastItem:(()=>{
+        const shelf=document.querySelector('#cp177-workshop #cs20-shelf');
+        const items=[...shelf.querySelectorAll('.cs20-item')];
+        const visible=items.filter(e=>e.getBoundingClientRect().width>0);
+        const second=visible.filter(e=>e.offsetTop>visible[0]?.offsetTop+20);
+        const a=second[0];
+        if(!a)return null;
+        const r=a.getBoundingClientRect(), sr=shelf.getBoundingClientRect();
+        const title=a.querySelector('.cs20-item-name')?.getBoundingClientRect();
+        return {top:r.top,bottom:r.bottom,shelfBottom:sr.bottom,nameBottom:title?.bottom};
+      })(),
       actions:box('#cp177-workshop .cp177-actions'),
       background:getComputedStyle(document.querySelector('#cp177-workshop .cp177-workbench')).backgroundImage};
   }""")
@@ -94,6 +106,10 @@ with sync_playwright() as pw:
   for section in ['workshop','top','order','bench','pantry','options','actions','dispenser','cup']:
    assert sizes[section] and sizes[section]['w']>30 and sizes[section]['h']>25,('missing visual',width,section,sizes)
   assert sizes['scroll']<=sizes['viewport']+2,('horizontal overflow',width,sizes)
+  assert sizes['order']['h']<210,('oversized empty order card',width,sizes['order'])
+  assert sizes['lastItem'],('topping second row missing',width,sizes)
+  assert sizes['lastItem']['nameBottom']<=sizes['lastItem']['shelfBottom']+1,('ingredient name cut off',width,sizes['lastItem'])
+
   assert sizes['top']['bottom']<=sizes['hero']['y']+3,('hidden/displaced header',width,sizes)
   assert sizes['bench']['bottom']<=sizes['pantry']['y']+3,('stage overlaps pantry',width,sizes)
   assert sizes['pantry']['bottom']<=sizes['options']['y']+3,('pantry overlaps sugar/ice',width,sizes)
