@@ -1,0 +1,81 @@
+name: Sync isolated BPVQ playtest
+on:
+  push:
+    branches:
+      - feat/v88-17-1-9-cup-handoff
+  workflow_dispatch:
+permissions:
+  contents: write
+  pages: write
+concurrency:
+  group: bpvq-playtest-sync
+  cancel-in-progress: false
+jobs:
+  sync-preview:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout development source
+        uses: actions/checkout@v4
+        with:
+          ref: feat/v88-17-1-9-cup-handoff
+          path: source
+          persist-credentials: false
+      - name: Checkout published main
+        uses: actions/checkout@v4
+        with:
+          ref: main
+          path: published
+      - name: Refresh only the playtest copy
+        shell: bash
+        run: |
+          set -euo pipefail
+          for dir in css js assets; do
+            mkdir -p "published/playtest/$dir"
+            rsync -a --delete "source/$dir/" "published/playtest/$dir/"
+          done
+          cp source/index.html published/playtest/index.html
+          cp source/asset-manifest.json published/playtest/asset-manifest.json
+          cp source/chuyen-save.html published/playtest/chuyen-save.html
+          python3 - <<'PY'
+          from pathlib import Path
+          root=Path('published/playtest')
+          game=root/'js/game.js'
+          s=game.read_text(encoding='utf-8')
+          # Keep playtest localStorage independent from production on the same GitHub Pages origin.
+          s=s.replace('ve_que_khoi_nghiep_', 'bpvq_playtest_')
+          game.write_text(s, encoding='utf-8')
+          index=root/'index.html'
+          html=index.read_text(encoding='utf-8')
+          import re
+          html=re.sub(r'<title>[^<]*</title>', '<title>BPVQ PLAYTEST — bản đang phát triển (save thử riêng)</title>', html, count=1)
+          # Use a per-build version so browser caches do not retain older CSS/JS.
+          import os
+          ver=os.environ['GITHUB_SHA'][:12]
+          html=re.sub(r'((?:href|src)="(?:css|js)/[^"]+?\.(?:css|js))(?:\?[^"]*)?(")',lambda m: m.group(1)+'?test='+ver+m.group(2),html)
+          index.write_text(html, encoding='utf-8')
+          PY
+      - name: Commit only playtest directory to main
+        id: commit
+        shell: bash
+        working-directory: published
+        run: |
+          set -euo pipefail
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add -A playtest/
+          if git diff --cached --quiet; then
+            echo "changed=false" >> "$GITHUB_OUTPUT"
+          else
+            git commit -m "test: sync isolated playtest from v88 development"
+            git push origin HEAD:main
+            echo "changed=true" >> "$GITHUB_OUTPUT"
+          fi
+      - name: Request GitHub Pages rebuild
+        if: steps.commit.outputs.changed == 'true'
+        env:
+          GH_TOKEN: ${{ github.token }}
+          GH_REPO: ${{ github.repository }}
+        shell: bash
+        run: |
+          # GITHUB_TOKEN pushes do not trigger other workflows; request a Pages branch build explicitly.
+          gh api --method POST "repos/$GH_REPO/pages/builds"
