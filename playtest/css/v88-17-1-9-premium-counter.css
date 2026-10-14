@@ -509,3 +509,95 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) #cs20-station .c
     grid-template-rows:auto 253px!important;
   }
 }
+
+/* v88.17.1.9 — physical tray calibration and compact counter.
+   Backbar art has its wooden tray centered. Both native cup and pour dispenser
+   remain operable; the cup is centered above the painted tray, not to the right. */
+body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
+  max-width:min(900px,100vw)!important;
+}
+#cp177-workshop[data-premium="1"] .cp177-workbench {
+  height:310px!important;min-height:310px!important;max-height:310px!important;
+}
+#cp177-workshop[data-premium="1"] #cp177-pour-object {
+  top:68px!important;left:1%!important;width:35%!important;
+  height:183px!important;min-height:183px!important;
+}
+#cp177-workshop[data-premium="1"] #cp177-pour-object img {
+  height:164px!important;max-height:164px!important;
+}
+#cp177-workshop[data-premium="1"] .cp177-cup-place {
+  top:auto!important;right:25%!important;bottom:19px!important;
+  width:50%!important;height:181px!important;
+  display:flex!important;justify-content:center!important;align-items:flex-end!important;
+}
+#cp177-workshop[data-premium="1"] .cs20-stage {
+  width:100%!important;height:181px!important;
+  min-height:181px!important;max-height:181px!important;
+  display:flex!important;justify-content:center!important;align-items:flex-end!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-visual {
+  width:100%!important;height:171px!important;
+  min-height:171px!important;max-height:171px!important;
+  display:flex!important;justify-content:center!important;align-items:flex-end!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-visual svg {
+  height:158px!important;max-height:158px!important;width:auto!important;
+  translate:0 5px;transform-origin:center bottom!important;
+}
+@media(max-width:800px) {
+  #cp177-workshop[data-premium="1"] .cp179-hero {
+    grid-template-rows:auto 231px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cp177-workbench {
+    height:231px!important;min-height:231px!important;max-height:231px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cp177-pour-object {
+    top:48px!important;left:1%!important;width:34%!important;
+    height:129px!important;min-height:129px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cp177-pour-object img {
+    height:114px!important;max-height:114px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cp177-cup-place {
+    top:auto!important;right:25%!important;bottom:17px!important;
+    width:50%!important;height:144px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cs20-stage {
+    height:144px!important;min-height:144px!important;max-height:144px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-visual {
+    height:137px!important;min-height:137px!important;max-height:137px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-visual svg {
+    height:125px!important;max-height:125px!important;translate:0 5px;
+  }
+}
+@media(max-width:425px) {
+  #cp177-workshop[data-premium="1"] .cp179-hero {
+    grid-template-rows:auto 216px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cp177-workbench {
+    height:216px!important;min-height:216px!important;max-height:216px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cp177-pour-object {
+    top:44px!important;left:1%!important;width:33%!important;
+    height:117px!important;min-height:117px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cp177-pour-object img {
+    height:103px!important;max-height:103px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cp177-cup-place {
+    top:auto!important;right:25%!important;bottom:16px!important;
+    width:50%!important;height:135px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cs20-stage {
+    height:135px!important;min-height:135px!important;max-height:135px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-visual {
+    height:128px!important;min-height:128px!important;max-height:128px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-visual svg {
+    height:117px!important;max-height:117px!important;translate:0 6px;
+  }
+}
