@@ -13195,7 +13195,7 @@ function v8752BuyFestival(id){
       if (!confirm(`Xóa tài khoản "${acc.name}" và toàn bộ tiến trình của tài khoản này?`)) return;
       const accounts = readAccountRegistry().filter(a => a && a.id !== profileId);
       writeAccountRegistry(accounts);
-      try { localStorage.removeItem(getProfileStorageKey(profileId)); localStorage.removeItem('bpvq:preview:admin:seed:'+profileId); } catch (err) {}
+      try { localStorage.removeItem(getProfileStorageKey(profileId)); localStorage.removeItem('bpvq:admin:seed:'+profileId); } catch (err) {}
       if (activeProfileId === profileId) {
         activeProfileId = null;
         sessionGameActive = false;
@@ -13334,7 +13334,7 @@ function v8752BuyFestival(id){
         shopName:gameState.shopName,shopAvatar:gameState.shopAvatar,playerChibi:gameState.playerChibi,
         createdAt:Date.now(),lastPlayedAt:Date.now(),summary:{playerName:clone.playerName,shopName:clone.shopName,
           playerChibi:clone.playerChibi,career:clone.currentCareer,day:clone.day,level:clone.level,hasStarted:true}};
-      const key=getProfileStorageKey(id),seedKey='bpvq:preview:admin:seed:'+id;
+      const key=getProfileStorageKey(id),seedKey='bpvq:admin:seed:'+id;
       try{
         localStorage.setItem(key,JSON.stringify(clone));
         localStorage.setItem(seedKey,JSON.stringify(clone));
@@ -13361,7 +13361,7 @@ function v8752BuyFestival(id){
     }
     function bpvqAdminResetSandbox(){
       if(!bpvqAdminTestActive())return false;
-      const id=activeProfileId,raw=localStorage.getItem('bpvq:preview:admin:seed:'+id);
+      const id=activeProfileId,raw=localStorage.getItem('bpvq:admin:seed:'+id);
       if(!raw)return false;
       try{
         const parsed=JSON.parse(raw);

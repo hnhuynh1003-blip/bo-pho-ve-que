@@ -43,8 +43,8 @@ button{background:#2e6f50;color:white}button[disabled]{opacity:.45;cursor:not-al
 <script>
 (() => {
 'use strict';
-const REGISTRY = 'bpvq_playtest_accounts_v1';
-const ACTIVE = 'bpvq_playtest_active_profile_v1';
+const REGISTRY = 've_que_khoi_nghiep_accounts_v1';
+const ACTIVE = 've_que_khoi_nghiep_active_profile_v1';
 const $ = (id) => document.getElementById(id);
 let candidate = null;
 function message(msg, isError=false){$('status').textContent=msg;$('status').style.color=isError?'#a52824':'#2d6644';}
@@ -89,7 +89,7 @@ $('importBtn').addEventListener('click',()=>{
   if(existing.some(a=>String(a?.name||'').toLowerCase()===name.toLowerCase()))return message('Tên hồ sơ đã tồn tại. Hãy đặt tên khác.',true);
   if(!confirm('Tạo hồ sơ mới "'+name+'" từ mã save đã chọn? Hồ sơ hiện có sẽ không bị ghi đè.'))return;
   const id='p_import_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);
-  const saveKey='bpvq_playtest_profile_'+id+'_save_v13';
+  const saveKey='ve_que_khoi_nghiep_profile_'+id+'_save_v13';
   const now=Date.now();
   const shopName=String(candidate.shopName||'Quán Nhà Mình').slice(0,32);
   const shopAvatar=String(candidate.shopAvatar||'bunny').slice(0,50);
