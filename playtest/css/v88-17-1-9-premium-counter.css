@@ -458,3 +458,54 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
   animation:none!important;transition:none!important;
  }
 }
+
+/* Hotfix 88.17.1.9 — old 1.8 CSS assigns named grid areas to the
+   workshop's direct children. Removing the areas on the container without
+   resetting those children created phantom grid tracks: empty brown stage,
+   hidden header, and overlapping pantry/timing controls. */
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop[data-premium="1"]{
+  grid-template-areas:"header" "workshop" "ingredients" "controls" "actions"!important;
+  grid-template-columns:minmax(0,1fr)!important;
+  grid-template-rows:auto auto auto auto auto!important;
+}
+#cp177-workshop[data-premium="1"] > .cp177-top{
+  grid-area:header!important;grid-column:1!important;
+  position:relative!important;visibility:visible!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] > .cp179-hero{
+  grid-area:workshop!important;grid-column:1!important;
+  min-width:0!important;position:relative!important;
+}
+#cp177-workshop[data-premium="1"] > .cp177-ingredients{
+  grid-area:ingredients!important;grid-column:1!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] > .cp177-options{
+  grid-area:controls!important;grid-column:1!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] > .cp177-actions{
+  grid-area:actions!important;grid-column:1!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] .cp179-hero > .cp177-upper{
+  display:contents!important;
+}
+#cp177-workshop[data-premium="1"] .cp179-hero .cp177-order{
+  grid-area:order!important;visibility:visible!important;
+}
+#cp177-workshop[data-premium="1"] .cp179-hero .cp177-workbench{
+  grid-area:bench!important;display:block!important;visibility:visible!important;
+}
+body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) #cs20-station .cp176-idle{
+  display:none!important;
+}
+@media(max-width:800px){
+  #cp177-workshop[data-premium="1"] > .cp179-hero{
+    grid-template-areas:"order" "bench"!important;
+    grid-template-columns:minmax(0,1fr)!important;
+    grid-template-rows:auto 275px!important;
+  }
+}
+@media(max-width:425px){
+  #cp177-workshop[data-premium="1"] > .cp179-hero{
+    grid-template-rows:auto 253px!important;
+  }
+}
