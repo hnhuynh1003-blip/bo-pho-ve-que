@@ -233,6 +233,7 @@
    hide redundant miniature ingredient captions that covered the cup/bench. */
 @media(max-width:599px){#cp177-workshop .cp177-active-items{display:none!important}}
 /* v88.17.1.9 — compact counter + in-counter handoff; inherited gameplay nodes intact. */
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop{position:relative!important}
 #v88-live-scene.us21-kitchen-view[data-career="boba"] .us21-train-start{display:none!important}
 #cp177-workshop .cp177-upper{gap:4px!important}
 #cp177-workshop .cp177-order{min-height:72px!important}
