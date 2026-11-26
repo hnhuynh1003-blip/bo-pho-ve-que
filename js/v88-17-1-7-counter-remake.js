@@ -66,6 +66,7 @@ function included(s){
  return [...keys].filter(id=>{let q=Object.prototype.hasOwnProperty.call(d.toppingPortions||{},id)?Number(d.toppingPortions[id]):1;return q>0;}).map(id=>({id,qty:Number(d.toppingPortions?.[id]??1),name:human(id,s)}));
 }
 const selectedArt={
+ topping_cheese_foam:'topping_cheese_foam-B-tray.webp',
  topping_boba:'topping_boba-ai-tray.webp',topping_white_boba:'topping_white_boba-ai-tray.webp',
  topping_peach:'topping_peach-ai-tray.webp',topping_jelly:'topping_jelly-ai-tray.webp',
  topping_pudding:'topping_pudding-ai-tray.webp',topping_crystal:'topping_crystal-ai-tray.webp',

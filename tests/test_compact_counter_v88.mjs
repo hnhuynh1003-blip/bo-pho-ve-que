@@ -2,12 +2,13 @@
 import assert from 'node:assert/strict';
 import { chromium } from 'playwright';
 import { mkdirSync, writeFileSync } from 'node:fs';
+import {enterKitchen,pourBoba,cookKitchen} from './kitchen_test_helpers.mjs';
 const options={headless:true,args:['--no-sandbox','--disable-gpu']};
 if(process.env.BPVQ_TEST_BROWSER_PATH)options.executablePath=process.env.BPVQ_TEST_BROWSER_PATH;
 const browser=await chromium.launch(options),reports=[];
 const dest='artifacts/v88-compact-counter';mkdirSync(dest,{recursive:true});
 try{
- for(const [width,height,career] of [[320,568,'boba'],[390,844,'boba'],[430,932,'boba'],[1366,768,'boba'],[320,568,'noodle'],[390,844,'noodle'],[430,932,'noodle'],[320,568,'streetfood'],[390,844,'streetfood'],[430,932,'streetfood']]){
+ for(const [width,height,career] of [[320,568,'boba'],[360,800,'boba'],[375,812,'boba'],[390,844,'boba'],[430,932,'boba'],[1366,768,'boba'],[320,568,'noodle'],[390,844,'noodle'],[430,932,'noodle'],[320,568,'streetfood'],[390,844,'streetfood'],[430,932,'streetfood']]){
   const page=await browser.newPage({viewport:{width,height}}),errors=[];
   page.on('pageerror',e=>errors.push(String(e)));
   await page.route('https://cdnjs.cloudflare.com/**',r=>r.abort());
@@ -45,13 +46,12 @@ try{
   assert.equal(geometry.tapCount,0,'tea base must not have a second selector');
   assert.equal(geometry.containerCount,geometry.catalogContainerCount,'all native container choices stay available');
   assert.ok(!geometry.groups.some(x=>['Chọn ly','Chọn thố','Chọn khay','Điều vị'].includes(x)),'no repeated size/flavor pantry tabs');
-  assert.ok(geometry.item.height<=80,'ingredient art remains compact and touchable');
   assert.ok(geometry.horizontal<=1,'no horizontal overflow');
   assert.ok(geometry.header.height<=56,'header stays compact');
   assert.ok(Math.abs(geometry.nav.bottom-height)<=1,'area dock touches bottom');
   assert.ok(geometry.scene.top>=geometry.header.bottom,'scene starts below the header');
   assert.ok(geometry.scene.top-geometry.header.bottom<=4,'shop sits close to header');
-  const yard=await page.locator('#v88-live-frame').boundingBox();assert.ok(Math.abs(yard.height-yard.width*10/16)<1,'courtyard keeps compact16:10 ratio');
+  const yard=await page.locator('#v88-live-frame').boundingBox();const yardRatio=width<=699?3/4:10/16;assert.ok(yard&&Math.abs(yard.height-yard.width*yardRatio)<1,'courtyard keeps owner-approved mobile 4:3 / desktop 16:10 ratio');
   await page.waitForFunction(()=>{const im=document.getElementById('v88-live-image');return im.complete&&im.naturalWidth>0;});
   const sceneArt=await page.evaluate(()=>{const im=document.getElementById('v88-live-image');return {src:im.getAttribute('src'),display:getComputedStyle(im).display,available:document.getElementById('v88-live-scene').dataset.unavailable,accent:getComputedStyle(document.getElementById('v88-live-scene')).getPropertyValue('--cafe-accent').trim()};});
   assert.equal(sceneArt.available,'false','all three starter carts have actual scene art');
@@ -60,14 +60,23 @@ try{
   assert.equal(sceneArt.accent,career==='noodle'?'#b35d48':career==='streetfood'?'#657d43':'#668454','materials match each cart');
   assert.equal(await page.locator('#v88-live-other-career').isVisible(),false,'no missing-art notice covers a restored cart');
   await page.evaluate(()=>window.scrollTo(0,0));await page.screenshot({path:`${dest}/${width}-${career}-yard.png`});
-  const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,career==='boba','extra pour control only belongs to drinks');
-  assert.equal(geometry.shelf.height,160,'two installed rows');
+  const nativeIds=['cs20-primary','cs20-shelf','cs20-visual','cs27-containers','us21-enter-kitchen','us21-exit-kitchen'];
+  await page.evaluate(ids=>{window.__compactNodes=ids.map(id=>document.getElementById(id));},nativeIds);
+  await enterKitchen(page);
+  assert.equal(await page.locator('#v88-live-supported').isVisible(),false,'no ghost yard');
+  assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=1),'no horizontal overflow in kitchen');
+  const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,false,'legacy top-up control is not a second visible control');if(career==='boba')assert.equal(await page.locator('#cp177-pour-object').isVisible(),true,'dispenser owns pour and top-up');
+  const shelfHeight=career==='boba'?(width<=480?200:222):160;
+  assert.equal((await page.locator('#cs20-shelf').boundingBox()).height,shelfHeight,'two installed rows in kitchen');
   const items=await page.evaluate(()=>{const rail=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('#cs20-shelf .cs20-item')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,width:r.width,visible:r.left>=rail.left-1&&r.right<=rail.right+1};});});
-  assert.equal(items.filter(x=>x.visible).length,Math.min(10,items.length),'five columns show up to ten ingredients');
+  const columns=career==='boba'?(width<=350?2:width<=800?3:5):5;
+  assert.equal(items.filter(x=>x.visible).length,Math.min(columns*2,items.length),'visible ingredients match responsive column count');
+  const itemHeight=(await page.locator('#cs20-shelf .cs20-item:visible').first().boundingBox()).height;
+  assert.ok(itemHeight>=44&&itemHeight<=(career==='boba'?(width<=480?94:104):80),'ingredient art remains compact and touchable');
   assert.equal(new Set(items.filter(x=>x.visible).map(x=>x.top)).size,2,'visible ingredients occupy two rows');
   assert.ok(items.every(x=>x.width>=44),'compact ingredient targets stay touchable');
   assert.ok(await page.locator('.cs20-stage #cs20-feedback').count()===1,'status is inside preparation, not a blank block');
-  const prep=await page.locator('.cs20-stage').boundingBox();assert.equal(prep.height,140,'preparation surface is shorter');
+  const prep=await page.locator('.cs20-stage').boundingBox();assert.equal(prep.height,career==='boba'?(width<=425?135:width<=800?144:181):140,'preparation surface matches installed view');
   if(career==='streetfood'){
    assert.equal(await page.locator('#cs20-lift').isVisible(),false,'manual lift only appears as the primary action after both faces');
    const row=await page.locator('.cs20-grill-actions').boundingBox();
@@ -76,7 +85,7 @@ try{
     assert.ok(r.x>=row.x-1&&r.x+r.width<=row.x+row.width+1,id+' fits its installed row');
    }
   }
-  const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=520,'counter is compact for every career');
+  if(career==='boba'){assert.equal(await page.locator('#cs20-station').isVisible(),false,'legacy station hidden, one premium counter');assert.equal(await page.locator('#cp177-workshop').isVisible(),true);}else{const stationHeight=(await page.locator('#cs20-station').boundingBox()).height;assert.ok(stationHeight<=520,'legacy counter is compact');}
   const before=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
   const size=page.locator('#cs27-containers button:enabled').first();await size.click();
   assert.equal(await size.getAttribute('aria-pressed'),'true','container choice feeds native dish');
@@ -85,7 +94,7 @@ try{
    const groups=page.locator('#cs20-groups');await groups.getByRole('button',{name:'Cốt trà',exact:true}).click();
    assert.ok(await page.locator('#cs20-shelf .cs20-item').count()>0,'native tea catalog available');
    await groups.getByRole('button',{name:'Topping & siro',exact:true}).click();
-   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,geometry.shelf.height,'all groups preserve two installed shelf rows');
+   const shelf=await page.locator('#cs20-shelf').boundingBox();assert.equal(shelf.height,shelfHeight,'all groups preserve two installed shelf rows');
    assert.equal(await page.locator('#cs20-shelf .cs20-item').count(),await page.evaluate(()=>window.BPVQCookingBridge.snapshot().catalog.filter(x=>x.group==='topping').length),'all toppings and siro share the rail');
    if(width===390){
     const money=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
@@ -113,6 +122,7 @@ try{
    await page.locator('[data-spice="7"]').click();assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.snapshot().dish.spicyLevel),7);
    await page.locator('#cs20-groups').getByRole('button',{name:'Nước cốt',exact:true}).click();
   }
+  if(career==='boba')await pourBoba(page); // primary becomes visible at cap-start
   await page.evaluate(()=>window.scrollTo(0,document.documentElement.scrollHeight));await page.waitForTimeout(60);
   const final=await page.evaluate(()=>{
    const nav=document.querySelector('.compact-nav').getBoundingClientRect(),button=document.getElementById('cs20-primary').getBoundingClientRect();
@@ -127,17 +137,17 @@ try{
   assert.ok(await page.locator('#tab-farm').isVisible(),'area navigation still switches sections');
   await page.evaluate(()=>switchTab('shop'));await page.waitForTimeout(40);
   assert.ok(await page.locator('#tab-shop').isVisible());
+  await page.locator('#us21-exit-kitchen').click();
+  await page.waitForFunction(()=>document.getElementById('v88-live-scene').dataset.view==='yard');
+  assert.ok(await page.locator('#v88-live-supported').isVisible(),'yard restored');
+  assert.ok(await page.evaluate(ids=>ids.every((id,i)=>document.querySelectorAll('#'+id).length===1&&document.getElementById(id)===window.__compactNodes[i]),nativeIds),'native node identity retained');
   if(width===390&&career==='boba'){
    await page.evaluate(()=>{gameState.phase='preparing';currentCustomer=null;renderCustomerBooth();window.BPVQUnifiedShop.update()});
    const saved=await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory]));
    await page.getByRole('button',{name:'Luyện nấu ăn không mất nguyên liệu khi nghỉ ca'}).click();
    await page.waitForFunction(()=>document.getElementById('cs20-station').dataset.state==='practice');
    await page.locator('#cs27-containers button:enabled').first().click();
-   await page.locator('#cs20-primary').click();await page.waitForTimeout(1100);await page.locator('#cs20-primary').click();
-   await page.locator('#cs20-primary').click();
-    await page.waitForFunction(()=>{const p=window.BPVQCookingStation.status().capPosition;return p>=47&&p<=52});
-    await page.evaluate(()=>document.getElementById('cs20-primary').click());
-   await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
+   await cookKitchen(page,'boba');
    await page.locator('#cs20-primary').click();
    assert.equal(await page.locator('#cs20-station').getAttribute('data-state'),'idle','training finishes safely');
    assert.equal(await page.evaluate(()=>JSON.stringify([gameState.coins,gameState.inventory])),saved,'training leaves native economy unchanged');

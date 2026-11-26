@@ -216,6 +216,7 @@ function renderContainers(){
  }
 }
 const CP176_AI_TOPPING_ART=Object.freeze({
+ topping_cheese_foam:'v88/cute-premium/topping_cheese_foam-B-tray.webp',
  topping_boba:'v88/cute-premium/topping_boba-ai-tray.webp',
  topping_white_boba:'v88/cute-premium/topping_white_boba-ai-tray.webp',
  topping_peach:'v88/cute-premium/topping_peach-ai-tray.webp',
