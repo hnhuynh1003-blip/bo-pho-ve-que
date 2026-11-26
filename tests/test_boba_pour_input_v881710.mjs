@@ -62,6 +62,17 @@ try{
    await page.waitForFunction(()=>!document.getElementById('cp177-pour-object').disabled);
    report.choose=await state();
    await shot('choose');
+   await page.locator('#cs20-groups').getByRole('button',{name:'Topping & siro',exact:true}).click();
+   report.toppingSlots=await page.evaluate(()=>{
+    const box=e=>{if(!e)return null;const r=e.getBoundingClientRect();return {x:r.x,y:r.y,w:r.width,h:r.height}};
+    return [...document.querySelectorAll('#cs20-shelf .cs20-item')].filter(e=>!e.hidden).map(e=>{
+     const art=e.querySelector('.cs26-jar-image'),img=art?.querySelector('img'),label=e.querySelector('.cs20-item-name');
+     return {id:e.dataset.item,hit:box(e),slot:box(art),image:box(img),src:img?.getAttribute('src'),label:box(label),labelOverflow:label?label.scrollHeight-label.clientHeight:null,disabled:e.disabled};
+    });
+   });
+   assert.ok(report.toppingSlots.length>0,'native topping catalog present');
+   assert.ok(report.toppingSlots.every(x=>x.hit.w>=44&&x.hit.h>=44),'topping native hit targets at least 44x44');
+   await shot('topping-slots');
    assert.equal(report.choose.primary.act,'pour');
    assert.equal(report.choose.primary.visible,false,'one visible pour control only');
    assert.equal(report.choose.dispenser.count,1);
