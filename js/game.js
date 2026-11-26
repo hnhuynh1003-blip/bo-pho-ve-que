@@ -6,6 +6,89 @@
     let activeProfileId = null;
     let sessionGameActive = false;
 
+    // QA-001-GW: only the generated playtest namespace opts into ownership.
+    // The sync helper changes the registry prefix, not the production contract.
+    const BPVQ_PLAYTEST_WRITER = ACCOUNT_REGISTRY_KEY === ['bpvq','playtest','accounts','v1'].join('_');
+    const BPVQ_WRITER_LOCK = ACCOUNT_REGISTRY_KEY.replace(/accounts_v1$/, 'import_pending_v1');
+    let bpvqWriterOwned=false,bpvqWriterRetired=false,bpvqWriterRequested=false;
+    let bpvqWriterRelease=null,bpvqGameLoopTimer=null,bpvqAutosaveTimer=null;
+    function bpvqCanWriteProfile() {
+      return !BPVQ_PLAYTEST_WRITER || (bpvqWriterOwned&&!bpvqWriterRetired);
+    }
+    function bpvqWriterNotice(text) {
+      let panel=document.getElementById('bpvq-writer-notice');
+      if(!panel){
+        panel=document.createElement('div');
+        panel.id='bpvq-writer-notice';panel.setAttribute('role','alert');
+        panel.style.cssText='position:fixed;inset:0;z-index:2147483647;background:#fff8ed;color:#3e3227;display:grid;place-items:center;padding:24px;text-align:center;white-space:pre-wrap;font:600 16px system-ui';
+        document.body.appendChild(panel);
+      }
+      panel.textContent=text;
+    }
+    function bpvqRetireWriterSession() {
+      // Revoke BEFORE releasing. A restored document must reload, not resume
+      // stale callbacks. Hidden/blur alone never releases a live writer.
+      bpvqWriterOwned=false;bpvqWriterRetired=true;sessionGameActive=false;
+      if(bpvqGameLoopTimer!==null)clearInterval(bpvqGameLoopTimer);
+      if(bpvqAutosaveTimer!==null)clearInterval(bpvqAutosaveTimer);
+      bpvqGameLoopTimer=null;bpvqAutosaveTimer=null;
+      const release=bpvqWriterRelease;bpvqWriterRelease=null;
+      if(release)release();
+    }
+    async function bpvqStartWriterSession(start) {
+      if(!BPVQ_PLAYTEST_WRITER){start();return;}
+      if(bpvqWriterRequested||bpvqWriterRetired)return;
+      bpvqWriterRequested=true;
+      try{
+        if(!window.isSecureContext||typeof navigator.locks?.request!=='function'){
+          bpvqRetireWriterSession();
+          bpvqWriterNotice('Playtest cần Web Locks trên HTTPS hoặc localhost. Hãy dùng trình duyệt hỗ trợ rồi tải lại.');
+          return;
+        }
+        await navigator.locks.request(BPVQ_WRITER_LOCK,{mode:'exclusive',ifAvailable:true},lock=>{
+          if(bpvqWriterRetired)return;
+          if(!lock){
+            bpvqRetireWriterSession();
+            bpvqWriterNotice('Một tab game hoặc importer cùng bản thử đang giữ quyền ghi. Hãy đóng tab đó hoặc hoàn tất nhập save, rồi tải lại.');
+            return;
+          }
+          // Only the importer may recover its pending journal.
+          if(localStorage.getItem(BPVQ_WRITER_LOCK)!==null){
+            bpvqRetireWriterSession();
+            bpvqWriterNotice('Có giao dịch nhập save chưa phục hồi. Hãy mở công cụ Chuyển save để phục hồi, sau đó tải lại game.');
+            return;
+          }
+          if(readAccountRegistry(true)===null)throw Error('Không đọc được danh mục hồ sơ.');
+          localStorage.getItem(ACTIVE_PROFILE_KEY);
+          return new Promise(resolve=>{
+            bpvqWriterRelease=resolve;bpvqWriterOwned=true;
+            try{
+              document.getElementById('bpvq-writer-notice')?.remove();
+              start();
+            }catch(error){
+              bpvqRetireWriterSession();
+              bpvqWriterNotice('Không thể khởi động phiên ghi an toàn: '+error.message+'. Hãy tải lại.');
+            }
+          });
+        });
+      }catch(error){
+        bpvqRetireWriterSession();
+        bpvqWriterNotice('Không thể mở phiên ghi an toàn: '+error.message+'. Hãy kiểm tra bộ nhớ và tải lại.');
+      }
+    }
+    if(BPVQ_PLAYTEST_WRITER){
+      bpvqWriterNotice('Đang kiểm tra quyền ghi save của bản thử…');
+      for(const type of ['click','dblclick','pointerdown','pointerup','touchstart','touchend','keydown','input','change','submit']){
+        window.addEventListener(type,event=>{
+          if(!bpvqCanWriteProfile()){event.preventDefault();event.stopImmediatePropagation();}
+        },{capture:true,passive:false});
+      }
+      window.addEventListener('pagehide',bpvqRetireWriterSession);
+      window.addEventListener('pageshow',event=>{
+        if(event.persisted){bpvqRetireWriterSession();bpvqWriterNotice('Phiên ghi cũ đã kết thúc. Đang tải lại game…');window.location.reload();}
+      });
+    }
+
     function getProfileStorageKey(profileId) {
       return `ve_que_khoi_nghiep_profile_${profileId}_save_v13`;
     }
@@ -1751,6 +1834,7 @@ clearTimeout(window._toastTimeout);
     }
 
     function confirmStartGameFromIntro() {
+      if(!bpvqCanWriteProfile())return false;
       const nameInp = document.getElementById('intro-player-name');
       const shopInp = document.getElementById('intro-shop-name');
 
@@ -12817,11 +12901,13 @@ function v8752BuyFestival(id){
       document.getElementById('modal-account-shop-edit')?.classList.add('hidden');
     }
     function saveAccountShopEdit() {
+      if(!bpvqCanWriteProfile())return false;
       if (!editingAccountShopId) return;
       const input = document.getElementById('account-edit-shop-name');
       const newName = (input?.value || '').trim();
       if (!newName) return showToast('Tên quán không được để trống.','⚠️');
-      const accounts = readAccountRegistry();
+      const accounts = readAccountRegistry(true);
+      if(!accounts)return bpvqRegistryFailure();
       const idx = accounts.findIndex(a => a && a.id===editingAccountShopId);
       if (idx < 0) return;
       const avatar = normalizedShopAvatar(pendingAccountEditAvatar);
@@ -12830,7 +12916,7 @@ function v8752BuyFestival(id){
       accounts[idx].shopAvatar = avatar;
       accounts[idx].playerChibi = playerChibi;
       accounts[idx].summary = {...(accounts[idx].summary||{}), shopName:accounts[idx].shopName,shopAvatar:avatar,playerChibi};
-      writeAccountRegistry(accounts);
+      if(writeAccountRegistry(accounts)===false)return bpvqRegistryFailure();
       // Update the corresponding save without replacing inventory or gameplay progress.
       const key = getProfileStorageKey(editingAccountShopId);
       try {
@@ -12913,29 +12999,47 @@ function v8752BuyFestival(id){
     }
 
 
-    function readAccountRegistry() {
+    function readAccountRegistry(strict=false) {
       try {
         const raw = localStorage.getItem(ACCOUNT_REGISTRY_KEY);
-        const parsed = raw ? JSON.parse(raw) : [];
-        return Array.isArray(parsed) ? parsed : [];
+        const parsed = raw===null ? [] : JSON.parse(raw || (BPVQ_PLAYTEST_WRITER&&strict?'null':'[]'));
+        return Array.isArray(parsed) ? parsed : (BPVQ_PLAYTEST_WRITER&&strict?null:[]);
       } catch (err) {
-        return [];
+        return BPVQ_PLAYTEST_WRITER&&strict?null:[];
       }
     }
 
     function writeAccountRegistry(accounts) {
+      if(!bpvqCanWriteProfile())return false;
       try {
+        if(BPVQ_PLAYTEST_WRITER&&!Array.isArray(accounts))return false;
         localStorage.setItem(ACCOUNT_REGISTRY_KEY, JSON.stringify(Array.isArray(accounts) ? accounts : []));
-      } catch (err) {}
+        if(BPVQ_PLAYTEST_WRITER)return true;
+      } catch (err) {if(BPVQ_PLAYTEST_WRITER)return false;}
     }
 
+    function bpvqRegistryFailure() {
+      showToast('Không thể cập nhật danh mục hồ sơ an toàn. Hãy kiểm tra bộ nhớ và thử lại.','⚠️');
+      return false;
+    }
+    function bpvqSelectProfile(profileId) {
+      if(!bpvqCanWriteProfile())return false;
+      if(!BPVQ_PLAYTEST_WRITER){
+        activeProfileId=profileId;localStorage.setItem(ACTIVE_PROFILE_KEY,profileId);return true;
+      }
+      try{
+        localStorage.setItem(ACTIVE_PROFILE_KEY,profileId);activeProfileId=profileId;sessionGameActive=false;return true;
+      }catch(error){return bpvqRegistryFailure();}
+    }
     function getAccountById(profileId) {
       return readAccountRegistry().find(a => a && a.id === profileId) || null;
     }
 
     function updateAccountSummary() {
+      if(!bpvqCanWriteProfile())return false;
       if (!activeProfileId) return;
-      const accounts = readAccountRegistry();
+      const accounts = readAccountRegistry(true);
+      if(!accounts)return false;
       const idx = accounts.findIndex(a => a && a.id === activeProfileId);
       if (idx < 0) return;
       accounts[idx].lastPlayedAt = Date.now();
@@ -12952,7 +13056,7 @@ function v8752BuyFestival(id){
         career: gameState.currentCareer || 'boba',
         hasStarted: !!gameState.hasStarted
       };
-      writeAccountRegistry(accounts);
+      return writeAccountRegistry(accounts);
     }
 
     function getCareerAccountIcon(career) {
@@ -13060,6 +13164,7 @@ function v8752BuyFestival(id){
     }
 
     function createLocalAccount() {
+      if(!bpvqCanWriteProfile())return false;
       const input = document.getElementById('account-new-name');
       const name = input ? input.value.trim() : '';
       const shopInput = document.getElementById('account-new-shop-name');
@@ -13068,7 +13173,8 @@ function v8752BuyFestival(id){
       const playerChibi = normalizedPlayerChibi(pendingAccountPlayerChibi);
       if (!name) return showToast('Hãy nhập tên tài khoản!', '👤');
 
-      const accounts = readAccountRegistry();
+      const accounts = readAccountRegistry(true);
+      if(!accounts)return bpvqRegistryFailure();
       if (accounts.some(a => String(a.name || '').toLowerCase() === name.toLowerCase())) {
         return showToast('Tên tài khoản này đã có trên máy!', '⚠️');
       }
@@ -13084,19 +13190,20 @@ function v8752BuyFestival(id){
         lastPlayedAt: Date.now(),
         summary: { playerName: name.slice(0, 20), shopName: shopName.slice(0,32), shopAvatar, playerChibi, day: 1, level: 1, career: 'boba', hasStarted: false }
       });
-      writeAccountRegistry(accounts);
+      if(writeAccountRegistry(accounts)===false)return bpvqRegistryFailure();
       if (input) input.value = '';
       if (shopInput) shopInput.value = '';
       pendingAccountShopAvatar = 'bunny';
       pendingAccountPlayerChibi = 'male';
       updatePlayerChibiPickers();
-      activeProfileId = id;
-      localStorage.setItem(ACTIVE_PROFILE_KEY, id);
-      startFreshRunForActiveProfile(name.slice(0, 20));
+      if(!bpvqSelectProfile(id))return false;
+      return startFreshRunForActiveProfile(name.slice(0, 20));
     }
 
     function startFreshRunForActiveProfile(accountName = '') {
+      if(!bpvqCanWriteProfile())return false;
       if (!activeProfileId) return;
+      if(BPVQ_PLAYTEST_WRITER&&!getAccountById(activeProfileId))return bpvqRegistryFailure();
       resetGameStateToDefault();
       const profile = getAccountById(activeProfileId);
       if (accountName) gameState.playerName = accountName;
@@ -13117,22 +13224,27 @@ function v8752BuyFestival(id){
     }
 
     function newGameForLocalAccount(profileId) {
+      if(!bpvqCanWriteProfile())return false;
       const acc = getAccountById(profileId);
       if (!acc) return;
-      const saveRaw = localStorage.getItem(getProfileStorageKey(profileId));
+      let saveRaw;
+      try{saveRaw=localStorage.getItem(getProfileStorageKey(profileId));}
+      catch(error){if(BPVQ_PLAYTEST_WRITER)return bpvqRegistryFailure();throw error;}
       if (saveRaw && !confirm(`Chơi mới trong tài khoản "${acc.name}" sẽ ghi đè tiến trình hiện tại. Tiếp tục?`)) return;
-      activeProfileId = profileId;
-      localStorage.setItem(ACTIVE_PROFILE_KEY, profileId);
-      startFreshRunForActiveProfile(acc.name || 'Bạn');
+      if(!bpvqSelectProfile(profileId))return false;
+      return startFreshRunForActiveProfile(acc.name || 'Bạn');
     }
 
     function continueLocalAccount(profileId) {
+      if(!bpvqCanWriteProfile())return false;
       const acc = getAccountById(profileId);
-      if (!acc) return;
-      activeProfileId = profileId;
-      localStorage.setItem(ACTIVE_PROFILE_KEY, profileId);
+      if (!acc) return BPVQ_PLAYTEST_WRITER?false:undefined;
+      let hadSave=false;
+      if(BPVQ_PLAYTEST_WRITER){try{hadSave=localStorage.getItem(getProfileStorageKey(profileId))!==null;}catch(error){return bpvqRegistryFailure();}}
+      if(!bpvqSelectProfile(profileId))return false;
       resetGameStateToDefault();
       const loaded = loadGameFromStorage(profileId);
+      if(BPVQ_PLAYTEST_WRITER&&hadSave&&!loaded){sessionGameActive=false;activeProfileId=null;return bpvqRegistryFailure();}
       sessionGameActive = true;
       document.getElementById('screen-account')?.classList.add('hidden');
 
@@ -13154,6 +13266,7 @@ function v8752BuyFestival(id){
     }
 
     function enterLoadedGame() {
+      if(!bpvqCanWriteProfile())return false;
       sessionGameActive = true;
       document.getElementById('screen-account')?.classList.add('hidden');
       document.getElementById('screen-intro')?.classList.add('hidden');
@@ -13182,6 +13295,7 @@ function v8752BuyFestival(id){
     }
 
     function openAccountScreen() {
+      if(!bpvqCanWriteProfile())return false;
       if (activeProfileId && sessionGameActive) saveGameToStorage(false);
       sessionGameActive = false;
       resetRuntimeForProfile();
@@ -13190,11 +13304,25 @@ function v8752BuyFestival(id){
     }
 
     function deleteLocalAccount(profileId) {
+      if(!bpvqCanWriteProfile())return false;
       const acc = getAccountById(profileId);
       if (!acc) return;
       if (!confirm(`Xóa tài khoản "${acc.name}" và toàn bộ tiến trình của tài khoản này?`)) return;
-      const accounts = readAccountRegistry().filter(a => a && a.id !== profileId);
-      writeAccountRegistry(accounts);
+      const registry=readAccountRegistry(true);
+      if(!registry)return bpvqRegistryFailure();
+      const accounts=registry.filter(a=>a&&a.id!==profileId);
+      if(writeAccountRegistry(accounts)===false)return bpvqRegistryFailure();
+      if(BPVQ_PLAYTEST_WRITER){
+        // Never remove the payload while registry/active still references it.
+        if(activeProfileId===profileId){activeProfileId=null;sessionGameActive=false;resetGameStateToDefault();}
+        try{
+          if(localStorage.getItem(ACTIVE_PROFILE_KEY)===profileId)localStorage.removeItem(ACTIVE_PROFILE_KEY);
+          const actual=readAccountRegistry(true);
+          if(!actual||actual.some(a=>a?.id===profileId)||localStorage.getItem(ACTIVE_PROFILE_KEY)===profileId)return bpvqRegistryFailure();
+          localStorage.removeItem(getProfileStorageKey(profileId));localStorage.removeItem('bpvq:admin:seed:'+profileId);
+        }catch(error){return bpvqRegistryFailure();}
+        renderAccountScreen();showToast('Đã xóa tài khoản.','🗑️');return;
+      }
       try { localStorage.removeItem(getProfileStorageKey(profileId)); localStorage.removeItem('bpvq:admin:seed:'+profileId); } catch (err) {}
       if (activeProfileId === profileId) {
         activeProfileId = null;
@@ -13207,13 +13335,21 @@ function v8752BuyFestival(id){
     }
 
     function importLegacySaveAsAccount() {
-      const raw = localStorage.getItem(LEGACY_STORAGE_KEY);
+      if(!bpvqCanWriteProfile())return false;
+      let raw;
+      try{raw=localStorage.getItem(LEGACY_STORAGE_KEY);}catch(error){if(BPVQ_PLAYTEST_WRITER)return bpvqRegistryFailure();throw error;}
       if (!raw) return showToast('Không còn save cũ để nhập.', '⚠️');
       let legacy;
       try { legacy = JSON.parse(raw); } catch (err) { return showToast('Save cũ không đọc được.', '⚠️'); }
       if (!legacy || typeof legacy !== 'object') return showToast('Save cũ không hợp lệ.', '⚠️');
 
-      const accounts = readAccountRegistry();
+      const accounts = readAccountRegistry(true);
+      if(!accounts)return bpvqRegistryFailure();
+      if(BPVQ_PLAYTEST_WRITER){
+        try{
+          if(localStorage.getItem(LEGACY_IMPORTED_KEY)==='1'||accounts.some(a=>String(a?.id||'').startsWith('legacy_')))return showToast('Save cũ đã được nhập thành hồ sơ riêng.','⚠️');
+        }catch(error){return bpvqRegistryFailure();}
+      }
       const baseName = String(legacy.playerName || 'Người chơi cũ').slice(0, 16);
       let name = `${baseName} • Cũ`;
       let n = 2;
@@ -13236,14 +13372,27 @@ function v8752BuyFestival(id){
           hasStarted: !!legacy.hasStarted
         }
       });
-      writeAccountRegistry(accounts);
-      localStorage.setItem(getProfileStorageKey(id), JSON.stringify(legacy));
-      localStorage.setItem(LEGACY_IMPORTED_KEY, '1');
+      if(BPVQ_PLAYTEST_WRITER){
+        try{
+          localStorage.setItem(getProfileStorageKey(id),JSON.stringify(legacy));
+          if(writeAccountRegistry(accounts)===false){
+            const actual=readAccountRegistry(true);
+            if(actual&&!actual.some(a=>a?.id===id)&&localStorage.getItem(ACTIVE_PROFILE_KEY)!==id)localStorage.removeItem(getProfileStorageKey(id));
+            return bpvqRegistryFailure();
+          }
+          localStorage.setItem(LEGACY_IMPORTED_KEY,'1');
+        }catch(error){return bpvqRegistryFailure();}
+      }else{
+        writeAccountRegistry(accounts);
+        localStorage.setItem(getProfileStorageKey(id),JSON.stringify(legacy));
+        localStorage.setItem(LEGACY_IMPORTED_KEY,'1');
+      }
       renderAccountScreen();
       showToast('Đã nhập save cũ thành một tài khoản riêng!', '📥');
     }
 
     function saveGameToStorage(isManual) {
+      if(!bpvqCanWriteProfile())return false;
       if(counterSettlementDepth > 0) return true;
       window.BPVQCookingBridge?.checkpointBatch?.();
       if(typeof d3CaptureRuntime==='function')d3CaptureRuntime();
@@ -13251,9 +13400,20 @@ function v8752BuyFestival(id){
         if (isManual) showToast("Hãy chọn hoặc tạo tài khoản trước khi lưu.", "👤");
         return false;
       }
+      if(BPVQ_PLAYTEST_WRITER){
+        const accounts=readAccountRegistry(true);
+        if(!accounts||!accounts.some(a=>a?.id===activeProfileId)){
+          if(isManual)bpvqRegistryFailure();return false;
+        }
+      }
       try {
         localStorage.setItem(getProfileStorageKey(activeProfileId), JSON.stringify(gameState));
-        updateAccountSummary();
+        if(BPVQ_PLAYTEST_WRITER){
+          // Payload is committed: summary failure cannot trigger a false
+          // settlement rollback in RAM. Report stale metadata separately.
+          try{if(updateAccountSummary()===false)console.warn('[BPVQ] Payload saved; account summary not refreshed.');}
+          catch(error){console.warn('[BPVQ] Payload saved; account summary not refreshed.',error);}
+        }else updateAccountSummary();
         if (isManual) {
           playSound('coin');
           showToast("Đã lưu tiến trình vào tài khoản hiện tại! 💾", "✅");
@@ -13266,6 +13426,7 @@ function v8752BuyFestival(id){
     }
 
     function loadGameFromStorage(profileId) {
+      if(!bpvqCanWriteProfile())return false;
       if (!profileId) return false;
       try {
         const raw = localStorage.getItem(getProfileStorageKey(profileId));
@@ -13323,6 +13484,7 @@ function v8752BuyFestival(id){
         maps:!!(bpvqAdminTestActive()&&gameState.adminSandbox.maps)};
     }
     function bpvqAdminCreateSandbox(){
+      if(!bpvqCanWriteProfile())return {ok:false,reason:'Phiên ghi save chưa khả dụng.'};
       if (!activeProfileId||!sessionGameActive||!gameState.hasStarted) return {ok:false,reason:'Hãy vào một hồ sơ đã bắt đầu chơi trước.'};
       if (bpvqAdminTestActive()) return {ok:false,reason:'Bạn đang ở hồ sơ TEST. Hãy quay về hồ sơ thường để tạo bản sao mới.'};
       if (!saveGameToStorage(false))return {ok:false,reason:'Không lưu được hồ sơ gốc; đã hủy sao chép để bảo vệ dữ liệu.'};
@@ -13338,28 +13500,38 @@ function v8752BuyFestival(id){
       try{
         localStorage.setItem(key,JSON.stringify(clone));
         localStorage.setItem(seedKey,JSON.stringify(clone));
-        const registry=readAccountRegistry();registry.push(account);writeAccountRegistry(registry);
+        const registry=readAccountRegistry(true);
+         if(!registry)throw Error('Không đọc được danh mục hồ sơ TEST');
+         registry.push(account);if(writeAccountRegistry(registry)===false)throw Error('Không ghi được danh sách hồ sơ TEST');
         if(!getAccountById(id))throw Error('Không ghi được danh sách hồ sơ TEST');
         return {ok:true,id};
       }catch(err){
-        try{localStorage.removeItem(key);localStorage.removeItem(seedKey)}catch(_){}
+        try{
+           const actual=BPVQ_PLAYTEST_WRITER?readAccountRegistry(true):[];
+           if(!BPVQ_PLAYTEST_WRITER||(actual&&!actual.some(a=>a?.id===id)&&localStorage.getItem(ACTIVE_PROFILE_KEY)!==id)){
+             localStorage.removeItem(key);localStorage.removeItem(seedKey);
+           }
+         }catch(_){}
         return {ok:false,reason:'Không đủ dung lượng lưu dữ liệu thử nghiệm hoặc trình duyệt chặn lưu.'};
       }
     }
     function bpvqAdminEnterSandbox(id){
+      if(!bpvqCanWriteProfile())return false;
       const a=getAccountById(id);
       if(!a?.adminTest || !String(id).startsWith('test_'))return false;
       if(activeProfileId&&sessionGameActive&&!saveGameToStorage(false))return false;
-      try{continueLocalAccount(id);return bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Enter sandbox',e);return false}
+      try{if(continueLocalAccount(id)===false)return false;return bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Enter sandbox',e);return false}
     }
     function bpvqAdminLeaveSandbox(){
+      if(!bpvqCanWriteProfile())return false;
       if(!bpvqAdminTestActive())return false;
       const source=gameState.adminSandbox.sourceId;
       if(!getAccountById(source))return false;
       if(!saveGameToStorage(false))return false;
-      try{continueLocalAccount(source);return !bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Leave sandbox',e);return false}
+      try{if(continueLocalAccount(source)===false)return false;return !bpvqAdminTestActive()}catch(e){console.warn('[ADMIN] Leave sandbox',e);return false}
     }
     function bpvqAdminResetSandbox(){
+      if(!bpvqCanWriteProfile())return false;
       if(!bpvqAdminTestActive())return false;
       const id=activeProfileId,raw=localStorage.getItem('bpvq:admin:seed:'+id);
       if(!raw)return false;
@@ -13367,10 +13539,11 @@ function v8752BuyFestival(id){
         const parsed=JSON.parse(raw);
         if(parsed?.adminSandbox?.id!==id)return false;
         localStorage.setItem(getProfileStorageKey(id),raw);
-        continueLocalAccount(id);return bpvqAdminTestActive();
+        if(continueLocalAccount(id)===false)return false;return bpvqAdminTestActive();
       }catch(e){console.warn('[ADMIN] Reset sandbox',e);return false}
     }
     function bpvqAdminApply(action,raw){
+      if(!bpvqCanWriteProfile())return {ok:false,reason:'Phiên ghi save chưa khả dụng.'};
       if(!bpvqAdminTestActive())return {ok:false,reason:'Chỉ có thể chỉnh sửa hồ sơ TEST.'};
       const number=Number(raw);
       const validInt=(min,max)=>Number.isInteger(number)&&number>=min&&number<=max;
@@ -13429,6 +13602,7 @@ function v8752BuyFestival(id){
       leave:bpvqAdminLeaveSandbox,reset:bpvqAdminResetSandbox,apply:bpvqAdminApply};
 
     function masterGameLoop() {
+      if(!bpvqCanWriteProfile())return false;
       if (!sessionGameActive || !activeProfileId) return;
       ensureV6State();
       const villageEnergyChanged = tickVillageEnergyRegen();
@@ -13528,7 +13702,8 @@ function v8752BuyFestival(id){
       }
     }
 
-    window.onload = function () {
+    function bpvqStartGamePage() {
+      if(!bpvqCanWriteProfile())return;
       // A profile chosen while new ingredient art loads must not be reset by load.
       if(!activeProfileId){
       sessionGameActive = false;
@@ -13544,10 +13719,14 @@ function v8752BuyFestival(id){
 
       }
 
-      setInterval(masterGameLoop, 1000);
-      setInterval(() => {
-        if (sessionGameActive && activeProfileId) saveGameToStorage(false);
-      }, 15000);
+      bpvqGameLoopTimer=setInterval(masterGameLoop,1000);
+      bpvqAutosaveTimer=setInterval(()=>{
+        if(bpvqCanWriteProfile()&&sessionGameActive&&activeProfileId)saveGameToStorage(false);
+      },15000);
+    }
+    window.onload=function(){
+      if(!BPVQ_PLAYTEST_WRITER)return bpvqStartGamePage();
+      return bpvqStartWriterSession(bpvqStartGamePage);
     };
 
     // V68: one read-only order source shared by the full customer card and the floating ticket.
@@ -13636,7 +13815,7 @@ function v8752BuyFestival(id){
       sauce:[...(cfg.sauces||[])]
     }];
   }));
-  const permitted=()=>gameState&&gameState.hasStarted&&['boba','noodle','streetfood'].includes(gameState.currentCareer);
+  const permitted=()=>bpvqCanWriteProfile()&&gameState&&gameState.hasStarted&&['boba','noodle','streetfood'].includes(gameState.currentCareer);
   // Existing full-body NPC art used as appearance templates, not new identities
   // or a transfer of village relationship/unlock state to counter customers.
   const guestLooks={ba_sau:'baTu',ong_bay:'bacTam',khai_si:'anhKhai',loan_cho:'coSau',tu_tho:'chuNam',lan_doctor:'yTaLinh',nam_farmer:'bacBinh',thao_mom:'chiHa',ngoc_idol:'chiNgoc',chi_bep:'coLua',chef_quang:'anhPho'};
@@ -13677,7 +13856,7 @@ function v8752BuyFestival(id){
   function completedQuality(dish){return dish===workbenchDish&&batchLocked()&&kitchen.ready()?kitchen.snapshot().grade:null;}
   function kitchenReady(){const assisted=isShopFastAssistantUnlocked()&&!!gameState.automation?.shopFastEnabled;return kitchen.ready()||(!batchLocked()&&assisted&&(gameState.currentCareer==='boba'?workbenchDish.isShaken:gameState.currentCareer==='noodle'?workbenchDish.isCooked:workbenchDish.fryState==='perfect'));}
   function kitchenAction(kind,value){if(!permitted())return false;return kitchen.action(kind,value);}
-  document.addEventListener('visibilitychange',()=>{kitchen.snapshot();checkpointBatch();saveGameToStorage(false);});
+  document.addEventListener('visibilitychange',()=>{if(!bpvqCanWriteProfile())return;kitchen.snapshot();checkpointBatch();saveGameToStorage(false);});
   function beginCap(){return permitted()&&gameState.currentCareer==='boba'&&kitchen.action('begin');}
   function capPosition(){const p=kitchen.snapshot();return p.stage==='capping'?p.position:null;}
   function hitCap(){return kitchen.action('hit')?kitchen.snapshot().grade:null;}
@@ -13692,7 +13871,7 @@ function v8752BuyFestival(id){
     startCustomerPatienceTimer();updateWorkbenchPreview();return true;
   }
   function transaction(action){
-    if(counterSettlementDepth)return false;
+    if(!bpvqCanWriteProfile()||counterSettlementDepth)return false;
     const before=copy(gameState),person=currentCustomer,dish=copy(workbenchDish),engine=kitchen.exportState(),batch=runtimeBatch?{...runtimeBatch}:null;
     let result=false,failed=false;counterSettlementDepth++;
     try{result=action();}catch(e){failed=true;console.error('Counter settlement',e);}finally{counterSettlementDepth--;}

@@ -110,7 +110,7 @@ async function harness({ populated = true, fail = null, confirmImport = true, im
     assert.ok(operations.every(([, key]) => key.startsWith(T)), 'all importer storage access must be playtest-only');
     assert.ok(lockRequests.every(name=>name===T+'import_pending_v1'), 'playtest lock must be namespaced');
   };
-  return {...first,data,before,isolated,operations,openTab,held,lockRequests,
+  return {...first,data,before,isolated,operations,openTab,held,lockRequests,localStorage,lockManager,
     setFault:fn=>{fault=fn;},setAfterWrite:fn=>{afterWrite=fn;},didFail:()=>failed};
 }
 
@@ -343,6 +343,220 @@ for(const options of [{secure:false},{lockSupport:false},{lockDenied:true}]){
   assert.match(b.nodes.status.textContent,/Tên hồ sơ đã tồn tại/);
   assert.equal(JSON.parse(h.data.get(gameRegistry)).length,2);h.isolated();
   console.log('PASS QA-001-MT failed journal cleanup releases lock; second tab recovers safely');
+}
+
+
+// QA-001-GW: actual lifecycle and account writer functions from the generated
+// game.js, mocked DOM/timers/Storage/Web Locks. Not full native browser.
+function openGame(h,{source=output.game,secure=true,hasLocks=true,locks=h.lockManager}={}){
+  const elements=new Map(),listeners=new Map(),timers=new Map(),callbacks=[],toasts=[];
+  let nextTimer=0,reloads=0,renders=0;
+  function element(id=''){
+    return {id,value:'',style:{},classList:{add(){},remove(){},contains(){return false;}},
+      setAttribute(){},remove(){elements.delete(this.id);}};
+  }
+  const document={
+    getElementById(id){
+      if(id==='bpvq-writer-notice')return elements.get(id)||null;
+      if(!elements.has(id))elements.set(id,element(id));
+      return elements.get(id);
+    },
+    createElement(){return element();},
+    body:{appendChild(node){elements.set(node.id,node);}}
+  };
+  const window={isSecureContext:secure,location:{reload(){reloads++;}},
+    addEventListener(type,fn){if(!listeners.has(type))listeners.set(type,[]);listeners.get(type).push(fn);}};
+  const fire=(type,event={})=>{for(const fn of listeners.get(type)||[])fn(event);};
+  const fn=name=>{
+    const a=source.indexOf('    function '+name+'(');
+    assert.ok(a>=0,name);
+    const b=source.indexOf('\n    }',a);
+    assert.ok(b>a,name+' body');
+    return source.slice(a,b+6);
+  };
+  const names=['readAccountRegistry','writeAccountRegistry','bpvqRegistryFailure','bpvqSelectProfile','getAccountById',
+    'updateAccountSummary','saveAccountShopEdit','createLocalAccount','startFreshRunForActiveProfile','newGameForLocalAccount',
+    'continueLocalAccount','enterLoadedGame','openAccountScreen','deleteLocalAccount','importLegacySaveAsAccount',
+    'saveGameToStorage','loadGameFromStorage','bpvqAdminTestActive','bpvqAdminInfo','bpvqAdminCreateSandbox',
+    'bpvqAdminEnterSandbox','bpvqAdminLeaveSandbox','bpvqAdminResetSandbox','bpvqAdminApply','confirmStartGameFromIntro',
+    'masterGameLoop','bpvqStartGamePage'];
+  const header=source.slice(0,source.indexOf('    const FARM_PLOTS_CONFIG ='));
+  const startup=source.match(/    window\.onload=function\(\)\{[\s\S]*?\n    \};/)[0];
+  const helpers=`
+    let gameState=JSON.parse(JSON.stringify(baseSave)),counterSettlementDepth=0,selectedIntroCareerChoice='boba';
+    let pendingAccountShopAvatar='bunny',pendingAccountPlayerChibi='male',editingAccountShopId='existing';
+    let pendingAccountEditAvatar='bunny',pendingAccountEditPlayerChibi='male',currentCustomer=null;
+    const SHOP_ICON_CHOICES=[],VILLAGE_ZONES={},DEFAULT_GAME_STATE={...baseSave,hasStarted:false,inventory:{}};
+    const noop=()=>{},normalizedShopAvatar=x=>x||'bunny',normalizedPlayerChibi=x=>x||'male';
+    const getCurrentShopAvatar=()=>gameState.shopAvatar||'bunny',getCurrentPlayerChibi=()=>gameState.playerChibi||'male';
+    const getCareerDefaultShopIcon=()=>null,getActiveWorldEventConfig=()=>true,v87521MigrateCompletedAwards=()=>0;
+    const resetRuntimeForProfile=noop,ensureGrowthState=noop,ensureV6State=noop,updatePlayerChibiPickers=noop;
+    const updateHeaderStats=noop,selectIntroCareer=noop,playSound=noop,showToast=(msg)=>toasts.push(msg);
+    const renderAccountScreen=()=>{rendered();},closeAccountShopEdit=noop,renderVillageChibi=noop,renderVillagePoints=noop;
+    const renderVillageNpcs=noop,ensureVillageNpcMotion=noop,d3RestoreRuntime=noop,generateDailyFlashDeal=noop;
+    const generateSoppiFlashSale=noop,rollDailyWorldEvent=noop,announceDailyMarketNews=noop,applyCareerLockToUI=noop;
+    const updateShopPhaseUI=noop,renderCustomerBooth=noop,scheduleNextCustomer=noop,renderDailyWorldEventBanner=noop;
+    const renderNotificationBadge=noop,renderGameCollectionSummary=noop,renderFarmEventPanel=noop,renderBarnEventPanel=noop;
+    const renderVillageUI=noop,v88MenuEnsure=noop,d3EnsureLedger=noop,v8753Ensure=noop,v8753MaybeBadge=noop;
+    const refreshShopStageQuickBadge=noop,renderFarmUI=noop,renderBarnUI=noop,renderWorkbenchControls=noop;
+    const renderShopReviews=noop,renderGrowthApp=noop,renderSoppiApp=noop,renderBankApp=noop,refreshShopFloorSummary=noop;
+    function resetGameStateToDefault(){gameState=JSON.parse(JSON.stringify(DEFAULT_GAME_STATE));}
+  `;
+  const exposed=`
+    return {canWrite:bpvqCanWriteProfile,start:()=>window.onload(),mode:BPVQ_PLAYTEST_WRITER,
+      create:createLocalAccount,edit:saveAccountShopEdit,summary:updateAccountSummary,write:writeAccountRegistry,
+      save:saveGameToStorage,load:loadGameFromStorage,select:bpvqSelectProfile,fresh:startFreshRunForActiveProfile,
+      newGame:newGameForLocalAccount,continue:continueLocalAccount,enter:enterLoadedGame,account:openAccountScreen,
+      remove:deleteLocalAccount,legacy:importLegacySaveAsAccount,adminCreate:bpvqAdminCreateSandbox,
+      adminEnter:bpvqAdminEnterSandbox,adminLeave:bpvqAdminLeaveSandbox,adminReset:bpvqAdminResetSandbox,
+      adminApply:bpvqAdminApply,confirmStart:confirmStartGameFromIntro,tick:masterGameLoop,
+      setCurrent(id,state){activeProfileId=id;sessionGameActive=true;gameState=JSON.parse(JSON.stringify(state));},
+      active:()=>activeProfileId,session:()=>sessionGameActive,state:()=>gameState};
+  `;
+  const api=new Function('document','window','navigator','localStorage','setInterval','clearInterval','confirm','console','baseSave','toasts','rendered',
+    header+'\n'+helpers+'\n'+names.map(fn).join('\n')+'\n'+startup+'\n'+exposed)(
+      document,window,hasLocks?{locks}:{},h.localStorage,
+      cb=>{const id=++nextTimer;timers.set(id,cb);callbacks.push(cb);return id;},
+      id=>timers.delete(id),()=>true,console,baseSave,toasts,()=>{renders++;});
+  return {...api,fire,timers,callbacks,toasts,reloads:()=>reloads,renders:()=>renders,
+    notice:()=>document.getElementById('bpvq-writer-notice')?.textContent||'',
+    input:(id,value)=>{document.getElementById(id).value=value;}};
+}
+function assertBlockedGame(g){
+  assert.equal(g.canWrite(),false);
+  for(const [name,args] of [
+    ['create',[]],['edit',[]],['summary',[]],['write',[[]]],['save',[false]],['load',['existing']],
+    ['select',['existing']],['fresh',[]],['newGame',['existing']],['continue',['existing']],['enter',[]],
+    ['account',[]],['remove',['existing']],['legacy',[]],['adminEnter',['existing']],['adminLeave',[]],
+    ['adminReset',[]],['confirmStart',[]],['tick',[]]
+  ])assert.equal(g[name](...args),false,name+' must fail before mutation');
+  assert.equal(g.adminCreate().ok,false);assert.equal(g.adminApply('coins',1).ok,false);
+}
+function assertGameIsolation(h){
+  assert.deepEqual([...h.data].filter(([key])=>key.startsWith(P)),production);
+  assert.ok(h.operations.every(([,key])=>key.startsWith(T)||/^bpvq:admin:seed:test_/.test(key)));
+  assert.ok(h.lockRequests.every(name=>name===pending));
+}
+{
+  const h=await harness(),g=openGame(h);
+  const before=[...h.data],ops=h.operations.length;
+  assertBlockedGame(g);assert.deepEqual([...h.data],before);assert.equal(h.operations.length,ops);
+  assert.equal(g.timers.size,0);
+  const running=g.start();assert.equal(g.canWrite(),true);assert.equal(g.timers.size,2);
+  const b=h.openTab();await b.ready;assert.match(b.nodes.status.textContent,/Một tab khác/);
+  const busyOps=h.operations.length;b.inspect(fixtures[1]);await b.submit('Import B');
+  assert.match(b.nodes.status.textContent,/Một tab khác/);assert.equal(h.operations.length,busyOps);
+  g.input('account-new-name','Game A');g.input('account-new-shop-name','QA shop');g.create();
+  const a=g.active();assert.ok(a.startsWith('p_'));assert.ok(h.data.has(gameProfile(a)));
+  const payload=h.data.get(gameProfile(a));
+  g.fire('pagehide');await running;assert.equal(g.canWrite(),false);
+  await b.reload();b.inspect(fixtures[1]);await b.submit('Import B');
+  const accounts=JSON.parse(h.data.get(gameRegistry));
+  assert.deepEqual(accounts.map(x=>x.name),['Existing QA','Game A','Import B']);
+  assert.equal(h.data.get(gameProfile(a)),payload);assert.equal(h.data.get(profile(T,'existing')),existing[2][1]);
+  assert.deepEqual(JSON.parse(h.data.get(gameProfile(accounts[2].id))),fixtures[1]);assertGameIsolation(h);
+  console.log('PASS QA-001-GW game owner blocks importer startup/submit; release and retry preserve both');
+}
+{
+  const h=await harness();let g,attempt,evidence;
+  h.inspect(fixtures[0]);
+  h.setAfterWrite(key=>{
+    if(key!==pending||g)return;
+    g=openGame(h);const before=[...h.data],ops=h.operations.length;attempt=g.start();
+    evidence={before,ops,after:[...h.data],afterOps:h.operations.length,notice:g.notice()};
+  });
+  await h.submit('Import A');assert.ok(g&&evidence);await attempt;
+  assertBlockedGame(g);assert.equal(g.timers.size,0);
+  assert.match(evidence.notice,/Một tab/);assert.deepEqual(evidence.after,evidence.before);assert.equal(evidence.ops,evidence.afterOps);
+  assert.match(h.nodes.status.textContent,/Đã tạo hồ sơ/);
+  const id=h.data.get(gameActive),b=openGame(h),running=b.start();assert.equal(b.canWrite(),true);
+  b.continue(id);assert.equal(b.active(),id);assert.equal(b.state().coins,fixtures[0].coins);
+  b.fire('pagehide');await running;assertGameIsolation(h);
+  console.log('PASS QA-001-GW importer live journal denies all game writers; later game loads imported profile');
+}
+{
+  const h=await harness(),a=openGame(h),running=a.start(),b=openGame(h);
+  await b.start();assertBlockedGame(b);assert.equal(b.timers.size,0);
+  a.fire('blur');a.fire('visibilitychange');assert.equal(a.canWrite(),true);
+  a.fire('pagehide');assert.equal(a.canWrite(),false);assert.equal(a.timers.size,0);await running;
+  a.fire('pageshow',{persisted:true});assert.equal(a.reloads(),1);
+  const before=[...h.data],ops=h.operations.length;assertBlockedGame(a);
+  for(const cb of a.callbacks)cb();
+  assert.deepEqual([...h.data],before);assert.equal(h.operations.length,ops);
+  const c=openGame(h),r=c.start();assert.equal(c.canWrite(),true);c.fire('pagehide');await r;
+  assertGameIsolation(h);console.log('PASS QA-001-GW game/game contention, hidden keeps lock, pagehide/BFCache and stale timers');
+}
+{
+  const h=await harness(),g=openGame(h);h.data.set(pending,'synthetic unresolved intent');
+  const before=[...h.data];await g.start();
+  assertBlockedGame(g);assert.match(g.notice(),/chưa phục hồi/);assert.equal(g.timers.size,0);
+  assert.deepEqual([...h.data],before);assert.equal(h.held.size,0);assertGameIsolation(h);
+  console.log('PASS QA-001-GW pending importer journal refuses game startup without deletion');
+}
+for(const kind of ['insecure','unsupported','denied']){
+  const h=await harness(),g=openGame(h,{secure:kind!=='insecure',hasLocks:kind!=='unsupported',
+    locks:kind==='denied'?{request:async()=>{throw Error('Synthetic Web Locks denial');}}:h.lockManager});
+  const before=[...h.data],ops=h.operations.length;await g.start();assertBlockedGame(g);
+  assert.equal(g.timers.size,0);assert.deepEqual([...h.data],before);assert.equal(h.operations.length,ops);
+  assert.ok(g.notice());assertGameIsolation(h);console.log('PASS QA-001-GW fail closed '+kind);
+}
+{
+  const h=await harness(),g=openGame(h);h.setFault((op,key)=>op==='get'&&key===gameRegistry);
+  const before=[...h.data];await g.start();assertBlockedGame(g);
+  assert.equal(g.timers.size,0);assert.equal(h.held.size,0);assert.deepEqual([...h.data],before);
+  h.setFault(()=>false);const a=openGame(h),r=a.start();
+  a.setCurrent('existing',fixtures[1]);a.input('account-new-name','Must not create');
+  h.setFault((op,key)=>op==='get'&&key===gameRegistry);
+  assert.equal(a.create(),false);assert.equal(a.save(false),false);assert.equal(a.summary(),false);
+  assert.deepEqual([...h.data],before);
+  h.setFault(()=>false);a.fire('pagehide');await r;assertGameIsolation(h);
+  console.log('PASS QA-001-GW startup/read failures fail closed; registry and payload preserved');
+}
+{
+  const h=await harness(),g=openGame(h),r=g.start();
+  g.setCurrent('existing',fixtures[1]);
+  h.setFault((op,key)=>op==='set'&&key===gameProfile('existing'));
+  assert.equal(g.save(false),false);assert.equal(h.data.get(gameProfile('existing')),existing[2][1]);
+  h.setFault((op,key)=>op==='set'&&key===gameRegistry);
+  assert.equal(g.save(false),true,'committed payload must not trigger false settlement rollback');
+  assert.deepEqual(JSON.parse(h.data.get(gameProfile('existing'))),fixtures[1]);
+  const before=[...h.data];assert.equal(g.remove('existing'),false);assert.deepEqual([...h.data],before);
+  h.setFault((op,key)=>op==='remove'&&key===gameActive);
+  assert.equal(g.remove('existing'),false);
+  assert.equal(h.data.get(gameActive),'existing');assert.ok(h.data.has(gameProfile('existing')),'active still references payload');
+  h.setFault(()=>false);g.fire('pagehide');await r;assertGameIsolation(h);
+  console.log('PASS QA-001-GW payload boolean contract, failed registry/active delete retains referenced payload');
+}
+{
+  const h=await harness(),g=openGame(h),r=g.start();
+  h.data.set(T+'progression_v1',JSON.stringify(fixtures[1]));g.legacy();
+  let accounts=JSON.parse(h.data.get(gameRegistry)),legacy=accounts.find(a=>a.id.startsWith('legacy_'));
+  assert.ok(legacy);assert.deepEqual(JSON.parse(h.data.get(gameProfile(legacy.id))),fixtures[1]);
+  assert.equal(h.data.get(T+'legacy_imported_v1'),'1');
+  g.setCurrent('existing',{...fixtures[0],hasStarted:true});
+  const created=g.adminCreate();assert.equal(created.ok,true);assert.ok(h.data.has(gameProfile(created.id)));
+  const original=h.data.get(gameProfile('existing'));
+  assert.equal(g.adminEnter(created.id),true);assert.equal(g.adminApply('coins',777).ok,true);
+  assert.equal(g.adminReset(),true);assert.equal(g.adminLeave(),true);
+  assert.equal(h.data.get(gameProfile('existing')),original);
+  g.fire('pagehide');await r;assertGameIsolation(h);
+  console.log('PASS QA-001-GW actual legacy and admin create/enter/apply/reset/leave writer fixture');
+}
+{
+  const h=await harness(),g=openGame(h,{source:sourceGame,secure:false,hasLocks:false});
+  const count=h.lockRequests.length,before=[...h.data];
+  await g.start();assert.equal(g.mode,false);assert.equal(g.canWrite(),true);assert.equal(g.timers.size,2);
+  assert.equal(h.lockRequests.length,count);assert.deepEqual([...h.data],before);
+  console.log('PASS QA-001-GW production source retains synchronous startup without Web Locks');
+}
+{
+  const h=await harness();let grant;
+  const locks={request:(name,opts,callback)=>new Promise(resolve=>{grant=()=>h.lockManager.request(name,opts,callback).then(resolve);})};
+  const g=openGame(h,{locks}),running=g.start(),before=[...h.data],ops=h.operations.length;
+  assert.equal(g.canWrite(),false);g.fire('pagehide');await grant();await running;
+  assertBlockedGame(g);assert.equal(g.timers.size,0);assert.equal(h.held.size,0);
+  assert.deepEqual([...h.data],before);assert.equal(h.operations.length,ops);assertGameIsolation(h);
+  console.log('PASS QA-001-GW pagehide before delayed grant cannot revive retired game');
 }
 
 // Negative control: old sync transformed only game.js. Synthetic production is intentionally used here.
