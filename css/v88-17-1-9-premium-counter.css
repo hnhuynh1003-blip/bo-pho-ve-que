@@ -862,3 +862,94 @@ body:has(#v88-live-scene.us21-kitchen-view[data-career="boba"]) .app-shell {
    grid-template-rows:auto 216px!important;
  }
 }
+
+/* v88.17.1.10 UI (#14) — responsive containment and readable native controls.
+   Only the premium boba kitchen owns these presentation overrides. */
+#cp177-workshop[data-premium="1"] .cp179-brand > span:last-child {
+  min-width:0;overflow-wrap:anywhere;
+}
+#cp177-workshop[data-premium="1"] .cp177-top-left {order:3;min-width:0}
+#cp177-workshop[data-premium="1"] #us21-exit-kitchen,
+#cp177-workshop[data-premium="1"] .cp177-practice,
+#cp177-workshop[data-premium="1"] #cs27-containers .cs27-container {
+  min-height:44px!important;
+}
+#cp177-workshop[data-premium="1"] .cp177-practice {
+  min-width:44px!important;height:44px!important;
+}
+#cp177-workshop[data-premium="1"] #cs27-containers .cs27-container {
+  min-width:44px!important;
+}
+/* The old 1.8 flex meters had max-width:50%; grid cells must fill their own track. */
+#cp177-workshop[data-premium="1"] #cs26-meters .cs26-meter {
+  width:100%!important;max-width:100%!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] #cs26-meters .cs26-range {
+  max-width:none!important;min-width:30px!important;
+}
+#cp177-workshop[data-premium="1"] .cp178-meter-slot .cs20-field #cs20-gauge-label {
+  white-space:normal!important;overflow-wrap:anywhere;
+  flex:0 1 auto!important;
+}
+/* Reserve space for two real lines, including padding, rather than clip the
+   second line or squeeze the jar. Only the shelf itself scrolls horizontally. */
+#cp177-workshop[data-premium="1"] #cs20-shelf,
+#cp177-workshop[data-premium="1"] #cs20-shelf[data-rows="1"] {
+  grid-template-rows:repeat(2,104px)!important;
+  height:222px!important;min-height:222px!important;max-height:222px!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-shelf .cs20-item {
+  height:104px!important;min-height:104px!important;max-height:104px!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-shelf .cs26-jar-image {
+  flex:0 0 68px!important;height:68px!important;min-height:68px!important;max-height:68px!important;
+}
+#cp177-workshop[data-premium="1"] #cs20-shelf .cs20-item-name {
+  flex:0 0 28px!important;height:28px!important;min-height:28px!important;max-height:28px!important;
+  font-size:10px!important;line-height:12px!important;padding:2px 3px!important;
+  overflow-wrap:anywhere;
+}
+#cp177-workshop[data-premium="1"] .cs20-actions {
+  flex-wrap:wrap!important;min-width:0!important;
+}
+#cp177-workshop[data-premium="1"] .cs20-actions button {
+  max-width:100%!important;min-height:44px!important;white-space:normal!important;overflow-wrap:anywhere;
+}
+@media(max-width:480px) {
+  #cp177-workshop[data-premium="1"] .cp177-top {
+    flex-wrap:wrap!important;gap:5px!important;
+  }
+  #cp177-workshop[data-premium="1"] .cp179-brand {
+    flex:1 1 110px;
+  }
+  #cp177-workshop[data-premium="1"] .cp177-day-status {
+    display:none!important;
+  }
+  #cp177-workshop[data-premium="1"] .cs20-price.cs33-order-bar {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs33-order-summary {
+    display:block!important;-webkit-line-clamp:unset!important;max-height:none!important;
+    font-size:11px!important;overflow:visible!important;
+  }
+  #cp177-workshop[data-premium="1"] .cs20-stepper {
+    max-width:100%!important;flex-wrap:wrap!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs26-meters {
+    grid-template-columns:minmax(0,1fr)!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-shelf,
+  #cp177-workshop[data-premium="1"] #cs20-shelf[data-rows="1"] {
+    grid-template-rows:repeat(2,94px)!important;
+    height:200px!important;min-height:200px!important;max-height:200px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-shelf .cs20-item {
+    height:94px!important;min-height:94px!important;max-height:94px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-shelf .cs26-jar-image {
+    flex-basis:58px!important;height:58px!important;min-height:58px!important;max-height:58px!important;
+  }
+  #cp177-workshop[data-premium="1"] #cs20-primary {
+    flex-basis:135px!important;
+  }
+}
