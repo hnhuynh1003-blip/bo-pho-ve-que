@@ -1,0 +1,122 @@
+name: QA RC2 (isolated)
+on:
+  push:
+    branches: [qa/v88-17-1-10-rc2]
+    paths:
+      - '.github/workflows/qa-rc2.yml'
+      - 'tests/qa-rc2/**'
+permissions:
+  contents: read
+env:
+  TARGET_SHA: 560614a7090b18cdf8364fa2b322ba0951b3bd5f
+  BASELINE_SHA: 793704021bc4be7827390656a0c3d0f9eae25d0f
+jobs:
+  fixture:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 560614a7090b18cdf8364fa2b322ba0951b3bd5f
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify and run separate fixture suites
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          mkdir -p qa-evidence
+          printf 'target=%s\nharness=%s\n' "$TARGET_SHA" "$GITHUB_SHA" | tee qa-evidence/refs.txt
+          failed=0
+          for t in test_playtest_save_isolation test_counter_settlement_v88 test_day_rules_v88 test_day_interest_v88 test_day_integration_v88 test_menu_dot2_v88 test_decor_v88 verify_phone_os_v88; do
+            if node "tests/$t.mjs" 2>&1 | tee "qa-evidence/$t.log"; then
+              echo "PASS $t"
+            else
+              echo "FAIL $t"
+              failed=1
+            fi
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-rc2-fixture
+          path: qa-evidence/
+          retention-days: 14
+  native:
+    name: native-${{ matrix.engine }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 55
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    env:
+      QA_ENGINE: ${{ matrix.engine }}
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: ${{ github.sha }}
+          path: harness
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 560614a7090b18cdf8364fa2b322ba0951b3bd5f
+          path: source
+          persist-credentials: false
+      - uses: actions/checkout@v4
+        with:
+          ref: 793704021bc4be7827390656a0c3d0f9eae25d0f
+          path: baseline
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install pinned test dependency
+        working-directory: harness
+        run: |
+          npm install --no-save --ignore-scripts playwright@1.56.1
+          npx playwright install --with-deps "$QA_ENGINE"
+      - name: Verify exact refs and create isolated HTTP root
+        id: prepare
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git -C source rev-parse HEAD)" = "$TARGET_SHA"
+          test "$(git -C baseline rev-parse HEAD)" = "$BASELINE_SHA"
+          test "$(git -C harness rev-parse HEAD)" = "$GITHUB_SHA"
+          mkdir -p qa-root/{production,playtest,baseline} qa-evidence
+          for variant in production playtest baseline; do
+            from=source
+            if [ "$variant" = baseline ]; then from=baseline; fi
+            cp "$from"/{index.html,chuyen-save.html,asset-manifest.json} "qa-root/$variant/"
+            cp -R "$from"/{js,css,assets} "qa-root/$variant/"
+          done
+          node source/scripts/isolate-playtest-save.mjs qa-root/playtest
+          node -e 'const fs=require("fs"); for(const f of ["js/game.js","chuyen-save.html"]){const a=fs.readFileSync("qa-root/production/"+f,"utf8");const b=fs.readFileSync("qa-root/playtest/"+f,"utf8");if(b!==a.replaceAll("ve_que_khoi_nghiep_","bpvq_playtest_"))throw Error("Unexpected generated diff "+f)}'
+          printf '<!doctype html><title>QA neutral page</title>' > qa-root/neutral.html
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory qa-root >qa-evidence/http.log 2>&1 &
+          for i in {1..20}; do
+            if curl -fsS http://127.0.0.1:8765/neutral.html >/dev/null; then exit 0; fi
+            sleep 1
+          done
+          exit 1
+      - name: Native save, locks, lifecycle and migration
+        run: node harness/tests/qa-rc2/native.mjs
+      - name: Milk Foam B and visible pour-topup across viewports
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: node harness/tests/qa-rc2/art.mjs
+      - name: B-02 actual trusted input and full practice across three viewports
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: node harness/tests/qa-rc2/practice.mjs
+      - name: Browser settlement, practice and upgrade (case-isolated adapted harness)
+        if: ${{ !cancelled() && steps.prepare.outcome == 'success' }}
+        run: node harness/tests/qa-rc2/existing.mjs
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-rc2-${{ matrix.engine }}
+          path: qa-evidence/
+          retention-days: 14
