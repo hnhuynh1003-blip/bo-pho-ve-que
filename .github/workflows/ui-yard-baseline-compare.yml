@@ -1,0 +1,79 @@
+name: UI yard baseline comparison
+on:
+  push:
+    branches: [work/v88-17-1-10-ui]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  compare:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+      - uses: actions/checkout@v4
+        with:
+          ref: 793704021bc4be7827390656a0c3d0f9eae25d0f
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps chromium
+      - name: Compare legacy test and matched real-game view geometry
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/baseline evidence/candidate
+          for variant in baseline candidate; do
+            python3 -m http.server 8765 --bind 127.0.0.1 --directory "$variant" > "evidence/$variant/server.log" 2>&1 &
+            server=$!
+            trap 'kill "$server" 2>/dev/null || true' EXIT
+            for attempt in {1..20}; do
+              if curl -fsS http://127.0.0.1:8765/ >/dev/null; then break; fi
+              sleep 1
+            done
+            set +e
+            (cd "$variant" && node tests/test_compact_counter_v88.mjs) > "evidence/$variant/legacy.log" 2>&1
+            legacy_status=$?
+            BPVQ_QA_OUTPUT="$PWD/evidence/$variant" node candidate/tests/test_boba_yard_compare_v881710.mjs > "evidence/$variant/native.log" 2>&1
+            native_status=$?
+            set -e
+            printf 'legacy=%s\nnative=%s\n' "$legacy_status" "$native_status" | tee "evidence/$variant/status.txt"
+            tail -n 20 "evidence/$variant/legacy.log"
+            tail -n 8 "evidence/$variant/native.log"
+            kill "$server"
+            trap - EXIT
+          done
+          python3 - <<'PY'
+          from pathlib import Path
+          import json
+          root=Path('evidence')
+          for v in ('baseline','candidate'):
+              print(v,(root/v/'status.txt').read_text())
+              data=json.loads((root/v/'geometry.json').read_text())
+              for r in data['reports']:
+                  print(v,r['career'],r['width'],r.get('yard',{}).get('yard'), 'station=',r.get('kitchen',{}).get('station'), 'legacy520=',r.get('legacyCompact520'),r.get('failure'))
+          a=json.loads((root/'baseline'/'geometry.json').read_text())['reports']
+          b=json.loads((root/'candidate'/'geometry.json').read_text())['reports']
+          for x,y in zip(a,b):
+              if x['career']=='boba': continue
+              assert (x['career'],x['width'])==(y['career'],y['width'])
+              h1=x['kitchen']['station']['h'];h2=y['kitchen']['station']['h']
+              print('LEGACY HEIGHT COMPARE',x['career'],x['width'],h1,h2,'delta',h2-h1,'gate <=520',h1<=520,h2<=520)
+              assert abs(h1-h2)<=1,('non-boba layout regression',x['career'],x['width'],h1,h2)
+          PY
+          # Keep diagnostics red when the real-game contract fails; never relabel legacy failure as a pass.
+          grep -qx 'native=0' evidence/baseline/status.txt
+          grep -qx 'native=0' evidence/candidate/status.txt
+      - name: Upload both full-game captures and original legacy logs
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: boba-yard-native-baseline-candidate
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
