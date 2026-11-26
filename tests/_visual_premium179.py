@@ -2,6 +2,7 @@ from pathlib import Path
 from bs4 import BeautifulSoup
 from playwright.sync_api import sync_playwright
 import base64, re
+from urllib.parse import urlsplit, unquote
 root=Path(__file__).resolve().parents[1]
 source=(root/'index.html').read_text()
 soup=BeautifulSoup(source,'html.parser')
@@ -68,10 +69,19 @@ polish_js=(root/'js/v88-17-1-9-premium-counter.js').read_text(encoding='utf-8')
 with sync_playwright() as pw:
  browser=pw.chromium.launch(headless=True,args=['--no-sandbox','--disable-dev-shm-usage'])
  errors=[]
- for width in [320,390,430,768,880,1024,1366]:
+ for width in [320,360,375,390,430,768,880,1024,1366]:
   page=browser.new_page(viewport={'width':width,'height':900},device_scale_factor=1)
   page.on('pageerror',lambda e:errors.append(str(e)))
-  page.set_content(html,wait_until='domcontentloaded')
+  # Resolve both inline CSS backgrounds and images inserted by the adapter.
+  # No live game state: this remains a visual fixture, not gameplay QA.
+  def serve_fixture_asset(route):
+   p=(root/unquote(urlsplit(route.request.url).path).lstrip('/')).resolve()
+   if p.is_relative_to(root/'assets') and p.is_file():
+    route.fulfill(path=str(p))
+   else:
+    route.abort()
+  page.route('http://bpvq.test/**',serve_fixture_asset)
+  page.set_content(html.replace('<head>','<head><base href="http://bpvq.test/">',1),wait_until='domcontentloaded')
   page.evaluate("""()=>{
     window.BPVQCookingStation={status:()=>({stage:'mix',practice:false,pour:72,handoffHeld:false})};
     window.BPVQCookingBridge={snapshot:()=>({career:'boba',phase:'open',
@@ -109,6 +119,15 @@ with sync_playwright() as pw:
         return {top:r.top,bottom:r.bottom,shelfBottom:sr.bottom,nameBottom:title?.bottom};
       })(),
       actions:box('#cp177-workshop .cp177-actions'),
+      nativeCounts:Object.fromEntries(['cs20-primary','cs20-shelf','cs20-visual','cs26-meters','cs27-containers','us21-exit-kitchen'].map(id=>[id,document.querySelectorAll('#'+id).length])),
+      meterFits:[...document.querySelectorAll('#cp177-workshop #cs26-meters .cs26-meter')].map(e=>{
+        const r=e.getBoundingClientRect(),input=e.querySelector('input').getBoundingClientRect();
+        return {w:r.width,range:input.width,overflow:e.scrollWidth-e.clientWidth};
+      }),
+      labelFits:[...document.querySelectorAll('#cp177-workshop #cs20-shelf .cs20-item-name')].filter(e=>e.getBoundingClientRect().width>0).map(e=>({text:e.textContent,client:e.clientHeight,scroll:e.scrollHeight})),
+      sizeButtons:[...document.querySelectorAll('#cp177-workshop #cs27-containers .cs27-container')].map(e=>({text:e.textContent,h:e.getBoundingClientRect().height,w:e.getBoundingClientRect().width})),
+      primary:box('#cs20-primary'),
+      dispenserLoaded:(()=>{const img=document.querySelector('#cp177-pour-object img');return img.complete && img.naturalWidth>0})(),
       background:getComputedStyle(document.querySelector('#cp177-workshop .cp177-workbench')).backgroundImage};
   }""")
   print('PREMIUM QA',width,{k:v for k,v in sizes.items() if k!='background'})
@@ -123,6 +142,12 @@ with sync_playwright() as pw:
   assert sizes['order']['h']<210,('oversized empty order card',width,sizes['order'])
   assert sizes['lastItem'],('topping second row missing',width,sizes)
   assert sizes['lastItem']['nameBottom']<=sizes['lastItem']['shelfBottom']+1,('ingredient name cut off',width,sizes['lastItem'])
+  assert all(n==1 for n in sizes['nativeCounts'].values()),('duplicate/missing native node',width,sizes['nativeCounts'])
+  assert len(sizes['meterFits'])==2 and all(m['range']>=30 and m['overflow']<=1 for m in sizes['meterFits']),('sugar/ice control clipped',width,sizes['meterFits'])
+  assert sizes['labelFits'] and all(l['scroll']<=l['client']+1 for l in sizes['labelFits']),('topping label clipped',width,sizes['labelFits'])
+  assert [b['text'] for b in sizes['sizeButtons']]==['M','L','XL'] and all(b['h']>=44 and b['w']>=44 for b in sizes['sizeButtons']),('size touch target',width,sizes['sizeButtons'])
+  assert sizes['primary']['h']>=44,('primary touch target',width,sizes['primary'])
+  assert sizes['dispenserLoaded'],('dispenser art failed to load in fixture',width)
 
   assert sizes['top']['bottom']<=sizes['hero']['y']+3,('hidden/displaced header',width,sizes)
   assert sizes['bench']['bottom']<=sizes['pantry']['y']+3,('stage overlaps pantry',width,sizes)
@@ -148,4 +173,4 @@ with sync_playwright() as pw:
   page.screenshot(path=f'visual_qa_counter_{width}.png',full_page=True)
   page.close()
  browser.close()
-print('PASS premium visual QA: cup centered on tray, compact stage, controls not overlapping, 320/390/430/768/880/1024/1366px')
+print('PASS premium visual QA: cup centered on tray, compact stage, controls not overlapping, 320/360/375/390/430/768/880/1024/1366px')
