@@ -32,6 +32,7 @@ jobs:
           node tests/test_counter_settlement_v88.mjs
           node tests/test_cooking_station_v88.mjs
           node tests/test_counter_layout_v881718.mjs
+          node tests/test_playtest_save_isolation.mjs
       - name: Checkout published main
         uses: actions/checkout@v4
         with:
@@ -48,14 +49,10 @@ jobs:
           cp source/index.html published/playtest/index.html
           cp source/asset-manifest.json published/playtest/asset-manifest.json
           cp source/chuyen-save.html published/playtest/chuyen-save.html
+          node source/scripts/isolate-playtest-save.mjs published/playtest
           python3 - <<'PY'
           from pathlib import Path
           root=Path('published/playtest')
-          game=root/'js/game.js'
-          s=game.read_text(encoding='utf-8')
-          # Keep playtest localStorage independent from production on the same GitHub Pages origin.
-          s=s.replace('ve_que_khoi_nghiep_', 'bpvq_playtest_')
-          game.write_text(s, encoding='utf-8')
           index=root/'index.html'
           html=index.read_text(encoding='utf-8')
           import re
