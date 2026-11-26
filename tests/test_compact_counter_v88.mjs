@@ -65,7 +65,7 @@ try{
   await enterKitchen(page);
   assert.equal(await page.locator('#v88-live-supported').isVisible(),false,'no ghost yard');
   assert.ok(await page.evaluate(()=>document.documentElement.scrollWidth-innerWidth<=1),'no horizontal overflow in kitchen');
-  const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,career==='boba','extra pour control only belongs to drinks');
+  const topup=await page.locator('#cs20-top-up').isVisible();assert.equal(topup,false,'legacy top-up control is not a second visible control');if(career==='boba')assert.equal(await page.locator('#cp177-pour-object').isVisible(),true,'dispenser owns pour and top-up');
   const shelfHeight=career==='boba'?(width<=480?200:222):160;
   assert.equal((await page.locator('#cs20-shelf').boundingBox()).height,shelfHeight,'two installed rows in kitchen');
   const items=await page.evaluate(()=>{const rail=document.getElementById('cs20-shelf').getBoundingClientRect();return [...document.querySelectorAll('#cs20-shelf .cs20-item')].map(b=>{const r=b.getBoundingClientRect();return {top:r.top,width:r.width,visible:r.left>=rail.left-1&&r.right<=rail.right+1};});});
