@@ -45,6 +45,7 @@ button{background:#2e6f50;color:white}button[disabled]{opacity:.45;cursor:not-al
 'use strict';
 const REGISTRY = 've_que_khoi_nghiep_accounts_v1';
 const ACTIVE = 've_que_khoi_nghiep_active_profile_v1';
+const PENDING = 've_que_khoi_nghiep_import_pending_v1';
 const $ = (id) => document.getElementById(id);
 let candidate = null;
 function message(msg, isError=false){$('status').textContent=msg;$('status').style.color=isError?'#a52824':'#2d6644';}
@@ -69,6 +70,63 @@ function readAccounts(){
  if(!Array.isArray(list))throw Error('Danh mục hồ sơ trên trang này không hợp lệ.');
  return list;
 }
+// Import-only recovery journal; not part of game save or account schema.
+// Write intent before payload. Never remove a payload while any account/active key refers to it.
+function restoreValue(key,value){
+  if(localStorage.getItem(key)===value)return;
+  if(value===null)localStorage.removeItem(key);else localStorage.setItem(key,value);
+}
+function pendingIntent(){
+  const raw=localStorage.getItem(PENDING);
+  if(raw===null)return null;
+  const j=JSON.parse(raw);
+  if(!j||!/^p_import_[a-z0-9]+_[a-z0-9]*$/.test(j.id)||j.record?.id!==j.id||
+      !(j.previousRegistry===null||typeof j.previousRegistry==='string')||
+      !(j.previousActive===null||typeof j.previousActive==='string')||j.previousActive===j.id)
+    throw Error('Nhật ký nhập không hợp lệ.');
+  const prior=j.previousRegistry===null?[]:JSON.parse(j.previousRegistry);
+  if(!Array.isArray(prior)||prior.some(a=>a?.id===j.id))throw Error('Nhật ký trùng hồ sơ cũ.');
+  return {...j,expectedRegistry:JSON.stringify([...prior,j.record])};
+}
+function recoverPending(rollback=false){
+  try{
+    const j=pendingIntent();
+    if(!j)return {state:'none'};
+    const key='ve_que_khoi_nghiep_profile_'+j.id+'_save_v13';
+    let raw=localStorage.getItem(REGISTRY);
+    let accounts=readAccounts();
+    let selected=localStorage.getItem(ACTIVE);
+    const referenced=accounts.some(a=>a?.id===j.id);
+    const payload=localStorage.getItem(key);
+    // On reload/retry keep a complete registered profile, even if active is
+    // still the old profile. Do not switch or overwrite another active profile.
+    if(referenced&&payload!==null&&(!rollback||selected===j.id)){
+      localStorage.removeItem(PENDING);
+      return {state:'recovered'};
+    }
+    if(referenced){
+      if(raw!==j.expectedRegistry)throw Error('Danh mục đã thay đổi; giữ nguyên dữ liệu để tránh ghi đè hồ sơ.');
+      restoreValue(REGISTRY,j.previousRegistry);
+    }
+    // Re-read actual storage: an unsuccessful registry restore must never
+    // be followed by deletion of the still-referenced save.
+    accounts=readAccounts();
+    if(accounts.some(a=>a?.id===j.id))throw Error('Danh mục vẫn tham chiếu hồ sơ đang nhập.');
+    selected=localStorage.getItem(ACTIVE);
+    if(selected===j.id)restoreValue(ACTIVE,j.previousActive);
+    if(readAccounts().some(a=>a?.id===j.id)||localStorage.getItem(ACTIVE)===j.id)
+      throw Error('Hồ sơ vẫn còn tham chiếu.');
+    if(localStorage.getItem(key)!==null)localStorage.removeItem(key);
+    if(localStorage.getItem(key)!==null)throw Error('Chưa xóa được dữ liệu nhập dang dở.');
+    localStorage.removeItem(PENDING);
+    return {state:'rolledback'};
+  }catch(error){return {state:'pending',detail:error.message};}
+}
+function recoveryMessage(result){
+  if(result.state==='pending')message('Chưa phục hồi được giao dịch nhập: '+result.detail+'. Dữ liệu còn tham chiếu được giữ lại; thử lại khi bộ nhớ khả dụng.',true);
+  else if(result.state==='recovered')message('Đã phục hồi hồ sơ nhập. Hãy chọn hồ sơ đó trong game; không cần nhập lại.');
+  else if(result.state==='rolledback')message('Đã dọn giao dịch nhập dang dở. Có thể nhập lại mã save.');
+}
 $('inspectBtn').addEventListener('click',()=>{
  try{
   candidate=decode($('saveCode').value);
@@ -81,40 +139,48 @@ $('inspectBtn').addEventListener('click',()=>{
  }catch(e){reset();message('Không thể đọc mã save: '+e.message,true)}
 });
 $('importBtn').addEventListener('click',()=>{
+ const recovery=recoverPending();
+ if(recovery.state==='pending'||recovery.state==='recovered'){recoveryMessage(recovery);return;}
  if(!candidate)return;
  const name=$('newName').value.trim().slice(0,20);
  if(!name)return message('Hãy nhập tên hồ sơ mới.',true);
  try{
-  const existing=readAccounts();
+  let existing=readAccounts();
   if(existing.some(a=>String(a?.name||'').toLowerCase()===name.toLowerCase()))return message('Tên hồ sơ đã tồn tại. Hãy đặt tên khác.',true);
   if(!confirm('Tạo hồ sơ mới "'+name+'" từ mã save đã chọn? Hồ sơ hiện có sẽ không bị ghi đè.'))return;
   const id='p_import_'+Date.now().toString(36)+'_'+Math.random().toString(36).slice(2,9);
   const saveKey='ve_que_khoi_nghiep_profile_'+id+'_save_v13';
+  const previousRegistry=localStorage.getItem(REGISTRY);
+  const previousActive=localStorage.getItem(ACTIVE);
+  existing=readAccounts();
+  if(existing.some(a=>String(a?.name||'').toLowerCase()===name.toLowerCase()))return message('Tên hồ sơ đã tồn tại. Hãy đặt tên khác.',true);
+  if(existing.some(a=>a?.id===id)||previousActive===id||localStorage.getItem(saveKey)!==null)throw Error('ID hồ sơ đã tồn tại; hãy thử lại.');
   const now=Date.now();
   const shopName=String(candidate.shopName||'Quán Nhà Mình').slice(0,32);
   const shopAvatar=String(candidate.shopAvatar||'bunny').slice(0,50);
   const playerChibi=candidate.playerChibi==='female'?'female':'male';
   const record={id,name,shopName,shopAvatar,playerChibi,createdAt:now,lastPlayedAt:now,
       summary:{playerName:String(candidate.playerName||name).slice(0,20),shopName,shopAvatar,playerChibi,day:candidate.day,level:candidate.level,career:candidate.currentCareer,hasStarted:!!candidate.hasStarted}};
-  // Atomic-ish transaction: restore registry and active profile if a write fails.
-  const previousRegistry=localStorage.getItem(REGISTRY);
-  const previousActive=localStorage.getItem(ACTIVE);
   try{
+    localStorage.setItem(PENDING,JSON.stringify({id,record,previousRegistry,previousActive}));
     localStorage.setItem(saveKey,JSON.stringify(candidate));
     localStorage.setItem(REGISTRY,JSON.stringify([...existing,record]));
     localStorage.setItem(ACTIVE,id);
   }catch(error){
-    try{
-      localStorage.removeItem(saveKey);
-      if(previousRegistry===null)localStorage.removeItem(REGISTRY);else localStorage.setItem(REGISTRY,previousRegistry);
-      if(previousActive===null)localStorage.removeItem(ACTIVE);else localStorage.setItem(ACTIVE,previousActive);
-    }catch(_rollbackError){/* Preserve original error; tell user not to delete any prior data. */}
+    const result=recoverPending(true);
+    if(result.state==='pending'){recoveryMessage(result);return;}
+    if(result.state==='recovered'){recoveryMessage(result);$('importBtn').disabled=true;return;}
     throw error;
+  }
+  const result=recoverPending();
+  if(result.state!=='recovered'){
+    recoveryMessage(result);return;
   }
   $('importBtn').disabled=true;
   message('Đã tạo hồ sơ "'+name+'". Bấm “Về game”, chọn hồ sơ này, sau đó kiểm tra toàn bộ dữ liệu.');
  }catch(e){message('Không thể tạo hồ sơ: '+e.message,true)}
 });
+recoveryMessage(recoverPending());
 })();
 </script>
 </body>
