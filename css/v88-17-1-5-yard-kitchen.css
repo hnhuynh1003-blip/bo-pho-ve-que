@@ -119,3 +119,10 @@
  width:min(280px,calc(100vw - 34px))!important;max-width:calc(100vw - 34px)!important;
  max-height:50vh!important;overflow-y:auto!important;z-index:500!important;
 }
+
+/* RC2 B-02: the aria-hidden props are decorative in every career, never hit targets.
+   Keep their visual geometry and the real native controls unchanged. */
+#cs20-station .cs20-stage > .cp175-props[aria-hidden="true"],
+#cs20-station .cs20-stage > .cp175-props[aria-hidden="true"] > img {
+  pointer-events:none!important;
+}

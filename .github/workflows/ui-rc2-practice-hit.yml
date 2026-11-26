@@ -1,0 +1,99 @@
+name: UI RC2 practice hit comparison
+on:
+  push:
+    branches: [work/v88-17-1-10-ui]
+    paths:
+      - css/v88-17-1-5-yard-kitchen.css
+      - tests/test_rc2_practice_hit_v88.mjs
+      - .github/workflows/ui-rc2-practice-hit.yml
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  practice:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 25
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+      - uses: actions/checkout@v4
+        with:
+          ref: 793704021bc4be7827390656a0c3d0f9eae25d0f
+          path: baseline
+      - uses: actions/checkout@v4
+        with:
+          ref: e6c10b3fbdabfb0a9cc2c28100be03a05e36b715
+          path: previous
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install browser
+        id: install
+        run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Compare real practice hit and settlement
+        shell: bash
+        env:
+          BPVQ_QA_ENGINE: ${{ matrix.engine }}
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/{baseline,previous,candidate}
+          for variant in baseline previous candidate; do
+            python3 -m http.server 8765 --bind 127.0.0.1 --directory "$variant" > "evidence/$variant/server.log" 2>&1 &
+            server=$!
+            trap 'kill "$server" 2>/dev/null || true' EXIT
+            for attempt in {1..20}; do
+              if curl -fsS http://127.0.0.1:8765/ >/dev/null; then break; fi
+              sleep 1
+            done
+            set +e
+            BPVQ_QA_OUTPUT="$PWD/evidence/$variant" node candidate/tests/test_rc2_practice_hit_v88.mjs > "evidence/$variant/practice.log" 2>&1
+            status=$?
+            set -e
+            echo "$status" > "evidence/$variant/status.txt"
+            cat "evidence/$variant/practice.log"
+            kill "$server"
+            trap - EXIT
+          done
+          python3 - <<'PY'
+          import json
+          from pathlib import Path
+          for variant in ('baseline','previous','candidate'):
+              p=Path('evidence')/variant
+              data=json.loads((p/'geometry.json').read_text())
+              for row in data['reports']:
+                  print('RC2 RESULT',variant,row['career'],row['width'],row.get('groupClicked',False),row.get('practiceSettled',False),row.get('failure',''))
+              assert len(data['reports'])==9
+          PY
+          # Only the fixed candidate must pass all practice cases; historical failures stay in evidence.
+          test "$(cat evidence/candidate/status.txt)" = 0
+      - name: Existing full-game live and practice regression
+        if: always() && steps.install.outcome == 'success'
+        shell: bash
+        env:
+          BPVQ_KITCHEN_ENGINE: ${{ matrix.engine }}
+        working-directory: candidate
+        run: |
+          set -euo pipefail
+          python3 -m http.server 8765 --bind 127.0.0.1 >/tmp/bpvq-rc2-server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          sleep 2
+          node tests/test_premium_counter_v881719.mjs
+          node tests/test_counter_settlement_v88.mjs
+          node tests/test_kitchen_browser_v88.mjs 2>&1 | tee ../evidence/full-regression.log
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: rc2-practice-${{ matrix.engine }}-evidence
+          path: |
+            evidence/
+            candidate/artifacts/v88-kitchen/
+          retention-days: 14
+          if-no-files-found: warn
