@@ -29,7 +29,7 @@ Paths relative to assets/images/. WebP alpha means header declares alpha, not pr
 | topping_crystal | CP/topping_crystal-ai-tray.webp | 159×89 alpha | KEEP_PENDING |
 | topping_grass_jelly | CP/topping_grass_jelly-ai-tray.webp | 150×88 alpha | KEEP_PENDING |
 | topping_aloe | CP/topping_aloe-ai-tray.webp | 147×88 alpha | KEEP_PENDING |
-| topping_cheese_foam | 069_topping-cheese-foam_0190b7ff02.webp | 160×160 alpha | POLISH_CANDIDATE, old card background |
+| topping_cheese_foam | 069_topping-cheese-foam_0190b7ff02.webp | 160×160 alpha | REDRAW_CANDIDATE_A, old card background |
 | topping_lychee | 070_topping-lychee_b30470ed21.webp | 160×160 alpha | REVIEW_LEGACY |
 | topping_cookie | 071_topping-cookie_9b347a4826.webp | 160×160 alpha | REVIEW_LEGACY |
 | topping_redbean | 074_topping-redbean_416456d0bc.webp | 160×160 alpha | REVIEW_LEGACY |
@@ -45,9 +45,9 @@ Paths relative to assets/images/. WebP alpha means header declares alpha, not pr
 - v88/counter/tea-dispenser.webp 362×384 alpha; topping-tray.webp 384×384 alpha.
 
 ## Six representative visual reviews + one filename issue
-See [contact sheet](v88-17-art-review-contact-sheet.html). Original pixels and 56px fit previews are embedded for review; no new art. All WebP files listed below declare alpha.
+See [contact sheet](v88-17-art-review-contact-sheet.html). Original pixels and 56px fit previews are embedded for review; one new unapproved Milk Foam A is included with 58/64px slot simulations. All WebP files listed below declare alpha.
 - topping_boba: 065_topping-boba_50721c0e58.webp 160×160 vs CP/topping_boba-ai-tray.webp 148×89 already used. Retain existing tray pending approval.
-- topping_cheese_foam: 069_topping-cheese-foam_0190b7ff02.webp 160×160. Old cream card behind bowl; priority polish candidate, no replacement generated.
+- topping_cheese_foam: 069_topping-cheese-foam_0190b7ff02.webp 160×160. Old cream card behind bowl; priority polish candidate; A generated and embedded as WebP alpha 160×79, 3508 bytes, Git blob 371272a9ce5d702dc83789f6085d6034afbab514. No runtime replacement.
 - broth_kimchi: 014_broth-kimchi_3479262574.webp 256×239. Stray fragment at upper edge; review broth depiction in noodle phase.
 - ntop_shrimp: 084_ntop-shrimp_04ea544abc.webp 160×160 exists. No direct image mapping in food.images, shape style present. Propose shelf mapping after review, keep native in-dish shape. Old card background may need cleanup.
 - skewer_beef: 036_skewer-beef_45ff36497f.webp 228×256 currently mapped; extra fragment at bottom. 098_skewer-beef_613e29801f.webp 160×160 is candidate, has card background. Do not replace yet.
@@ -55,4 +55,10 @@ See [contact sheet](v88-17-art-review-contact-sheet.html). Original pixels and 5
 - sauce_sweet_chili: 108_sauce-sweet-chili_e934851eee.webp returns 404 at base. 044_sauce-sweet-chili_738b66b9fd.webp 256×228 exists and is already mapped; review left edge. No duplicate mapping fix proposed.
 
 ## Gate and handoff
-Proposed source 512×512 for new assets; runtime WebP alpha 160/256 as appropriate, preserve established tray aspect ratios when replacing. Cute Premium Vietnamese chibi, warm brown outlines, cream/wood/sage/rose, soft highlights, no baked-in label or price. Source master availability not verified. Inspect edges, transparency, readability at actual display scale, and coordinate hit targets with UI team (>=44px proposed, not measured). Do not alter layout, gameplay, save, IDs, clean shell or main. Noodle 32 and streetfood 32 remain deferred except sample audit. No image generation until needed and approved direction. No approvals recorded. Static audit does not establish all legacy references across entire repository or runtime behavior. No browser-render verification of contact sheet performed.
+Proposed source 512×512 for new assets; runtime WebP alpha 160/256 as appropriate, preserve established tray aspect ratios when replacing. Cute Premium Vietnamese chibi, warm brown outlines, cream/wood/sage/rose, soft highlights, no baked-in label or price. Source master availability not verified. Inspect edges, transparency, readability at actual display scale, and coordinate hit targets with UI team (>=44px proposed, not measured). Do not alter layout, gameplay, save, IDs, clean shell or main. Noodle 32 and streetfood 32 remain deferred except sample audit. Only one necessary review candidate generated under latest coordinator instruction; no batch generation. No approvals recorded. Static audit does not establish all legacy references across entire repository or runtime behavior. No browser-render verification of contact sheet performed. CSS 1.9 declares 58/64px art slot heights and 81/88px item heights; actual bounding boxes/hit targets remain unmeasured. Candidate original generated RGBA 1774×887, alpha cleaned below 16, visible crop 1343×630; local exports 512×512, 256×124 and 160×79. Only 160×79 review copy embedded in GitHub contact sheet, other sizes local handoff. Candidate tray is wider and more orange than existing boba tray: owner must review consistency before approval.
+
+## Decision summary (all pending owner approval)
+- KEEP: 8 existing trays, 8 tea bases with direct references, 3 native cups, native milk representation (review), and existing working fallback art pending visual inspection.
+- REDRAW: only topping_cheese_foam candidate A in this batch. Other legacy toppings remain pending, not automatic redraws.
+- REMAP: ntop_shrimp and skewer_beef proposed for later career phases; sauce_tamarind and sweet chili already mapped to 045/044; no code edits.
+- PENDING: all 28 boba IDs remain unapproved, 32 noodle and 32 streetfood deferred except six representative review IDs and sweet chili check.
