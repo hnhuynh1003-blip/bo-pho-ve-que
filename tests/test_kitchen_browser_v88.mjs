@@ -1,7 +1,7 @@
 import assert from 'node:assert/strict';
 import {chromium,webkit} from 'playwright';
 import {mkdirSync} from 'node:fs';
-import {cookKitchen} from './kitchen_test_helpers.mjs';
+import {cookKitchen,enterKitchen,takeBoba} from './kitchen_test_helpers.mjs';
 const options={headless:true,args:['--no-sandbox','--disable-gpu']};if(process.env.BPVQ_TEST_BROWSER_PATH)options.executablePath=process.env.BPVQ_TEST_BROWSER_PATH;
 const browser=process.env.BPVQ_KITCHEN_ENGINE==='webkit'?await webkit.launch({headless:true}):await chromium.launch(options);mkdirSync('artifacts/v88-kitchen',{recursive:true});
 async function setup(page,career,practice){
@@ -22,6 +22,7 @@ async function setup(page,career,practice){
  },{career,practice});
  await page.waitForTimeout(650);
  if(practice){await page.getByRole('button',{name:'Luyện nấu ăn không mất nguyên liệu khi nghỉ ca'}).click();}
+ await enterKitchen(page);
  await page.evaluate(c=>{
   const b=window.BPVQCookingBridge;
   if(c==='boba'){if(!window.BPVQCookingStation.status().practice){b.choose('topping','topping_boba',1);b.choose('topping','topping_boba',1);}}
@@ -29,7 +30,7 @@ async function setup(page,career,practice){
   else if(!window.BPVQCookingStation.status().practice){b.choose('topping','skewer_fish',1);b.choose('topping','skewer_fish',1);b.choose('topping','skewer_beef',1);}
  },career);
  if(practice){
-  await page.locator('#cs20-groups').getByRole('button',{name:career==='streetfood'?'Chọn xiên':'Topping',exact:true}).click();
+  await page.locator('#cs20-groups').getByRole('button',{name:career==='streetfood'?'Chọn xiên':career==='boba'?'Topping & siro':'Topping',exact:true}).click();
   for(const [key,n]of career==='boba'?[['topping_boba',2]]:career==='noodle'?[['ntop_beef',2],['ntop_fishcake',1]]:[['skewer_fish',2],['skewer_beef',1]])for(let i=0;i<n;i++)await page.locator(`[data-item="${key}"]`).click();
  }
  await page.waitForTimeout(650);
@@ -45,7 +46,7 @@ try{
   const ready=await page.evaluate(key=>({grade:window.BPVQCookingBridge.kitchenStatus().grade,stock:gameState.inventory[key],profile:activeProfileId}),key);
   assert.equal(ready.grade,grade==='timeout'?'bad':grade);assert.equal(ready.stock,initial.inventory[key]-2);
   if(grade==='perfect'){
-   const profile=ready.profile;await page.evaluate(()=>saveGameToStorage(false));await page.reload({waitUntil:'load'});await page.evaluate(profile=>continueLocalAccount(profile),profile);await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
+   const profile=ready.profile;await page.evaluate(()=>saveGameToStorage(false));await page.reload({waitUntil:'load'});await page.evaluate(profile=>continueLocalAccount(profile),profile);await enterKitchen(page);if(career==='boba')await takeBoba(page);await page.waitForFunction(()=>document.getElementById('cs20-primary').dataset.act==='send');
    assert.equal(await page.evaluate(()=>window.BPVQCookingBridge.kitchenStatus().grade),'perfect','actual reload retains outcome');
   }
   const frozen=await page.evaluate(()=>JSON.stringify(window.BPVQCookingBridge.kitchenStatus()));await page.waitForTimeout(650);assert.equal(await page.evaluate(()=>JSON.stringify(window.BPVQCookingBridge.kitchenStatus())),frozen);
