@@ -54,6 +54,20 @@ jobs:
             trap - EXIT
           done
           exit "$failed"
+      - name: Explicit interactive boba and static Engine regression
+        if: always()
+        env:
+          BPVQ_QA_ENGINE: ${{ matrix.engine }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/interactive
+          python3 -m http.server 8765 --bind 127.0.0.1 --directory candidate >/tmp/interactive-server.log 2>&1 &
+          server=$!
+          trap 'kill "$server" 2>/dev/null || true' EXIT
+          sleep 2
+          (cd candidate && node --check js/v88-cooking-station.js && node --check js/v88-interactive-counter.js && node tests/test_counter_settlement_v88.mjs && node tests/test_kitchen_rules_v88.mjs) | tee evidence/interactive/static.log
+          BPVQ_QA_OUTPUT="$PWD/evidence/interactive" node candidate/tests/test_interactive_boba_v88.mjs | tee evidence/interactive/browser.log
       - uses: actions/upload-artifact@v4
         if: always()
         with:
