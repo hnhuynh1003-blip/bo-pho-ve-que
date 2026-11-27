@@ -114,7 +114,7 @@ function updatePreview(s,status){
 }
 function refresh(){
  const s=snapshot();if(!s)return;
- const c=s.career||'boba';oldCareer=c;const should=c==='boba';if(should!==mounted){if(should)mount();else unmount();}
+ const c=s.career||'boba';const actual=w.BPVQCookingStation.presentation?.();if(actual?.practice)s.dish=actual.dish;oldCareer=c;const should=c==='boba';if(should!==mounted){if(should)mount();else unmount();}
  if(!should)return;
  const state=w.BPVQCookingStation.status();
  shell.dataset.state=state.practice?'practice':s.customer?'order':'idle';
@@ -124,7 +124,7 @@ function refresh(){
  const actuator=$('cp177-pour-object'),primary=$('cs20-primary'),topUp=$('cs20-top-up');
  const mainAct=primary?.dataset.act||'';
  // The tea dispenser IS the pour control: never draw a second visible pour button.
- const canPour=!!primary&&!primary.disabled&&!s.pause&&(mainAct==='pour'||(mainAct==='cap-start'&&!topUp?.disabled));
+ const canPour=!!primary&&!s.pause&&((mainAct==='pour'&&!primary.disabled)||(mainAct==='cap-start'&&!topUp?.disabled));
  actuator.disabled=!canPour;
  actuator.setAttribute('aria-label',state.stage==='pour'?'Dừng rót trà':'Rót trà từ bình vào ly');
  actuator.querySelector('.cp177-pour-tag').textContent=state.stage==='pour'?'Dừng':mainAct==='cap-start'&&canPour?'Rót thêm':'Rót';

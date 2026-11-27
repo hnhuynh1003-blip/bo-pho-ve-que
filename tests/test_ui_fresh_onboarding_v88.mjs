@@ -17,15 +17,15 @@ try{
    await page.goto('http://127.0.0.1:8765/',{waitUntil:'load'});
    await page.locator('#account-new-name').fill('UI TEST '+career);
    await page.locator('button[onclick="createLocalAccount()"]').click();
-   await page.locator('#intro-card-'+career).click();
-   await page.locator('#intro-shop-name').fill('Quán TEST '+career);
-   await page.locator('button[onclick="confirmStartGameFromIntro()"]').click();
    // Complete actual story via its visible Next buttons, no skip or synthetic profile.
    for(let i=0;i<12;i++){
     if(await page.locator('.v8771-next').isVisible())await page.locator('.v8771-next').click();
-    else if(await page.locator('#v8771-welcome').isVisible())break;
+    else if(await page.locator('#intro-card-'+career).isVisible()&&!(await page.locator('#v8771-story').isVisible()))break;
     else await page.waitForTimeout(250);
    }
+   await page.locator('#intro-card-'+career).click();
+   await page.locator('#intro-shop-name').fill('Quán TEST '+career);
+   await page.locator('button[onclick="confirmStartGameFromIntro()"]').click();
    await page.locator('#v8771-welcome button[onclick*="explore"]').click({timeout:10000});
    await page.locator('#nav-btn-shop').click();
    await page.waitForTimeout(800);

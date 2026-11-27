@@ -1,0 +1,31 @@
+/* Scoped interactive workbench; no yard or other-career overrides. */
+#cp177-workshop[data-interactive="1"] .cp180-equipment{grid-area:equipment;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr) minmax(0,1fr);gap:6px;padding:8px;background:#f4d9ae;border-radius:12px;align-items:stretch}
+#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop[data-interactive="1"]{grid-template-areas:"header" "equipment" "workshop" "ingredients" "controls" "actions"!important;grid-template-rows:auto auto auto auto auto auto!important}
+#cp177-workshop[data-interactive="1"] .cp180-equipment .cp178-size-slot,#cp177-workshop[data-interactive="1"] .cp180-equipment #cp177-pour-object{position:relative!important;inset:auto!important;width:100%!important;max-width:none!important;height:auto!important;min-height:84px!important;padding:4px!important;align-self:stretch}
+#cp177-workshop[data-interactive="1"] .cp180-equipment #cp177-pour-object img{height:66px!important;max-height:66px!important}
+#cp177-workshop[data-interactive="1"] .cp180-equipment #cs27-containers{flex-wrap:wrap!important;justify-content:center!important}
+#cp177-workshop[data-interactive="1"] .cp180-cap{border:1px solid #a4774f;border-radius:10px;background:#fff0d5;color:#704832;font-weight:800;min-height:44px;padding:6px;white-space:normal}
+#cp177-workshop[data-interactive="1"] .cp180-cap:disabled{opacity:.55}
+#cp177-workshop[data-interactive="1"] .cp180-cap.active{background:#f3c95d}
+#cp177-workshop[data-interactive="1"] .cp180-receipt{padding:8px;display:grid;gap:4px;color:#67462e;font-size:13px;line-height:1.4;overflow-wrap:anywhere}
+#cp177-workshop[data-interactive="1"] .cp179-ticket-head{display:none!important}
+#cp177-workshop[data-interactive="1"] .cp177-order .cs33-order-ticket{display:none!important}
+#cp177-workshop[data-interactive="1"] .cp177-order .cs33-help-detail{position:static!important}
+#cp177-workshop[data-interactive="1"] .cp177-workbench{height:245px!important;min-height:245px!important;max-height:245px!important;background:#ead0a5!important}
+#cp177-workshop[data-interactive="1"] .cp177-backbar-art{display:none!important}
+#cp177-workshop[data-interactive="1"] .cp177-cup-place{position:relative!important;inset:auto!important;width:100%!important;height:165px!important}
+#cp177-workshop[data-interactive="1"] #cs20-visual svg[data-cup-selected="false"]{visibility:hidden!important}
+#cp177-workshop[data-interactive="1"] .cp180-applied{position:relative;z-index:12;padding:5px 8px;color:#69452c;background:#fff3dc;border-radius:8px;font-size:11px;line-height:1.3;pointer-events:none}
+#cp177-workshop[data-interactive="1"] .cp179-live-status{position:relative!important;inset:auto!important;display:block!important;margin:3px 5px!important}
+#cp177-workshop[data-interactive="1"] .cp177-active-items{position:relative!important;inset:auto!important}
+#cp177-workshop[data-interactive="1"] .cp180-pantry-title,#cp177-workshop[data-interactive="1"] .cp180-lower-title{font-size:12px;font-weight:800;color:#704832;padding:4px}
+#cp177-workshop[data-interactive="1"] #cs26-meters{display:grid!important;grid-template-columns:1fr!important}
+#cp177-workshop[data-interactive="1"] #cs26-meters .cs26-meter{display:grid!important;grid-template-columns:44px minmax(0,1fr) auto!important;gap:4px!important;align-items:center!important}
+#cp177-workshop[data-interactive="1"] .cp180-flavor-choices{display:flex;flex-wrap:wrap;gap:3px}
+#cp177-workshop[data-interactive="1"] .cp180-flavor-choices button{min-width:44px;min-height:44px;border:1px solid #bc936b;border-radius:8px;background:#fff3dc;color:#704832;font-size:12px}
+#cp177-workshop[data-interactive="1"] .cp180-flavor-choices button[aria-pressed="true"]{background:#e8a1ac;border-color:#af6375}
+#cp177-workshop[data-interactive="1"] .cp180-flavor-choices button:disabled{opacity:.5}
+#cp177-workshop[data-interactive="1"] .cs20-group,#cp177-workshop[data-interactive="1"] #cs26-pager button{min-height:44px!important;min-width:44px!important}
+@media(min-width:801px){#v88-live-scene.us21-unified.us21-kitchen-view[data-career="boba"] #cp177-workshop[data-interactive="1"]{grid-template-areas:"header header" "equipment equipment" "workshop ingredients" "controls controls" "actions actions"!important;grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important}#cp177-workshop[data-interactive="1"]>.cp179-hero{grid-column:1!important;grid-template-areas:"order" "bench"!important;grid-template-columns:1fr!important;grid-template-rows:auto 245px!important}#cp177-workshop[data-interactive="1"]>.cp177-ingredients{grid-column:2!important}#cp177-workshop[data-interactive="1"] #cs20-shelf,#cp177-workshop[data-interactive="1"] #cs20-shelf[data-rows="1"]{grid-auto-columns:calc((100% - 14px)/3)!important}}
+@media(max-width:800px){#cp177-workshop[data-interactive="1"]>.cp179-hero{grid-template-rows:auto 245px!important}}
+@media(max-width:599px){#cp177-workshop[data-interactive="1"] .cp177-active-items{display:none!important}#cp177-workshop[data-interactive="1"] .cp180-equipment{grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,1fr)}}
