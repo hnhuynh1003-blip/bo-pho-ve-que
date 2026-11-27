@@ -19,7 +19,7 @@ let practiceDish=null,practicePerson=null,practiceNumber=0;
 const clone=o=>JSON.parse(JSON.stringify(o));
 const practiceKitchen=w.BPVQKitchenPlay.create({
  context:()=>({career:current?.career,person:practiceDish?practicePerson:null,dish:practiceDish,phase:'open',patience:90,paused:bridge.isPaused(),hidden:document.visibilityState==='hidden'}),
- onBegin(){practiceDish.isCooked=false;practiceDish.fryState='unfried';practiceDish.fryProgress=0;},
+ onBegin(){if(current.career==='boba')return bridge.canCapDish(practiceDish);practiceDish.isCooked=false;practiceDish.fryState='unfried';practiceDish.fryProgress=0;},
  onFinish(grade,play){if(current.career==='boba')practiceDish.isShaken=true;else if(current.career==='noodle')practiceDish.isCooked=true;else{practiceDish.fryState=grade==='bad'?'burnt':grade;practiceDish.fryProgress=100;}}
 });
 function kitchenView(){return practiceDish?practiceKitchen.snapshot():bridge.kitchenStatus();}
@@ -34,9 +34,8 @@ function practiceSelect(group,key,delta){
  if(practiceKitchen.snapshot().stage!=='choose')return false;
  const d=practiceDish;if(!d)return false;
  const kind=current.career;
- if(group==='sugar'&&kind==='boba')d.sugar=Number(key);
- else if(group==='ice'&&kind==='boba')d.ice=Number(key);
- else if(group==='spice'&&kind==='noodle')d.spicyLevel=Number(key);
+ if(kind==='boba')return bridge.choosePractice(d,group,key,delta);
+ if(group==='spice'&&kind==='noodle')d.spicyLevel=Number(key);
  else if(group==='container'){
   if(kind==='streetfood')d.tray=({tray_plate:'plate',tray_basket:'basket',tray_box:'box'}[key])||'plate';
   else d.container=key;
@@ -103,7 +102,7 @@ function portionCount(d,key){const m=d.toppingPortions||{};return Object.prototy
 function selected(s,x){
  const d=s.dish;
  if(x.group==='container')return d.container===x.id || ({plate:'tray_plate',basket:'tray_basket',box:'tray_box'}[d.tray]===x.id);
- if(x.group==='base')return d.base===x.id;
+ if(x.group==='base')return (s.career==='boba'?d.selectedBase:d.base)===x.id;
  if(x.group==='sauce')return d.sauce===x.id;
  if(x.group==='topping')return s.career==='streetfood'?Number(d.skewerCounts[x.id]||0)>0:portionCount(d,x.id)>0;
  return false;
@@ -120,9 +119,10 @@ function renderGroups(){
  for(const b of tabs.children){b.classList.toggle('selected',ui.group===b.dataset.group);attr(b,'aria-pressed',ui.group===b.dataset.group);}
 }
 function emitSelection(x,delta){
- if(!current)return;
- if(x.group==='topping' && delta>0)lastPortionKey=x.id;
- if(practiceDish){if(!x.unlocked||practiceKitchen.snapshot().stage!=='choose')return;practiceSelect(x.group,x.id,delta);}else{if(!bridge.choose(x.group,x.id,delta))return;}
+ if(!current||current.pause||ui.active)return;
+ if(current.career==='boba'&&!current.dish.container&&x.group==='topping'){setNotice('Chọn ly trước khi thêm topping.');return;}
+ if(practiceDish){if(!x.unlocked||practiceKitchen.snapshot().stage!=='choose')return;if(!practiceSelect(x.group,x.id,delta))return;}else{if(!bridge.choose(x.group,x.id,delta))return;}
+ if(x.group==='topping'&&delta>0)lastPortionKey=x.id;
  ui.page=Math.max(0,ui.page||0);
  afterIngredientEdit();
  touchMotion($('cs20-visual').querySelector('svg'),[{transform:'translateY(0)'},{transform:'translateY(-3px)'},{transform:'translateY(0)'}]);
@@ -172,29 +172,25 @@ const teaColors={tea_black:'#a57042',tea_green:'#83a35a',tea_strawberry:'#e993a7
 const meterViews=[],containerViews=[];
 let containerStamp='',shelfStamp='',shelfViews=[];
 function chooseFlavor(kind,n){
- if(practiceDish){if(practiceKitchen.snapshot().stage!=='choose')return;practiceSelect(kind,n,1);}else if(!bridge.choose(kind,n))return;
+ if(!current||current.pause||ui.active)return;
+ if(practiceDish){if(!practiceSelect(kind,n,1))return;}else if(!bridge.choose(kind,n))return;
  afterIngredientEdit();refresh(true);
 }
 function renderMiniMeters(){
  hide(cs26Meters,ui.career!=='boba');
  if(ui.career!=='boba')return;
  if(!meterViews.length){
- for(const [title,kind,vals] of [['Đường','sugar',[30,70,100]],['Đá','ice',[0,50,100]]]){
-  const wrap=document.createElement('label');wrap.className='cs26-meter '+kind;
-  const text=document.createElement('span');text.textContent=title;
-  const values=vals;const value=Number(current.dish[kind]);
-  const slide=document.createElement('input');slide.type='range';slide.className='cs26-range';slide.min=0;slide.max=vals.length-1;slide.step=1;slide.value=String(Math.max(0,vals.indexOf(value)));
-  slide.setAttribute('aria-label',title+' trong món');
-  const number=document.createElement('strong');number.textContent=value+'%';
-  slide.addEventListener('input',()=>{number.textContent=values[Number(slide.value)]+'%';slide.style.setProperty('--fill',((Number(slide.value)/(vals.length-1))*100)+'%');});
-  slide.addEventListener('change',()=>chooseFlavor(kind,values[Number(slide.value)]));
-  slide.style.setProperty('--fill',((Number(slide.value)/(vals.length-1))*100)+'%');
-  wrap.append(text,slide,number);cs26Meters.append(wrap);meterViews.push({kind,vals,slide,number});
+  for(const [title,kind,vals] of [['Đường','sugar',[0,30,70,100]],['Đá','ice',[0,50,100]]]){
+   const wrap=document.createElement('div');wrap.className='cs26-meter '+kind;
+   const text=document.createElement('span');text.textContent=title;
+   const choices=document.createElement('div');choices.className='cp180-flavor-choices';choices.setAttribute('role','group');choices.setAttribute('aria-label',title);
+   const buttons=vals.map(n=>{const b=document.createElement('button');b.type='button';b.textContent=n+'%';b.dataset.flavor=kind;b.dataset.value=String(n);b.setAttribute('aria-label',title+' '+n+'%');b.addEventListener('click',()=>chooseFlavor(kind,n));choices.append(b);return {b,n};});
+   const number=document.createElement('strong');wrap.append(text,choices,number);cs26Meters.append(wrap);meterViews.push({kind,buttons,number});
+  }
  }
- }
- for(const m of meterViews){const value=Number(current.dish[m.kind]),index=Math.max(0,m.vals.indexOf(value));
-  if(document.activeElement!==m.slide){if(m.slide.value!==String(index))m.slide.value=String(index);const fill=((index/(m.vals.length-1))*100)+'%';if(m.slide.style.getPropertyValue('--fill')!==fill)m.slide.style.setProperty('--fill',fill);}
-  if(m.number.textContent!==value+'%')m.number.textContent=value+'%';
+ for(const m of meterViews){const value=current.dish[m.kind];
+  m.number.textContent=value==null?'Chưa thêm':value+'%';
+  for(const {b,n} of m.buttons){attr(b,'aria-pressed',value===n);disable(b,!current.customer||!current.dish.container||current.pause||ui.active||current.kitchen.stage!=='choose');}
  }
 }
 function renderContainers(){
@@ -296,7 +292,7 @@ function buildVisual(s){
   <path data-pour-stream d="M150 6 Q132 12 119 48" stroke="#bf8c55" stroke-width="5" stroke-linecap="round" fill="none" opacity="0"/><ellipse cx="101" cy="170" rx="58" ry="7" fill="#996837" opacity=".15"/>
   <path d="M52 35 Q100 29 148 35 L138 156 Q100 170 62 156 Z" fill="url(#cs28-glass)" stroke="#8f684b" stroke-width="2.8"/>
   <g clip-path="url(#cs20-cup-clip)"><rect data-tea x="47" y="148" width="107" height="170" fill="#bc9463"/><path data-wave d="M52 150 Q80 146 110 151 T148 150" stroke="#fff8df" opacity=".55" stroke-width="3" fill="none"/>${pearls}${ice}<path d="M65 44 Q57 96 72 148" stroke="#fff" stroke-width="6" opacity=".46" fill="none" stroke-linecap="round"/></g>
-  <path d="M132 37 L146 12" stroke="#86a57d" stroke-width="7" stroke-linecap="round"/><ellipse data-lid cx="100" cy="35" rx="49" ry="6" fill="#fff2d6" stroke="#936c4a" stroke-width="2.5" opacity=".65"/>
+  <path data-straw d="M132 37 L146 12" stroke="#86a57d" stroke-width="7" stroke-linecap="round"/><ellipse data-lid cx="100" cy="35" rx="49" ry="6" fill="#fff2d6" stroke="#936c4a" stroke-width="2.5" opacity=".65"/>
   <ellipse cx="101" cy="102" rx="24" ry="19" fill="#fff6df" fill-opacity=".88" stroke="#bca078" stroke-width="1.4"/><path d="M93 111 Q86 89 108 91 Q113 108 93 111 M96 107 L105 96" stroke="#729875" stroke-width="2.5" fill="#b5c99a" stroke-linecap="round"/>
   <!-- Cat mascot decal lives on the dynamic cup, not a separate payout/recipe system. -->
   <path d="M85 96L89 88L96 94Q102 92 107 94L114 87L118 98Q123 116 104 120Q82 122 82 104Z" fill="#fff0d8" stroke="#a87969" stroke-width="1.6"/>
@@ -368,13 +364,15 @@ function paintVessel(s){
  attr(v.svg,'data-off-heat',!!s.kitchen?.offHeat);
  if(s.career!=='boba')attr(v.svg,'aria-label',s.career==='noodle'?(s.kitchen.offHeat?'Nồi mì đã nhấc khỏi bếp':'Nồi mì đang trên bếp'):(s.kitchen.offHeat?'Xiên đã gắp ra '+({plate:'đĩa',basket:'mẹt tre',box:'hộp mang đi'}[d.tray]||'đĩa'):'Xiên đang trên vỉ nướng'));
  if(s.career==='boba'){
+  attr(v.svg,'data-cup-selected',!!d.container);
   attr(v.stream,'opacity',ui.active?'.75':'0');
-  const fill=ui.pour>0?Math.max(3,Math.round(ui.pour)):d.isShaken?78:8,y=153-fill*1.1;
-  attr(v.tea,'y',y.toFixed(1));attr(v.tea,'fill',teaColors[d.base]||'#bb9163');
-  attr(v.wave,'d',`M52 ${y+4} Q80 ${y-1} 110 ${y+4} T148 ${y+4}`);attr(v.lid,'opacity',d.isShaken?'1':'.65');
+  const fill=ui.active?ui.pour:Number(d.pourAmount||0),y=153-fill*1.1;
+  attr(v.tea,'opacity',fill>0?'1':'0');attr(v.wave,'opacity',fill>0?'.55':'0');
+  attr(v.tea,'y',y.toFixed(1));attr(v.tea,'fill',teaColors[d.base||(ui.active?d.selectedBase:null)]||'#bb9163');
+  attr(v.wave,'d',`M52 ${y+4} Q80 ${y-1} 110 ${y+4} T148 ${y+4}`);attr(v.lid,'opacity',d.isShaken?'1':'0');const straw=v.svg.querySelector('[data-straw]');if(straw)attr(straw,'opacity',d.isShaken?'1':'0');
   const dots=(d.toppings||[]).flatMap(key=>Array.from({length:Math.min(3,portionCount(d,key))*4},()=>key)).slice(0,36);
   v.pearls.forEach((el,i)=>{const key=dots[i];attr(el,'opacity',key?'1':'0');if(key){attr(el,'fill',key.includes('boba')?'#49312c':key.includes('jelly')?'#b3d79a':key.includes('redbean')?'#965b49':key.includes('peach')?'#e5a785':'#f8dca5');attr(el,'r',key.includes('boba')?4.5:4);}});
-  const iceCount=Number(d.ice)===100?8:Number(d.ice)===50?4:0;v.ice.forEach((el,i)=>attr(el,'opacity',i<iceCount&&fill>25?'1':'0'));
+  const iceCount=Number(d.ice)===100?8:Number(d.ice)===50?4:0;v.ice.forEach((el,i)=>attr(el,'opacity',i<iceCount?'1':'0'));
   // Each topping is visibly distinct (pearls, pudding cubes, jelly, foam...).
   v.pearls.forEach(el=>attr(el,'opacity','0'));paintDetailedToppings(visual,d);
  }else if(s.career==='noodle'){
@@ -445,8 +443,8 @@ function renderAction(){
  if(!current?.customer){label=current?.phase==='open'?'Đang chờ khách…':'Mở quán để đón khách';disabled=true;}
  else if(ready){if(ui.career==='boba'&&!current?.practice&&!ui.handoffHeld){label='🥤 Cầm ly thành phẩm';secondary='take';}else{label=safe(current?.practice?'✨ Hoàn thành bài luyện':'✨ Giao ly cho khách');secondary='send';}}
  else if(ui.career==='boba'){
-  if(ui.stage==='choose'||ui.stage==='pour'){label=ui.active?'⏹ Dừng rót':'🫖 Rót trà vào ly';secondary='pour';}
-  else if(ui.stage==='mix'){label='🥤 Canh nhịp dập nắp';secondary='cap-start';}
+  if(ui.stage==='choose'||ui.stage==='pour'){label=ui.active?'⏹ Dừng rót':'🫖 Rót trà vào ly';secondary='pour';disabled=!ui.active&&(!d.container||!d.selectedBase);}
+  else if(ui.stage==='mix'){label='🥤 Canh nhịp dập nắp';secondary='cap-start';disabled=!(practiceDish?bridge.canCapDish(d):bridge.canCap());}
   else if(ui.stage==='capping'){label='✦ Dập nắp ngay!';secondary='cap-hit';}
   else {label='Đang dập nắp…';disabled=true;}
  } else {
@@ -469,14 +467,14 @@ function renderAction(){
 }
 function endPour(){
  if(!ui.active)return;
- ui.active=false;ui.poured=true;ui.stage='mix';if(!practiceDish)bridge.setPresentation({pour:ui.pour,poured:true});ui.craft=.55*clamp(1-Math.abs(ui.pour-72)/50,0,1);
+ ui.active=false;const ok=practiceDish?bridge.pourPractice(practiceDish,ui.pour):bridge.setPresentation({pour:ui.pour,poured:true});current=view();ui.pour=Number(current.dish.pourAmount||0);ui.poured=ui.pour>0;ui.stage=ui.poured?'mix':'choose';ui.craft=.55*clamp(1-Math.abs(ui.pour-72)/50,0,1);if(!ok){setNotice('Chưa thể rót trà. Kiểm tra ly và cốt trà.');refresh(true);return;}
  setNotice('Đã rót trà. Bấm canh nhịp, rồi dập nắp khi kim vào vùng giữa.');
  renderDish();renderAction();
 }
 function pour(){
  if(!current?.customer||current.pause||ui.delivering)return;
  if(ui.active){endPour();return;}
- if(!['choose','mix'].includes(ui.stage))return;
+ if(!['choose','mix'].includes(ui.stage)||!current.dish.container||!current.dish.selectedBase)return;
  if(ui.pour>=100){setNotice('Ly đã đầy 100%. Canh dập nắp rồi giao món nhé.');return;}
  ui.stage='pour';ui.active=true;ui.lastTick=performance.now();setNotice('Nhấn Dừng rót khi nước gần vạch 72%. Có thể chạm giữ nút.');renderAction();ensureAnimation();
 }
@@ -535,12 +533,13 @@ $('cs20-fire').addEventListener('click',()=>{if(!$('cs20-fire').disabled)kitchen
 $('cs20-flip').addEventListener('click',()=>{if(!$('cs20-flip').disabled)kitchenAction(ui.career==='noodle'?'stir':'flip');});
 $('cs20-sauce').addEventListener('click',()=>{if(!$('cs20-sauce').disabled)kitchenAction('sauce');});
 $('cs20-lift').addEventListener('click',()=>{if(!$('cs20-lift').disabled)kitchenAction('lift');});
-$('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)return;ui.handoffHeld=false;if(practiceDish){practiceKitchen.reset();practiceDish.isShaken=false;practiceDish.isCooked=false;practiceDish.fryState='unfried';}else bridge.reset();reset(ui.key,ui.career);refresh(true);});
+$('cs20-undo').addEventListener('click',()=>{if(ui.delivering||current?.pause)return;ui.handoffHeld=false;if(practiceDish){practiceKitchen.reset();practiceDish=bridge.createPracticeDish(ui.career);}else if(!bridge.reset())return;reset(ui.key,ui.career);refresh(true);});
 function refresh(force=false){
  const s=view();current=s;
  const key=s.customer?.key||`idle:${s.phase}:${s.career}`;
- if(key!==ui.key||s.career!==ui.career){reset(key,s.career);ui.handoffHeld=false;if(s.presentation&&s.career==='boba'){ui.pour=Number(s.presentation.pour)||0;ui.poured=!!s.presentation.poured;}if(s.career!=='boba')bobaDrawerOpen=true;force=true;}
+ if(key!==ui.key||s.career!==ui.career){reset(key,s.career);ui.handoffHeld=false;if(s.career==='boba'){ui.pour=Number(s.dish.pourAmount||0);ui.poured=ui.pour>0;ui.stage=ui.poured?'mix':'choose';}if(s.career!=='boba')bobaDrawerOpen=true;force=true;}
  syncBobaDrawer(s.career);
+ if(s.career==='boba'&&!ui.active&&s.kitchen.stage==='choose'){ui.pour=Number(s.dish.pourAmount||0);ui.poured=ui.pour>0;ui.stage=ui.poured?'mix':'choose';}
  if(s.career!=='boba'||s.kitchen.stage!=='choose'){ui.kitchen=s.kitchen;ui.stage=s.kitchen.stage;const note=s.kitchen.hint||s.kitchen.notice;if(note&&ui.notice!==note)setNotice(note);}
  if(!s.dish?.isShaken)ui.handoffHeld=false;
  const hasOrder=!!s.customer;
@@ -586,7 +585,7 @@ function refresh(force=false){
  if(s.career==='boba'&&s.dish.isShaken&&ui.stage==='finishing')setNotice('Ly đã dập nắp. Sẵn sàng giao món!');
  if(s.career==='noodle'&&s.dish.isCooked&&ui.stage==='heating')setNotice('Thố mì đã chín. Sẵn sàng giao!');
  if(s.career==='streetfood'&&ui.stage==='grilling'&&s.dish.fryState==='burnt')setNotice('Xiên đã bị cháy — làm lại hoặc giao món chất lượng thấp.');
- renderDish();renderAction();ensureAnimation();
+ renderDish();renderAction();renderMiniMeters();ensureAnimation();
 }
 let animationId=0,lastVisualFrame=0;
 function needsMotion(){return !!current&&!current.pause&&document.visibilityState!=='hidden'&&current.phase==='open'&&!!current.customer&&current.customer.patience>0&&(ui.active||ui.stage==='capping'||['warming','timing'].includes(ui.stage));}
@@ -622,12 +621,13 @@ w.BPVQCookingStation=Object.freeze({
  startPractice:()=>{
   const s=bridge.snapshot();
   if(!s.started||s.phase==='open'||s.customer)return false;
-  practiceDish=clone(s.dish);practiceDish.isShaken=false;practiceDish.isCooked=false;practiceDish.fryState='unfried';practiceDish.fryProgress=0;
+  practiceDish=bridge.createPracticeDish(s.career);
   ++practiceNumber;practicePerson={key:'practice:'+practiceNumber,name:'Tập chế biến',description:'Thử chế biến tự do, không nhận thưởng',patience:90,maxPatience:90};practiceKitchen.reset();refresh(true);
   // Keep the player's scroll position unchanged when entering practice.
   return true;
  },
  stopPractice:()=>{if(!practiceDish)return false;practiceDish=null;practiceKitchen.reset();refresh(true);return true;},
+ presentation:()=>({dish:clone(current?.dish||{}),practice:!!practiceDish,notice:ui.notice}),
  status:()=>({career:ui.career,stage:ui.stage,key:ui.key,handoffHeld:!!ui.handoffHeld,craft:ui.craft,pour:ui.pour,poured:!!ui.poured,capPosition:ui.capPosition,kitchen:ui.kitchen,practice:!!practiceDish,animating:!!animationId,previewOnly:false})
 });
 })(window);
