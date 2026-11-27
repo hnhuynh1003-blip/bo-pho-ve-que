@@ -2,7 +2,45 @@
 (function(w){
 'use strict';
 const clamp=(n,a,b)=>Math.max(a,Math.min(b,n));
-const signature=c=>JSON.stringify([c.career,c.dish.container,c.dish.tray,c.dish.base,c.dish.spicyLevel,c.dish.sugar,c.dish.ice,c.dish.sauce,Object.entries(c.dish.toppingPortions||{}).sort(),[...(c.dish.toppings||[])].sort(),Object.entries(c.dish.skewerCounts||{}).sort()]);
+// Boba preparation is transient; requested order is never a source of applied ingredients.
+function emptyBoba(){return {career:'boba',container:null,selectedBase:null,base:null,sugar:null,ice:null,pourAmount:0,
+ spicyLevel:0,fryHeat:170,tray:null,sauce:null,toppings:[],toppingPortions:{},skewerCounts:{},listedPrice:45,
+ isShaken:false,isCooked:false,fryProgress:0,fryState:'unfried'};}
+function canCapDish(d){
+ return !!d&&d.career==='boba'&&typeof d.container==='string'&&d.container.startsWith('cup_')&&
+  typeof d.base==='string'&&d.base===d.selectedBase&&Number.isFinite(d.pourAmount)&&d.pourAmount>0&&d.pourAmount<=100&&
+  [0,30,70,100].includes(d.sugar)&&[0,50,100].includes(d.ice);
+}
+function chooseBoba(d,group,key,delta=1){
+ if(!d||d.career!=='boba'||d.isShaken)return false;
+ if(group==='container'){
+  if(typeof key!=='string'||!key.startsWith('cup_')||d.container===key)return false;
+  if(d.base||d.pourAmount>0||d.sugar!==null||d.ice!==null||d.toppings?.length)return false;
+  d.container=key;
+ }else if(group==='base'){
+  if(typeof key!=='string'||!key||d.selectedBase===key||d.pourAmount>0)return false;
+  d.selectedBase=key;
+ }else if(group==='sugar'||group==='ice'){
+  if(!d.container||key===null||key===undefined||key==='')return false;
+  const n=Number(key),allowed=group==='sugar'?[0,30,70,100]:[0,50,100];
+  if(!allowed.includes(n)||d[group]===n)return false;d[group]=n;
+ }else if(group==='topping'){
+  if(!d.container||typeof key!=='string'||!key)return false;
+  const portions={...Object.fromEntries((d.toppings||[]).map(k=>[k,1])),...(d.toppingPortions||{})};
+  const old=Number(portions[key]||0),next=Math.max(0,Math.min(3,old+Math.sign(delta)));
+  if(!Number.isFinite(next)||next===old)return false;
+  if(next)portions[key]=next;else delete portions[key];
+  d.toppingPortions=portions;d.toppings=Object.keys(portions).filter(k=>portions[k]>0);
+ }else return false;
+ delete d.recipeId;return true;
+}
+function pourBoba(d,amount){
+ if(!d||d.career!=='boba'||d.isShaken||!d.container||!d.selectedBase||typeof amount!=='number'||!Number.isFinite(amount)||amount<=0||amount>100||
+    (d.base&&d.base!==d.selectedBase)||amount<=Number(d.pourAmount||0))return false;
+ d.base=d.selectedBase;d.pourAmount=amount;delete d.recipeId;return true;
+}
+// Keep the original signature for already-paid legacy batches; new batches include actual pour.
+const signature=c=>JSON.stringify([c.career,c.dish.container,c.dish.tray,c.dish.base,c.dish.spicyLevel,c.dish.sugar,c.dish.ice,c.dish.sauce,Object.entries(c.dish.toppingPortions||{}).sort(),[...(c.dish.toppings||[])].sort(),Object.entries(c.dish.skewerCounts||{}).sort(),...(c.career==='boba'&&Object.prototype.hasOwnProperty.call(c.dish,'pourAmount')?[c.dish.selectedBase,c.dish.pourAmount]:[])]);
 function create({context,now=()=>performance.now(),onBegin=()=>true,onFinish=()=>{},onChange=()=>{}}){
  let s=null,last=now(),suspended=false;
  const blocked=c=>!!c.paused||!!c.hidden;
@@ -28,6 +66,7 @@ function create({context,now=()=>performance.now(),onBegin=()=>true,onFinish=()=
  }
  function snapshot(){const c=tick(),v=data();return Object.freeze({...v,ready:v.ready&&!blocked(c),canFinish:v.canFinish&&!blocked(c)});}
  function begin(){const c=tick();if(s||!['boba','noodle','streetfood'].includes(c.career)||!c.person||c.phase!=='open'||c.patience<=0||blocked(c))return false;
+  if(c.career==='boba'&&!canCapDish(c.dish))return false;
   if(c.career==='streetfood'&&!Object.values(c.dish.skewerCounts||{}).some(n=>Number(n)>0))return false;
   if(onBegin(c)===false)return false;
   s={person:c.person,dish:c.dish,career:c.career,signature:signature(c),stage:c.career==='boba'?'capping':'warming',phaseTime:0,elapsed:0,hits:[],sauced:false,grade:'',notice:c.career==='boba'?'Canh vùng sáng để dập nắp.':'Đang làm nóng bếp…'};last=now();suspended=false;changed();return true;
@@ -47,5 +86,5 @@ function create({context,now=()=>performance.now(),onBegin=()=>true,onFinish=()=
  }
  return Object.freeze({action,snapshot,reset,ready:()=>snapshot().ready,exportState,restore});
 }
-w.BPVQKitchenPlay=Object.freeze({create});
+w.BPVQKitchenPlay=Object.freeze({create,emptyBoba,canCapDish,chooseBoba,pourBoba});
 })(window);

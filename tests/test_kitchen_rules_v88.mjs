@@ -3,6 +3,7 @@ import {readFileSync} from 'node:fs';
 import vm from 'node:vm';
 const env={window:{}};vm.runInNewContext(readFileSync('js/v88-kitchen-play.js','utf8'),env);
 function session(career){let clock=0;const commits=[];const c={career,person:{id:1},dish:{container:'bowl_m',base:'broth_kimchi',sugar:70,ice:50,toppings:['ntop_beef'],toppingPortions:{ntop_beef:2},tray:'plate',sauce:'sauce_sweet_chili',skewerCounts:{skewer_fish:2}},phase:'open',patience:180,paused:false,hidden:false};
+if(career==='boba')Object.assign(c.dish,{career:'boba',container:'cup_m',base:'tea_black',selectedBase:'tea_black',pourAmount:72});
 const api=env.window.BPVQKitchenPlay.create({context:()=>c,now:()=>clock,onFinish:g=>commits.push(g)});
 const advance=n=>{for(let i=0;i<Math.round(n*100);i++){clock+=10;api.snapshot();}};
 const play=grade=>{let guard=0;while(api.snapshot().stage==='warming'){assert.ok(++guard<1000);advance(.01);}if(grade==='timeout'){advance(10.1);return;}const p=grade==='perfect'?50:grade==='good'?36:5;while(api.snapshot().position<p){assert.ok(++guard<2000);advance(.01);}assert.equal(api.action('hit'),true);};return {c,api,advance,play,commits};}
