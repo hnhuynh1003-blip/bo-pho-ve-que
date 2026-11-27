@@ -1,0 +1,54 @@
+name: QA independent explicit boba Engine (Node)
+on:
+  push:
+    branches: [qa/rc2-engine-explicit-boba]
+    paths:
+      - '.github/workflows/qa-engine-explicit-boba.yml'
+permissions:
+  contents: read
+env:
+  TARGET_SHA: 38c71a6da5f8415abeafdd3d8a803b542a6172ac
+jobs:
+  regression:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: 38c71a6da5f8415abeafdd3d8a803b542a6172ac
+          persist-credentials: false
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify pinned source and run independent Node regression
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$(git rev-parse HEAD)" = "$TARGET_SHA"
+          mkdir -p qa-evidence
+          printf 'target=%s\nharness=%s\n' "$TARGET_SHA" "$GITHUB_SHA" | tee qa-evidence/refs.txt
+          node --version | tee qa-evidence/node-version.txt
+          failed=0
+          for f in js/game.js js/v88-kitchen-play.js; do
+            if node --check "$f" 2>&1 | tee -a qa-evidence/syntax.log; then
+              echo "PASS syntax $f"
+            else
+              echo "FAIL syntax $f"
+              failed=1
+            fi
+          done
+          for t in test_kitchen_rules_v88 test_counter_settlement_v88 test_playtest_save_isolation test_day_rules_v88 test_day_interest_v88 test_day_integration_v88 test_menu_dot2_v88 test_decor_v88 verify_phone_os_v88; do
+            if node "tests/$t.mjs" 2>&1 | tee "qa-evidence/$t.log"; then
+              echo "PASS $t"
+            else
+              echo "FAIL $t"
+              failed=1
+            fi
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: qa-engine-explicit-boba-node
+          path: qa-evidence/
+          retention-days: 14
