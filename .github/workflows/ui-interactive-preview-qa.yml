@@ -1,0 +1,63 @@
+name: UI interactive preview QA
+on:
+  push:
+    branches: [work/v88-17-1-10-ui-interactive]
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  onboarding:
+    runs-on: ubuntu-24.04
+    timeout-minutes: 20
+    strategy:
+      fail-fast: false
+      matrix:
+        engine: [chromium, webkit]
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          path: candidate
+      - uses: actions/checkout@v4
+        with:
+          ref: 560614a7090b18cdf8364fa2b322ba0951b3bd5f
+          path: baseline
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - run: |
+          npm install --no-save playwright@1.56.1
+          npx playwright install --with-deps ${{ matrix.engine }}
+      - name: Fresh onboarding baseline and candidate
+        env:
+          BPVQ_QA_ENGINE: ${{ matrix.engine }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          mkdir -p evidence/{baseline,candidate}
+          failed=0
+          for variant in baseline candidate; do
+            python3 -m http.server 8765 --bind 127.0.0.1 --directory "$variant" > "evidence/$variant/server.log" 2>&1 &
+            server=$!
+            trap 'kill "$server" 2>/dev/null || true' EXIT
+            for attempt in {1..20}; do
+              if curl -fsS http://127.0.0.1:8765/ >/dev/null; then break; fi
+              sleep 1
+            done
+            set +e
+            BPVQ_QA_OUTPUT="$PWD/evidence/$variant" node candidate/tests/test_ui_fresh_onboarding_v88.mjs > "evidence/$variant/onboarding.log" 2>&1
+            status=$?
+            set -e
+            echo "$status" > "evidence/$variant/status.txt"
+            cat "evidence/$variant/onboarding.log"
+            if [ "$status" -ne 0 ]; then failed=1; fi
+            kill "$server"
+            trap - EXIT
+          done
+          exit "$failed"
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: interactive-onboarding-${{ matrix.engine }}
+          path: evidence/
+          retention-days: 14
+          if-no-files-found: warn
